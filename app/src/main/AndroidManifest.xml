@@ -23,7 +23,7 @@
         </activity>
 
         <activity
-            android:name=".WelcomeActivity"565656
+            android:name=".WelcomeActivity"
             android:theme="@style/NoActionBar">
         </activity>
 
