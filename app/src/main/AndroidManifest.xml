@@ -11,8 +11,13 @@
         android:theme="@style/AppTheme">
 
         <activity
+            android:name=".WelcomeActivity"
+            android:theme="@style/NoActionBar">
+        </activity>
+
+        <activity
             android:name=".LaunchScreenActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
