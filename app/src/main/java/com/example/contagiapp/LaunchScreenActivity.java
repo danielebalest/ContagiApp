@@ -17,8 +17,14 @@ public class LaunchScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent homeIntent = new Intent(LaunchScreenActivity.this, MainActivity.class);
-                startActivity(homeIntent);
+
+                /*per andare alla home*/
+                //Intent homeIntent = new Intent(LaunchScreenActivity.this, MainActivity.class);
+                //startActivity(homeIntent);
+
+                /*per andare alla welcomeActivity*/
+                Intent welcomeIntent = new Intent(LaunchScreenActivity.this, WelcomeActivity.class);
+                startActivity(welcomeIntent);
             }
         },
             1000);  //la Launch Screen rimarrà visibile per 1 secondi
