@@ -57,8 +57,9 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_notify:
                             fragment = new NotifyFragment();
                             break;
-                        case R.id.nav_setting:
-                            fragment = new SettingFragment();
+
+                        case R.id.nav_events:
+                            fragment = new EventsFragment();
                             break;
 
                         case R.id.nav_friends:
