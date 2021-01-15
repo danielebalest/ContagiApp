@@ -10,10 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity
-            android:name=".WelcomeActivity"
-            android:theme="@style/NoActionBar">
-        </activity>
+
 
         <activity
             android:name=".LaunchScreenActivity"
@@ -24,6 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".WelcomeActivity"565656
+            android:theme="@style/NoActionBar">
+        </activity>
+
         <activity android:name=".MainActivity" />
     </application>
 
