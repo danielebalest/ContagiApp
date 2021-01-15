@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.contagiapp.ui.login.LoginActivity;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     private Button login;
@@ -16,18 +18,18 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         //implementazione OnClick
-        login = (Button) findViewById(R.id.login);
+        login = (Button) findViewById(R.id.login2);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openHome();
+                openLogin();
             }
         });
 
     }
 
-    public void openHome(){
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        startActivity(mainIntent);
+    public void openLogin(){
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
     }
 }
