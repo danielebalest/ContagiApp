@@ -36,6 +36,19 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        Fragment SettingFragment= new SettingFragment();
+        if(id == R.id.nav_setting){
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, SettingFragment).commit();
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     //Per ottenere la barra di navigazione in basso
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = new
             BottomNavigationView.OnNavigationItemSelectedListener() {
