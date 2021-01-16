@@ -12,7 +12,7 @@ public class EventsFragment extends Fragment {
 
     public class ciao extends AppCompatActivity {
         private Button new_event;
-
+    
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
