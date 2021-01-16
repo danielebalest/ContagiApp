@@ -1,0 +1,55 @@
+Index: app/src/main/java/com/example/contagiapp/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.contagiapp;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport android.os.Bundle;\r\nimport android.view.Menu;\r\nimport android.view.MenuItem;\r\n\r\nimport com.example.contagiapp.eventi.EventsFragment;\r\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    private BottomNavigationView bottomNavigationView;\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n\r\n        bottomNavigationView=findViewById(R.id.bottomNav);\r\n\r\n        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);\r\n        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();\r\n    }\r\n\r\n    //per aggiungere menu sulla actionBar\r\n    @Override\r\n    public boolean onCreateOptionsMenu(Menu menu) {\r\n        getMenuInflater().inflate(R.menu.menu, menu);\r\n        return super.onCreateOptionsMenu(menu);\r\n    }\r\n\r\n    @Override\r\n    public boolean onOptionsItemSelected(@NonNull MenuItem item) {\r\n        int id = item.getItemId();\r\n\r\n        Fragment SettingFragment= new SettingFragment();\r\n        if(id == R.id.nav_setting){\r\n            getSupportFragmentManager().beginTransaction().replace(R.id.container, SettingFragment).commit();\r\n\r\n        }\r\n\r\n        return super.onOptionsItemSelected(item);\r\n    }\r\n\r\n    //Per ottenere la barra di navigazione in basso\r\n    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = new\r\n            BottomNavigationView.OnNavigationItemSelectedListener() {\r\n                @Override\r\n                public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {\r\n\r\n                    Fragment fragment=null;\r\n\r\n                    switch (menuitem.getItemId())\r\n                    {\r\n                        case R.id.nav_group:\r\n                            fragment = new GroupFragment();\r\n                            break;\r\n\r\n                        case R.id.nav_home:\r\n                            fragment = new HomeFragment();\r\n                            break;\r\n\r\n                        case R.id.nav_notify:\r\n                            fragment = new NotifyFragment();\r\n                            break;\r\n\r\n                        case R.id.nav_events:\r\n                            fragment = new EventsFragment();\r\n                            break;\r\n\r\n                        case R.id.nav_friends:\r\n                            fragment = new FriendsFragment();\r\n                            break;\r\n                    }\r\n                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();\r\n                    return true;\r\n                }\r\n            };\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/contagiapp/MainActivity.java	(revision f4c0d1077ffbb63746e95100a1f406fa9f0b23bf)
++++ app/src/main/java/com/example/contagiapp/MainActivity.java	(date 1610797223455)
+@@ -68,7 +68,8 @@
+                             break;
+ 
+                         case R.id.nav_events:
+-                            fragment = new EventsFragment();
++                            EventsFragment fragment1 = new EventsFragment();
++                            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
+                             break;
+ 
+                         case R.id.nav_friends:
+Index: app/src/main/java/com/example/contagiapp/eventi/EventsFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.contagiapp.eventi;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport androidx.fragment.app.Fragment;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport com.example.contagiapp.R;\r\n\r\npublic class EventsFragment extends AppCompatActivity {\r\n\r\n    private Button new_event;\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.fragment_events);\r\n\r\n        //implementazione OnClick\r\n        new_event = (Button) findViewById(R.id.nuovo_evento);\r\n        new_event.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                openNuovoEvento();\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    public void openNuovoEvento(){\r\n        Intent newEvents = new Intent(this, NewEventsFragment.class);\r\n        startActivity(newEvents);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/contagiapp/eventi/EventsFragment.java	(revision f4c0d1077ffbb63746e95100a1f406fa9f0b23bf)
++++ app/src/main/java/com/example/contagiapp/eventi/EventsFragment.java	(date 1610797223471)
+@@ -11,6 +11,11 @@
+ public class EventsFragment extends AppCompatActivity {
+ 
+     private Button new_event;
++
++    public EventsFragment() {
++        // Required empty public constructor
++    }
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+Index: app/src/main/java/com/example/contagiapp/eventi/InterfaceEvents.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/contagiapp/eventi/InterfaceEvents.java	(date 1610797581066)
++++ app/src/main/java/com/example/contagiapp/eventi/InterfaceEvents.java	(date 1610797581066)
+@@ -0,0 +1,7 @@
++package com.example.contagiapp.eventi;
++
++import androidx.appcompat.app.AppCompatActivity;
++import androidx.fragment.app.Fragment;
++
++public interface InterfaceEvents extends Fragment {
++}
