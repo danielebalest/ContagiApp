@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
-public class DbManager
+/*public class DbManager
 {
     private DBhelper dbhelper;
     public DbManager(Context ctx)
@@ -57,4 +57,4 @@ public class DbManager
         }
         return crs;
     }
-}
+}*/
