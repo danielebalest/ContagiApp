@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EventsFragment">
+    tools:context=".eventi.EventsFragment">
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/textInputEditText"
@@ -42,7 +42,6 @@
         android:src="@drawable/custom_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton5"
-        android:onClick="openNuovoEvento"/>
+        app:layout_constraintTop_toBottomOf="@+id/imageButton5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
