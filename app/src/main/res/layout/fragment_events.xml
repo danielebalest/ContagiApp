@@ -32,7 +32,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/nuovo_evento"
         android:layout_width="78dp"
         android:layout_height="85dp"
         android:layout_marginStart="317dp"
@@ -42,6 +42,7 @@
         android:src="@drawable/custom_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton5" />
+        app:layout_constraintTop_toBottomOf="@+id/imageButton5"
+        android:onClick="openNuovoEvento"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
