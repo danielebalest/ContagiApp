@@ -7,6 +7,18 @@
     tools:context=".GroupFragment"
     android:background="@color/colorAccent">
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation" />
+
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/textInputEditText3"
         android:layout_width="278dp"
