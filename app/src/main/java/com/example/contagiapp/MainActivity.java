@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_friends:
                             fragment = new FriendsFragment();
                             break;
+
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                     return true;

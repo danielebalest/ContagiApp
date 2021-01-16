@@ -15,7 +15,8 @@ import android.view.ViewGroup;
 public class GroupFragment extends Fragment {
 
     public GroupFragment() {
-        // Required empty public constructor
+
+
     }
 
 
