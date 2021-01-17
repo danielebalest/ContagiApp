@@ -33,6 +33,12 @@
                 <action android:name="android.intent.action.NewEventsFragment" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".gruppi.GroupSearch">
+            <intent-filter>
+                <action android:name="android.intent.action.GroupSearch" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
