@@ -35,13 +35,16 @@
         android:id="@+id/nuovo_evento"
         android:layout_width="78dp"
         android:layout_height="85dp"
-        android:layout_marginStart="317dp"
         android:layout_marginTop="350dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="87dp"
         android:clickable="true"
         android:src="@drawable/custom_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton5"/>
+        app:layout_constraintTop_toBottomOf="@+id/imageButton5"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,29 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".HomeFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/createEvents"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_centerInParent="false"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        <HorizontalScrollView
+            android:id="@+id/eventiCreatiRecenti"
+            android:layout_width="match_parent"
+            android:layout_height="128dp">
 
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/custom_button"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+        </HorizontalScrollView>
 
-        android:text="Crea Evento" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="273dp"
+                android:layout_height="wrap_content"
+                android:hint="cerca evento" />
 
+            <ImageButton
+                android:id="@+id/eventi"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@android:drawable/ic_menu_search" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/createEvents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crea evento" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="267dp"
+                android:layout_height="wrap_content"
+                android:hint="cerca amici" />
+
+            <ImageButton
+                android:id="@+id/amici"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@android:drawable/ic_menu_search" />
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/eventiVicinanze"
+            android:layout_width="match_parent"
+            android:layout_height="91dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+        </HorizontalScrollView>
+
+    </LinearLayout>
 
 </RelativeLayout>
