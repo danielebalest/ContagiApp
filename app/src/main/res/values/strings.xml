@@ -14,8 +14,9 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    
-    
+    <string name="scemo">Scemo</string>
+
+
     <string-array name="nazioni">
         <item>Italia</item>
         <item>Francia</item>
