@@ -31,8 +31,6 @@
             android:name=".eventi.NewEventsFragment">
             <intent-filter>
                 <action android:name="android.intent.action.NewEventsFragment" />
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
         </activity>
     </application>
