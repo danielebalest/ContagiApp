@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.contagiapp.registrazione.RegistrationActivity;
 import com.example.contagiapp.ui.login.LoginActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
