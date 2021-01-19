@@ -28,7 +28,7 @@ public class GroupFragment extends Fragment {
     }
 
 
-    private Button new_event;
+    private Button visualizza_gruppo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,8 +37,8 @@ public class GroupFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_group, container, false);
 
-        new_event = view.findViewById(R.id.Visualizza_gruppo);
-        new_event.setOnClickListener(new View.OnClickListener() {
+        visualizza_gruppo = view.findViewById(R.id.Visualizza_gruppo);
+        visualizza_gruppo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), GroupSearch.class);
