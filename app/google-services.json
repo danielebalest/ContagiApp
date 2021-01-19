@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1085126901004",
+    "firebase_url": "https://contagiapp-c5306-default-rtdb.firebaseio.com",
+    "project_id": "contagiapp-c5306",
+    "storage_bucket": "contagiapp-c5306.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085126901004:android:08b911e1cb1023dc515d29",
+        "android_client_info": {
+          "package_name": "com.example.contagiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1085126901004-93kebrr8amk705mqvakj5aavg9fh5bhl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLRrY87k0zgfJ7ZqEoAWEK5pZga1exX2w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1085126901004-93kebrr8amk705mqvakj5aavg9fh5bhl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
