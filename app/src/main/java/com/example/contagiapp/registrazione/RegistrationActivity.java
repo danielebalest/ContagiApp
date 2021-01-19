@@ -2,15 +2,18 @@ package com.example.contagiapp.registrazione;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
 
 import java.text.ParseException;
@@ -18,7 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
+    private Button signInButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +34,21 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinnerNazioni.setAdapter(adapter);
         spinnerNazioni.setOnItemSelectedListener(this);
+
+
+        // collegamento button registrati con la mainActivity
+        signInButton = (Button) findViewById(R.id.registrati);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMainActivity();
+            }
+        });
+    }
+
+    public void openMainActivity(){
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        startActivity(mainIntent);
     }
 
 
