@@ -39,6 +39,19 @@
                 <action android:name="android.intent.action.GroupSearch" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".data.amici.FriendProfile">
+            <intent-filter>
+                <action android:name="android.intent.action.FriendProfile" />
+            </intent-filter>
+        </activity>
+      <!-- <activity
+            android:name=".data.registrazione.SignUpActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.HomeFragment" />
+            </intent-filter>
+        </activity>-->
+
     </application>
 
 </manifest>
