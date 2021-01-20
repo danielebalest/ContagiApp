@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".registrazione.SignUpActivity"></activity>
+        <activity android:name=".utente.ProfiloActivity"></activity>
+        <activity android:name=".registrazione.SignUpActivity" />
         <activity android:name=".registrazione.RegistrationActivity" />
         <activity
             android:name=".ui.login.LoginActivity"
@@ -33,25 +34,16 @@
                 <action android:name="android.intent.action.NewEventsFragment" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".gruppi.GroupSearch">
+        <activity android:name=".gruppi.GroupSearch">
             <intent-filter>
                 <action android:name="android.intent.action.GroupSearch" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".data.amici.FriendProfile">
+        <activity android:name=".data.amici.FriendProfile">
             <intent-filter>
                 <action android:name="android.intent.action.FriendProfile" />
             </intent-filter>
         </activity>
-      <!-- <activity
-            android:name=".data.registrazione.SignUpActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.HomeFragment" />
-            </intent-filter>
-        </activity>-->
-
     </application>
 
 </manifest>
