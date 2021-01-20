@@ -27,7 +27,7 @@ public class GroupFragment extends Fragment {
 
     }
 
-
+    private Button crea_gruppo;
     private Button visualizza_gruppo;
 
     @Override
@@ -36,6 +36,15 @@ public class GroupFragment extends Fragment {
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_group, container, false);
+        crea_gruppo= view.findViewById(R.id.Crea_gruppo);
+        crea_gruppo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), GroupAdd.class);
+                startActivity(intent);
+            }
+        });
+
 
         visualizza_gruppo = view.findViewById(R.id.Visualizza_gruppo);
         visualizza_gruppo.setOnClickListener(new View.OnClickListener() {
