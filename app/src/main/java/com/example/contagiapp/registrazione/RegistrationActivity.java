@@ -2,15 +2,21 @@ package com.example.contagiapp.registrazione;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.contagiapp.MainActivity;
@@ -18,10 +24,15 @@ import com.example.contagiapp.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Button signInButton;
+    private TextView dataNascita;
+    private DatePickerDialog.OnDateSetListener dataDiNascita;
+    private static final String TAG = "RegistrationActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +55,39 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 openMainActivity();
             }
         });
+
+        //Date Picker
+        dataNascita = (TextView) findViewById(R.id.dataNascita);
+        dataNascita.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        RegistrationActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        dataDiNascita,
+                        year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        dataDiNascita = new DatePickerDialog.OnDateSetListener(){
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                Log.d(TAG, "onDateSet: date: " + dayOfMonth + "/" + month + "/" + year);
+                String date = dayOfMonth + "/" + month+1 + "/" + year;
+                dataNascita.setText(date);
+            }
+        };
+
+
+
     }
 
     public void openMainActivity(){
