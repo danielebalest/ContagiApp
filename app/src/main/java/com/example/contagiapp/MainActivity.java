@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.eventi.EventsFragment;
 import com.example.contagiapp.gruppi.GroupFragment;
+import com.example.contagiapp.utente.ProfiloActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,7 +44,11 @@ public class MainActivity extends AppCompatActivity {
         Fragment SettingFragment= new SettingFragment();
         if(id == R.id.nav_setting){
             getSupportFragmentManager().beginTransaction().replace(R.id.container, SettingFragment).commit();
+        }
 
+        if(id == R.id.nav_account){
+            Intent profiloIntent = new Intent(this, ProfiloActivity.class);
+            startActivity(profiloIntent);
         }
 
         return super.onOptionsItemSelected(item);
