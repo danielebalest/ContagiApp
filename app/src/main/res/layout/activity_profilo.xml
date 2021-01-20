@@ -111,6 +111,7 @@
             android:text="Modifica dati"></Button>
 
         <Button
+            android:id="@+id/certificato"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
