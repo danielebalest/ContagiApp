@@ -111,11 +111,12 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         EditText surname = (EditText)findViewById(R.id.editTextTextPersonName4);
         String cognome = surname.getText().toString();
         user.put("cognome", cognome);
+
         TextView date = (TextView) findViewById(R.id.dataNascita);
         String data= date.getText().toString();
         user.put("dataNascita", data);
 
-// Add a new document with a generated ID
+        // Add a new document with a generated ID
         db.collection("Utenti")
         .add(user)
                 /*.addOnSuccessListener(new OnSuccessListener<Void>() {
