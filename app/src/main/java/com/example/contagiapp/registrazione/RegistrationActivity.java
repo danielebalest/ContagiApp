@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Button signInButton;
-    public TextView dataNascita;
+    private TextView dataNascita;
     private DatePickerDialog.OnDateSetListener dataDiNascita;
     private static final String TAG = "RegistrationActivity";
     // Access a Cloud Firestore instance from your Activity
@@ -104,14 +104,16 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         // Create a new user with a first, middle, and last name
         Map<String, Object> user = new HashMap<>();
 
-        EditText nom = (EditText)findViewById(R.id.editTextTextPersonName3);
-        String nome = nom.getText().toString();
+        EditText name = (EditText)findViewById(R.id.editTextTextPersonName3);
+        String nome = name.getText().toString();
         user.put("nome", nome);
 
-        EditText cogn = (EditText)findViewById(R.id.editTextTextPersonName4);
-        String cognome = cogn.getText().toString();
+        EditText surname = (EditText)findViewById(R.id.editTextTextPersonName4);
+        String cognome = surname.getText().toString();
         user.put("cognome", cognome);
-        //user.put("dataNascita", dataNascita);
+        TextView date = (TextView) findViewById(R.id.dataNascita);
+        String data= date.getText().toString();
+        user.put("dataNascita", data);
 
 // Add a new document with a generated ID
         db.collection("Utenti")
