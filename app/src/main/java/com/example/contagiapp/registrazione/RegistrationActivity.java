@@ -1,6 +1,5 @@
 package com.example.contagiapp.registrazione;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -10,28 +9,21 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +31,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     private Button signInButton;
     private TextView dataNascita;
     private DatePickerDialog.OnDateSetListener dataDiNascita;
+    private RadioGroup radiogroup;
+    private RadioButton radiosex;
     private static final String TAG = "RegistrationActivity";
     // Access a Cloud Firestore instance from your Activity
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -102,7 +96,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
     public void openMainActivity(){
         // Create a new user with a first, middle, and last name
-        Map<String, Object> user = new HashMap<>();
+        final Map<String, Object> user = new HashMap<>();
 
         EditText name = (EditText)findViewById(R.id.editTextTextPersonName3);
         String nome = name.getText().toString();
@@ -114,6 +108,13 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         TextView date = (TextView) findViewById(R.id.dataNascita);
         String data= date.getText().toString();
         user.put("dataNascita", data);
+        radiogroup=(RadioGroup) findViewById(R.id.radiogroup);
+        int Idselezionato= radiogroup.getCheckedRadioButtonId();
+        radiosex= (RadioButton) findViewById(Idselezionato);
+        user.put("genere", radiosex.getText().toString());
+
+
+
 
 // Add a new document with a generated ID
         db.collection("Utenti")
