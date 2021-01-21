@@ -110,8 +110,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
 // Add a new document with a generated ID
         db.collection("Utenti").document("3")
-        .set(user, SetOptions.merge());
-               /* .addOnSuccessListener(new OnSuccessListener<Void>() {
+        .set(user, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
@@ -122,7 +122,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
                     }
-                });*/
+                });
 
 
         Intent mainIntent = new Intent(this, MainActivity.class);
