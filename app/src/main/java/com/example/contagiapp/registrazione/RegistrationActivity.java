@@ -1,5 +1,6 @@
 package com.example.contagiapp.registrazione;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -21,17 +22,26 @@ import android.widget.Toast;
 
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Button signInButton;
     private TextView dataNascita;
     private DatePickerDialog.OnDateSetListener dataDiNascita;
     private static final String TAG = "RegistrationActivity";
+    // Access a Cloud Firestore instance from your Activity
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +101,30 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     }
 
     public void openMainActivity(){
+        // Create a new user with a first, middle, and last name
+        Map<String, Object> user = new HashMap<>();
+        user.put("nome", "Alan");
+        user.put("cognome", "Mathison");
+        user.put("last", "Turing");
+        user.put("born", 1912);
+
+// Add a new document with a generated ID
+        db.collection("Utenti").document("3")
+        .set(user, SetOptions.merge());
+               /* .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });*/
+
+
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);
     }
