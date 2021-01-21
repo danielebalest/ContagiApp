@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Button signInButton;
-    private TextView dataNascita;
+    public TextView dataNascita;
     private DatePickerDialog.OnDateSetListener dataDiNascita;
     private static final String TAG = "RegistrationActivity";
     // Access a Cloud Firestore instance from your Activity
@@ -103,15 +103,20 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     public void openMainActivity(){
         // Create a new user with a first, middle, and last name
         Map<String, Object> user = new HashMap<>();
-        user.put("nome", "Alan");
-        user.put("cognome", "Mathison");
-        user.put("last", "Turing");
-        user.put("born", 1912);
+
+        EditText nom = (EditText)findViewById(R.id.editTextTextPersonName3);
+        String nome = nom.getText().toString();
+        user.put("nome", nome);
+
+        EditText cogn = (EditText)findViewById(R.id.editTextTextPersonName4);
+        String cognome = cogn.getText().toString();
+        user.put("cognome", cognome);
+        //user.put("dataNascita", dataNascita);
 
 // Add a new document with a generated ID
-        db.collection("Utenti").document("3")
-        .set(user, SetOptions.merge())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+        db.collection("Utenti")
+        .add(user)
+                /*.addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
@@ -122,7 +127,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
                     }
-                });
+                })*/;
 
 
         Intent mainIntent = new Intent(this, MainActivity.class);
