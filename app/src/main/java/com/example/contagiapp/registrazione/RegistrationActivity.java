@@ -1,6 +1,5 @@
 package com.example.contagiapp.registrazione;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -10,7 +9,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,20 +16,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,11 +94,11 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         // Create a new user with a first, middle, and last name
         Map<String, Object> user = new HashMap<>();
 
-        EditText name = (EditText)findViewById(R.id.editTextTextPersonName3);
+        EditText name = (EditText)findViewById(R.id.EditTextName);
         String nome = name.getText().toString();
         user.put("nome", nome);
 
-        EditText surname = (EditText)findViewById(R.id.editTextTextPersonName4);
+        EditText surname = (EditText)findViewById(R.id.EdiTextSurname);
         String cognome = surname.getText().toString();
         user.put("cognome", cognome);
 
