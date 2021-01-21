@@ -108,6 +108,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         String data= date.getText().toString();
         user.put("dataNascita", data);
 
+
         RadioGroup radiogroup=(RadioGroup) findViewById(R.id.radiogroup);
         int Idselezionato= radiogroup.getCheckedRadioButtonId();
         RadioButton radiosex= (RadioButton) findViewById(Idselezionato);
