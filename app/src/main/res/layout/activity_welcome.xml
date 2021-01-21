@@ -26,8 +26,9 @@
         android:layout_marginStart="161dp"
         android:layout_marginTop="128dp"
         android:layout_marginEnd="162dp"
-        android:background="#D81B60"
-        android:text="ACCEDI"
+        android:background="#D81B31"
+        android:text="@string/login"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
@@ -40,7 +41,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="162dp"
         android:background="#1E88E5"
-        android:text="Registrati"
+        android:text="@string/signUp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login" />
