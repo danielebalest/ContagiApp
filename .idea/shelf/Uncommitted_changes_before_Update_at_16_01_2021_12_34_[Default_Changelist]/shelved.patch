@@ -1,0 +1,60 @@
+Index: app/src/main/res/layout/fragment_group.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".GroupFragment\"\r\n    android:background=\"@color/colorAccent\">\r\n\r\n    <com.google.android.material.textfield.TextInputEditText\r\n        android:id=\"@+id/textInputEditText3\"\r\n        android:layout_width=\"278dp\"\r\n        android:layout_height=\"41dp\"\r\n        android:layout_marginStart=\"24dp\"\r\n        android:layout_marginTop=\"44dp\"\r\n        android:layout_marginEnd=\"16dp\"\r\n        android:hint=\"Cerca\"\r\n        app:layout_constraintEnd_toStartOf=\"@+id/imageButton\"\r\n        app:layout_constraintHorizontal_bias=\"0.41\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n    <ImageButton\r\n        android:id=\"@+id/imageButton4\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"16dp\"\r\n        android:layout_marginTop=\"37dp\"\r\n        android:layout_marginEnd=\"32dp\"\r\n        android:src=\"@android:drawable/ic_menu_search\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/textInputLayout\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_group.xml	(revision be5b21a8672dfacc58606f20007d737a5e86dfea)
++++ app/src/main/res/layout/fragment_group.xml	(date 1610796851884)
+@@ -4,8 +4,8 @@
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+-    tools:context=".GroupFragment"
+-    android:background="@color/colorAccent">
++    android:background="@color/colorAccent"
++    tools:context=".GroupFragment">
+ 
+     <com.google.android.material.textfield.TextInputEditText
+         android:id="@+id/textInputEditText3"
+@@ -31,4 +31,17 @@
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toEndOf="@+id/textInputLayout"
+         app:layout_constraintTop_toTopOf="parent" />
++
++    <Button
++        android:id="@+id/VIsualizza_evento"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="292dp"
++        android:layout_marginEnd="31dp"
++        android:text="Visualizza"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent"
++        app:layout_constraintVertical_bias="0.203" />
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/contagiapp/GroupSearch.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/contagiapp/GroupSearch.java	(date 1610796851891)
++++ app/src/main/java/com/example/contagiapp/GroupSearch.java	(date 1610796851891)
+@@ -0,0 +1,13 @@
++package com.example.contagiapp;
++
++import android.view.View;
++
++public class GroupSearch extends GroupFragment {
++
++
++
++
++    }
++
++
++
