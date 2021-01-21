@@ -1,112 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".registrazione.RegistrationActivity">
+    tools:context=".utente.ProfiloActivity">
 
-    <EditText
-        android:id="@+id/editTextTextPersonName3"
-        android:layout_width="305dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="Nome"
-        android:inputType="textPersonName"
-        android:labelFor="@id/editTextTextPersonName4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".registrazione.RegistrationActivity">
 
-    <EditText
-        android:id="@+id/editTextTextPersonName4"
-        android:layout_width="305dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="Cognome"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+        <EditText
+            android:id="@+id/EditTextName"
+            android:layout_width="305dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="Nome"
+            android:inputType="textPersonName"
+            android:labelFor="@id/EditTextSurname"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <RadioGroup
-        android:id="@+id/radiogroup"
-        android:layout_width="71dp"
-        android:layout_height="68dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4">
+        <EditText
+            android:id="@+id/EditTextSurname"
+            android:layout_width="305dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Cognome"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EditTextName" />
 
-        <RadioButton
-            android:id="@+id/radioButton"
-            android:layout_width="match_parent"
+        <RadioGroup
+            android:id="@+id/radiogroup"
+            android:layout_width="71dp"
+            android:layout_height="68dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EditTextSurname">
+
+            <RadioButton
+                android:id="@+id/radioButton1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="M" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="F" />
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/editTextTextEmailAddress"
+            android:layout_width="305dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="@string/prompt_email"
+            android:inputType="textEmailAddress"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerCitta" />
+
+        <EditText
+            android:id="@+id/editTextPhone"
+            android:layout_width="305dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="@string/phone"
+            android:inputType="phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
+
+        <Spinner
+            android:id="@+id/spinnerNazioni"
+            android:layout_width="305dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+
+            android:layout_marginTop="10dp"
+            android:entries="@array/nazioni"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dataNascita" />
+
+        <Button
+            android:id="@+id/registrati"
+            android:layout_width="201dp"
+            android:layout_height="51dp"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="#1E88E5"
+            android:gravity="center|center_horizontal"
+            android:text="@string/signUp"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextRepeatPassword" />
+
+        <TextView
+            android:id="@+id/dataNascita"
+            android:layout_width="303dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="33dp"
+            android:text="datanascita"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radiogroup" />
+
+        <EditText
+            android:id="@+id/editTextTextPassword"
+            android:layout_width="305dp"
             android:layout_height="wrap_content"
-            android:text="M" />
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="@string/prompt_password"
+            android:inputType="textPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />
 
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/editTextRepeatPassword"
+            android:layout_width="305dp"
             android:layout_height="wrap_content"
-            android:text="F" />
-    </RadioGroup>
+            android:layout_marginStart="32dp"
+            android:ems="10"
+            android:hint="@string/repeat_password"
+            android:inputType="textPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
 
-    <EditText
-        android:id="@+id/editTextTextEmailAddress"
-        android:layout_width="305dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radiogroup" />
+        <Spinner
+            android:id="@+id/spinnerRegione"
+            android:layout_width="305dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="10dp"
+            android:entries="@array/regioniItaliane"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerNazioni" />
 
-    <EditText
-        android:id="@+id/editTextPhone"
-        android:layout_width="305dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="Numero di telefono"
-        android:inputType="phone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
+        <Spinner
+            android:id="@+id/SpinnerProvince"
+            android:layout_width="305dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="10dp"
+            android:entries="@array/ProvincePuglia"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerRegione" />
 
-    <Spinner
-        android:id="@+id/spinnerNazioni"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="20dp"
-        android:entries="@array/nazioni"
+        <Spinner
+            android:id="@+id/spinnerCitta"
+            android:layout_width="305dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="10dp"
+            android:entries="@array/Citta"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/SpinnerProvince" />
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />
-
-    <Button
-        android:id="@+id/registrati"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="110dp"
-        android:text="Registrati"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerNazioni" />
-
-    <TextView
-        android:id="@+id/dataNascita"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="20dp"
-        android:text="datanascita"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerNazioni" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

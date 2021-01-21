@@ -31,8 +31,6 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     private Button signInButton;
     private TextView dataNascita;
     private DatePickerDialog.OnDateSetListener dataDiNascita;
-    private RadioGroup radiogroup;
-    private RadioButton radiosex;
     private static final String TAG = "RegistrationActivity";
     // Access a Cloud Firestore instance from your Activity
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -96,28 +94,27 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
     public void openMainActivity(){
         // Create a new user with a first, middle, and last name
-        final Map<String, Object> user = new HashMap<>();
+        Map<String, Object> user = new HashMap<>();
 
         EditText name = (EditText)findViewById(R.id.EditTextName);
         String nome = name.getText().toString();
         user.put("nome", nome);
 
-        EditText surname = (EditText)findViewById(R.id.EdiTextSurname);
+        EditText surname = (EditText)findViewById(R.id.EditTextSurname);
         String cognome = surname.getText().toString();
         user.put("cognome", cognome);
 
         TextView date = (TextView) findViewById(R.id.dataNascita);
         String data= date.getText().toString();
         user.put("dataNascita", data);
-        radiogroup=(RadioGroup) findViewById(R.id.radiogroup);
+
+
+        RadioGroup radiogroup=(RadioGroup) findViewById(R.id.radiogroup);
         int Idselezionato= radiogroup.getCheckedRadioButtonId();
-        radiosex= (RadioButton) findViewById(Idselezionato);
+        RadioButton radiosex= (RadioButton) findViewById(Idselezionato);
         user.put("genere", radiosex.getText().toString());
 
-
-
-
-        // Add a new document with a generated ID
+// Add a new document with a generated ID
         db.collection("Utenti")
         .add(user)
                 /*.addOnSuccessListener(new OnSuccessListener<Void>() {
