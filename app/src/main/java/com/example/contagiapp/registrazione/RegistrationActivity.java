@@ -98,13 +98,14 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         // Create a new user with a first, middle, and last name
         final Map<String, Object> user = new HashMap<>();
 
-        EditText name = (EditText)findViewById(R.id.editTextTextPersonName3);
+        EditText name = (EditText)findViewById(R.id.EditTextName);
         String nome = name.getText().toString();
         user.put("nome", nome);
 
-        EditText surname = (EditText)findViewById(R.id.editTextTextPersonName4);
+        EditText surname = (EditText)findViewById(R.id.EdiTextSurname);
         String cognome = surname.getText().toString();
         user.put("cognome", cognome);
+
         TextView date = (TextView) findViewById(R.id.dataNascita);
         String data= date.getText().toString();
         user.put("dataNascita", data);
@@ -116,7 +117,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
 
 
-// Add a new document with a generated ID
+        // Add a new document with a generated ID
         db.collection("Utenti")
         .add(user)
                 /*.addOnSuccessListener(new OnSuccessListener<Void>() {

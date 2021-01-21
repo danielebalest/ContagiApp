@@ -2,6 +2,7 @@ package com.example.contagiapp.ui.login;
 
 import android.app.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -25,10 +27,20 @@ import android.widget.Toast;
 
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG ="LoginActivity";
     private LoginViewModel loginViewModel;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,8 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final EditText usernameEditText = findViewById(R.id.username);
-        final EditText passwordEditText = findViewById(R.id.password);
+        usernameEditText = findViewById(R.id.username);
+        passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
@@ -130,8 +142,27 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
     public void openMain(){
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        startActivity(mainIntent);
+        /*String username = usernameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();*/
+        final Intent mainIntent = new Intent(this, MainActivity.class);
+
+        /*db.collection("Utenti")
+                .whereEqualTo("nome", username).whereEqualTo("password",password)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());*/
+                                startActivity(mainIntent);
+                            /*}
+                        } else {
+                            Log.d(TAG, "Username o password errati", task.getException());
+                        }
+                    }
+                });*/
+        //Query capitalCities = db.collection("cities").whereEqualTo("capital", true);
     }
 }
 
