@@ -152,7 +152,7 @@
             app:layout_constraintTop_toBottomOf="@+id/spinnerNazioni" />
 
         <Spinner
-            android:id="@+id/SpinnerProvince"
+            android:id="@+id/spinnerProvince"
             android:layout_width="305dp"
             android:layout_height="40dp"
             android:layout_marginStart="32dp"
@@ -169,7 +169,7 @@
             android:layout_marginTop="10dp"
             android:entries="@array/Citta"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/SpinnerProvince" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerProvince" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

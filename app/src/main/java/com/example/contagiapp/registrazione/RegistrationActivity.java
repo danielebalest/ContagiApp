@@ -118,8 +118,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         Spinner regione= (Spinner) findViewById(R.id.spinnerRegione);
         user.put("regione", regione.getSelectedItem().toString());
 
-        /*Spinner provincia= (Spinner) findViewById(R.id.spinnerProvince);
-        user.put("nazione", nazione.getSelectedItem().toString());*/
+        Spinner provincia= (Spinner) findViewById(R.id.spinnerProvince);
+        user.put("province", nazione.getSelectedItem().toString());
 
         Spinner citta= (Spinner) findViewById(R.id.spinnerCitta);
         user.put("citta", citta.getSelectedItem().toString());
