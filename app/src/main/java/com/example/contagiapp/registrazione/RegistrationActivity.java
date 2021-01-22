@@ -101,17 +101,14 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         user.put("nome", nome);
 
         EditText surname = (EditText)findViewById(R.id.EditTextSurname);
-        String cognome = surname.getText().toString();
-        user.put("cognome", cognome);
+        user.put("cognome", surname.getText().toString());
 
         TextView date = (TextView) findViewById(R.id.dataNascita);
         String data= date.getText().toString();
         user.put("dataNascita", data);
 
-      /*  Spinner nazione= (Spinner) findViewById(R.id.spinnerNazioni);
-        long naz= nazione.getSelectedItemId();
-
-                user.put("nazione", naz);*/
+        Spinner nazione= (Spinner) findViewById(R.id.spinnerNazioni);
+        user.put("nazione", nazione.getSelectedItem().toString());
 
         EditText email = (EditText)findViewById(R.id.editTextTextEmailAddress);
         String mail = email.getText().toString();
