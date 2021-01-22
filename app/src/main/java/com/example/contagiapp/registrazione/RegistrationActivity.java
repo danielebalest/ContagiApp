@@ -108,10 +108,22 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         String data= date.getText().toString();
         user.put("dataNascita", data);
 
+      /*  Spinner nazione= (Spinner) findViewById(R.id.spinnerNazioni);
+        long naz= nazione.getSelectedItemId();
+
+                user.put("nazione", naz);*/
+
+        EditText email = (EditText)findViewById(R.id.editTextTextEmailAddress);
+        String mail = email.getText().toString();
+        user.put("cognome", mail);
+
+        EditText pass = (EditText)findViewById(R.id.editTextTextPassword);
+        String password = pass.getText().toString();
+        user.put("cognome", password);
 
         RadioGroup radiogroup=(RadioGroup) findViewById(R.id.radiogroup);
-        int Idselezionato= radiogroup.getCheckedRadioButtonId();
-        RadioButton radiosex= (RadioButton) findViewById(Idselezionato);
+        int Idsex= radiogroup.getCheckedRadioButtonId();
+        RadioButton radiosex= (RadioButton) findViewById(Idsex);
         user.put("genere", radiosex.getText().toString());
 
 // Add a new document with a generated ID
