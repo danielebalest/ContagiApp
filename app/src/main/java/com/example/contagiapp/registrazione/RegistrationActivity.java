@@ -18,6 +18,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
@@ -131,6 +132,10 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
         EditText password = (EditText)findViewById(R.id.editTextTextPassword);
         user.put("password", password.getText().toString());
+        EditText password2= (EditText) findViewById(R.id.editTextRepeatPassword);
+      /*  if((password.equals(password2))){
+            Toast.makeText(this,"le password non coincidono", Toast.LENGTH_SHORT.show());
+        }NON VAAAAAAAAAA*/
 
 
 
