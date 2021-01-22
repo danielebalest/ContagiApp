@@ -70,7 +70,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         RegistrationActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        android.R.style.Widget_Material_CalendarView,
                         dataDiNascita,
                         year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -108,6 +108,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         user.put("genere", radiosex.getText().toString());
 
         TextView date = (TextView) findViewById(R.id.dataNascita);
+        //date.
         user.put("dataNascita", date.getText().toString());
 
         Spinner nazione= (Spinner) findViewById(R.id.spinnerNazioni);
