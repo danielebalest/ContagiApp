@@ -144,8 +144,8 @@ public class LoginActivity extends AppCompatActivity {
     public void openMain(){
         /*String username = usernameEditText.getText().toString();
         String password = passwordEditText.getText().toString();*/
-        final Intent mainIntent = new Intent(this, MainActivity.class);
-
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        startActivity(mainIntent);
         /*db.collection("Utenti")
                 .whereEqualTo("nome", username).whereEqualTo("password",password)
                 .get()

@@ -24,7 +24,7 @@ public class EventsFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_events, container, false);
 
-        new_event = view.findViewById(R.id.nuovo_evento);
+        new_event = view.findViewById(R.id.floating_action_button);
         new_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
