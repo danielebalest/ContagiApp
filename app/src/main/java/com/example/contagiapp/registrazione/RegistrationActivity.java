@@ -97,34 +97,41 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         Map<String, Object> user = new HashMap<>();
 
         EditText name = (EditText)findViewById(R.id.EditTextName);
-        String nome = name.getText().toString();
-        user.put("nome", nome);
+        user.put("nome", name.getText().toString());
 
         EditText surname = (EditText)findViewById(R.id.EditTextSurname);
-        String cognome = surname.getText().toString();
-        user.put("cognome", cognome);
-
-        TextView date = (TextView) findViewById(R.id.dataNascita);
-        String data= date.getText().toString();
-        user.put("dataNascita", data);
-
-      /*  Spinner nazione= (Spinner) findViewById(R.id.spinnerNazioni);
-        long naz= nazione.getSelectedItemId();
-
-                user.put("nazione", naz);*/
-
-        EditText email = (EditText)findViewById(R.id.editTextTextEmailAddress);
-        String mail = email.getText().toString();
-        user.put("cognome", mail);
-
-        EditText pass = (EditText)findViewById(R.id.editTextTextPassword);
-        String password = pass.getText().toString();
-        user.put("cognome", password);
+        user.put("cognome", surname.getText().toString());
 
         RadioGroup radiogroup=(RadioGroup) findViewById(R.id.radiogroup);
         int Idsex= radiogroup.getCheckedRadioButtonId();
         RadioButton radiosex= (RadioButton) findViewById(Idsex);
         user.put("genere", radiosex.getText().toString());
+
+        TextView date = (TextView) findViewById(R.id.dataNascita);
+        user.put("dataNascita", date.getText().toString());
+
+        Spinner nazione= (Spinner) findViewById(R.id.spinnerNazioni);
+        user.put("nazione", nazione.getSelectedItem().toString());
+
+        Spinner regione= (Spinner) findViewById(R.id.spinnerRegione);
+        user.put("regione", regione.getSelectedItem().toString());
+
+        /*Spinner provincia= (Spinner) findViewById(R.id.spinnerProvince);
+        user.put("nazione", nazione.getSelectedItem().toString());*/
+
+        Spinner citta= (Spinner) findViewById(R.id.spinnerCitta);
+        user.put("citta", citta.getSelectedItem().toString());
+
+        EditText email = (EditText)findViewById(R.id.editTextTextEmailAddress);
+        user.put("email", email.getText().toString());
+
+        EditText telefono = (EditText)findViewById(R.id.editTextPhone);
+        user.put("telefono", telefono.getText().toString());
+
+        EditText password = (EditText)findViewById(R.id.editTextTextPassword);
+        user.put("password", password.getText().toString());
+
+
 
 // Add a new document with a generated ID
         db.collection("Utenti")
