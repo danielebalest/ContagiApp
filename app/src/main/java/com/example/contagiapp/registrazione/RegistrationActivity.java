@@ -144,15 +144,16 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
 
 
-        TextView mail = (TextView) findViewById(R.id.editTextTextEmailAddress);
+        final TextView mail = (TextView) findViewById(R.id.editTextTextEmailAddress);
         final String email = date.getText().toString();
         final String email2 = null;
 
-        Task<QuerySnapshot> docRef = db.collection("Utenti").whereEqualTo("mail", email).get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        //questionObject object=queryDocumentSnapshots.getDocuments().get(0).toObject(questionObject.class);
+        db.collection("Utenti").whereEqualTo("mail", email).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshots) {
-                mail_contr(documentSnapshots, email, user);
+            public void onSuccess(QuerySnapshot querySnapshots) {
+                mail_contr(querySnapshots.isEmpty(), user, email);
 
             }
                 });
@@ -166,12 +167,6 @@ docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                           });*/
 
 }
-
-    private void mail_contr(DocumentSnapshot documentSnapshots, String email, Map<String, Object> user) {
-    }
-
-
-
     //Spinner per nazioni
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -183,12 +178,11 @@ docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-}
 
-    private void mail_contr(DocumentSnapshot documentSnapshot, String email, Map<String, Object> user) {
-        Utente ut = documentSnapshot.toObject(Utente.class);
+    private void mail_contr(boolean cond, Map<String, Object> user, String email) {
+        //Utente ut = documentSnapshot.toObject(Utente.class);
 
-        if(ut.getMail().equals(email))
+        if(cond)
         {
             user.put("mail", email);
             db.collection("Utenti").add(user);
@@ -197,6 +191,8 @@ docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
         } else {
             //TODO
             Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
+            /*Intent mainIntent = new Intent(this, RegistrationActivity.class);
+            startActivity(mainIntent);*/
         }
     }
 }
