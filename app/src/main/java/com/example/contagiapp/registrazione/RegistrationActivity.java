@@ -136,36 +136,25 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         user.put("telefono", telefono.getText().toString());
 
         EditText password = (EditText)findViewById(R.id.editTextTextPassword);
-        user.put("password", password.getText().toString());
+        final String psw1 = password.getText().toString();
+
         EditText password2= (EditText) findViewById(R.id.editTextRepeatPassword);
-      /*  if((password.equals(password2))){
-            Toast.makeText(this,"le password non coincidono", Toast.LENGTH_SHORT.show());
-        }NON VAAAAAAAAAA*/
+        final String psw2 = password2.getText().toString();
+
+
 
 
 
         final TextView mail = (TextView) findViewById(R.id.editTextTextEmailAddress);
         final String email = date.getText().toString();
-        final String email2 = null;
 
-        //questionObject object=queryDocumentSnapshots.getDocuments().get(0).toObject(questionObject.class);
         db.collection("Utenti").whereEqualTo("mail", email).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot querySnapshots) {
-                mail_contr(querySnapshots.isEmpty(), user, email);
-
-            }
+                    @Override
+                    public void onSuccess(QuerySnapshot querySnapshots) {
+                        mail_contr(querySnapshots.isEmpty(), user, email, psw1, psw2);
+                    }
                 });
-
-                                         /* DocumentReference docRef = db.collection("cities").document("BJ");
-docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                              @Override
-                                              public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                  City city = documentSnapshot.toObject(City.class);
-                                              }
-                                          });*/
-
 }
     //Spinner per nazioni
     @Override
@@ -179,20 +168,21 @@ docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 
     }
 
-    private void mail_contr(boolean cond, Map<String, Object> user, String email) {
+    private void mail_contr(boolean cond, Map<String, Object> user, String email, String psw1, String psw2) {
         //Utente ut = documentSnapshot.toObject(Utente.class);
 
-        if(cond)
-        {
-            user.put("mail", email);
-            db.collection("Utenti").add(user);
-            Intent mainIntent = new Intent(this, MainActivity.class);
-            startActivity(mainIntent);
+        if(psw1.equals(psw2)){
+            Toast.makeText(this, "Le password coincidono", Toast.LENGTH_SHORT).show();
         } else {
-            //TODO
-            Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
-            /*Intent mainIntent = new Intent(this, RegistrationActivity.class);
-            startActivity(mainIntent);*/
+            if (cond) {
+                user.put("password", psw1);
+                user.put("mail", email);
+                db.collection("Utenti").add(user);
+                Intent mainIntent = new Intent(this, MainActivity.class);
+                startActivity(mainIntent);
+            } else {
+                Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
