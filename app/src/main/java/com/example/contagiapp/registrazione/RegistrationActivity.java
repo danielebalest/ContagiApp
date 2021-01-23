@@ -22,7 +22,14 @@ import android.widget.Toast;
 
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
+import com.example.contagiapp.data.DB.Utente;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -95,7 +102,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
     public void openMainActivity(){
         // Create a new user with a first, middle, and last name
-        Map<String, Object> user = new HashMap<>();
+        final Map<String, Object> user = new HashMap<>();
+        setContentView(R.layout.activity_registration);
 
         EditText name = (EditText)findViewById(R.id.EditTextName);
         user.put("nome", name.getText().toString());
@@ -103,9 +111,9 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         EditText surname = (EditText)findViewById(R.id.EditTextSurname);
         user.put("cognome", surname.getText().toString());
 
-        RadioGroup radiogroup=(RadioGroup) findViewById(R.id.radiogroup);
-        int Idsex= radiogroup.getCheckedRadioButtonId();
-        RadioButton radiosex= (RadioButton) findViewById(Idsex);
+        RadioGroup radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
+        int Idselezionato = radiogroup.getCheckedRadioButtonId();
+        RadioButton radiosex = (RadioButton) findViewById(Idselezionato);
         user.put("genere", radiosex.getText().toString());
 
         TextView date = (TextView) findViewById(R.id.dataNascita);
@@ -124,9 +132,6 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         Spinner citta= (Spinner) findViewById(R.id.spinnerCitta);
         user.put("citta", citta.getSelectedItem().toString());
 
-        EditText email = (EditText)findViewById(R.id.editTextTextEmailAddress);
-        user.put("email", email.getText().toString());
-
         EditText telefono = (EditText)findViewById(R.id.editTextPhone);
         user.put("telefono", telefono.getText().toString());
 
@@ -139,27 +144,28 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
 
 
-// Add a new document with a generated ID
-        db.collection("Utenti")
-        .add(user)
-                /*.addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                })*/;
+        TextView mail = (TextView) findViewById(R.id.editTextTextEmailAddress);
+        final String email = date.getText().toString();
+        final String email2 = null;
 
+        Task<QuerySnapshot> docRef = db.collection("Utenti").whereEqualTo("mail", email).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshots) {
+                mail_contr(documentSnapshots, email, user);
 
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        startActivity(mainIntent);
-    }
+            }
+                });
 
+                                         /* DocumentReference docRef = db.collection("cities").document("BJ");
+docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                              @Override
+                                              public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                  City city = documentSnapshot.toObject(City.class);
+                                              }
+                                          });*/
+
+                                      }
 
     //Spinner per nazioni
     @Override
@@ -171,5 +177,21 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+}
+
+    private void mail_contr(DocumentSnapshot documentSnapshot, String email, Map<String, Object> user) {
+        Utente ut = documentSnapshot.toObject(Utente.class);
+
+        if(ut.getMail().equals(email))
+        {
+            user.put("mail", email);
+            db.collection("Utenti").add(user);
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            startActivity(mainIntent);
+        } else {
+            //TODO
+            Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
+        }
     }
 }
