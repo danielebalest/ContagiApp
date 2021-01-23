@@ -9,23 +9,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-        tools:context=".ui.login.LoginActivity">
+    android:background="@drawable/gradient"
+    tools:context=".ui.login.LoginActivity">
 
 
     <TextView
+        android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_marginStart="32dp"
-
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="225dp"
 
-        android:textColor="@color/black"
+        android:layout_marginEnd="225dp"
         android:fontFamily="sans-serif-black"
         android:text="@string/login"
         android:textAllCaps="true"
 
 
+        android:textColor="@color/black"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +43,7 @@
             android:layout_marginEnd="16dp"
             app:endIconMode="clear_text"
             app:startIconDrawable="@drawable/ic_account_circle_black_24dp"
-
+            app:startIconTint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -72,7 +74,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textFieldUsername"
             app:endIconMode="password_toggle"
-            app:startIconDrawable="@drawable/ic_outline_lock_24">
+            app:startIconDrawable="@drawable/ic_outline_lock_24"
+            app:startIconTint="@color/black">
             />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -88,26 +91,27 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <Button
-            android:id="@+id/login"
-            android:layout_width="226dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="48dp"
-            android:layout_marginBottom="64dp"
-            android:backgroundTint="#D81B31"
-            android:enabled="false"
-            android:text="@string/login"
-            android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textFieldPassword"
-            app:layout_constraintVertical_bias="0.13999999" />
+    <Button
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="64dp"
+        android:backgroundTint="#D81B31"
+        android:enabled="false"
+        android:text="@string/login"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldPassword"
+        app:layout_constraintVertical_bias="0.279" />
 
-        <ProgressBar
+    <ProgressBar
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -122,6 +126,55 @@
             app:layout_constraintStart_toStartOf="@+id/textFieldPassword"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.3" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="267dp"
+        android:layout_marginBottom="13dp"
+        android:buttonTint="@color/black"
+        android:text="@string/remember_me"
+        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.437"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldPassword"
+        app:layout_constraintVertical_bias="0.195" />
+
+    <Button
+        android:id="@+id/forgetPSWbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="74dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="43dp"
+        android:background="#FFFFFF"
+        android:text="Password dimenticata"
+        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/checkBox"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldPassword"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:textSize="18dp"
+        />
+
+    <Button
+        android:id="@+id/createAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/createAccount"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="47dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:textSize="20dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,6 +25,9 @@
     <string name="phone">Cellulare</string>
     <string name="search">Cerca</string>
 
+    <string name="remember_me">Ricordami</string>
+    <string name="createAccount">Crea account</string>
+
     <string-array name="nazioni">
         <item>Italia</item>
         <item>Francia</item>

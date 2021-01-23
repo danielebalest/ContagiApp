@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
+import com.example.contagiapp.registrazione.RegistrationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -52,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameEditText = findViewById(R.id.username);
         passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
+        final Button createAccountButton = findViewById(R.id.createAccount);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -132,6 +134,13 @@ public class LoginActivity extends AppCompatActivity {
                 openMain();
             }
         });
+
+        createAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openRegistration();
+            }
+        });
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
@@ -165,6 +174,11 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });*/
         //Query capitalCities = db.collection("cities").whereEqualTo("capital", true);
+    }
+
+    public void openRegistration(){
+        Intent signUpIntent = new Intent(this, RegistrationActivity.class);
+        startActivity(signUpIntent);
     }
 }
 
