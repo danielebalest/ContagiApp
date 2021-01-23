@@ -23,7 +23,9 @@
             android:inputType="textPersonName"
             android:labelFor="@id/EditTextSurname"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:endIconMode="clear_text"
+            />
 
         <EditText
             android:id="@+id/EditTextSurname"
@@ -108,13 +110,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextRepeatPassword" />
 
-        <TextView
+        <EditText
             android:id="@+id/dataNascita"
             android:layout_width="303dp"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="33dp"
-            android:text="datanascita"
+            android:layout_marginTop="10dp"
+            android:hint="@string/birth"
+            android:ems="10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/radiogroup" />
 
@@ -170,6 +173,7 @@
             android:entries="@array/Citta"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinnerProvince" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

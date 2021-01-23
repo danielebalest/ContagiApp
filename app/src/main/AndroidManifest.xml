@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".utente.ProfiloActivity"></activity>
+        <activity android:name=".utente.ProfiloActivity" />
         <activity android:name=".registrazione.SignUpActivity" />
         <activity android:name=".registrazione.RegistrationActivity" />
         <activity

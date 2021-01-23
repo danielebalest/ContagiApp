@@ -3,6 +3,12 @@
     <string name="home">Home</string>
     <string name="group">Gruppi</string>
 
+
+    <!--Campi di registrazione-->
+    <string name="name">Nome</string>
+    <string name="surname">Cognome</string>
+    <string name="birth">Data di nascita</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_login">Accedi</string>
     <string name="login">Accedi</string>
@@ -17,8 +23,7 @@
     <string name="invalid_password">Password deve contenere più di 5 caratteri</string>
     <string name="login_failed">"Accesso fallito"</string>
     <string name="phone">Cellulare</string>
-
-
+    <string name="search">Cerca</string>
 
     <string-array name="nazioni">
         <item>Italia</item>
