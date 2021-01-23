@@ -1,0 +1,251 @@
+Index: app/src/main/java/com/example/contagiapp/registrazione/RegistrationActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.contagiapp.registrazione;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.app.DatePickerDialog;\r\nimport android.content.Intent;\r\nimport android.graphics.Color;\r\nimport android.graphics.drawable.ColorDrawable;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.AdapterView;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.Button;\r\nimport android.widget.DatePicker;\r\nimport android.widget.EditText;\r\nimport android.widget.RadioButton;\r\nimport android.widget.RadioGroup;\r\nimport android.widget.Spinner;\r\nimport android.widget.TextView;\r\n\r\nimport com.example.contagiapp.MainActivity;\r\nimport com.example.contagiapp.R;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\n\r\nimport java.util.Calendar;\r\nimport java.util.HashMap;\r\nimport java.util.Map;\r\n\r\npublic class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {\r\n    private Button signInButton;\r\n    private TextView dataNascita;\r\n    private DatePickerDialog.OnDateSetListener dataDiNascita;\r\n    private static final String TAG = \"RegistrationActivity\";\r\n    // Access a Cloud Firestore instance from your Activity\r\n    FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_registration);\r\n\r\n\r\n        //Spinner per nazioni\r\n        Spinner spinnerNazioni = findViewById(R.id.spinnerNazioni);\r\n        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.nazioni, android.R.layout.simple_spinner_dropdown_item);\r\n        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);\r\n        spinnerNazioni.setAdapter(adapter);\r\n        spinnerNazioni.setOnItemSelectedListener(this);\r\n\r\n\r\n        // collegamento button registrati con la mainActivity\r\n        signInButton = (Button) findViewById(R.id.registrati);\r\n        signInButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                openMainActivity();\r\n            }\r\n        });\r\n\r\n        //Date Picker\r\n        dataNascita = (TextView) findViewById(R.id.dataNascita);\r\n        dataNascita.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Calendar cal = Calendar.getInstance();\r\n                int year = cal.get(Calendar.YEAR);\r\n                int month = cal.get(Calendar.MONTH);\r\n                int day = cal.get(Calendar.DAY_OF_MONTH);\r\n\r\n                DatePickerDialog dialog = new DatePickerDialog(\r\n                        RegistrationActivity.this,\r\n                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,\r\n                        dataDiNascita,\r\n                        year, month, day);\r\n                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));\r\n                dialog.show();\r\n            }\r\n        });\r\n\r\n        dataDiNascita = new DatePickerDialog.OnDateSetListener(){\r\n            @Override\r\n            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {\r\n\r\n                Log.d(TAG, \"onDateSet: date: \" + dayOfMonth + \"/\" + month + \"/\" + year);\r\n                String date = dayOfMonth + \"/\" + month+1 + \"/\" + year;\r\n                dataNascita.setText(date);\r\n            }\r\n        };\r\n\r\n\r\n\r\n    }\r\n\r\n    public void openMainActivity(){\r\n        // Create a new user with a first, middle, and last name\r\n        Map<String, Object> user = new HashMap<>();\r\n\r\n        EditText name = (EditText)findViewById(R.id.EditTextName);\r\n        String nome = name.getText().toString();\r\n        user.put(\"nome\", nome);\r\n\r\n        EditText surname = (EditText)findViewById(R.id.EditTextSurname);\r\n        String cognome = surname.getText().toString();\r\n        user.put(\"cognome\", cognome);\r\n\r\n        TextView date = (TextView) findViewById(R.id.dataNascita);\r\n        String data= date.getText().toString();\r\n        user.put(\"dataNascita\", data);\r\n\r\n      /*  Spinner nazione= (Spinner) findViewById(R.id.spinnerNazioni);\r\n        long naz= nazione.getSelectedItemId();\r\n\r\n                user.put(\"nazione\", naz);*/\r\n\r\n        EditText email = (EditText)findViewById(R.id.editTextTextEmailAddress);\r\n        String mail = email.getText().toString();\r\n        user.put(\"cognome\", mail);\r\n\r\n        EditText pass = (EditText)findViewById(R.id.editTextTextPassword);\r\n        String password = pass.getText().toString();\r\n        user.put(\"cognome\", password);\r\n\r\n        RadioGroup radiogroup=(RadioGroup) findViewById(R.id.radiogroup);\r\n        int Idsex= radiogroup.getCheckedRadioButtonId();\r\n        RadioButton radiosex= (RadioButton) findViewById(Idsex);\r\n        user.put(\"genere\", radiosex.getText().toString());\r\n\r\n// Add a new document with a generated ID\r\n        db.collection(\"Utenti\")\r\n        .add(user)\r\n                /*.addOnSuccessListener(new OnSuccessListener<Void>() {\r\n                    @Override\r\n                    public void onSuccess(Void aVoid) {\r\n                        Log.d(TAG, \"DocumentSnapshot successfully written!\");\r\n                    }\r\n                })\r\n                .addOnFailureListener(new OnFailureListener() {\r\n                    @Override\r\n                    public void onFailure(@NonNull Exception e) {\r\n                        Log.w(TAG, \"Error writing document\", e);\r\n                    }\r\n                })*/;\r\n\r\n\r\n        Intent mainIntent = new Intent(this, MainActivity.class);\r\n        startActivity(mainIntent);\r\n    }\r\n\r\n\r\n    //Spinner per nazioni\r\n    @Override\r\n    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {\r\n        String text = parent.getItemAtPosition(position).toString();\r\n        //Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();\r\n    }\r\n\r\n    @Override\r\n    public void onNothingSelected(AdapterView<?> parent) {\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/contagiapp/registrazione/RegistrationActivity.java	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
++++ app/src/main/java/com/example/contagiapp/registrazione/RegistrationActivity.java	(date 1611393860677)
+@@ -18,10 +18,14 @@
+ import android.widget.RadioGroup;
+ import android.widget.Spinner;
+ import android.widget.TextView;
++import android.widget.Toast;
+ 
+ import com.example.contagiapp.MainActivity;
+ import com.example.contagiapp.R;
++import com.google.android.gms.tasks.Task;
+ import com.google.firebase.firestore.FirebaseFirestore;
++import com.google.firebase.firestore.Query;
++import com.google.firebase.firestore.QuerySnapshot;
+ 
+ import java.util.Calendar;
+ import java.util.HashMap;
+@@ -108,43 +112,33 @@
+         String data= date.getText().toString();
+         user.put("dataNascita", data);
+ 
+-      /*  Spinner nazione= (Spinner) findViewById(R.id.spinnerNazioni);
+-        long naz= nazione.getSelectedItemId();
+-
+-                user.put("nazione", naz);*/
+-
+-        EditText email = (EditText)findViewById(R.id.editTextTextEmailAddress);
+-        String mail = email.getText().toString();
+-        user.put("cognome", mail);
+-
+-        EditText pass = (EditText)findViewById(R.id.editTextTextPassword);
+-        String password = pass.getText().toString();
+-        user.put("cognome", password);
+ 
+-        RadioGroup radiogroup=(RadioGroup) findViewById(R.id.radiogroup);
+-        int Idsex= radiogroup.getCheckedRadioButtonId();
+-        RadioButton radiosex= (RadioButton) findViewById(Idsex);
++        RadioGroup radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
++        int Idselezionato = radiogroup.getCheckedRadioButtonId();
++        RadioButton radiosex = (RadioButton) findViewById(Idselezionato);
+         user.put("genere", radiosex.getText().toString());
+ 
+-// Add a new document with a generated ID
+-        db.collection("Utenti")
+-        .add(user)
+-                /*.addOnSuccessListener(new OnSuccessListener<Void>() {
+-                    @Override
+-                    public void onSuccess(Void aVoid) {
+-                        Log.d(TAG, "DocumentSnapshot successfully written!");
+-                    }
+-                })
+-                .addOnFailureListener(new OnFailureListener() {
+-                    @Override
+-                    public void onFailure(@NonNull Exception e) {
+-                        Log.w(TAG, "Error writing document", e);
+-                    }
+-                })*/;
+-
+-
+-        Intent mainIntent = new Intent(this, MainActivity.class);
+-        startActivity(mainIntent);
++        TextView mail = (TextView) findViewById(R.id.editTextTextEmailAddress);
++        String email = date.getText().toString();
++
++        Task<QuerySnapshot> q = db.collection("Utenti").whereEqualTo("mail", email).get()
++                /*.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
++                                          @Override
++                                          public void onSuccess(DocumentSnapshot documentSnapshot) {
++                                              City city = documentSnapshot.toObject(City.class);
++                                          })*/;
++        if(q.getResult().isEmpty())
++        {
++            user.put("mail", email);
++            Toast.makeText(this, q.toString(), Toast.LENGTH_SHORT).show();
++            db.collection("Utenti").add(user);
++            Intent mainIntent = new Intent(this, MainActivity.class);
++            startActivity(mainIntent);
++        } else {
++            //TODO
++            Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
++
++        }
+     }
+ 
+ 
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_17__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_17__Default_Changelist_.xml	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_17__Default_Changelist_.xml	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
+@@ -1,9 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_15_01_2021_12_17_[Default_Changelist]" date="1610709427556" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_17_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 15/01/2021 12:17 [Default Changelist]" />
+-  <binary>
+-    <option name="BEFORE_PATH" />
+-    <option name="AFTER_PATH" value=".idea/.name" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_17_[Default_Changelist]/.name" />
+-  </binary>
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_18_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_18_[Default_Changelist]/shelved.patch	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_18_[Default_Changelist]/shelved.patch	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
+@@ -1,3 +0,0 @@
+-diff --git .idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_20_35__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_20_35__Default_Changelist_.xml
+-diff --git .idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_20_23__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_20_23__Default_Changelist_.xml
+-diff --git .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_11_02__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_11_02__Default_Changelist_.xml
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_11_02_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_11_02_[Default_Changelist]/shelved.patch	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_11_02_[Default_Changelist]/shelved.patch	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
+@@ -1,27 +0,0 @@
+-Index: .idea/vcs.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"VcsDirectoryMappings\">\r\n    <mapping directory=\"\" vcs=\"Git\" />\r\n  </component>\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/vcs.xml	(revision 04dc762d76afb4cc9ce8d74a7f94f0c359e3d7ed)
+-+++ .idea/vcs.xml	(date 1610702826621)
+-@@ -2,5 +2,6 @@
+- <project version="4">
+-   <component name="VcsDirectoryMappings">
+-     <mapping directory="" vcs="Git" />
+-+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+-   </component>
+- </project>
+-\ No newline at end of file
+-Index: .idea/.name
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/.name	(date 1610652933189)
+-+++ .idea/.name	(date 1610652933189)
+-@@ -0,0 +1,1 @@
+-+ContagiApp
+-\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_18__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_18__Default_Changelist_.xml	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_18__Default_Changelist_.xml	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
+@@ -1,9 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_15_01_2021_12_18_[Default_Changelist]" date="1610709489204" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_18_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 15/01/2021 12:18 [Default Changelist]" />
+-  <binary>
+-    <option name="BEFORE_PATH" value=".idea/.name" />
+-    <option name="AFTER_PATH" value=".idea/.name" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_18_[Default_Changelist]/.name" />
+-  </binary>
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_20_35__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_20_35__Default_Changelist_.xml	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_20_35__Default_Changelist_.xml	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_14_01_2021_20_35_[Default_Changelist]" date="1610652933428" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_20_35_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 14/01/2021 20:35 [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_20_35_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_20_35_[Default_Changelist]/shelved.patch	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_20_35_[Default_Changelist]/shelved.patch	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
+@@ -1,62 +0,0 @@
+-Index: app/src/main/AndroidManifest.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.example.contagiapp\">\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/AppTheme\">\r\n\r\n        <activity\r\n            android:name=\".LaunchScreenActivity\"\r\n            android:theme=\"@style/AppTheme\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />àààààà\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity android:name=\".MainActivity\" />\r\n    </application>\r\n\r\n</manifest>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/AndroidManifest.xml	(revision 8f9d403de8f2467b17cb4e2f4154a406cc26c319)
+-+++ app/src/main/AndroidManifest.xml	(date 1610652613694)
+-@@ -14,7 +14,7 @@
+-             android:name=".LaunchScreenActivity"
+-             android:theme="@style/AppTheme">
+-             <intent-filter>
+--                <action android:name="android.intent.action.MAIN" />àààààà
+-+                <action android:name="android.intent.action.MAIN" />
+- 
+-                 <category android:name="android.intent.category.LAUNCHER" />
+-             </intent-filter>
+-Index: .idea/jarRepositories.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/jarRepositories.xml	(date 1610652199375)
+-+++ .idea/jarRepositories.xml	(date 1610652199375)
+-@@ -0,0 +1,25 @@
+-+<?xml version="1.0" encoding="UTF-8"?>
+-+<project version="4">
+-+  <component name="RemoteRepositoriesConfiguration">
+-+    <remote-repository>
+-+      <option name="id" value="central" />
+-+      <option name="name" value="Maven Central repository" />
+-+      <option name="url" value="https://repo1.maven.org/maven2" />
+-+    </remote-repository>
+-+    <remote-repository>
+-+      <option name="id" value="jboss.community" />
+-+      <option name="name" value="JBoss Community repository" />
+-+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+-+    </remote-repository>
+-+    <remote-repository>
+-+      <option name="id" value="BintrayJCenter" />
+-+      <option name="name" value="BintrayJCenter" />
+-+      <option name="url" value="https://jcenter.bintray.com/" />
+-+    </remote-repository>
+-+    <remote-repository>
+-+      <option name="id" value="Google" />
+-+      <option name="name" value="Google" />
+-+      <option name="url" value="https://dl.google.com/dl/android/maven2/" />
+-+    </remote-repository>
+-+  </component>
+-+</project>
+-\ No newline at end of file
+-Index: .idea/.name
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/.name	(date 1610652032589)
+-+++ .idea/.name	(date 1610652032589)
+-@@ -0,0 +1,1 @@
+-+ContagiApp
+-\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_11_02__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_11_02__Default_Changelist_.xml	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_11_02__Default_Changelist_.xml	(revision 7c37fd08fc268860cb574348bb4977a705b06857)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_15_01_2021_11_02_[Default_Changelist]" date="1610704978985" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_11_02_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 15/01/2021 11:02 [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_17_[Default_Changelist]/shelved.patch .idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_12_17_[Default_Changelist]/shelved.patch
+deleted file mode 100644

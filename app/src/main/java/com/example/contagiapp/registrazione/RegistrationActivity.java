@@ -165,7 +165,12 @@ docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                               }
                                           });*/
 
-                                      }
+}
+
+    private void mail_contr(DocumentSnapshot documentSnapshots, String email, Map<String, Object> user) {
+    }
+
+
 
     //Spinner per nazioni
     @Override
