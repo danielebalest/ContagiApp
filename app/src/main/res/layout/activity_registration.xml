@@ -13,7 +13,7 @@
         tools:context=".registrazione.RegistrationActivity">
 
         <EditText
-            android:id="@+id/EditTextName"
+            android:id="@+id/editTextName"
             android:layout_width="305dp"
             android:layout_height="43dp"
             android:layout_marginStart="32dp"
@@ -21,14 +21,14 @@
             android:ems="10"
             android:hint="Nome"
             android:inputType="textPersonName"
-            android:labelFor="@id/EditTextSurname"
+            android:labelFor="@id/editTextSurname"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:endIconMode="clear_text"
             />
 
         <EditText
-            android:id="@+id/EditTextSurname"
+            android:id="@+id/editTextSurname"
             android:layout_width="305dp"
             android:layout_height="43dp"
             android:layout_marginStart="32dp"
@@ -37,7 +37,7 @@
             android:hint="Cognome"
             android:inputType="textPersonName"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EditTextName" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextName" />
 
         <RadioGroup
             android:id="@+id/radiogroup"
@@ -46,7 +46,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EditTextSurname">
+            app:layout_constraintTop_toBottomOf="@+id/editTextSurname">
 
             <RadioButton
                 android:id="@+id/radioButton1"

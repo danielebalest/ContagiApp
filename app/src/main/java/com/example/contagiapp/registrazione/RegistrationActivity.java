@@ -22,13 +22,8 @@ import android.widget.Toast;
 
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
-import com.example.contagiapp.data.DB.Utente;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
@@ -36,7 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private Button signInButton;
     private TextView dataNascita;
     private DatePickerDialog.OnDateSetListener dataDiNascita;
     private static final String TAG = "RegistrationActivity";
@@ -58,7 +52,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
 
         // collegamento button registrati con la mainActivity
-        signInButton = (Button) findViewById(R.id.registrati);
+        Button signInButton = (Button) findViewById(R.id.registrati);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,10 +99,10 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         final Map<String, Object> user = new HashMap<>();
         setContentView(R.layout.activity_registration);
 
-        EditText name = (EditText)findViewById(R.id.EditTextName);
+        EditText name = (EditText)findViewById(R.id.editTextName);
         user.put("nome", name.getText().toString());
 
-        EditText surname = (EditText)findViewById(R.id.EditTextSurname);
+        EditText surname = (EditText)findViewById(R.id.editTextSurname);
         user.put("cognome", surname.getText().toString());
 
         RadioGroup radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
@@ -116,8 +110,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         RadioButton radiosex = (RadioButton) findViewById(Idselezionato);
         user.put("genere", radiosex.getText().toString());
 
-        TextView date = (TextView) findViewById(R.id.dataNascita);
-        //date.
+        EditText date = (EditText) findViewById(R.id.dataNascita);
         user.put("dataNascita", date.getText().toString());
 
         Spinner nazione= (Spinner) findViewById(R.id.spinnerNazioni);
@@ -127,7 +120,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         user.put("regione", regione.getSelectedItem().toString());
 
         Spinner provincia= (Spinner) findViewById(R.id.spinnerProvince);
-        user.put("province", nazione.getSelectedItem().toString());
+        user.put("province", provincia.getSelectedItem().toString());
 
         Spinner citta= (Spinner) findViewById(R.id.spinnerCitta);
         user.put("citta", citta.getSelectedItem().toString());
@@ -135,18 +128,14 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         EditText telefono = (EditText)findViewById(R.id.editTextPhone);
         user.put("telefono", telefono.getText().toString());
 
-        EditText password = (EditText)findViewById(R.id.editTextTextPassword);
+        EditText password = (EditText) findViewById(R.id.editTextTextPassword);
         final String psw1 = password.getText().toString();
 
-        EditText password2= (EditText) findViewById(R.id.editTextRepeatPassword);
+        EditText password2 = (EditText) findViewById(R.id.editTextRepeatPassword);
         final String psw2 = password2.getText().toString();
 
-
-
-
-
-        final TextView mail = (TextView) findViewById(R.id.editTextTextEmailAddress);
-        final String email = date.getText().toString();
+        EditText mail = (EditText) findViewById(R.id.editTextTextEmailAddress);
+        final String email = mail.getText().toString();
 
         db.collection("Utenti").whereEqualTo("mail", email).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -168,21 +157,24 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
     }
 
-    private void mail_contr(boolean cond, Map<String, Object> user, String email, String psw1, String psw2) {
-        //Utente ut = documentSnapshot.toObject(Utente.class);
+    private void mail_contr(boolean cond, Map<String, Object> user1, String email, String psw1, String psw2) {
 
-        if(psw1.equals(psw2)){
+        /*if(psw1.equals(psw2)){
             Toast.makeText(this, "Le password coincidono", Toast.LENGTH_SHORT).show();
-        } else {
+            finish();
+            startActivity(getIntent());
+        } else {*/
             if (cond) {
-                user.put("password", psw1);
-                user.put("mail", email);
-                db.collection("Utenti").add(user);
+                user1.put("password", psw1);
+                user1.put("mail", email);
+                db.collection("Utenti").add(user1);
                 Intent mainIntent = new Intent(this, MainActivity.class);
                 startActivity(mainIntent);
             } else {
                 Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
+                finish();
+                startActivity(getIntent());
             }
-        }
+        //}
     }
-}
+}//TODO se non serve rimuovere la classe Utente
