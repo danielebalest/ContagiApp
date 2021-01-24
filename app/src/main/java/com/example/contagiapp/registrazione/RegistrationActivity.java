@@ -157,7 +157,6 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     }
 
     private void mail_contr(boolean cond, Map<String, Object> user1, String email, String psw1, String psw2) {
-        wanna non so che cazzo è successo ma i dati non li carica nel db, vedete voi che cazzo è successo e nel caso rivedete se avete modificato qualcosa che può centrare con la registrazione ancora è quello...perchè ieri quando ho scritto il codice identico a quello di ora funzionava, quindi io continuo a provare, ma vedete anche voi che io sto perdendo la testa
         if(!(psw1.equals(psw2))){
             Toast.makeText(this, "Le password coincidono", Toast.LENGTH_SHORT).show();
             finish();
