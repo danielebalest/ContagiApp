@@ -32,6 +32,7 @@ import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private TextView dataNascita;
+    private Button signInButton;
     private DatePickerDialog.OnDateSetListener dataDiNascita;
     private static final String TAG = "RegistrationActivity";
     // Access a Cloud Firestore instance from your Activity
@@ -52,7 +53,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
 
         // collegamento button registrati con la mainActivity
-        Button signInButton = (Button) findViewById(R.id.registrati);
+        signInButton = (Button) findViewById(R.id.registrati);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +73,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         RegistrationActivity.this,
-                        android.R.style.Widget_Material_CalendarView,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         dataDiNascita,
                         year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -89,21 +90,19 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 dataNascita.setText(date);
             }
         };
-
-
-
     }
 
     public void openMainActivity(){
         // Create a new user with a first, middle, and last name
         final Map<String, Object> user = new HashMap<>();
-        setContentView(R.layout.activity_registration);
 
         EditText name = (EditText)findViewById(R.id.editTextName);
-        user.put("nome", name.getText().toString());
+        String nome = name.getText().toString();
+        user.put("nome", nome);
 
         EditText surname = (EditText)findViewById(R.id.editTextSurname);
-        user.put("cognome", surname.getText().toString());
+        String cognome = surname.getText().toString();
+        user.put("cognome", cognome);
 
         RadioGroup radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
         int Idselezionato = radiogroup.getCheckedRadioButtonId();
@@ -158,12 +157,12 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     }
 
     private void mail_contr(boolean cond, Map<String, Object> user1, String email, String psw1, String psw2) {
-
-        /*if(psw1.equals(psw2)){
+        wanna non so che cazzo è successo ma i dati non li carica nel db, vedete voi che cazzo è successo e nel caso rivedete se avete modificato qualcosa che può centrare con la registrazione ancora è quello...perchè ieri quando ho scritto il codice identico a quello di ora funzionava, quindi io continuo a provare, ma vedete anche voi che io sto perdendo la testa
+        if(!(psw1.equals(psw2))){
             Toast.makeText(this, "Le password coincidono", Toast.LENGTH_SHORT).show();
             finish();
             startActivity(getIntent());
-        } else {*/
+        } else {
             if (cond) {
                 user1.put("password", psw1);
                 user1.put("mail", email);
@@ -175,6 +174,6 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 finish();
                 startActivity(getIntent());
             }
-        //}
+        }
     }
-}//TODO se non serve rimuovere la classe Utente
+}
