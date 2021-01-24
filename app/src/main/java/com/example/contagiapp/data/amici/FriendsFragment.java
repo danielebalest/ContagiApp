@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -50,6 +52,15 @@ public class FriendsFragment extends Fragment {
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, arrayList);
         listView.setAdapter(arrayAdapter);
+
+        listView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FriendProfile.class);
+                startActivity(intent);
+            }
+        });
+
 
 
         /*visualizza_profilo = view.findViewById(R.id.Visualizza_profilo);
