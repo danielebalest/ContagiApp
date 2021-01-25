@@ -14,6 +14,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:text="Inserire dati dell'evento"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
         <EditText
             android:id="@+id/textNameEvent"
             android:layout_width="match_parent"
@@ -52,23 +61,13 @@
             android:layout_height="44dp"
             android:entries="@array/nazioni"/>
 
-        <Spinner
-            android:id="@+id/spinnerRegione"
+        <EditText
+            android:id="@+id/editCittaResidenza"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:entries="@array/regioniItaliane"/>
-
-        <Spinner
-            android:id="@+id/spinnerProvince"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:entries="@array/ProvincePuglia"/>
-
-        <Spinner
-            android:id="@+id/spinnerCitta"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:entries="@array/Citta"/>
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Città di residenza" />
 
         <Button
             android:id="@+id/buttonCreaEvento"
