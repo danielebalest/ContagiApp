@@ -9,34 +9,39 @@
     android:layout_marginTop="20dp">
 
 
+
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/search_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/search"
         android:paddingLeft="20dp"
-        android:paddingTop="10dp"
         android:paddingRight="20dp"
-        android:paddingBottom="10dp"
-        android:layout_marginRight="20dp"
+        android:padding="10dp"
         android:textSize="16sp"
         android:background="@drawable/search_layout"
         android:drawableLeft="@drawable/ic_baseline_search_24"
         />
 
-    <ListView
-        android:id="@+id/list_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/search_field"></ListView>
+    <LinearLayout
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:orientation = "horizontal"
+        android:layout_below="@+id/search_field"
+        android:layout_marginTop="20dp">
 
 
 
+        <ListView
+            android:id = "@+id/list_view"
+            android:layout_width = "wrap_content"
+            android:layout_height = "match_parent"
+            android:divider = "#000"
+            android:dividerHeight = "1dp"
+            android:footerDividersEnabled = "false"
+            android:headerDividersEnabled = "false"/>
 
 
-
-
-
+    </LinearLayout>
 
 </RelativeLayout>
