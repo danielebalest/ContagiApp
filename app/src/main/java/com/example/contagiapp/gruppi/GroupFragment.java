@@ -10,12 +10,17 @@ import android.service.autofill.OnClickAction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.eventi.NewEventsFragment;
 import com.example.contagiapp.ui.login.LoginActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 
 /**
@@ -27,8 +32,9 @@ public class GroupFragment extends Fragment {
 
     }
 
-    private Button crea_gruppo;
+    private FloatingActionButton crea_gruppo;
     private Button visualizza_gruppo;
+    ListView listViewGruppi;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,7 +42,25 @@ public class GroupFragment extends Fragment {
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_group, container, false);
-        crea_gruppo= view.findViewById(R.id.Crea_gruppo);
+        listViewGruppi = (ListView)view.findViewById(R.id.list_groups);
+        ArrayList<String> arrayListGruppi = new ArrayList<>();
+
+        arrayListGruppi.add("Gruppo1");
+        arrayListGruppi.add("Gruppo2");
+        arrayListGruppi.add("Gruppo3");
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, arrayListGruppi);
+        listViewGruppi.setAdapter(arrayAdapter);
+
+        listViewGruppi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), GroupSearch.class);
+                startActivity(intent);
+            }
+        });
+
+        crea_gruppo = view.findViewById(R.id.FAB_groups);
         crea_gruppo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,14 +70,6 @@ public class GroupFragment extends Fragment {
         });
 
 
-        visualizza_gruppo = view.findViewById(R.id.Visualizza_gruppo);
-        visualizza_gruppo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), GroupSearch.class);
-                startActivity(intent);
-            }
-        });
         return view;
     }
 
