@@ -37,6 +37,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     private static final String TAG = "RegistrationActivity";
     // Access a Cloud Firestore instance from your Activity
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private int anno=0, mese=0, giorno=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +74,10 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         RegistrationActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        android.R.style.Theme_Material_InputMethod,
                         dataDiNascita,
                         year, month, day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));
                 dialog.show();
             }
         });
@@ -109,8 +110,24 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         RadioButton radiosex = (RadioButton) findViewById(Idselezionato);
         user.put("genere", radiosex.getText().toString());
 
-        EditText date = (EditText) findViewById(R.id.dataNascita);
-        user.put("dataNascita", date.getText().toString());
+        TextView date = (TextView) findViewById(R.id.dataNascita);
+        Calendar cal= Calendar.getInstance();
+        String appoggio= date.getText().toString();
+        char[] appoggiochar=null;
+        int l = appoggio.length();
+
+        switch (l){
+            case 9:
+                 anno = Integer.valueOf(appoggio.substring(l-4,l));
+                 mese= Integer.valueOf(appoggio.substring(l-7,l-5));
+                 giorno= Integer.valueOf(appoggio.charAt(0)) - 48;
+                break;
+            case 10:
+                anno = Integer.valueOf(appoggio.substring(l-4,l));
+                mese= Integer.valueOf((appoggio.substring(l-7,l-5)));
+                giorno= Integer.valueOf((appoggio.substring(l-10,l-8)));
+                break;
+        }
 
         Spinner nazione= (Spinner) findViewById(R.id.spinnerNazioni);
         user.put("nazione", nazione.getSelectedItem().toString());
@@ -174,5 +191,18 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 startActivity(getIntent());
             }
         }
+
+        /*da aggiungere in questo metodo
+        if(anno<=(cal.get(Calendar.YEAR)-14)) {
+            if(mese<=cal.get(Calendar.MONTH)){
+                if(giorno<=cal.get(Calendar.DAY_OF_MONTH)){
+                    user.put("dataNascita", date.getText().toString());
+                }
+            }
+        } else{
+            Toast.makeText(this,"bisogna avere almeno 14 anni per iscriversi", Toast.LENGTH_SHORT);
+            finish();
+            startActivity(getIntent());
+        }*/
     }
 }

@@ -110,14 +110,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextRepeatPassword" />
 
-        <EditText
+        <TextView
             android:id="@+id/dataNascita"
-            android:layout_width="303dp"
-            android:layout_height="wrap_content"
+            android:layout_width="305dp"
+            android:layout_height="43dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="10dp"
-            android:hint="@string/birth"
             android:ems="10"
+            android:hint="@string/birth"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/radiogroup" />
 
