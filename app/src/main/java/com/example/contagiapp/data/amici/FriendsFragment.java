@@ -53,9 +53,9 @@ public class FriendsFragment extends Fragment {
         ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, arrayList);
         listView.setAdapter(arrayAdapter);
 
-        listView.setOnClickListener(new View.OnClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), FriendProfile.class);
                 startActivity(intent);
             }
