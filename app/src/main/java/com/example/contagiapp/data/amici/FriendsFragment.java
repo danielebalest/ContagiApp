@@ -6,17 +6,21 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.gruppi.GroupSearch;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
@@ -34,6 +38,7 @@ public class FriendsFragment extends Fragment {
 
     private Button visualizza_profilo;
     ListView listView;
+    TextInputEditText editText;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,23 +64,24 @@ public class FriendsFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), FriendProfile.class);
                 startActivity(intent);
             }
+
         });
 
-
-
-        /*visualizza_profilo = view.findViewById(R.id.Visualizza_profilo);
-        visualizza_profilo.setOnClickListener(new View.OnClickListener() {
+        editText = view.findViewById(R.id.search_field);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FriendProfile.class);
-                startActivity(intent);
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    //da inserire metodo per la ricerca
+                    return true;
+                }
 
-
-
+                return false;
             }
-        });*/
+        });
 
       return view;
+
     }
 
 

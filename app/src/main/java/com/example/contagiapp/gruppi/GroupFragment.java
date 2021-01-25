@@ -7,18 +7,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.service.autofill.OnClickAction;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.eventi.NewEventsFragment;
 import com.example.contagiapp.ui.login.LoginActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
@@ -35,6 +39,7 @@ public class GroupFragment extends Fragment {
     private FloatingActionButton crea_gruppo;
     private Button visualizza_gruppo;
     ListView listViewGruppi;
+    TextInputEditText editText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,6 +71,19 @@ public class GroupFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), GroupAdd.class);
                 startActivity(intent);
+            }
+        });
+
+        editText = view.findViewById(R.id.search_field);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    //da inserire metodo per la ricerca
+                    return true;
+                }
+
+                return false;
             }
         });
 
