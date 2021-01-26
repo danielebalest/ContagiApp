@@ -180,7 +180,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 giorno = Integer.valueOf(appoggio.substring(l - 10, l - 8));
                 break;
         }
-        System.out.println("\n\n\n\nlunghezza\n\n\n\n\n"+l); //TODO controllare condizioni nellif
+        System.out.println("\n\n\n\nlunghezza\n\n\n\n\n"+l); //TODO controllare condizioni nell'if
         if (!(anno > (cal.get(Calendar.YEAR) - 14))) {
             System.out.println("anno"+anno);
             if (mese <= cal.get(Calendar.MONTH)) {
