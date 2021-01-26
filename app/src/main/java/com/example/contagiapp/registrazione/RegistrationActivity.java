@@ -37,7 +37,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     private static final String TAG = "RegistrationActivity";
     // Access a Cloud Firestore instance from your Activity
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private int anno=0, mese=0, giorno=0;
+    private int anno = 0, mese = 0, giorno = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,26 +82,26 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
             }
         });
 
-        dataDiNascita = new DatePickerDialog.OnDateSetListener(){
+        dataDiNascita = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
                 Log.d(TAG, "onDateSet: date: " + dayOfMonth + "/" + month + "/" + year);
-                String date = dayOfMonth + "/" + month+1 + "/" + year;
+                String date = dayOfMonth + "/" + month + 1 + "/" + year;
                 dataNascita.setText(date);
             }
         };
     }
 
-    public void openMainActivity(){
+    public void openMainActivity() {
         // Create a new user with a first, middle, and last name
         final Map<String, Object> user = new HashMap<>();
 
-        EditText name = (EditText)findViewById(R.id.editTextName);
+        EditText name = (EditText) findViewById(R.id.editTextName);
         String nome = name.getText().toString();
         user.put("nome", nome);
 
-        EditText surname = (EditText)findViewById(R.id.editTextSurname);
+        EditText surname = (EditText) findViewById(R.id.editTextSurname);
         String cognome = surname.getText().toString();
         user.put("cognome", cognome);
 
@@ -111,37 +111,21 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         user.put("genere", radiosex.getText().toString());
 
         TextView date = (TextView) findViewById(R.id.dataNascita);
-        Calendar cal= Calendar.getInstance();
-        String appoggio= date.getText().toString();
-        char[] appoggiochar=null;
-        int l = appoggio.length();
+        final String appoggio = date.getText().toString();
 
-        switch (l){
-            case 9:
-                 anno = Integer.valueOf(appoggio.substring(l-4,l));
-                 mese= Integer.valueOf(appoggio.substring(l-7,l-5));
-                 giorno= Integer.valueOf(appoggio.charAt(0)) - 48;
-                break;
-            case 10:
-                anno = Integer.valueOf(appoggio.substring(l-4,l));
-                mese= Integer.valueOf((appoggio.substring(l-7,l-5)));
-                giorno= Integer.valueOf((appoggio.substring(l-10,l-8)));
-                break;
-        }
-
-        Spinner nazione= (Spinner) findViewById(R.id.spinnerNazioni);
+        Spinner nazione = (Spinner) findViewById(R.id.spinnerNazioni);
         user.put("nazione", nazione.getSelectedItem().toString());
 
-        Spinner regione= (Spinner) findViewById(R.id.spinnerRegione);
+        Spinner regione = (Spinner) findViewById(R.id.spinnerRegione);
         user.put("regione", regione.getSelectedItem().toString());
 
-        Spinner provincia= (Spinner) findViewById(R.id.spinnerProvince);
+        Spinner provincia = (Spinner) findViewById(R.id.spinnerProvince);
         user.put("province", provincia.getSelectedItem().toString());
 
-        Spinner citta= (Spinner) findViewById(R.id.spinnerCitta);
+        Spinner citta = (Spinner) findViewById(R.id.spinnerCitta);
         user.put("citta", citta.getSelectedItem().toString());
 
-        EditText telefono = (EditText)findViewById(R.id.editTextPhone);
+        EditText telefono = (EditText) findViewById(R.id.editTextPhone);
         user.put("telefono", telefono.getText().toString());
 
         EditText password = (EditText) findViewById(R.id.editTextTextPassword);
@@ -157,10 +141,17 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot querySnapshots) {
-                        mail_contr(querySnapshots.isEmpty(), user, email, psw1, psw2);
+                        mail_contr(querySnapshots.isEmpty(), user, email, psw1, psw2, appoggio);
                     }
                 });
-}
+    }
+
+    private void controllodata(String appoggio,Map<String, Object> user1) {
+
+    }
+
+
+
     //Spinner per nazioni
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -173,36 +164,61 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
     }
 
-    private void mail_contr(boolean cond, Map<String, Object> user1, String email, String psw1, String psw2) {
-        if(!(psw1.equals(psw2))){
-            Toast.makeText(this, "Le password coincidono", Toast.LENGTH_SHORT).show();
+    private void mail_contr(boolean cond, Map<String, Object> user1, String email, String psw1, String psw2,String appoggio) {
+        Calendar cal = Calendar.getInstance();
+        int l = appoggio.length();
+        boolean conddata= true;
+        switch (l) {
+            case 9:
+                anno = Integer.valueOf(appoggio.substring(l - 4, l));
+                mese = Integer.valueOf(appoggio.substring(l - 7, l - 5));
+                giorno = Integer.valueOf(appoggio.charAt(0)) - 48;
+                break;
+            case 10:
+                anno = Integer.valueOf(appoggio.substring(l - 4, l));
+                mese = Integer.valueOf(appoggio.substring(l - 7, l - 5));
+                giorno = Integer.valueOf(appoggio.substring(l - 10, l - 8));
+                break;
+        }
+        System.out.println("\n\n\n\nlunghezza\n\n\n\n\n"+l); //TODO controllare condizioni nell'if
+        if (!(anno > (cal.get(Calendar.YEAR) - 14))) {
+            System.out.println("anno"+anno);
+            if (mese <= cal.get(Calendar.MONTH)) {
+
+                System.out.println("mese"+mese);
+                if (giorno <= cal.get(Calendar.DAY_OF_MONTH)) {
+                    conddata=false;
+                    user1.put("dataNascita", appoggio);
+
+                    System.out.println("giorno"+giorno);
+                }
+            }
+        }
+
+        if(conddata)
+        {
+            Toast.makeText(this, "bisogna avere almeno 14 anni per iscriversi", Toast.LENGTH_SHORT);
+            System.out.println("\n\n\n\n\n\n\n\n\n\n\nCAZOOOOOOOOOO");
             finish();
             startActivity(getIntent());
         } else {
-            if (cond) {
-                user1.put("password", psw1);
-                user1.put("mail", email);
-                db.collection("Utenti").add(user1);
-                Intent mainIntent = new Intent(this, MainActivity.class);
-                startActivity(mainIntent);
-            } else {
-                Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
+            if (!(psw1.equals(psw2))) {
+                Toast.makeText(this, "Le password coincidono", Toast.LENGTH_SHORT).show();
                 finish();
                 startActivity(getIntent());
-            }
-        }
-//TODO
-        /*da aggiungere in questo metodo
-        if(anno<=(cal.get(Calendar.YEAR)-14)) {
-            if(mese<=cal.get(Calendar.MONTH)){
-                if(giorno<=cal.get(Calendar.DAY_OF_MONTH)){
-                    user.put("dataNascita", date.getText().toString());
+            } else {
+                if (cond) {
+                    user1.put("password", psw1);
+                    user1.put("mail", email);
+                    db.collection("Utenti").add(user1);
+                    Intent mainIntent = new Intent(this, MainActivity.class);
+                    startActivity(mainIntent);
+                } else {
+                    Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
+                    finish();
+                    startActivity(getIntent());
                 }
             }
-        } else{
-            Toast.makeText(this,"bisogna avere almeno 14 anni per iscriversi", Toast.LENGTH_SHORT);
-            finish();
-            startActivity(getIntent());
-        }*/
+        }
     }
 }

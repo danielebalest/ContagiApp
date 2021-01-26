@@ -17,8 +17,8 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:layout_height="82dp"
-            android:text="Inserire dati dell'evento"
+            android:layout_height="wrap_content"
+            android:text="Inserisci dati evento"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textSize="36sp"
             android:textStyle="bold" />
@@ -30,7 +30,7 @@
             android:ems="10"
             android:hint="Nome evento"
             android:inputType="textPersonName"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/editTextNumber"
@@ -39,15 +39,15 @@
             android:ems="10"
             android:hint="Numero massimo di partecipanti"
             android:inputType="number"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/dataEvento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:textSize="24sp"
-            android:hint="Data Evento"/>
+            android:hint="Data Evento"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/editTextTextMultiLine"
@@ -65,24 +65,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="  Nazione:"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
         <Spinner
             android:id="@+id/spinnerNazioni"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:entries="@array/nazioni"/>
+            android:layout_height="43dp"
+            android:entries="@array/nazioni" />
 
         <EditText
             android:id="@+id/editCittaResidenza"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Città di residenza"
             android:inputType="textPersonName"
-            android:text="Città di residenza"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="#686565"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/buttonCreaEvento"
