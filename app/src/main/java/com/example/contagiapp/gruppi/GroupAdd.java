@@ -1,5 +1,6 @@
 package com.example.contagiapp.gruppi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -9,13 +10,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.contagiapp.HomeFragment;
+import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.NotifyFragment;
 import com.example.contagiapp.R;
+import com.example.contagiapp.WelcomeActivity;
 import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.eventi.EventsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class GroupAdd extends AppCompatActivity {
+    private  BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,20 +28,23 @@ public class GroupAdd extends AppCompatActivity {
 
         //BOTTON NAVIGATION
         //Inizializza e assegna varibaile
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+        bottomNavigationView = findViewById(R.id.bottomNav);
 
         //imposta nav_events selezionata
         bottomNavigationView.setSelectedItemId(R.id.nav_group);
 
+
+        final Intent intent = new Intent(this, WelcomeActivity.class);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
 
             public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
                 Fragment fragment = null;
+
                 switch (menuitem.getItemId())
                 {
                     case R.id.nav_group:
-                        fragment = new GroupFragment();
+                        startActivity(intent);
                         break;
 
                     case R.id.nav_home:
