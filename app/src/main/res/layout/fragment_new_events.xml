@@ -29,7 +29,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Nome evento"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/editTextNumber"
@@ -37,14 +38,16 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Numero massimo di partecipanti"
-            android:inputType="number" />
+            android:inputType="number"
+            android:textSize="24sp" />
 
-        <EditText
-            android:id="@+id/editTextDate"
+        <TextView
+            android:id="@+id/dataEvento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="date" />
+            android:textSize="24sp"
+            android:hint="Data Evento"/>
 
         <EditText
             android:id="@+id/editTextTextMultiLine"
@@ -53,7 +56,16 @@
             android:ems="10"
             android:gravity="start|top"
             android:hint="Descrizione evento"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="  Nazione:"
+            android:textSize="24sp" />
 
         <Spinner
             android:id="@+id/spinnerNazioni"
@@ -67,7 +79,10 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Città di residenza" />
+            android:text="Città di residenza"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="#686565"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/buttonCreaEvento"
@@ -75,6 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             android:text="Crea" />
 
     </LinearLayout>

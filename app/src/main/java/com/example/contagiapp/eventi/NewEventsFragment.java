@@ -1,9 +1,14 @@
 package com.example.contagiapp.eventi;
 
+import android.app.DatePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,17 +23,22 @@ import com.example.contagiapp.NotifyFragment;
 import com.example.contagiapp.R;
 import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.gruppi.GroupFragment;
+import com.example.contagiapp.registrazione.RegistrationActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 public class NewEventsFragment extends AppCompatActivity {
 
-    Button creaEvento;
+    private static final String TAG = "NewEventsFragment";
+    private Button creaEvento;
+    private TextView dataEvento;
+    private DatePickerDialog.OnDateSetListener dataDellEvento;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -84,6 +94,36 @@ public class NewEventsFragment extends AppCompatActivity {
                 return true;
             }
         });
+
+        //Date Picker
+        dataEvento = (TextView) findViewById(R.id.dataEvento);
+        dataEvento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        NewEventsFragment.this,
+                        android.R.style.Theme_Material_InputMethod,
+                        dataDellEvento,
+                        year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));
+                dialog.show();
+            }
+        });
+
+        dataDellEvento = new DatePickerDialog.OnDateSetListener(){
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                Log.d(TAG, "onDateSet: date: " + dayOfMonth + "/" + month + "/" + year);
+                String date = dayOfMonth + "/" + month+1 + "/" + year;
+                dataEvento.setText(date);
+            }
+        };
 
     }
 

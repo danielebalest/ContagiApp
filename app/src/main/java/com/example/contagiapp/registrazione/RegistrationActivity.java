@@ -191,7 +191,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 startActivity(getIntent());
             }
         }
-
+//TODO
         /*da aggiungere in questo metodo
         if(anno<=(cal.get(Calendar.YEAR)-14)) {
             if(mese<=cal.get(Calendar.MONTH)){
