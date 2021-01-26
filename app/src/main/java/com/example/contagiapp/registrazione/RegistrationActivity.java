@@ -167,7 +167,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     private void mail_contr(boolean cond, Map<String, Object> user1, String email, String psw1, String psw2,String appoggio) {
         Calendar cal = Calendar.getInstance();
         int l = appoggio.length();
-        boolean conddata= true;
+        boolean conddata= false;
         switch (l) {
             case 9:
                 anno = Integer.valueOf(appoggio.substring(l - 4, l));
@@ -180,24 +180,23 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 giorno = Integer.valueOf(appoggio.substring(l - 10, l - 8));
                 break;
         }
-        System.out.println("\n\n\n\nlunghezza\n\n\n\n\n"+l); //TODO controllare condizioni nell'if
-        if (!(anno > (cal.get(Calendar.YEAR) - 14))) {
-            System.out.println("anno"+anno);
-            if (mese <= cal.get(Calendar.MONTH)) {
-
-                System.out.println("mese"+mese);
-                if (giorno <= cal.get(Calendar.DAY_OF_MONTH)) {
-                    conddata=false;
+        System.out.println("la lunghezza è:"+l); //TODO controllare condizioni nell'if
+        System.out.println("questo è l'anno inserito:"+anno);
+        System.out.println("questo è il mese inserito:"+mese);
+        System.out.println("Questo è il giorno inserito:"+giorno);
+        System.out.println(cal.get(Calendar.MONTH+1));
+        System.out.println(mese <= cal.get(Calendar.MONTH));
+        if (anno <= (cal.get(Calendar.YEAR) - 14)) {
+            if (mese <= cal.get(Calendar.MONTH+1)) {
+                if (giorno <= cal.get(Calendar.DAY_OF_MONTH))
                     user1.put("dataNascita", appoggio);
-
-                    System.out.println("giorno"+giorno);
-                }
-            }
-        }
+                else conddata= true;
+            }else conddata= true;
+        }else conddata= true;
 
         if(conddata)
         {
-            Toast.makeText(this, "bisogna avere almeno 14 anni per iscriversi", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "bisogna avere almeno 14 anni per iscriversi", Toast.LENGTH_SHORT).show();
             System.out.println("\n\n\n\n\n\n\n\n\n\n\nCAZOOOOOOOOOO");
             finish();
             startActivity(getIntent());
