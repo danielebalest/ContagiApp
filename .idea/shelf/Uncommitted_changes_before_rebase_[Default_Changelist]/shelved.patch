@@ -1,0 +1,102 @@
+Index: app/src/main/java/com/example/contagiapp/registrazione/RegistrationActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.contagiapp.registrazione;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.app.DatePickerDialog;\r\nimport android.content.Intent;\r\nimport android.graphics.Color;\r\nimport android.graphics.drawable.ColorDrawable;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.AdapterView;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.Button;\r\nimport android.widget.DatePicker;\r\nimport android.widget.EditText;\r\nimport android.widget.RadioButton;\r\nimport android.widget.RadioGroup;\r\nimport android.widget.Spinner;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.contagiapp.MainActivity;\r\nimport com.example.contagiapp.R;\r\nimport com.example.contagiapp.data.DB.Utente;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.firestore.DocumentReference;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.Query;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\n\r\nimport java.util.Calendar;\r\nimport java.util.HashMap;\r\nimport java.util.Map;\r\n\r\npublic class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {\r\n    private Button signInButton;\r\n    private TextView dataNascita;\r\n    private DatePickerDialog.OnDateSetListener dataDiNascita;\r\n    private static final String TAG = \"RegistrationActivity\";\r\n    // Access a Cloud Firestore instance from your Activity\r\n    FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_registration);\r\n\r\n\r\n        //Spinner per nazioni\r\n        Spinner spinnerNazioni = findViewById(R.id.spinnerNazioni);\r\n        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.nazioni, android.R.layout.simple_spinner_dropdown_item);\r\n        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);\r\n        spinnerNazioni.setAdapter(adapter);\r\n        spinnerNazioni.setOnItemSelectedListener(this);\r\n\r\n\r\n        // collegamento button registrati con la mainActivity\r\n        signInButton = (Button) findViewById(R.id.registrati);\r\n        signInButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                openMainActivity();\r\n            }\r\n        });\r\n\r\n        //Date Picker\r\n        dataNascita = (TextView) findViewById(R.id.dataNascita);\r\n        dataNascita.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Calendar cal = Calendar.getInstance();\r\n                int year = cal.get(Calendar.YEAR);\r\n                int month = cal.get(Calendar.MONTH);\r\n                int day = cal.get(Calendar.DAY_OF_MONTH);\r\n\r\n                DatePickerDialog dialog = new DatePickerDialog(\r\n                        RegistrationActivity.this,\r\n                        android.R.style.Widget_Material_CalendarView,\r\n                        dataDiNascita,\r\n                        year, month, day);\r\n                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));\r\n                dialog.show();\r\n            }\r\n        });\r\n\r\n        dataDiNascita = new DatePickerDialog.OnDateSetListener(){\r\n            @Override\r\n            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {\r\n\r\n                Log.d(TAG, \"onDateSet: date: \" + dayOfMonth + \"/\" + month + \"/\" + year);\r\n                String date = dayOfMonth + \"/\" + month+1 + \"/\" + year;\r\n                dataNascita.setText(date);\r\n            }\r\n        };\r\n\r\n\r\n\r\n    }\r\n\r\n    public void openMainActivity(){\r\n        // Create a new user with a first, middle, and last name\r\n        final Map<String, Object> user = new HashMap<>();\r\n        setContentView(R.layout.activity_registration);\r\n\r\n        EditText name = (EditText)findViewById(R.id.EditTextName);\r\n        user.put(\"nome\", name.getText().toString());\r\n\r\n        EditText surname = (EditText)findViewById(R.id.EditTextSurname);\r\n        user.put(\"cognome\", surname.getText().toString());\r\n\r\n        RadioGroup radiogroup = (RadioGroup) findViewById(R.id.radiogroup);\r\n        int Idselezionato = radiogroup.getCheckedRadioButtonId();\r\n        RadioButton radiosex = (RadioButton) findViewById(Idselezionato);\r\n        user.put(\"genere\", radiosex.getText().toString());\r\n\r\n        TextView date = (TextView) findViewById(R.id.dataNascita);\r\n        //date.\r\n        user.put(\"dataNascita\", date.getText().toString());\r\n\r\n        Spinner nazione= (Spinner) findViewById(R.id.spinnerNazioni);\r\n        user.put(\"nazione\", nazione.getSelectedItem().toString());\r\n\r\n        Spinner regione= (Spinner) findViewById(R.id.spinnerRegione);\r\n        user.put(\"regione\", regione.getSelectedItem().toString());\r\n\r\n        Spinner provincia= (Spinner) findViewById(R.id.spinnerProvince);\r\n        user.put(\"province\", nazione.getSelectedItem().toString());\r\n\r\n        Spinner citta= (Spinner) findViewById(R.id.spinnerCitta);\r\n        user.put(\"citta\", citta.getSelectedItem().toString());\r\n\r\n        EditText telefono = (EditText)findViewById(R.id.editTextPhone);\r\n        user.put(\"telefono\", telefono.getText().toString());\r\n\r\n        EditText password = (EditText)findViewById(R.id.editTextTextPassword);\r\n        final String psw1 = password.getText().toString();\r\n\r\n        EditText password2= (EditText) findViewById(R.id.editTextRepeatPassword);\r\n        final String psw2 = password2.getText().toString();\r\n\r\n\r\n\r\n\r\n\r\n        final TextView mail = (TextView) findViewById(R.id.editTextTextEmailAddress);\r\n        final String email = date.getText().toString();\r\n\r\n        db.collection(\"Utenti\").whereEqualTo(\"mail\", email).get()\r\n                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {\r\n                    @Override\r\n                    public void onSuccess(QuerySnapshot querySnapshots) {\r\n                        mail_contr(querySnapshots.isEmpty(), user, email, psw1, psw2);\r\n                    }\r\n                });\r\n}\r\n    //Spinner per nazioni\r\n    @Override\r\n    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {\r\n        String text = parent.getItemAtPosition(position).toString();\r\n        //Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();\r\n    }\r\n\r\n    @Override\r\n    public void onNothingSelected(AdapterView<?> parent) {\r\n\r\n    }\r\n\r\n    private void mail_contr(boolean cond, Map<String, Object> user, String email, String psw1, String psw2) {\r\n        //Utente ut = documentSnapshot.toObject(Utente.class);\r\n\r\n        if(psw1.equals(psw2)){\r\n            Toast.makeText(this, \"Le password coincidono\", Toast.LENGTH_SHORT).show();\r\n        } else {\r\n            if (cond) {\r\n                user.put(\"password\", psw1);\r\n                user.put(\"mail\", email);\r\n                db.collection(\"Utenti\").add(user);\r\n                Intent mainIntent = new Intent(this, MainActivity.class);\r\n                startActivity(mainIntent);\r\n            } else {\r\n                Toast.makeText(this, \"Mail già esistente\", Toast.LENGTH_SHORT).show();\r\n            }\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/contagiapp/registrazione/RegistrationActivity.java	(revision 236eccb55dd23b7583629c178b7ea2210de6c32a)
++++ app/src/main/java/com/example/contagiapp/registrazione/RegistrationActivity.java	(date 1611402278438)
+@@ -136,26 +136,42 @@
+         user.put("telefono", telefono.getText().toString());
+ 
+         EditText password = (EditText)findViewById(R.id.editTextTextPassword);
+-        final String psw1 = password.getText().toString();
+-
++        user.put("password", password.getText().toString());
+         EditText password2= (EditText) findViewById(R.id.editTextRepeatPassword);
+-        final String psw2 = password2.getText().toString();
+-
++      /*  if((password.equals(password2))){
++            Toast.makeText(this,"le password non coincidono", Toast.LENGTH_SHORT.show());
++        }NON VAAAAAAAAAA*/
+ 
+ 
+ 
+-
+-        final TextView mail = (TextView) findViewById(R.id.editTextTextEmailAddress);
++        TextView mail = (TextView) findViewById(R.id.editTextTextEmailAddress);
+         final String email = date.getText().toString();
++        final String email2 = null;
++
++        Task<QuerySnapshot> docRef = db.collection("Utenti").whereEqualTo("mail", email).get()
++                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
++            @Override
++            public void onSuccess(DocumentSnapshot documentSnapshots) {
++                mail_contr(documentSnapshots, email, user);
+ 
+-        db.collection("Utenti").whereEqualTo("mail", email).get()
+-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+-                    @Override
+-                    public void onSuccess(QuerySnapshot querySnapshots) {
+-                        mail_contr(querySnapshots.isEmpty(), user, email, psw1, psw2);
+-                    }
+-                });
++            }
++                });
++
++                                         /* DocumentReference docRef = db.collection("cities").document("BJ");
++docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
++                                              @Override
++                                              public void onSuccess(DocumentSnapshot documentSnapshot) {
++                                                  City city = documentSnapshot.toObject(City.class);
++                                              }
++                                          });*/
++
+ }
++
++    private void mail_contr(DocumentSnapshot documentSnapshots, String email, Map<String, Object> user) {
++    }
++
++
++
+     //Spinner per nazioni
+     @Override
+     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+@@ -167,22 +183,20 @@
+     public void onNothingSelected(AdapterView<?> parent) {
+ 
+     }
++}
+ 
+-    private void mail_contr(boolean cond, Map<String, Object> user, String email, String psw1, String psw2) {
+-        //Utente ut = documentSnapshot.toObject(Utente.class);
++    private void mail_contr(DocumentSnapshot documentSnapshot, String email, Map<String, Object> user) {
++        Utente ut = documentSnapshot.toObject(Utente.class);
+ 
+-        if(psw1.equals(psw2)){
+-            Toast.makeText(this, "Le password coincidono", Toast.LENGTH_SHORT).show();
+-        } else {
+-            if (cond) {
+-                user.put("password", psw1);
+-                user.put("mail", email);
+-                db.collection("Utenti").add(user);
+-                Intent mainIntent = new Intent(this, MainActivity.class);
+-                startActivity(mainIntent);
+-            } else {
+-                Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
+-            }
++        if(ut.getMail().equals(email))
++        {
++            user.put("mail", email);
++            db.collection("Utenti").add(user);
++            Intent mainIntent = new Intent(this, MainActivity.class);
++            startActivity(mainIntent);
++        } else {
++            //TODO
++            Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
+         }
+     }
+ }
+\ No newline at end of file
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_23_01_2021_10_24__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_23_01_2021_10_24__Default_Changelist_.xml
