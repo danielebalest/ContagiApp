@@ -56,45 +56,6 @@ public class NewEventsFragment extends AppCompatActivity {
             }
         });
 
-        //Inizializza e assegna varibaile
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
-
-        //imposta nav_events selezionata
-        bottomNavigationView.setSelectedItemId(R.id.nav_events);
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
-                Fragment fragment = null;
-                switch (menuitem.getItemId())
-                {
-                    case R.id.nav_group:
-                        fragment = new GroupFragment();
-                        break;
-
-                    case R.id.nav_home:
-                        fragment = new HomeFragment();
-                        break;
-
-                    case R.id.nav_notify:
-                        fragment = new NotifyFragment();
-                        break;
-
-                    case R.id.nav_events:
-                        fragment = new EventsFragment();
-                        break;
-
-                    case R.id.nav_friends:
-                        fragment = new FriendsFragment();
-                        break;
-                }
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-                return true;
-            }
-        });
-
         //Date Picker
         dataEvento = (TextView) findViewById(R.id.dataEvento);
         dataEvento.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +98,7 @@ public class NewEventsFragment extends AppCompatActivity {
         evento.put("num_partecipanti", numeroP.getText().toString());
 
         TextView data = (TextView) findViewById(R.id.dataEvento);
-        //evento.put("num_partecipanti", numeroP.getText().toString());
+        evento.put("data", data.getText().toString());
 
         TextView descrizione = (TextView) findViewById(R.id.editTextTextMultiLine);
         evento.put("descrizione", descrizione.getText().toString());
@@ -155,10 +116,4 @@ public class NewEventsFragment extends AppCompatActivity {
         this.finish();
 
     }
-
-
-
-
-
-
 };
