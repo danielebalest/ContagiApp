@@ -47,6 +47,7 @@ public class ProfiloActivity extends AppCompatActivity {
         arrayListProfilo.add("Città di residenza");
         arrayListProfilo.add("Via di residenza");
 
+
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, arrayListProfilo);
         listViewProfilo.setAdapter(arrayAdapter);
 
