@@ -136,8 +136,9 @@ public class NewEventsFragment extends AppCompatActivity {
         TextView numeroP = (TextView) findViewById(R.id.editTextNumber);
         evento.put("num_partecipanti", numeroP.getText().toString());
 
-        //data da vedere dalla registrazione
-//TODO inserire i dati dell'utente che crea l'evento
+        TextView data = (TextView) findViewById(R.id.dataEvento);
+        //evento.put("num_partecipanti", numeroP.getText().toString());
+
         TextView descrizione = (TextView) findViewById(R.id.editTextTextMultiLine);
         evento.put("descrizione", descrizione.getText().toString());
 
