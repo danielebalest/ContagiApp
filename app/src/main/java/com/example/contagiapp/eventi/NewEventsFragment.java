@@ -29,6 +29,7 @@ import java.util.Map;
 public class NewEventsFragment extends AppCompatActivity {
 
     Button creaEvento;
+    private  BottomNavigationView bottomNavigationView;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -46,8 +47,8 @@ public class NewEventsFragment extends AppCompatActivity {
             }
         });
 
-        //Inizializza e assegna varibaile
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+        //Inizializza varibaile
+        bottomNavigationView = findViewById(R.id.bottomNav);
 
         //imposta nav_events selezionata
         bottomNavigationView.setSelectedItemId(R.id.nav_events);

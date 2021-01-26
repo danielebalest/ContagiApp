@@ -15,14 +15,15 @@ import com.example.contagiapp.eventi.EventsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class GroupSearch extends AppCompatActivity {
+    private  BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_group_profile);
 
-        //Inizializza e assegna varibaile
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+        //Inizializza varibaile
+        bottomNavigationView = findViewById(R.id.bottomNav);
 
         //imposta nav_events selezionata
         bottomNavigationView.setSelectedItemId(R.id.nav_group);

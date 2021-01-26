@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.example.contagiapp.HomeFragment;
 import com.example.contagiapp.NotifyFragment;
@@ -19,14 +21,37 @@ import com.example.contagiapp.eventi.EventsFragment;
 import com.example.contagiapp.gruppi.GroupFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
 public class ProfiloActivity extends AppCompatActivity {
     private static final int PHOTO_REQUEST_CODE = 0;
     private Button certificato;
+    ListView listViewProfilo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilo);
+
+        listViewProfilo = (ListView) findViewById(R.id.list_profilo);
+        ArrayList<String> arrayListProfilo = new ArrayList<>();
+
+        arrayListProfilo.add("Nome");
+        arrayListProfilo.add("Cognome");
+        arrayListProfilo.add("Email");
+        arrayListProfilo.add("Data di Nascita");
+        arrayListProfilo.add("Città di Nascita");
+        arrayListProfilo.add("Genere");
+        arrayListProfilo.add("Nazione di residenza");
+        arrayListProfilo.add("Città di residenza");
+        arrayListProfilo.add("Via di residenza");
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, arrayListProfilo);
+        listViewProfilo.setAdapter(arrayAdapter);
+
+
+
 
         certificato = (Button) findViewById(R.id.certificato);
         certificato.setOnClickListener(new View.OnClickListener() {
@@ -37,44 +62,6 @@ public class ProfiloActivity extends AppCompatActivity {
             }
         });
 
-        //Inizializza e assegna varibaile
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
-
-        //imposta nav_events selezionata
-        bottomNavigationView.setSelectedItemId(R.id.nav_events);
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
-                Fragment fragment = null;
-                switch (menuitem.getItemId())
-                {
-                    case R.id.nav_group:
-                        fragment = new GroupFragment();
-                        break;
-
-                    case R.id.nav_home:
-                        fragment = new HomeFragment();
-                        break;
-
-                    case R.id.nav_notify:
-                        fragment = new NotifyFragment();
-                        break;
-
-                    case R.id.nav_events:
-                        fragment = new EventsFragment();
-                        break;
-
-                    case R.id.nav_friends:
-                        fragment = new FriendsFragment();
-                        break;
-                }
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-                return true;
-            }
-        });
 
     }
 }
