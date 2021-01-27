@@ -1,7 +1,5 @@
 package com.example.contagiapp.registrazione;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,6 +17,8 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
@@ -142,9 +142,22 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                     @Override
                     public void onSuccess(QuerySnapshot querySnapshots) {
                         mail_contr(querySnapshots.isEmpty(), user, email, psw1, psw2, appoggio);
+                        isValidEmail(email);
                     }
                 });
     }
+
+    private boolean isValidEmail(String email){
+        if(!email.isEmpty() && email.contains("@") ){
+            return true;
+        }
+        Toast.makeText(this,"Inserisci una mail valida", Toast.LENGTH_SHORT).show();
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\nla chiocciola stronzo");
+        finish();
+        startActivity(getIntent());
+        return false;
+    }
+
 
     private void controllodata(String appoggio,Map<String, Object> user1) {
 
@@ -159,6 +172,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         //Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
+    //per spinner
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 

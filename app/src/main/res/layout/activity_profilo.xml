@@ -29,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linear"
+
         android:orientation="vertical">
 
         <Button
@@ -36,7 +37,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="#43A047"
-            android:text="Modifica dati">
+            android:text="Modifica dati"
+            android:layout_margin="10dp">
         </Button>
 
         <Button
@@ -45,20 +47,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@color/red"
-            android:text="inserisci certificato">
+            android:text="inserisci certificato"
+            android:layout_margin = "10dp">
         </Button>
 
 
 
     </LinearLayout>
-
-
-
-
-
-
-
-
-
-
 </RelativeLayout>

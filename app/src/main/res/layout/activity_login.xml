@@ -18,13 +18,14 @@
         android:id="@+id/textViewAccedi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-black"
+        android:fontFamily="@font/muli_semi_bold"
         android:gravity="center"
         android:layout_gravity="center"
         android:text="@string/login"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="40sp"
+        android:layout_marginTop="50dp"
        ></TextView>
 
 
@@ -32,7 +33,7 @@
         android:id="@+id/textFieldUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         app:endIconMode="clear_text"
         app:startIconDrawable="@drawable/ic_account_circle_black_24dp"
         app:startIconTint="@color/black">
