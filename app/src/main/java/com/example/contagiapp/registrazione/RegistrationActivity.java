@@ -23,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -105,6 +107,10 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         EditText name = (EditText) findViewById(R.id.editTextName);
         String nome = name.getText().toString();
         user.put("nome", nome);
+
+
+
+
 
         EditText surname = (EditText) findViewById(R.id.editTextSurname);
         String cognome = surname.getText().toString();
