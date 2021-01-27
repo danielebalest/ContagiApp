@@ -15,40 +15,25 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.contagiapp.R;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCallback {
+public class NewEventsFragment extends AppCompatActivity {
 
     private static final String TAG = "NewEventsFragment";
     private Button creaEvento;
     private TextView dataEvento;
     private DatePickerDialog.OnDateSetListener dataDellEvento;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private GoogleMap mMap;
+    private int anno = 0, mese = 0, giorno = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_new_events);
-
-        //per la mappa
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapview);if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }//fine mappa
 
         // collegamento button registrati con la mainActivity
         creaEvento = (Button) findViewById(R.id.buttonCreaEvento);
@@ -80,12 +65,17 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
-        dataDellEvento = new DatePickerDialog.OnDateSetListener(){
+        dataDellEvento = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
+                month++;
+                String date = null;
                 Log.d(TAG, "onDateSet: date: " + dayOfMonth + "/" + month + "/" + year);
-                String date = dayOfMonth + "/" + month+1 + "/" + year;
+                if(month<=9) {
+                    date = dayOfMonth + "/0" + month + "/" + year;
+                }else
+                    date = dayOfMonth + "/" + month + "/" + year;
+
                 dataEvento.setText(date);
             }
         };
@@ -102,7 +92,7 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
         evento.put("num_partecipanti", numeroP.getText().toString());
 
         TextView data = (TextView) findViewById(R.id.dataEvento);
-        evento.put("data", data.getText().toString());
+        String appoggio= data.getText().toString();
 
         TextView descrizione = (TextView) findViewById(R.id.editTextTextMultiLine);
         evento.put("descrizione", descrizione.getText().toString());
@@ -115,23 +105,53 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
 
         TextView luogo = (TextView) findViewById(R.id.editCittaEvento);
         evento.put("luogo", luogo.getText().toString());
+        controllodata(evento,appoggio);
 
-        db.collection("Eventi").add(evento);
-        Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
 
         //Tornare indietro
         this.finish();
 
-    }//TODO vedere se la mappa funziona altrimenti toglierla
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
-}
 
+    void controllodata(Map<String, Object> evento, String appoggio){
+        Calendar cal = Calendar.getInstance();
+        boolean condevento=false;
+        int l = appoggio.length();
+        switch (l) {
+            case 9:
+                anno = Integer.valueOf(appoggio.substring(l - 4, l));
+                mese = Integer.valueOf(appoggio.substring(l - 7, l - 5));
+                giorno = Integer.valueOf(appoggio.charAt(0)) - 48;
+                break;
+            case 10:
+                anno = Integer.valueOf(appoggio.substring(l - 4, l));
+                mese = Integer.valueOf(appoggio.substring(l - 7, l - 5));
+                giorno = Integer.valueOf(appoggio.substring(l - 10, l - 8));
+                break;
+        }
+        if (anno >= cal.get(Calendar.YEAR)) {
+            if ((mese-1) >= cal.get(Calendar.MONTH)) {
+                if (giorno >= cal.get(Calendar.DAY_OF_MONTH))
+                    evento.put("data", appoggio);
+                else condevento= true;
+            }else condevento= true;
+        }else condevento= true;
+
+        if(condevento){
+            Toast.makeText(this, "data non valida",Toast.LENGTH_SHORT).show();
+            finish();
+            startActivity(getIntent());
+        }else {
+            db.collection("Eventi").add(evento);
+            Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+
+    }
+
+
+
+
+
+};
