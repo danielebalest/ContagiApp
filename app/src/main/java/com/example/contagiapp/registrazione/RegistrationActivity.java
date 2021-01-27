@@ -31,6 +31,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private TextView dataNascita;
@@ -152,21 +154,31 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot querySnapshots) {
-                        mail_contr(querySnapshots.isEmpty(), user, email, psw1, psw2, appoggio);
-                        //isValidEmail(email);
+
+                        controlli(querySnapshots.isEmpty(), user, email, psw1, psw2, appoggio);
+
                     }
                 });
     }
 
    /* private boolean isValidEmail(String email){
-        if(!email.isEmpty() && email.contains("@") ){
-            return true;
+        System.out.print(email);
+        if(!email.isEmpty()){
+            Pattern p = Pattern.compile(".+@.+\\.[a-z]+", Pattern.CASE_INSENSITIVE);
+            Matcher m = p.matcher(email);
+            boolean matchFound = m.matches();
+
+            String  expressionPlus="^[\\w\\-]([\\.\\w])+[\\w]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+            Pattern pPlus = Pattern.compile(expressionPlus, Pattern.CASE_INSENSITIVE);
+            Matcher mPlus = pPlus.matcher(email);
+            boolean matchFoundPlus = mPlus.matches();
+            System.out.print(matchFound && matchFoundPlus);
+            return matchFound && matchFoundPlus;
         }
-        Toast.makeText(this,"Inserisci una mail valida", Toast.LENGTH_SHORT).show();
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\nla chiocciola stronzo");
-        finish();
-        startActivity(getIntent());
-        return false;
+        else {
+            Toast.makeText(this,"formato email non valido", Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }*/
 
 
@@ -186,10 +198,11 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
     }
 
-    private void mail_contr(boolean cond, Map<String, Object> user1, String email, String psw1, String psw2,String appoggio) {
+    private void controlli(boolean cond, Map<String, Object> user1, String email, String psw1, String psw2,String appoggio) {
         Calendar cal = Calendar.getInstance();
         int l = appoggio.length();
         boolean conddata= false;
+        boolean condemail= false;
         switch (l) {
             case 9:
                 anno = Integer.valueOf(appoggio.substring(l - 4, l));
@@ -211,7 +224,24 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
             }else conddata= true;
         }else conddata= true;
 
-        if(conddata)
+
+        if(email.isEmpty()){
+            Pattern p = Pattern.compile(".+@.+\\.[a-z]+", Pattern.CASE_INSENSITIVE);
+            Matcher m = p.matcher(email);
+            boolean matchFound = m.matches();
+
+            String  expressionPlus="^[\\w\\-]([\\.\\w])+[\\w]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+            Pattern pPlus = Pattern.compile(expressionPlus, Pattern.CASE_INSENSITIVE);
+            Matcher mPlus = pPlus.matcher(email);
+            boolean matchFoundPlus = mPlus.matches();
+            System.out.print(matchFound && matchFoundPlus);
+            condemail=(matchFound && matchFoundPlus);
+        }else{
+            Toast.makeText(this, "formato email non valido", Toast.LENGTH_SHORT).show();
+            finish();
+            startActivity(getIntent());
+        }
+        if(conddata && condemail)
         {
             Toast.makeText(this, "bisogna avere almeno 14 anni per iscriversi", Toast.LENGTH_SHORT).show();
             finish();
