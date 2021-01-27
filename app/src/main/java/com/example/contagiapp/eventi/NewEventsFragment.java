@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -13,21 +12,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
-import com.example.contagiapp.HomeFragment;
-import com.example.contagiapp.MainActivity;
-import com.example.contagiapp.NotifyFragment;
 import com.example.contagiapp.R;
-import com.example.contagiapp.data.amici.FriendsFragment;
-import com.example.contagiapp.gruppi.GroupFragment;
-import com.example.contagiapp.registrazione.RegistrationActivity;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -106,8 +94,11 @@ public class NewEventsFragment extends AppCompatActivity {
         Spinner nazione = (Spinner) findViewById(R.id.spinnerNazioni);
         evento.put("nazione", nazione.getSelectedItem().toString());
 
-        TextView citta = (TextView) findViewById(R.id.editCittaResidenza);
+        TextView citta = (TextView) findViewById(R.id.editCittaEvento);
         evento.put("citta", citta.getText().toString());
+
+        TextView luogo = (TextView) findViewById(R.id.editCittaEvento);
+        evento.put("luogo", luogo.getText().toString());
 
         db.collection("Eventi").add(evento);
         Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();

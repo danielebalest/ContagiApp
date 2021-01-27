@@ -75,13 +75,27 @@
             android:entries="@array/nazioni" />
 
         <EditText
-            android:id="@+id/editCittaResidenza"
+            android:id="@+id/editCittaEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Città"
+            android:inputType="textPersonName"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/editLuogoEvento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:hint="Città di residenza"
+            android:hint="Luogo evento"
             android:textSize="24sp" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/buttonCreaEvento"
