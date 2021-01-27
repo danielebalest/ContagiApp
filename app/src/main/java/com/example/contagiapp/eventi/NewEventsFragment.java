@@ -15,24 +15,40 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.contagiapp.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NewEventsFragment extends AppCompatActivity {
+public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = "NewEventsFragment";
     private Button creaEvento;
     private TextView dataEvento;
     private DatePickerDialog.OnDateSetListener dataDellEvento;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_new_events);
+
+        //per la mappa
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapview);if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }//fine mappa
 
         // collegamento button registrati con la mainActivity
         creaEvento = (Button) findViewById(R.id.buttonCreaEvento);
@@ -106,5 +122,16 @@ public class NewEventsFragment extends AppCompatActivity {
         //Tornare indietro
         this.finish();
 
+    }//TODO vedere se la mappa funziona altrimenti toglierla
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney, Australia, and move the camera.
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
-};
+}
+

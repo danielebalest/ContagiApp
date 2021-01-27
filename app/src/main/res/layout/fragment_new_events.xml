@@ -92,10 +92,12 @@
             android:hint="Luogo evento"
             android:textSize="24sp" />
 
-        <com.google.android.gms.maps.MapView
+        <fragment
             android:id="@+id/mapview"
+            android:clickable="true"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="219dp" />
 
         <Button
             android:id="@+id/buttonCreaEvento"
