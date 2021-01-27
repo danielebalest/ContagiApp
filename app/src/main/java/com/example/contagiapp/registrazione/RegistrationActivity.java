@@ -110,10 +110,6 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         String nome = name.getText().toString();
         user.put("nome", nome);
 
-
-
-
-
         EditText surname = (EditText) findViewById(R.id.editTextSurname);
         String cognome = surname.getText().toString();
         user.put("cognome", cognome);

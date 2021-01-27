@@ -28,6 +28,7 @@ public class NewEventsFragment extends AppCompatActivity {
     private TextView dataEvento;
     private DatePickerDialog.OnDateSetListener dataDellEvento;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private int anno = 0, mese = 0, giorno = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +65,17 @@ public class NewEventsFragment extends AppCompatActivity {
             }
         });
 
-        dataDellEvento = new DatePickerDialog.OnDateSetListener(){
+        dataDellEvento = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
+                month++;
+                String date = null;
                 Log.d(TAG, "onDateSet: date: " + dayOfMonth + "/" + month + "/" + year);
-                String date = dayOfMonth + "/" + month+1 + "/" + year;
+                if(month<=9) {
+                    date = dayOfMonth + "/0" + month + "/" + year;
+                }else
+                    date = dayOfMonth + "/" + month + "/" + year;
+
                 dataEvento.setText(date);
             }
         };
@@ -86,7 +92,7 @@ public class NewEventsFragment extends AppCompatActivity {
         evento.put("num_partecipanti", numeroP.getText().toString());
 
         TextView data = (TextView) findViewById(R.id.dataEvento);
-        evento.put("data", data.getText().toString());
+        String appoggio= data.getText().toString();
 
         TextView descrizione = (TextView) findViewById(R.id.editTextTextMultiLine);
         evento.put("descrizione", descrizione.getText().toString());
@@ -99,12 +105,53 @@ public class NewEventsFragment extends AppCompatActivity {
 
         TextView luogo = (TextView) findViewById(R.id.editCittaEvento);
         evento.put("luogo", luogo.getText().toString());
+         controllodata(evento,appoggio);
 
-        db.collection("Eventi").add(evento);
-        Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
 
         //Tornare indietro
         this.finish();
 
     }
+
+    void controllodata(Map<String, Object> evento, String appoggio){
+        Calendar cal = Calendar.getInstance();
+        boolean condevento=false;
+        int l = appoggio.length();
+        switch (l) {
+            case 9:
+                anno = Integer.valueOf(appoggio.substring(l - 4, l));
+                mese = Integer.valueOf(appoggio.substring(l - 7, l - 5));
+                giorno = Integer.valueOf(appoggio.charAt(0)) - 48;
+                break;
+            case 10:
+                anno = Integer.valueOf(appoggio.substring(l - 4, l));
+                mese = Integer.valueOf(appoggio.substring(l - 7, l - 5));
+                giorno = Integer.valueOf(appoggio.substring(l - 10, l - 8));
+                break;
+        }
+        if (anno >= cal.get(Calendar.YEAR)) {
+            if ((mese-1) >= cal.get(Calendar.MONTH)) {
+                if (giorno >= cal.get(Calendar.DAY_OF_MONTH))
+                    evento.put("data", appoggio);
+                else condevento= true;
+            }else condevento= true;
+        }else condevento= true;
+
+        if(condevento){
+            Toast.makeText(this, "data non valida",Toast.LENGTH_SHORT).show();
+            finish();
+            startActivity(getIntent());
+        }else {
+            db.collection("Eventi").add(evento);
+            Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+
+    }
+
+
+
+
+
 };
