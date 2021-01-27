@@ -161,30 +161,6 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 });
     }
 
-   /* private boolean isValidEmail(String email){
-        System.out.print(email);
-        if(!email.isEmpty()){
-            Pattern p = Pattern.compile(".+@.+\\.[a-z]+", Pattern.CASE_INSENSITIVE);
-            Matcher m = p.matcher(email);
-            boolean matchFound = m.matches();
-
-            String  expressionPlus="^[\\w\\-]([\\.\\w])+[\\w]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-            Pattern pPlus = Pattern.compile(expressionPlus, Pattern.CASE_INSENSITIVE);
-            Matcher mPlus = pPlus.matcher(email);
-            boolean matchFoundPlus = mPlus.matches();
-            System.out.print(matchFound && matchFoundPlus);
-            return matchFound && matchFoundPlus;
-        }
-        else {
-            Toast.makeText(this,"formato email non valido", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-    }*/
-
-
-
-
-
     //Spinner per nazioni
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -203,6 +179,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         int l = appoggio.length();
         boolean conddata= false;
         boolean condemail= false;
+        System.out.println("l'email inserita è "+email);
         switch (l) {
             case 9:
                 anno = Integer.valueOf(appoggio.substring(l - 4, l));
@@ -225,7 +202,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         }else conddata= true;
 
 
-        if(email.isEmpty()){
+        if(!email.isEmpty()){
             Pattern p = Pattern.compile(".+@.+\\.[a-z]+", Pattern.CASE_INSENSITIVE);
             Matcher m = p.matcher(email);
             boolean matchFound = m.matches();
@@ -234,14 +211,16 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
             Pattern pPlus = Pattern.compile(expressionPlus, Pattern.CASE_INSENSITIVE);
             Matcher mPlus = pPlus.matcher(email);
             boolean matchFoundPlus = mPlus.matches();
-            System.out.print(matchFound && matchFoundPlus);
+            System.out.println("Mail valida? " + (matchFound && matchFoundPlus));
             condemail=(matchFound && matchFoundPlus);
-        }else{
+        }
+        System.out.println("questo è condemail dopo averlo controllato "+condemail);
+        if(!condemail) {
             Toast.makeText(this, "formato email non valido", Toast.LENGTH_SHORT).show();
             finish();
             startActivity(getIntent());
-        }
-        if(conddata && condemail)
+        }else
+            if(conddata && condemail)
         {
             Toast.makeText(this, "bisogna avere almeno 14 anni per iscriversi", Toast.LENGTH_SHORT).show();
             finish();
