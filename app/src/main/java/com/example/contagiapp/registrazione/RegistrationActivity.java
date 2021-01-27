@@ -85,9 +85,14 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         dataDiNascita = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
+                month++;
+                String date = null;
                 Log.d(TAG, "onDateSet: date: " + dayOfMonth + "/" + month + "/" + year);
-                String date = dayOfMonth + "/" + month + 1 + "/" + year;
+                if(month<=9) {
+                     date = dayOfMonth + "/0" + month + "/" + year;
+                }else
+                    date = dayOfMonth + "/" + month + "/" + year;
+
                 dataNascita.setText(date);
             }
         };
@@ -142,12 +147,12 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                     @Override
                     public void onSuccess(QuerySnapshot querySnapshots) {
                         mail_contr(querySnapshots.isEmpty(), user, email, psw1, psw2, appoggio);
-                        isValidEmail(email);
+                        //isValidEmail(email);
                     }
                 });
     }
 
-    private boolean isValidEmail(String email){
+   /* private boolean isValidEmail(String email){
         if(!email.isEmpty() && email.contains("@") ){
             return true;
         }
@@ -156,12 +161,9 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         finish();
         startActivity(getIntent());
         return false;
-    }
+    }*/
 
 
-    private void controllodata(String appoggio,Map<String, Object> user1) {
-
-    }
 
 
 
@@ -194,14 +196,9 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 giorno = Integer.valueOf(appoggio.substring(l - 10, l - 8));
                 break;
         }
-        System.out.println("la lunghezza è:"+l); //TODO controllare condizioni nell'if
-        System.out.println("questo è l'anno inserito:"+anno);
-        System.out.println("questo è il mese inserito:"+mese);
-        System.out.println("Questo è il giorno inserito:"+giorno);
-        System.out.println(cal.get(Calendar.MONTH+1));
-        System.out.println(mese <= cal.get(Calendar.MONTH));
+
         if (anno <= (cal.get(Calendar.YEAR) - 14)) {
-            if (mese <= cal.get(Calendar.MONTH+1)) {
+            if ((mese-1) <= cal.get(Calendar.MONTH)) {
                 if (giorno <= cal.get(Calendar.DAY_OF_MONTH))
                     user1.put("dataNascita", appoggio);
                 else conddata= true;
@@ -211,7 +208,6 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         if(conddata)
         {
             Toast.makeText(this, "bisogna avere almeno 14 anni per iscriversi", Toast.LENGTH_SHORT).show();
-            System.out.println("\n\n\n\n\n\n\n\n\n\n\nCAZOOOOOOOOOO");
             finish();
             startActivity(getIntent());
         } else {
