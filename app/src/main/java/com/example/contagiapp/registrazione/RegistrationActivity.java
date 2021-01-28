@@ -36,12 +36,23 @@ import java.util.regex.Pattern;
 
 public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private TextView dataNascita;
-    private Button signInButton;
+    private Button signUpButton;
     private DatePickerDialog.OnDateSetListener dataDiNascita;
     private static final String TAG = "RegistrationActivity";
     // Access a Cloud Firestore instance from your Activity
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private int anno = 0, mese = 0, giorno = 0;
+
+    //Per gli errori
+    private TextInputLayout nomeLayout;
+    private TextInputLayout cognomeLayout;
+    private TextInputLayout phoneLayout;
+
+    private TextInputEditText nome;
+    private TextInputEditText cognome;
+    private TextInputEditText phone;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +68,46 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         spinnerNazioni.setOnItemSelectedListener(this);
 
 
+        nome = (TextInputEditText) findViewById(R.id.editTextName);
+        cognome = (TextInputEditText) findViewById(R.id.editTextSurname);
+        phone = (TextInputEditText) findViewById(R.id.editTextPhone) ;
+
+        nomeLayout = (TextInputLayout) findViewById(R.id.textInputNameLayout);
+        cognomeLayout = (TextInputLayout) findViewById(R.id.textInputSurnameLayout);
+        phoneLayout = (TextInputLayout) findViewById(R.id.textInputPhoneLayout);
+
         // collegamento button registrati con la mainActivity
-        signInButton = (Button) findViewById(R.id.registrati);
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        signUpButton = (Button) findViewById(R.id.registrati);
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMainActivity();
+
+
+
+                switch (controlli_TextInput(nome, nomeLayout, cognome, cognomeLayout, phone, phoneLayout)){
+
+                    case 1:
+                        nomeLayout.setError("Inserisci nome");
+                        cognomeLayout.setError(null);
+                        phoneLayout.setError(null);
+                        break;
+                    case 2:
+                        cognomeLayout.setError("Inserisci cognome");
+                        nomeLayout.setError(null);
+                        phoneLayout.setError(null);
+                        break;
+                    case 3:
+                        phoneLayout.setError("Inserisci cellulare");
+                        nomeLayout.setError(null);
+                        cognomeLayout.setError(null);
+                        break;
+
+                    default:
+                        openMainActivity();
+                        break;
+                }
+                //per togliere i controlli togliere il commento alla riga successiva
+                //openMainActivity();
             }
         });
 
@@ -102,17 +147,44 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         };
     }
 
+    private int controlli_TextInput(TextInputEditText name, TextInputLayout nomeLayout, TextInputEditText surname, TextInputLayout surnameLayout, TextInputEditText phone, TextInputLayout phoneLayout){
+
+        if(isEmpty(name) == true){
+            return 1;
+        }
+
+        if(isEmpty(surname) == true){
+            return 2;
+        }
+
+        if(isEmpty(phone) == true){
+            return 3;
+        }
+
+
+        return 0;
+    }
+
+    private boolean isEmpty(TextInputEditText etText) {
+        if(etText.getText().toString().length() > 0)
+            return false;
+        return true;
+    }
+
+
+
     public void openMainActivity() {
         // Create a new user with a first, middle, and last name
         final Map<String, Object> user = new HashMap<>();
 
-        EditText name = (EditText) findViewById(R.id.editTextName);
+        TextInputEditText name = (TextInputEditText) findViewById(R.id.editTextName);
         String nome = name.getText().toString();
         user.put("nome", nome);
 
-        EditText surname = (EditText) findViewById(R.id.editTextSurname);
+        TextInputEditText surname = (TextInputEditText) findViewById(R.id.editTextSurname);
         String cognome = surname.getText().toString();
         user.put("cognome", cognome);
+
 
         RadioGroup radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
         int Idselezionato = radiogroup.getCheckedRadioButtonId();

@@ -28,11 +28,13 @@
             android:textSize="40sp"></TextView>
 
         <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputNameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:hint="Nome"
         app:endIconMode="clear_text"
+        app:errorEnabled="true"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -47,11 +49,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputSurnameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:hint="Cognome"
-        app:endIconMode="clear_text">
+        app:endIconMode="clear_text"
+        app:errorEnabled="true">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextSurname"
             android:layout_width="match_parent"
@@ -82,11 +86,14 @@
         </RadioGroup>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputBirthLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="@string/birth"
-            app:endIconMode="clear_text">
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            >
             <EditText
                 android:id="@+id/dataNascita"
                 android:layout_width="match_parent"
@@ -127,11 +134,13 @@
             />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputEmailLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="@string/prompt_email"
-            app:endIconMode="clear_text">
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextTextEmailAddress"
                 android:layout_width="match_parent"
@@ -141,11 +150,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputRepeatPasswordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="@string/phone"
-            app:endIconMode="clear_text">
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPhone"
                 android:layout_width="match_parent"
@@ -154,11 +165,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputPhoneLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="@string/prompt_password"
-            app:endIconMode="clear_text">
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextTextPassword"
                 android:layout_width="match_parent"
@@ -168,11 +181,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputPasswordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="@string/repeat_password"
-            app:endIconMode="clear_text">
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextRepeatPassword"
                 android:layout_width="match_parent"

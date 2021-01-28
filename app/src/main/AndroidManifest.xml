@@ -19,8 +19,9 @@
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="your API key"/>
 
         <activity android:name=".utente.ProfiloActivity" />
-        <activity android:name=".registrazione.SignUpActivity" />
-        <activity android:name=".registrazione.RegistrationActivity" />
+        <activity
+            android:name=".registrazione.RegistrationActivity"
+            android:parentActivityName=".WelcomeActivity"/>
         <activity
             android:name=".ui.login.LoginActivity"
             android:parentActivityName=".WelcomeActivity" />
