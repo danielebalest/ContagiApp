@@ -1,0 +1,34 @@
+Index: app/src/main/res/layout/activity_login.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/container\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@drawable/gradient\"\r\n    android:paddingLeft=\"@dimen/activity_horizontal_margin\"\r\n    android:paddingTop=\"@dimen/activity_vertical_margin\"\r\n    android:paddingRight=\"@dimen/activity_horizontal_margin\"\r\n    android:paddingBottom=\"@dimen/activity_vertical_margin\"\r\n    android:orientation=\"vertical\"\r\n    tools:context=\".ui.login.LoginActivity\">\r\n\r\n\r\n    <TextView\r\n        android:id=\"@+id/textViewAccedi\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:fontFamily=\"sans-serif-black\"\r\n        android:gravity=\"center\"\r\n        android:layout_gravity=\"center\"\r\n        android:text=\"@string/login\"\r\n        android:textAllCaps=\"true\"\r\n        android:textColor=\"@color/black\"\r\n        android:textSize=\"40sp\"\r\n       ></TextView>\r\n\r\n\r\n    <com.google.android.material.textfield.TextInputLayout\r\n        android:id=\"@+id/textFieldUsername\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"100dp\"\r\n        app:endIconMode=\"clear_text\"\r\n        app:startIconDrawable=\"@drawable/ic_account_circle_black_24dp\"\r\n        app:startIconTint=\"@color/black\">\r\n\r\n        <com.google.android.material.textfield.TextInputEditText\r\n            android:id=\"@+id/username\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:hint=\"@string/prompt_email\"\r\n            android:inputType=\"textEmailAddress\"\r\n            android:selectAllOnFocus=\"true\" />\r\n    </com.google.android.material.textfield.TextInputLayout>\r\n\r\n    <com.google.android.material.textfield.TextInputLayout\r\n        android:id=\"@+id/textFieldPassword\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"20dp\"\r\n        app:endIconMode=\"password_toggle\"\r\n        app:startIconDrawable=\"@drawable/ic_outline_lock_24\"\r\n        app:startIconTint=\"@color/black\">\r\n        />\r\n\r\n        <com.google.android.material.textfield.TextInputEditText\r\n            android:id=\"@+id/password\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:hint=\"@string/prompt_password\"\r\n            android:imeActionLabel=\"@string/action_sign_in_short\"\r\n            android:imeOptions=\"actionDone\"\r\n            android:inputType=\"textPassword\"\r\n            android:selectAllOnFocus=\"true\" />\r\n\r\n    </com.google.android.material.textfield.TextInputLayout>\r\n\r\n\r\n\r\n    <ProgressBar\r\n        android:id=\"@+id/loading\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_gravity=\"center\"\r\n        android:layout_marginStart=\"32dp\"\r\n        android:layout_marginTop=\"64dp\"\r\n        android:layout_marginEnd=\"32dp\"\r\n        android:layout_marginBottom=\"64dp\"\r\n        android:visibility=\"gone\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"@+id/textFieldPassword\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/textFieldPassword\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.3\" />\r\n\r\n    <CheckBox\r\n        android:id=\"@+id/checkBox\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:buttonTint=\"@color/black\"\r\n        android:text=\"@string/remember_me\"\r\n        android:layout_marginTop=\"20dp\"\r\n        />\r\n\r\n\r\n    <Button\r\n        android:id=\"@+id/login\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_gravity=\"start\"\r\n        android:backgroundTint=\"#D81B31\"\r\n        android:enabled=\"false\"\r\n        android:text=\"@string/login\"\r\n        android:textColor=\"#FFFFFF\"\r\n        android:layout_marginTop=\"10dp\"\r\n        />\r\n\r\n    <Button\r\n        android:id=\"@+id/forgetPSWbutton\"\r\n        style=\"@style/Widget.MaterialComponents.Button.TextButton\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"#FFFFFF\"\r\n        android:text=\"Password dimenticata\"\r\n        android:textSize=\"11dp\"\r\n        />\r\n\r\n\r\n    <Button\r\n        android:id=\"@+id/createAccount\"\r\n        style=\"@style/Widget.MaterialComponents.Button.TextButton\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"50dp\"\r\n        android:text=\"@string/createAccount\"\r\n        android:textSize=\"20dp\"\r\n        />\r\n\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_login.xml	(revision 770aa0e6428e9aa6970e2ed76f009eb0d896a814)
++++ app/src/main/res/layout/activity_login.xml	(date 1611685355988)
+@@ -18,13 +18,14 @@
+         android:id="@+id/textViewAccedi"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:fontFamily="sans-serif-black"
++        android:fontFamily="@font/muli_semi_bold"
+         android:gravity="center"
+         android:layout_gravity="center"
+         android:text="@string/login"
+         android:textAllCaps="true"
+         android:textColor="@color/black"
+         android:textSize="40sp"
++        android:layout_marginTop="50dp"
+        ></TextView>
+ 
+ 
+@@ -32,7 +33,7 @@
+         android:id="@+id/textFieldUsername"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:layout_marginTop="100dp"
++        android:layout_marginTop="50dp"
+         app:endIconMode="clear_text"
+         app:startIconDrawable="@drawable/ic_account_circle_black_24dp"
+         app:startIconTint="@color/black">

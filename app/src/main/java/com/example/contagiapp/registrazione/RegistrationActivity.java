@@ -103,11 +103,11 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                         break;
 
                     default:
-                        openMainActivity();
+                        addToDb();
                         break;
                 }
                 //per togliere i controlli togliere il commento alla riga successiva
-                //openMainActivity();
+                //addToDb();
 
             }
         });
@@ -174,7 +174,13 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
 
 
-    public void openMainActivity() {
+    public void openMainActivity(){
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        startActivity(mainIntent);
+    }
+
+
+    public void addToDb() {
         // Create a new user with a first, middle, and last name
         final Map<String, Object> user = new HashMap<>();
 
@@ -301,8 +307,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                     user1.put("password", psw1);
                     user1.put("mail", email);
                     db.collection("Utenti").add(user1);
-                    Intent mainIntent = new Intent(this, MainActivity.class);
-                    startActivity(mainIntent);
+                    addToDb();
                 } else {
                     Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
                     finish();
