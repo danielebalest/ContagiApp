@@ -108,6 +108,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 }
                 //per togliere i controlli togliere il commento alla riga successiva
                 //openMainActivity();
+
             }
         });
 
