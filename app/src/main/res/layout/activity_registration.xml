@@ -95,7 +95,7 @@
             app:errorEnabled="true"
             >
             <EditText
-                android:id="@+id/dataNascita"
+                android:id="@+id/editTextDataNascita"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"/>
@@ -150,7 +150,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputRepeatPasswordLayout"
+            android:id="@+id/textInputPhoneLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -165,7 +165,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputPhoneLayout"
+            android:id="@+id/textInputPasswordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -181,7 +181,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputPasswordLayout"
+            android:id="@+id/textInputRepeatPasswordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
