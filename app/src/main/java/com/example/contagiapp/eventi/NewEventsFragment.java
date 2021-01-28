@@ -146,12 +146,5 @@ public class NewEventsFragment extends AppCompatActivity {
             Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
             finish();
         }
-
-
     }
-
-
-
-
-
 };

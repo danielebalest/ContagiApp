@@ -58,6 +58,7 @@
                 <action android:name="android.intent.action.FriendProfile" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

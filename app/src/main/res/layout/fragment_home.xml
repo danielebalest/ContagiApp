@@ -29,16 +29,19 @@
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="273dp"
-                android:layout_height="wrap_content"
-                android:hint="cerca evento" />
-
-            <ImageButton
-                android:id="@+id/eventi"
-                android:layout_width="72dp"
+                android:id="@+id/search_field2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@android:drawable/ic_menu_search" />
+                android:background="@drawable/search_layout"
+                android:drawableLeft="@drawable/ic_baseline_search_24"
+                android:hint="cerca evento"
+                android:imeOptions="actionSearch"
+                android:padding="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:singleLine="true"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <Button
@@ -53,16 +56,19 @@
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="267dp"
-                android:layout_height="wrap_content"
-                android:hint="cerca amici" />
-
-            <ImageButton
-                android:id="@+id/amici"
-                android:layout_width="72dp"
+                android:id="@+id/search_field3"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@android:drawable/ic_menu_search" />
+                android:background="@drawable/search_layout"
+                android:drawableLeft="@drawable/ic_baseline_search_24"
+                android:hint="cerca amici"
+                android:imeOptions="actionSearch"
+                android:padding="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:singleLine="true"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <HorizontalScrollView
