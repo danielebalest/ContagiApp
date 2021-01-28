@@ -56,7 +56,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     private TextInputEditText cognome;
     private TextInputEditText phone;
     private TextInputEditText mail;
-    private EditText data;
+    private TextInputEditText data;
     private TextInputEditText psw1;
     private TextInputEditText psw2;
 
@@ -79,7 +79,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         nome = (TextInputEditText) findViewById(R.id.editTextName);
         cognome = (TextInputEditText) findViewById(R.id.editTextSurname);
         phone = (TextInputEditText) findViewById(R.id.editTextPhone);
-        data = (EditText) findViewById(R.id.editTextDataNascita);
+        data = (TextInputEditText) findViewById(R.id.editTextDataNascita);
         mail = (TextInputEditText) findViewById(R.id.editTextTextEmailAddress);
         psw1 = (TextInputEditText) findViewById(R.id.editTextTextPassword) ;
         psw2 = (TextInputEditText) findViewById(R.id.editTextRepeatPassword);
@@ -100,75 +100,45 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
             @Override
             public void onClick(View v) {
 
-                switch (controlli_TextInput(nome, cognome, mail, data, phone, psw1, psw2)){
+                switch (controlli_TextInput(nome, nomeLayout, cognome, cognomeLayout, mail, mailLayout, data, dataLayout, phone, phoneLayout, psw1, psw1Layout, psw2, psw2Layout)){
 
                     case 1:
                         nomeLayout.setError("Inserisci nome");
                         Toast.makeText(RegistrationActivity.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
 
-                        cognomeLayout.setError(null);
-                        mailLayout.setError(null);
-                        phoneLayout.setError(null);
-                        psw1Layout.setError(null);
-                        psw2Layout.setError(null);
 
-                        break;
+
+
                     case 2:
                         cognomeLayout.setError("Inserisci cognome");
                         Toast.makeText(RegistrationActivity.this, "Inserisci cognome", Toast.LENGTH_SHORT).show();
 
-                        nomeLayout.setError(null);
-                        mailLayout.setError(null);
-                        phoneLayout.setError(null);
-                        psw1Layout.setError(null);
-                        psw2Layout.setError(null);
-                        break;
-                        /*
+
+
                     case 3:
                         dataLayout.setError("Inserisci data di nascita");
-                    */
+
                     case 4:
                         mailLayout.setError("Inserisci mail");
                         Toast.makeText(RegistrationActivity.this, "Inserisci mail", Toast.LENGTH_SHORT).show();
 
-                        nomeLayout.setError(null);
-                        cognomeLayout.setError(null);
-                        phoneLayout.setError(null);
-                        psw1Layout.setError(null);
-                        psw2Layout.setError(null);
-                        break;
+
 
                     case 5:
                         phoneLayout.setError("Inserisci cellulare");
                         Toast.makeText(RegistrationActivity.this, "Inserisci cellulare", Toast.LENGTH_SHORT).show();
 
-                        nomeLayout.setError(null);
-                        cognomeLayout.setError(null);
-                        mailLayout.setError(null);
-                        psw1Layout.setError(null);
-                        psw2Layout.setError(null);
-                        break;
+
 
                     case 6:
                         psw1Layout.setError("Inserisci password");
                         Toast.makeText(RegistrationActivity.this, "Inserisci Password", Toast.LENGTH_SHORT).show();
 
-                        nomeLayout.setError(null);
-                        cognomeLayout.setError(null);
-                        mailLayout.setError(null);
-                        phoneLayout.setError(null);
-                        psw2Layout.setError(null);
-                        break;
+
                     case 7:
                         psw2Layout.setError("Inserisci password");
                         Toast.makeText(RegistrationActivity.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
 
-                        nomeLayout.setError(null);
-                        cognomeLayout.setError(null);
-                        mailLayout.setError(null);
-                        phoneLayout.setError(null);
-                        psw1Layout.setError(null);
-                        psw2Layout.setError(null);
                         break;
 
                     default:
@@ -217,35 +187,38 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         };
     }
 
-    private int controlli_TextInput(TextInputEditText name, TextInputEditText surname, TextInputEditText mail, EditText birth, TextInputEditText phone, TextInputEditText psw1, TextInputEditText psw2){
+    private int controlli_TextInput(TextInputEditText name, TextInputLayout nomeLayout, TextInputEditText surname, TextInputLayout cognomeLayout, TextInputEditText mail, TextInputLayout mailLayout,
+                                    TextInputEditText birth, TextInputLayout dataLayout, TextInputEditText phone, TextInputLayout phoneLayout, TextInputEditText psw1, TextInputLayout psw1Layout,
+                                    TextInputEditText psw2, TextInputLayout psw2Layout){
 
         if(isEmpty(name) == true){
             return 1;
-        }
+        }else nomeLayout.setError(null);
 
         if(isEmpty(surname) == true){
             return 2;
-        }
-/*
-        if(isEmpty((TextInputEditText) birth) == true){
+        }else cognomeLayout.setError(null);
+
+        if(isEmpty(birth) == true){
             return 3;
-        }*/
+        }else dataLayout.setError(null);
 
         if(isEmpty(mail)  == true){
             return 4;
-        }
+        }else mailLayout.setError(null);
 
 
         if(isEmpty(phone) == true){
             return 5;
-        }
+        }else phoneLayout.setError(null);
 
         if(isEmpty(psw1)  == true){
             return 6;
-        }
+        }else psw1Layout.setError(null);
+
         if(isEmpty(psw2)  == true){
             return 7;
-        }
+        }else psw2Layout.setError(null);
 
         return 0;
     }

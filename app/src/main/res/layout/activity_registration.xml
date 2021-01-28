@@ -92,13 +92,14 @@
             android:layout_marginTop="10dp"
             android:hint="@string/birth"
             app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            >
-            <EditText
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextDataNascita"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"/>
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <Spinner
