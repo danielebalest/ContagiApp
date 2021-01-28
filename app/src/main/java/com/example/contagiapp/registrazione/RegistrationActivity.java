@@ -105,14 +105,23 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                     case 1:
                         nomeLayout.setError("Inserisci nome");
                         Toast.makeText(RegistrationActivity.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
+
                         cognomeLayout.setError(null);
+                        mailLayout.setError(null);
                         phoneLayout.setError(null);
+                        psw1Layout.setError(null);
+                        psw2Layout.setError(null);
+
                         break;
                     case 2:
                         cognomeLayout.setError("Inserisci cognome");
                         Toast.makeText(RegistrationActivity.this, "Inserisci cognome", Toast.LENGTH_SHORT).show();
+
                         nomeLayout.setError(null);
+                        mailLayout.setError(null);
                         phoneLayout.setError(null);
+                        psw1Layout.setError(null);
+                        psw2Layout.setError(null);
                         break;
                         /*
                     case 3:
@@ -120,20 +129,46 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                     */
                     case 4:
                         mailLayout.setError("Inserisci mail");
+                        Toast.makeText(RegistrationActivity.this, "Inserisci mail", Toast.LENGTH_SHORT).show();
+
+                        nomeLayout.setError(null);
+                        cognomeLayout.setError(null);
+                        phoneLayout.setError(null);
+                        psw1Layout.setError(null);
+                        psw2Layout.setError(null);
                         break;
 
                     case 5:
                         phoneLayout.setError("Inserisci cellulare");
                         Toast.makeText(RegistrationActivity.this, "Inserisci cellulare", Toast.LENGTH_SHORT).show();
+
                         nomeLayout.setError(null);
                         cognomeLayout.setError(null);
+                        mailLayout.setError(null);
+                        psw1Layout.setError(null);
+                        psw2Layout.setError(null);
                         break;
 
                     case 6:
                         psw1Layout.setError("Inserisci password");
+                        Toast.makeText(RegistrationActivity.this, "Inserisci Password", Toast.LENGTH_SHORT).show();
+
+                        nomeLayout.setError(null);
+                        cognomeLayout.setError(null);
+                        mailLayout.setError(null);
+                        phoneLayout.setError(null);
+                        psw2Layout.setError(null);
                         break;
                     case 7:
                         psw2Layout.setError("Inserisci password");
+                        Toast.makeText(RegistrationActivity.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
+
+                        nomeLayout.setError(null);
+                        cognomeLayout.setError(null);
+                        mailLayout.setError(null);
+                        phoneLayout.setError(null);
+                        psw1Layout.setError(null);
+                        psw2Layout.setError(null);
                         break;
 
                     default:
