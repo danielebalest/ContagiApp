@@ -106,14 +106,9 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                         nomeLayout.setError("Inserisci nome");
                         Toast.makeText(RegistrationActivity.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
 
-
-
-
                     case 2:
                         cognomeLayout.setError("Inserisci cognome");
                         Toast.makeText(RegistrationActivity.this, "Inserisci cognome", Toast.LENGTH_SHORT).show();
-
-
 
                     case 3:
                         dataLayout.setError("Inserisci data di nascita");
@@ -122,23 +117,17 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                         mailLayout.setError("Inserisci mail");
                         Toast.makeText(RegistrationActivity.this, "Inserisci mail", Toast.LENGTH_SHORT).show();
 
-
-
                     case 5:
                         phoneLayout.setError("Inserisci cellulare");
                         Toast.makeText(RegistrationActivity.this, "Inserisci cellulare", Toast.LENGTH_SHORT).show();
-
-
 
                     case 6:
                         psw1Layout.setError("Inserisci password");
                         Toast.makeText(RegistrationActivity.this, "Inserisci Password", Toast.LENGTH_SHORT).show();
 
-
                     case 7:
                         psw2Layout.setError("Inserisci password");
                         Toast.makeText(RegistrationActivity.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
-
                         break;
 
                     default:

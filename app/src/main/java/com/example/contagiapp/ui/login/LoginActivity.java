@@ -30,6 +30,8 @@ import com.example.contagiapp.R;
 import com.example.contagiapp.registrazione.RegistrationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -39,8 +41,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG ="LoginActivity";
     private LoginViewModel loginViewModel;
-    private EditText usernameEditText;
-    private EditText passwordEditText;
+    private TextInputEditText usernameEditText;
+    private TextInputEditText passwordEditText;
+    private TextInputLayout usernameTextLayout;
+    private TextInputLayout passwordTextLayout;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -52,6 +56,10 @@ public class LoginActivity extends AppCompatActivity {
 
         usernameEditText = findViewById(R.id.username);
         passwordEditText = findViewById(R.id.password);
+        usernameTextLayout = findViewById(R.id.textFieldUsername);
+        passwordTextLayout = findViewById(R.id.textFieldPassword);
+
+
         final Button loginButton = findViewById(R.id.login);
         final Button createAccountButton = findViewById(R.id.createAccount);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
@@ -66,10 +74,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 loginButton.setEnabled(loginFormState.isDataValid());
                 if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
+                    usernameTextLayout.setError(getString(loginFormState.getUsernameError()));
                 }
                 if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
+                    passwordTextLayout.setError(getString(loginFormState.getPasswordError()));
                 }
             }
         });

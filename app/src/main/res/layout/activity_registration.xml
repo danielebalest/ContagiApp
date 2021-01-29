@@ -35,13 +35,12 @@
         android:hint="Nome"
         app:endIconMode="clear_text"
         app:errorEnabled="true"
-        >
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:inputType="textPersonName"
             android:labelFor="@id/editTextSurname"
 
@@ -55,7 +54,9 @@
         android:layout_marginTop="10dp"
         android:hint="Cognome"
         app:endIconMode="clear_text"
-        app:errorEnabled="true">
+        app:errorEnabled="true"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextSurname"
             android:layout_width="match_parent"
@@ -92,7 +93,9 @@
             android:layout_marginTop="10dp"
             android:hint="@string/birth"
             app:endIconMode="clear_text"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextDataNascita"
@@ -101,13 +104,17 @@
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
+        
 
         <Spinner
             android:id="@+id/spinnerNazioni"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp"
+
             android:entries="@array/nazioni"
+            android:popupBackground="@color/gray"
+            android:backgroundTint="@color/colorPrimary"
+            android:focusableInTouchMode="true"
             />
 
         <Spinner
@@ -116,7 +123,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:entries="@array/regioniItaliane"
-            />
+            android:focusableInTouchMode="true"/>
 
         <Spinner
             android:id="@+id/spinnerProvince"
@@ -141,7 +148,8 @@
             android:layout_marginTop="10dp"
             android:hint="@string/prompt_email"
             app:endIconMode="clear_text"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextTextEmailAddress"
                 android:layout_width="match_parent"
@@ -157,7 +165,8 @@
             android:layout_marginTop="10dp"
             android:hint="@string/phone"
             app:endIconMode="clear_text"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPhone"
                 android:layout_width="match_parent"
@@ -172,7 +181,8 @@
             android:layout_marginTop="10dp"
             android:hint="@string/prompt_password"
             app:endIconMode="clear_text"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextTextPassword"
                 android:layout_width="match_parent"
@@ -188,7 +198,8 @@
             android:layout_marginTop="10dp"
             android:hint="@string/repeat_password"
             app:endIconMode="clear_text"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextRepeatPassword"
                 android:layout_width="match_parent"

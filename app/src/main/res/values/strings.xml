@@ -50,6 +50,9 @@
         <item>TA</item>
     </string-array>
 
+    //ERRORI
+    <string name="Insert">Inserisci</string>
+
     <string-array name="Citta">
         <item>Bari</item>
         <item>Molfetta</item>
