@@ -3,6 +3,7 @@ package com.example.contagiapp.ui.login;
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -25,10 +26,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.contagiapp.HomeFragment;
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
 import com.example.contagiapp.registrazione.RegistrationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -161,27 +164,29 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
     public void openMain(){
-        /*String username = usernameEditText.getText().toString();
-        String password = passwordEditText.getText().toString();*/
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        startActivity(mainIntent);
-        /*db.collection("Utenti")
-                .whereEqualTo("nome", username).whereEqualTo("password",password)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());*/
-                                startActivity(mainIntent);
-                            /*}
-                        } else {
-                            Log.d(TAG, "Username o password errati", task.getException());
-                        }
-                    }
-                });*/
-        //Query capitalCities = db.collection("cities").whereEqualTo("capital", true);
+        String username = usernameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+
+        System.out.println("username in input:"+username);
+        System.out.println("password in input:"+password);
+        //final Intent mainIntent = new Intent(this, HomeFragment.class);
+        final Fragment fragment = new HomeFragment();
+        db.collection("Utenti").whereEqualTo("mail", username).whereEqualTo("password",password)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot querySnapshots) { System.out.println(querySnapshots.isEmpty());
+                if(querySnapshots.isEmpty()) {
+                    //setContentView(R.layout.activity_login);
+                    Toast.makeText(getApplicationContext(), "Mail o password errati", Toast.LENGTH_SHORT).show();
+                } else {
+                    //startActivity(mainIntent);
+                    //fragment = new HomeFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                    //inflater.inflate(R.layout.my_first_fragment, container, false);
+                    //setContentView(R.layout.fragment_home);
+                }
+            }
+        });
     }
 
     public void openRegistration(){
