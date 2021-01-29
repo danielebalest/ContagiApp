@@ -46,7 +46,6 @@
             android:hint="@string/prompt_email"
             android:inputType="textEmailAddress"
             android:selectAllOnFocus="true"
-
             />
     </com.google.android.material.textfield.TextInputLayout>
 

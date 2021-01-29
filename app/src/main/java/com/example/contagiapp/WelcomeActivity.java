@@ -16,6 +16,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button registrationButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        setTheme(R.style.NoActionBar);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 

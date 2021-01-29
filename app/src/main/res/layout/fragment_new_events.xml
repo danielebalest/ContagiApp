@@ -9,6 +9,8 @@
     app:layout_constraintStart_toStartOf="parent"
     tools:context=".eventi.NewEventsFragment">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -102,4 +104,5 @@
             android:text="Crea" />
 
     </LinearLayout>
+
 </ScrollView>

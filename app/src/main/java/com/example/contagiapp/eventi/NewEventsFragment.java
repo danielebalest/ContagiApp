@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -12,14 +13,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
+import com.example.contagiapp.HomeFragment;
+import com.example.contagiapp.NotifyFragment;
 import com.example.contagiapp.R;
+import com.example.contagiapp.data.amici.FriendsFragment;
+import com.example.contagiapp.gruppi.GroupFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class NewEventsFragment extends AppCompatActivity {
 
@@ -27,6 +35,7 @@ public class NewEventsFragment extends AppCompatActivity {
     private Button creaEvento;
     private TextView dataEvento;
     private DatePickerDialog.OnDateSetListener dataDellEvento;
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private int anno = 0, mese = 0, giorno = 0;
 
@@ -34,6 +43,9 @@ public class NewEventsFragment extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_new_events);
+
+        //bottomNavigation
+
 
         // collegamento button registrati con la mainActivity
         creaEvento = (Button) findViewById(R.id.buttonCreaEvento);
@@ -147,4 +159,5 @@ public class NewEventsFragment extends AppCompatActivity {
             finish();
         }
     }
+
 };

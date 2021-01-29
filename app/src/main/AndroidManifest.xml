@@ -25,16 +25,20 @@
             android:parentActivityName=".WelcomeActivity" />
         <activity
             android:name=".LaunchScreenActivity"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/LauncherTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity
             android:name=".WelcomeActivity"
-            android:theme="@style/NoActionBar" />
+            android:theme="@style/NoActionBar">
+        </activity>
+
         <activity android:name=".MainActivity" />
         <activity android:name=".eventi.NewEventsFragment">
             <intent-filter>

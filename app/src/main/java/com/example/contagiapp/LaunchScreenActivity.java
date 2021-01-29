@@ -18,9 +18,6 @@ public class LaunchScreenActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                /*per andare alla home*/
-                //Intent homeIntent = new Intent(LaunchScreenActivity.this, MainActivity.class);
-                //startActivity(homeIntent);
 
                 /*per andare alla welcomeActivity*/
                 Intent welcomeIntent = new Intent(LaunchScreenActivity.this, WelcomeActivity.class);
