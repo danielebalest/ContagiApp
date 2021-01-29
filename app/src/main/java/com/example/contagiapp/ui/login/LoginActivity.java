@@ -145,12 +145,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot querySnapshots) { System.out.println(querySnapshots.isEmpty());
                 if(querySnapshots.isEmpty()) {
-                    //setContentView(R.layout.activity_login);
                     Toast.makeText(getApplicationContext(), "Mail o password errati", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(mainIntent);
-
                 }
             }
         });
