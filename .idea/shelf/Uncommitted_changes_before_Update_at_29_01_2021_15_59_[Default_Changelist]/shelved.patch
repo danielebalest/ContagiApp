@@ -1,0 +1,174 @@
+Index: app/src/main/java/com/example/contagiapp/ui/login/LoginActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.contagiapp.ui.login;\r\n\r\nimport android.app.Activity;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.lifecycle.Observer;\r\nimport androidx.lifecycle.ViewModelProvider;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\n\r\nimport androidx.annotation.Nullable;\r\nimport androidx.annotation.StringRes;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.text.Editable;\r\nimport android.text.TextWatcher;\r\nimport android.util.Log;\r\nimport android.view.KeyEvent;\r\nimport android.view.View;\r\nimport android.view.inputmethod.EditorInfo;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ProgressBar;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.contagiapp.MainActivity;\r\nimport com.example.contagiapp.R;\r\nimport com.example.contagiapp.registrazione.RegistrationActivity;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.android.material.textfield.TextInputEditText;\r\nimport com.google.android.material.textfield.TextInputLayout;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.Query;\r\nimport com.google.firebase.firestore.QueryDocumentSnapshot;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\n\r\npublic class LoginActivity extends AppCompatActivity {\r\n\r\n    private static final String TAG =\"LoginActivity\";\r\n    private LoginViewModel loginViewModel;\r\n    private TextInputEditText usernameEditText;\r\n    private TextInputEditText passwordEditText;\r\n    private TextInputLayout usernameTextLayout;\r\n    private TextInputLayout passwordTextLayout;\r\n    private FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n\r\n    @Override\r\n    public void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_login);\r\n        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())\r\n                .get(LoginViewModel.class);\r\n\r\n        usernameEditText = findViewById(R.id.username);\r\n        passwordEditText = findViewById(R.id.password);\r\n        usernameTextLayout = findViewById(R.id.textFieldUsername);\r\n        passwordTextLayout = findViewById(R.id.textFieldPassword);\r\n\r\n\r\n        final Button loginButton = findViewById(R.id.login);\r\n        final Button createAccountButton = findViewById(R.id.createAccount);\r\n        final ProgressBar loadingProgressBar = findViewById(R.id.loading);\r\n        getSupportActionBar().setDisplayHomeAsUpEnabled(true);\r\n\r\n\r\n        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {\r\n            @Override\r\n            public void onChanged(@Nullable LoginFormState loginFormState) {\r\n                if (loginFormState == null) {\r\n                    return;\r\n                }\r\n                loginButton.setEnabled(loginFormState.isDataValid());\r\n                if (loginFormState.getUsernameError() != null) {\r\n                    usernameTextLayout.setError(getString(loginFormState.getUsernameError()));\r\n                }\r\n                if (loginFormState.getPasswordError() != null) {\r\n                    passwordTextLayout.setError(getString(loginFormState.getPasswordError()));\r\n                }\r\n            }\r\n        });\r\n\r\n        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {\r\n            @Override\r\n            public void onChanged(@Nullable LoginResult loginResult) {\r\n                if (loginResult == null) {\r\n                    return;\r\n                }\r\n                loadingProgressBar.setVisibility(View.GONE);\r\n                if (loginResult.getError() != null) {\r\n                    showLoginFailed(loginResult.getError());\r\n                }\r\n                if (loginResult.getSuccess() != null) {\r\n                    updateUiWithUser(loginResult.getSuccess());\r\n                }\r\n                setResult(Activity.RESULT_OK);\r\n\r\n                //Complete and destroy login activity once successful\r\n                finish();\r\n            }\r\n        });\r\n\r\n        TextWatcher afterTextChangedListener = new TextWatcher() {\r\n            @Override\r\n            public void beforeTextChanged(CharSequence s, int start, int count, int after) {\r\n                // ignore\r\n            }\r\n\r\n            @Override\r\n            public void onTextChanged(CharSequence s, int start, int before, int count) {\r\n                // ignore\r\n            }\r\n\r\n            @Override\r\n            public void afterTextChanged(Editable s) {\r\n                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),\r\n                        passwordEditText.getText().toString());\r\n            }\r\n        };\r\n        usernameEditText.addTextChangedListener(afterTextChangedListener);\r\n        passwordEditText.addTextChangedListener(afterTextChangedListener);\r\n        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {\r\n\r\n            @Override\r\n            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {\r\n                if (actionId == EditorInfo.IME_ACTION_DONE) {\r\n                    loginViewModel.login(usernameEditText.getText().toString(),\r\n                            passwordEditText.getText().toString());\r\n                }\r\n                return false;\r\n            }\r\n        });\r\n\r\n        loginButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                loadingProgressBar.setVisibility(View.VISIBLE);\r\n                loginViewModel.login(usernameEditText.getText().toString(),\r\n                        passwordEditText.getText().toString());\r\n                openMain();\r\n            }\r\n        });\r\n\r\n        createAccountButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                openRegistration();\r\n            }\r\n        });\r\n    }\r\n\r\n    private void updateUiWithUser(LoggedInUserView model) {\r\n        String welcome = getString(R.string.welcome) + model.getDisplayName();\r\n        // TODO : initiate successful logged in experience\r\n        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();\r\n    }\r\n\r\n    private void showLoginFailed(@StringRes Integer errorString) {\r\n        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();\r\n    }\r\n    public void openMain(){\r\n        /*String username = usernameEditText.getText().toString();\r\n        String password = passwordEditText.getText().toString();*/\r\n        Intent mainIntent = new Intent(this, MainActivity.class);\r\n        startActivity(mainIntent);\r\n        /*db.collection(\"Utenti\")\r\n                .whereEqualTo(\"nome\", username).whereEqualTo(\"password\",password)\r\n                .get()\r\n                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<QuerySnapshot> task) {\r\n                        if (task.isSuccessful()) {\r\n                            for (QueryDocumentSnapshot document : task.getResult()) {\r\n                                Log.d(TAG, document.getId() + \" => \" + document.getData());*/\r\n                                startActivity(mainIntent);\r\n                            /*}\r\n                        } else {\r\n                            Log.d(TAG, \"Username o password errati\", task.getException());\r\n                        }\r\n                    }\r\n                });*/\r\n        //Query capitalCities = db.collection(\"cities\").whereEqualTo(\"capital\", true);\r\n    }\r\n\r\n    public void openRegistration(){\r\n        Intent signUpIntent = new Intent(this, RegistrationActivity.class);\r\n        startActivity(signUpIntent);\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/contagiapp/ui/login/LoginActivity.java	(revision fa5062211f5d50d8a463f53516cb034bfb5ed2f5)
++++ app/src/main/java/com/example/contagiapp/ui/login/LoginActivity.java	(date 1611922261366)
+@@ -62,84 +62,28 @@
+ 
+         final Button loginButton = findViewById(R.id.login);
+         final Button createAccountButton = findViewById(R.id.createAccount);
+-        final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+ 
+ 
+-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
+-            @Override
+-            public void onChanged(@Nullable LoginFormState loginFormState) {
+-                if (loginFormState == null) {
+-                    return;
+-                }
+-                loginButton.setEnabled(loginFormState.isDataValid());
+-                if (loginFormState.getUsernameError() != null) {
+-                    usernameTextLayout.setError(getString(loginFormState.getUsernameError()));
+-                }
+-                if (loginFormState.getPasswordError() != null) {
+-                    passwordTextLayout.setError(getString(loginFormState.getPasswordError()));
+-                }
+-            }
+-        });
+-
+-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+-            @Override
+-            public void onChanged(@Nullable LoginResult loginResult) {
+-                if (loginResult == null) {
+-                    return;
+-                }
+-                loadingProgressBar.setVisibility(View.GONE);
+-                if (loginResult.getError() != null) {
+-                    showLoginFailed(loginResult.getError());
+-                }
+-                if (loginResult.getSuccess() != null) {
+-                    updateUiWithUser(loginResult.getSuccess());
+-                }
+-                setResult(Activity.RESULT_OK);
+-
+-                //Complete and destroy login activity once successful
+-                finish();
+-            }
+-        });
+-
+-        TextWatcher afterTextChangedListener = new TextWatcher() {
+-            @Override
+-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+-                // ignore
+-            }
+ 
+-            @Override
+-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+-                // ignore
+-            }
+ 
+-            @Override
+-            public void afterTextChanged(Editable s) {
+-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
+-                        passwordEditText.getText().toString());
+-            }
+-        };
+-        usernameEditText.addTextChangedListener(afterTextChangedListener);
+-        passwordEditText.addTextChangedListener(afterTextChangedListener);
+-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+-
+-            @Override
+-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+-                    loginViewModel.login(usernameEditText.getText().toString(),
+-                            passwordEditText.getText().toString());
+-                }
+-                return false;
+-            }
+-        });
+ 
+         loginButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                loadingProgressBar.setVisibility(View.VISIBLE);
+-                loginViewModel.login(usernameEditText.getText().toString(),
+-                        passwordEditText.getText().toString());
+-                openMain();
++
++                switch (controlli(usernameEditText, passwordEditText)){
++                    case 1:
++                        usernameTextLayout.setError("Inserisci username");
++
++                    case 2:
++                        passwordTextLayout.setError("Inserisci password");
++                        break;
++                    case 0:
++                        openMain();
++                }
++
++
+             }
+         });
+ 
+@@ -151,6 +95,26 @@
+         });
+     }
+ 
++    private int controlli(TextInputEditText usernameEditText, TextInputEditText passwordEditText){
++        if(isEmpty(usernameEditText) == true){
++            return 1;
++        }else
++            usernameTextLayout.setError(null);
++
++        if(isEmpty(passwordEditText) == true){
++            return 2;
++        }else
++            usernameTextLayout.setError(null);
++
++        return 0;
++    }
++
++    private boolean isEmpty(TextInputEditText etText) {
++        if(etText.getText().toString().length() > 0)
++            return false;
++        return true;
++    }
++
+     private void updateUiWithUser(LoggedInUserView model) {
+         String welcome = getString(R.string.welcome) + model.getDisplayName();
+         // TODO : initiate successful logged in experience
+Index: app/src/main/res/layout/activity_login.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/container\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@drawable/gradient\"\r\n    android:paddingLeft=\"@dimen/activity_horizontal_margin\"\r\n    android:paddingTop=\"@dimen/activity_vertical_margin\"\r\n    android:paddingRight=\"@dimen/activity_horizontal_margin\"\r\n    android:paddingBottom=\"@dimen/activity_vertical_margin\"\r\n    android:orientation=\"vertical\"\r\n    tools:context=\".ui.login.LoginActivity\">\r\n\r\n\r\n    <TextView\r\n        android:id=\"@+id/textViewAccedi\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_gravity=\"center\"\r\n        android:layout_marginTop=\"32dp\"\r\n        android:fontFamily=\"@font/muli_semi_bold\"\r\n        android:gravity=\"center\"\r\n        android:text=\"@string/login\"\r\n        android:textAllCaps=\"true\"\r\n        android:textColor=\"@color/colorPrimaryDark\"\r\n        android:textSize=\"40sp\"></TextView>\r\n\r\n\r\n    <com.google.android.material.textfield.TextInputLayout\r\n        android:id=\"@+id/textFieldUsername\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"50dp\"\r\n        app:endIconMode=\"clear_text\"\r\n        app:startIconDrawable=\"@drawable/ic_account_circle_black_24dp\"\r\n        app:startIconTint=\"@color/black\"\r\n        app:errorEnabled=\"true\"\r\n        style=\"@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox\">\r\n\r\n        <com.google.android.material.textfield.TextInputEditText\r\n            android:id=\"@+id/username\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:hint=\"@string/prompt_email\"\r\n            android:inputType=\"textEmailAddress\"\r\n            android:selectAllOnFocus=\"true\"\r\n\r\n            />\r\n    </com.google.android.material.textfield.TextInputLayout>\r\n\r\n    <com.google.android.material.textfield.TextInputLayout\r\n        android:id=\"@+id/textFieldPassword\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"20dp\"\r\n        app:endIconMode=\"password_toggle\"\r\n        app:startIconDrawable=\"@drawable/ic_outline_lock_24\"\r\n        app:startIconTint=\"@color/black\"\r\n        app:errorEnabled=\"true\"\r\n        style=\"@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox\">\r\n        />\r\n\r\n        <com.google.android.material.textfield.TextInputEditText\r\n            android:id=\"@+id/password\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:hint=\"@string/prompt_password\"\r\n            android:imeActionLabel=\"@string/action_sign_in_short\"\r\n            android:imeOptions=\"actionDone\"\r\n            android:inputType=\"textPassword\"\r\n            android:selectAllOnFocus=\"true\" />\r\n\r\n    </com.google.android.material.textfield.TextInputLayout>\r\n\r\n\r\n\r\n    <ProgressBar\r\n        android:id=\"@+id/loading\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_gravity=\"center\"\r\n        android:layout_marginStart=\"32dp\"\r\n        android:layout_marginTop=\"64dp\"\r\n        android:layout_marginEnd=\"32dp\"\r\n        android:layout_marginBottom=\"64dp\"\r\n        android:visibility=\"gone\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"@+id/textFieldPassword\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/textFieldPassword\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.3\" />\r\n\r\n    <CheckBox\r\n        android:id=\"@+id/checkBox\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:buttonTint=\"@color/black\"\r\n        android:text=\"@string/remember_me\"\r\n        android:layout_marginTop=\"20dp\"\r\n        />\r\n\r\n\r\n    <Button\r\n        android:id=\"@+id/login\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_gravity=\"start\"\r\n        android:backgroundTint=\"#D81B31\"\r\n        android:enabled=\"false\"\r\n        android:text=\"@string/login\"\r\n        android:textColor=\"#FFFFFF\"\r\n        android:layout_marginTop=\"10dp\"\r\n        />\r\n\r\n\r\n\r\n    <Button\r\n        android:id=\"@+id/forgetPSWbutton\"\r\n        style=\"@style/Widget.MaterialComponents.Button.TextButton\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"#FFFFFF\"\r\n        android:text=\"Password dimenticata\"\r\n        android:textSize=\"11dp\"\r\n        />\r\n\r\n\r\n    <Button\r\n        android:id=\"@+id/createAccount\"\r\n        style=\"@style/Widget.MaterialComponents.Button.TextButton\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"50dp\"\r\n        android:text=\"@string/createAccount\"\r\n        android:textSize=\"20dp\"\r\n        />\r\n\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_login.xml	(revision fa5062211f5d50d8a463f53516cb034bfb5ed2f5)
++++ app/src/main/res/layout/activity_login.xml	(date 1611921157550)
+@@ -76,21 +76,6 @@
+ 
+ 
+ 
+-    <ProgressBar
+-        android:id="@+id/loading"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_gravity="center"
+-        android:layout_marginStart="32dp"
+-        android:layout_marginTop="64dp"
+-        android:layout_marginEnd="32dp"
+-        android:layout_marginBottom="64dp"
+-        android:visibility="gone"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="@+id/textFieldPassword"
+-        app:layout_constraintStart_toStartOf="@+id/textFieldPassword"
+-        app:layout_constraintTop_toTopOf="parent"
+-        app:layout_constraintVertical_bias="0.3" />
+ 
+     <CheckBox
+         android:id="@+id/checkBox"
+@@ -108,7 +93,7 @@
+         android:layout_height="wrap_content"
+         android:layout_gravity="start"
+         android:backgroundTint="#D81B31"
+-        android:enabled="false"
++        android:enabled="true"
+         android:text="@string/login"
+         android:textColor="#FFFFFF"
+         android:layout_marginTop="10dp"

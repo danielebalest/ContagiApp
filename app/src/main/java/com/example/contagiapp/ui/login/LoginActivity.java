@@ -44,9 +44,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG ="LoginActivity";
     private LoginViewModel loginViewModel;
-    private TextInputEditText usernameEditText;
+    private TextInputEditText mailEditText;
     private TextInputEditText passwordEditText;
-    private TextInputLayout usernameTextLayout;
+    private TextInputLayout mailTextLayout;
     private TextInputLayout passwordTextLayout;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -57,9 +57,9 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        usernameEditText = findViewById(R.id.username);
+        mailEditText = findViewById(R.id.mail);
         passwordEditText = findViewById(R.id.password);
-        usernameTextLayout = findViewById(R.id.textFieldUsername);
+        mailTextLayout = findViewById(R.id.textFieldMail);
         passwordTextLayout = findViewById(R.id.textFieldPassword);
 
 
@@ -74,21 +74,9 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMain();
-                /*
-                switch (controlli(usernameEditText, passwordEditText)){
-                    case 1:
-                        usernameTextLayout.setError("Inserisci username");
 
-                    case 2:
-                        passwordTextLayout.setError("Inserisci password");
-                        break;
-                    case 0:
-                        openMain();
-                }
-
-                 */
-
+                if(controlloTextFieldVuoto(mailEditText, passwordEditText) == 0)
+                    openMain();
 
             }
         });
@@ -101,17 +89,26 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private int controlli(TextInputEditText usernameEditText, TextInputEditText passwordEditText){
-        if(isEmpty(usernameEditText) == true){
-            return 1;
-        }else
-            usernameTextLayout.setError(null);
+    private int controlloTextFieldVuoto(TextInputEditText mailEditText, TextInputEditText passwordEditText){
 
-        if(isEmpty(passwordEditText) == true){
+        if(isEmpty(mailEditText) == true && isEmpty(passwordEditText) == false ){
+            mailTextLayout.setError("Inserisci mail");
+            passwordTextLayout.setError(null);
+            return 1;
+        }
+
+        if(isEmpty(passwordEditText) == true && isEmpty(mailEditText) == false){
+            passwordTextLayout.setError("Inserisci password");
+            mailTextLayout.setError(null);
             return 2;
         }else
-            usernameTextLayout.setError(null);
+            passwordTextLayout.setError(null);
 
+        if(isEmpty(mailEditText) && isEmpty(passwordEditText) == true){
+            mailTextLayout.setError("Inserisci mail");
+            passwordTextLayout.setError("Inserisci password");
+            return 3;
+        }
         return 0;
     }
 
@@ -130,14 +127,15 @@ public class LoginActivity extends AppCompatActivity {
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
+
+
     public void openMain(){
-        String username = usernameEditText.getText().toString();
+        String username = mailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
         System.out.println("username in input:"+username);
         System.out.println("password in input:"+password);
-        //final Intent mainIntent = new Intent(this, HomeFragment.class);
-        final Fragment fragment = new HomeFragment();
+
         db.collection("Utenti").whereEqualTo("mail", username).whereEqualTo("password",password)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -148,10 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(mainIntent);
-                    //fragment = new HomeFragment();
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-                    //inflater.inflate(R.layout.my_first_fragment, container, false);
-                    //setContentView(R.layout.fragment_home);
+
                 }
             }
         });
