@@ -30,15 +30,19 @@ import com.example.contagiapp.HomeFragment;
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
 import com.example.contagiapp.registrazione.RegistrationActivity;
+import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.io.FileOutputStream;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -134,8 +138,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void openMain(){
-        String username = mailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
+        final String username = mailEditText.getText().toString();
+        final String password = passwordEditText.getText().toString();
 
         System.out.println("username in input:"+username);
         System.out.println("password in input:"+password);
@@ -147,6 +151,20 @@ public class LoginActivity extends AppCompatActivity {
                 if(querySnapshots.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Mail o password errati", Toast.LENGTH_SHORT).show();
                 } else {
+                    db.collection("Utenti").whereEqualTo("mail", username).whereEqualTo("password",password)
+                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Utente utente = document.toObject(Utente.class);
+                                            //FileOutputStream openFileOutput = new FileOutputStream("FileUtente.txt", "r");
+                                        }
+                                    } else {
+                                        Log.d(TAG, "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
                     Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(mainIntent);
                 }
