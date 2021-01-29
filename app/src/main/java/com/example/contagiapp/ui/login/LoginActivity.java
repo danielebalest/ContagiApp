@@ -75,8 +75,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(controlloTextFieldVuoto(mailEditText, passwordEditText) == 0)
+                if(controlloTextFieldVuoto(mailEditText, passwordEditText) == 0){
+                    mailTextLayout.setError(null);
+                    passwordTextLayout.setError(null);
                     openMain();
+                }
+
 
             }
         });
