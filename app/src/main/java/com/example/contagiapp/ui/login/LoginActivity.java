@@ -65,84 +65,31 @@ public class LoginActivity extends AppCompatActivity {
 
         final Button loginButton = findViewById(R.id.login);
         final Button createAccountButton = findViewById(R.id.createAccount);
-        final ProgressBar loadingProgressBar = findViewById(R.id.loading);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
-            @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
-                if (loginFormState == null) {
-                    return;
-                }
-                loginButton.setEnabled(loginFormState.isDataValid());
-                if (loginFormState.getUsernameError() != null) {
-                    usernameTextLayout.setError(getString(loginFormState.getUsernameError()));
-                }
-                if (loginFormState.getPasswordError() != null) {
-                    passwordTextLayout.setError(getString(loginFormState.getPasswordError()));
-                }
-            }
-        });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
-                loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
 
-                //Complete and destroy login activity once successful
-                finish();
-            }
-        });
-
-        TextWatcher afterTextChangedListener = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-            }
-        };
-        usernameEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
-                }
-                return false;
-            }
-        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
                 openMain();
+                /*
+                switch (controlli(usernameEditText, passwordEditText)){
+                    case 1:
+                        usernameTextLayout.setError("Inserisci username");
+
+                    case 2:
+                        passwordTextLayout.setError("Inserisci password");
+                        break;
+                    case 0:
+                        openMain();
+                }
+
+                 */
+
+
             }
         });
 
@@ -152,6 +99,26 @@ public class LoginActivity extends AppCompatActivity {
                 openRegistration();
             }
         });
+    }
+
+    private int controlli(TextInputEditText usernameEditText, TextInputEditText passwordEditText){
+        if(isEmpty(usernameEditText) == true){
+            return 1;
+        }else
+            usernameTextLayout.setError(null);
+
+        if(isEmpty(passwordEditText) == true){
+            return 2;
+        }else
+            usernameTextLayout.setError(null);
+
+        return 0;
+    }
+
+    private boolean isEmpty(TextInputEditText etText) {
+        if(etText.getText().toString().length() > 0)
+            return false;
+        return true;
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
@@ -179,9 +146,10 @@ public class LoginActivity extends AppCompatActivity {
                     //setContentView(R.layout.activity_login);
                     Toast.makeText(getApplicationContext(), "Mail o password errati", Toast.LENGTH_SHORT).show();
                 } else {
-                    //startActivity(mainIntent);
+                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(mainIntent);
                     //fragment = new HomeFragment();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                    //getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                     //inflater.inflate(R.layout.my_first_fragment, container, false);
                     //setContentView(R.layout.fragment_home);
                 }
@@ -194,4 +162,3 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(signUpIntent);
     }
 }
-
