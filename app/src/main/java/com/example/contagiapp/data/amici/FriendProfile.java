@@ -27,7 +27,7 @@ public class FriendProfile extends AppCompatActivity {
     private static final String TAG = "FriendProfile";
     // Access a Cloud Firestore instance from your Activity
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private BottomNavigationView bottomNavigationView;
+
 
 
     @Override
@@ -52,46 +52,8 @@ public class FriendProfile extends AppCompatActivity {
             }
         });*/
 
-        bottomNavigationView=findViewById(R.id.bottomNav2);
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();
 
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = new
-            BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
-
-                    Fragment fragment=null;
-
-                    switch (menuitem.getItemId())
-                    {
-                        case R.id.nav_group:
-                            fragment = new GroupFragment();
-                            break;
-
-                        case R.id.nav_home:
-                            fragment = new HomeFragment();
-                            break;
-
-                        case R.id.nav_notify:
-                            fragment = new NotifyFragment();
-                            break;
-
-                        case R.id.nav_events:
-                            fragment = new EventsFragment();
-                            break;
-
-                        case R.id.nav_friends:
-                            fragment = new FriendsFragment();
-                            break;
-
-                    }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-                    return true;
-                }
-            };
 
 }

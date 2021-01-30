@@ -1,5 +1,6 @@
 package com.example.contagiapp.gruppi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.contagiapp.HomeFragment;
+import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.NotifyFragment;
 import com.example.contagiapp.R;
 import com.example.contagiapp.data.amici.FriendsFragment;
@@ -22,48 +24,47 @@ public class GroupSearch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_group_profile);
 
-        //Inizializza varibaile
-       /* bottomNavigationView = findViewById(R.id.bottomNav3);
+        //Inizializza variabile
+        bottomNavigationView = findViewById(R.id.bottomNav3);
 
         //imposta nav_events selezionata
-       // bottomNavigationView.setSelectedItemId(R.id.nav_group);
+        bottomNavigationView.setSelectedItemId(R.id.nav_group);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();
-*/
+
+        //bottomNavigationView.setSelected();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = new
             BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
-
-                    Fragment fragment=null;
+                    Intent mainIntent = new Intent(GroupSearch.this, MainActivity.class);
 
                     switch (menuitem.getItemId())
                     {
                         case R.id.nav_group:
-                            fragment = new GroupFragment();
+                            startActivity(mainIntent);
                             break;
 
                         case R.id.nav_home:
-                            fragment = new HomeFragment();
+                            startActivity(mainIntent);
                             break;
 
                         case R.id.nav_notify:
-                            fragment = new NotifyFragment();
+                            startActivity(mainIntent);
                             break;
 
                         case R.id.nav_events:
-                            fragment = new EventsFragment();
+                            startActivity(mainIntent);
                             break;
 
                         case R.id.nav_friends:
-                            fragment = new FriendsFragment();
+                            startActivity(mainIntent);
                             break;
 
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                    //getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                     return true;
                 }
             };

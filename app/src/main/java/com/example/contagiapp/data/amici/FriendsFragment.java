@@ -44,18 +44,18 @@ public class FriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view;
         view = inflater.inflate(R.layout.fragment_friends, container, false);
-        listView = (ListView)view.findViewById(R.id.list_view);
+        listView = (ListView)view.findViewById(R.id.list_view_friends);
 
-        ArrayList<String> arrayList = new ArrayList<>();
+        ArrayList<String> arrayListFriend = new ArrayList<>();
 
-        arrayList.add("Utente1");
-        arrayList.add("Utente2");
-        arrayList.add("Utente3");
-        arrayList.add("Utente4");
-        arrayList.add("Utente5");
-        arrayList.add("Utente6");
+        arrayListFriend.add("Utente1");
+        arrayListFriend.add("Utente2");
+        arrayListFriend.add("Utente3");
+        arrayListFriend.add("Utente4");
+        arrayListFriend.add("Utente5");
+        arrayListFriend.add("Utente6");
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, arrayList);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, arrayListFriend);
         listView.setAdapter(arrayAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

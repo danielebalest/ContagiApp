@@ -4,9 +4,9 @@
     package="com.example.contagiapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--per google maps
+    <!--per google maps -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -45,6 +45,16 @@
                 <action android:name="android.intent.action.NewEventsFragment" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${mapsApiKey}" />
+
+
         <activity android:name=".gruppi.GroupSearch">
             <intent-filter>
                 <action android:name="android.intent.action.GroupSearch" />
