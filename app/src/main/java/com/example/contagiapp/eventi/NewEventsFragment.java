@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,9 @@ import com.example.contagiapp.NotifyFragment;
 import com.example.contagiapp.R;
 import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.gruppi.GroupFragment;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
@@ -29,7 +33,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class NewEventsFragment extends AppCompatActivity {
+public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCallback {
+
+    MapView mapView;
 
     private static final String TAG = "NewEventsFragment";
     private Button creaEvento;
@@ -44,7 +50,11 @@ public class NewEventsFragment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_new_events);
 
-        //bottomNavigation
+
+
+        mapView = findViewById(R.id.map_view);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
 
 
         // collegamento button registrati con la mainActivity
@@ -91,6 +101,9 @@ public class NewEventsFragment extends AppCompatActivity {
                 dataEvento.setText(date);
             }
         };
+
+
+
 
     }
 
@@ -160,4 +173,47 @@ public class NewEventsFragment extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
 };
