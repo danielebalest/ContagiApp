@@ -1,22 +1,17 @@
 <resources>
     <string name="app_name">ContagiApp</string>
     <string name="home">Home</string>
-    <string name="group">Gruppi</string>
 
 
     <!--Campi di registrazione-->
-    <string name="name">Nome</string>
-    <string name="surname">Cognome</string>
     <string name="birth">Data di nascita</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="title_activity_login">Accedi</string>
     <string name="login">Accedi</string>
     <string name="signUp">Registrati</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="repeat_password">Ripeti Password</string>
-    <string name="action_sign_in">Accedi o iscriviti</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Benvenuto !"</string>
     <string name="invalid_username">Not a valid username</string>
@@ -51,7 +46,6 @@
     </string-array>
 
     //ERRORI
-    <string name="Insert">Inserisci</string>
 
     <string-array name="Citta">
         <item>Bari</item>

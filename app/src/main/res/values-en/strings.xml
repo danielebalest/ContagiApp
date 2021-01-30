@@ -2,21 +2,16 @@
 <resources>
     <string name="app_name">ContagiApp</string>
     <string name="home">Home</string>
-    <string name="group">Groups</string>
 
     <!--Campi di registrazione-->
-    <string name="name">Name</string>
-    <string name="surname">Surname</string>
     <string name="birth">Data di nascita</string>
 
 
-    <string name="title_activity_login">Sign in</string>
     <string name="login">Login</string>
     <string name="signUp">Sign Up</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="repeat_password">Repeat Password</string>
-    <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
@@ -29,7 +24,6 @@
     <string name="createAccount">Create account</string>
 
     //ERRORI
-    <string name="Insert">Insert</string>
 
 
 </resources>

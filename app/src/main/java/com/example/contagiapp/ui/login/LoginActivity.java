@@ -1,32 +1,20 @@
 package com.example.contagiapp.ui.login;
 
-import android.app.Activity;
-
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.contagiapp.HomeFragment;
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
 import com.example.contagiapp.registrazione.RegistrationActivity;
@@ -36,13 +24,18 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -70,10 +63,6 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = findViewById(R.id.login);
         final Button createAccountButton = findViewById(R.id.createAccount);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
-
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,32 +130,50 @@ public class LoginActivity extends AppCompatActivity {
         final String username = mailEditText.getText().toString();
         final String password = passwordEditText.getText().toString();
 
-        System.out.println("username in input:"+username);
-        System.out.println("password in input:"+password);
-
         db.collection("Utenti").whereEqualTo("mail", username).whereEqualTo("password",password)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(QuerySnapshot querySnapshots) { System.out.println(querySnapshots.isEmpty());
+            public void onSuccess(QuerySnapshot querySnapshots) {
                 if(querySnapshots.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Mail o password errati", Toast.LENGTH_SHORT).show();
                 } else {
                     db.collection("Utenti").whereEqualTo("mail", username).whereEqualTo("password",password)
                             .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            Utente utente = document.toObject(Utente.class);
-                                            //FileOutputStream openFileOutput = new FileOutputStream("FileUtente.txt", "r");
-                                        }
-                                    } else {
-                                        Log.d(TAG, "Error getting documents: ", task.getException());
-                                    }
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Utente utente = document.toObject(Utente.class);
+
+                                    //TODO non cancellate i commenti in questo try
+                                    //try {//inizio scrittura file
+                                        /*FileOutputStream osw1 = openFileOutput("FileUtente.txt", Context.MODE_PRIVATE);
+                                        OutputStreamWriter osw = new OutputStreamWriter(osw1);
+                                        osw.write(utente.getMail());
+                                        osw.write(utente.getPassword());
+                                        osw.flush();
+                                        osw.close();*/
+                                        //oppure, vedere qual'è meglio, per il momento il secondo metodo funziona, penso anche il primo
+                                        /*String FILENAME = "hello_file";
+                                        String string = "hello world!";
+                                        FileOutputStream fos = null;
+                                        fos = openFileOutput(FILENAME, MODE_PRIVATE);
+                                        fos.write(string.getBytes());
+                                        Toast.makeText(getApplicationContext(), "Saved to " + getFilesDir() + "/" + FILENAME, Toast.LENGTH_LONG).show();
+                                        fos.flush();
+                                        fos.close();*/
+                                        ////////////////fine scrittura file (il path del file però è un casino)
+                                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(mainIntent);
+                                    /*} catch (IOException e) {
+                                        e.printStackTrace();
+                                    }*/
                                 }
-                            });
-                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(mainIntent);
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
                 }
             }
         });
