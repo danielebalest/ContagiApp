@@ -1,6 +1,8 @@
 package com.example.contagiapp.eventi;
 
+import android.app.AuthenticationRequiredException;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,32 +12,50 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.contagiapp.HomeFragment;
+import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.NotifyFragment;
 import com.example.contagiapp.R;
 import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.gruppi.GroupFragment;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCallback {
 
     MapView mapView;
+
+    EditText editTextLuogo;
+    TextView textViewLuogo;
+
 
     private static final String TAG = "NewEventsFragment";
     private Button creaEvento;
@@ -49,6 +69,29 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_new_events);
+
+        editTextLuogo = findViewById(R.id.editLuogoEvento);
+        textViewLuogo = findViewById(R.id.text_viewLuogo);
+
+
+
+        //inizializza l' SDK
+
+
+        Places.initialize(getApplicationContext(), "AIzaSyDaZTesWrbtKYHmXv8grh73xk3kjMBzMT4");
+        editTextLuogo.setFocusable(false);
+        editTextLuogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
+
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(NewEventsFragment.this);
+
+                startActivityForResult(intent, 100);
+            }
+        });
+
+
 
 
 
@@ -102,9 +145,23 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
             }
         };
 
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 100 && resultCode == RESULT_OK){
+            //quando ha successo
+            //inizializza place
+            Place place = Autocomplete.getPlaceFromIntent(data);
 
+            editTextLuogo.setText(place.getAddress());
 
+            textViewLuogo.setText(String.format("Nome luogo :   %s", place.getName()));
+        }else if (resultCode == AutocompleteActivity.RESULT_ERROR){
+            Status status = Autocomplete.getStatusFromIntent(data);
+            Toast.makeText(getApplicationContext(), status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openMainActivity() {
