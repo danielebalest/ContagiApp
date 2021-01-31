@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.example.contagiapp.MainActivity;
@@ -45,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText passwordEditText;
     private TextInputLayout mailTextLayout;
     private TextInputLayout passwordTextLayout;
+    private boolean ricord;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -59,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
         mailTextLayout = findViewById(R.id.textFieldMail);
         passwordTextLayout = findViewById(R.id.textFieldPassword);
 
-
         final Button loginButton = findViewById(R.id.login);
         final Button createAccountButton = findViewById(R.id.createAccount);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -71,10 +72,11 @@ public class LoginActivity extends AppCompatActivity {
                 if(controlloTextFieldVuoto(mailEditText, passwordEditText) == 0){
                     mailTextLayout.setError(null);
                     passwordTextLayout.setError(null);
+                    CheckBox ricordami = (CheckBox) findViewById(R.id.checkBox);
+                    ricord = ricordami.isChecked();
+                    System.out.println(ricord);
                     openMain();
                 }
-
-
             }
         });
 
@@ -130,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
         final String username = mailEditText.getText().toString();
         final String password = passwordEditText.getText().toString();
 
+        //utente già registrato?
         db.collection("Utenti").whereEqualTo("mail", username).whereEqualTo("password",password)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -137,43 +140,40 @@ public class LoginActivity extends AppCompatActivity {
                 if(querySnapshots.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Mail o password errati", Toast.LENGTH_SHORT).show();
                 } else {
-                    db.collection("Utenti").whereEqualTo("mail", username).whereEqualTo("password",password)
-                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Utente utente = document.toObject(Utente.class);
+                    //checkbox ricordami
+                    if(ricord) {
+                        db.collection("Utenti").whereEqualTo("mail", username).whereEqualTo("password",password)
+                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Utente utente = document.toObject(Utente.class);
 
-                                    //TODO non cancellate i commenti in questo try
-                                    //try {//inizio scrittura file
-                                        /*FileOutputStream osw1 = openFileOutput("FileUtente.txt", Context.MODE_PRIVATE);
-                                        OutputStreamWriter osw = new OutputStreamWriter(osw1);
-                                        osw.write(utente.getMail());
-                                        osw.write(utente.getPassword());
-                                        osw.flush();
-                                        osw.close();*/
-                                        //oppure, vedere qual'è meglio, per il momento il secondo metodo funziona, penso anche il primo
-                                        /*String FILENAME = "hello_file";
-                                        String string = "hello world!";
-                                        FileOutputStream fos = null;
-                                        fos = openFileOutput(FILENAME, MODE_PRIVATE);
-                                        fos.write(string.getBytes());
-                                        Toast.makeText(getApplicationContext(), "Saved to " + getFilesDir() + "/" + FILENAME, Toast.LENGTH_LONG).show();
-                                        fos.flush();
-                                        fos.close();*/
-                                        ////////////////fine scrittura file (il path del file però è un casino)
-                                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(mainIntent);
-                                    /*} catch (IOException e) {
-                                        e.printStackTrace();
-                                    }*/
+                                        //TODO non cancellate i commenti in questo try
+                                        try {
+                                            FileOutputStream osw1 = openFileOutput("Utente", MODE_PRIVATE);
+                                            OutputStreamWriter osw = new OutputStreamWriter(osw1);
+                                            osw.write(utente.getMail());
+                                            osw.write(utente.getPassword());
+
+                                            //questo toast può essere cancellato ma per il momento lasciatelo
+                                            Toast.makeText(getApplicationContext(), "Saved to " + getFilesDir() + "/Utente", Toast.LENGTH_LONG).show();
+
+                                            osw.flush();
+                                            osw.close();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } else {
+                                    Log.d(TAG, "Error getting documents: ", task.getException());
                                 }
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
                             }
-                        }
-                    });
+                        });
+                    }
+                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(mainIntent);
                 }
             }
         });
