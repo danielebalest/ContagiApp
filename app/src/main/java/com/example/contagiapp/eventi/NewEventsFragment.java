@@ -2,11 +2,13 @@ package com.example.contagiapp.eventi;
 
 import android.app.AuthenticationRequiredException;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +16,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +45,7 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -60,18 +65,25 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
     private static final String TAG = "NewEventsFragment";
     private Button creaEvento;
     private TextView dataEvento;
+    private TextClock orarioEvento;
     private DatePickerDialog.OnDateSetListener dataDellEvento;
+
+
+
+
+
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private int anno = 0, mese = 0, giorno = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_new_events);
 
         editTextLuogo = findViewById(R.id.editLuogoEvento);
         textViewLuogo = findViewById(R.id.text_viewLuogo);
+        orarioEvento = findViewById(R.id.orarioEvento);
 
 
 
@@ -111,6 +123,30 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
         });
 
         //Date Picker
+        orarioEvento=(TextClock) findViewById(R.id.orarioEvento);
+        orarioEvento.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Calendar cal = Calendar.getInstance();
+                int hour = cal.get(Calendar.HOUR_OF_DAY);
+                int minute = cal.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(NewEventsFragment.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        orarioEvento.setText( selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, true);//Yes 24 hour time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+
+            }
+        });
+
+
+
         dataEvento = (TextView) findViewById(R.id.dataEvento);
         dataEvento.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +180,7 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
                 dataEvento.setText(date);
             }
         };
+        //orario
 
     }
 
@@ -175,6 +212,8 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
 
         TextView data = (TextView) findViewById(R.id.dataEvento);
         String appoggio= data.getText().toString();
+
+        TextView orario= (TextView) findViewById(R.id.orarioEvento);
 
         TextView descrizione = (TextView) findViewById(R.id.editTextTextMultiLine);
         evento.put("descrizione", descrizione.getText().toString());

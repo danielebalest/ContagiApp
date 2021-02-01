@@ -52,6 +52,14 @@
             android:ems="10"
             android:hint="Data Evento"
             android:textSize="24sp" />
+        <TextClock
+            android:id="@+id/orarioEvento"
+            android:layout_width="match_parent"
+            android:layout_height="59dp"
+            android:ems="10"
+            android:hint="Orario Evento"
+            android:textSize="24sp" />
+
 
         <EditText
             android:id="@+id/editTextTextMultiLine"
