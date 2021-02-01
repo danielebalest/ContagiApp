@@ -133,13 +133,14 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
                 int hour = cal.get(Calendar.HOUR_OF_DAY);
                 int minute = cal.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(NewEventsFragment.this, new TimePickerDialog.OnTimeSetListener() {
+                mTimePicker = new TimePickerDialog(NewEventsFragment.this,android.R.style.Theme_Material_InputMethod, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         orarioEvento.setText( selectedHour + ":" + selectedMinute);
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
+                mTimePicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));
                 mTimePicker.show();
 
             }
