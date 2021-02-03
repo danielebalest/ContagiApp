@@ -45,6 +45,7 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DateFormat;
 import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,6 +68,8 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
     private TextView dataEvento;
     private TextClock orarioEvento;
     private DatePickerDialog.OnDateSetListener dataDellEvento;
+    private TimePickerDialog.OnTimeSetListener orarioDellEvento;
+
 
 
 
@@ -74,7 +77,7 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
 
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private int anno = 0, mese = 0, giorno = 0;
+    private int anno = 0, mese = 0, giorno = 0, ora=0, minuti=0;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -128,23 +131,23 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Calendar cal = Calendar.getInstance();
                 int hour = cal.get(Calendar.HOUR_OF_DAY);
                 int minute = cal.get(Calendar.MINUTE);
-                TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(NewEventsFragment.this,android.R.style.Theme_Material_InputMethod, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog dialog;
+                dialog = new TimePickerDialog(NewEventsFragment.this,android.R.style.Theme_Material_InputMethod, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         orarioEvento.setText( selectedHour + ":" + selectedMinute);
                     }
                 }, hour, minute, true);//Yes 24 hour time
-                mTimePicker.setTitle("Select Time");
-                mTimePicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));
-                mTimePicker.show();
+                dialog.setTitle("Select Time");
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));
+                dialog.show();
 
             }
         });
+
 
 
 
@@ -182,7 +185,33 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
             }
         };
         //orario
+        orarioDellEvento = new TimePickerDialog.OnTimeSetListener() {
+            boolean condorario= false;
+            boolean condminuto= false;
 
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                if(hourOfDay<=9){
+                   condorario=true;
+                }
+                if(minute<=9){
+                    condminuto=true;
+                }
+                String time=null;
+                Log.d(TAG,"onTimeSet: time: " +hourOfDay + ":" + minute);
+                if(condorario &&  condminuto){
+                      time= "0" + hourOfDay + ":0" + minute;
+                }else if (condorario){
+                    time= "0" + hourOfDay + ":" + minute;
+                }else if(condminuto){
+                    time=  + hourOfDay + ":0" + minute;
+                }
+                orarioEvento.setText(time);
+            }
+
+
+        };
     }
 
     @Override
@@ -214,7 +243,9 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
         TextView data = (TextView) findViewById(R.id.dataEvento);
         String appoggio= data.getText().toString();
 
-        TextView orario= (TextView) findViewById(R.id.orarioEvento);
+        TextClock orario= (TextClock) findViewById(R.id.orarioEvento);
+        String appoggio1=orario.getText().toString();
+        //evento.put("orario evento", orario.getText().toString());
 
         TextView descrizione = (TextView) findViewById(R.id.editTextTextMultiLine);
         evento.put("descrizione", descrizione.getText().toString());
@@ -227,7 +258,7 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
 
         TextView luogo = (TextView) findViewById(R.id.editCittaEvento);
         evento.put("luogo", luogo.getText().toString());
-        controllodata(evento,appoggio);
+        controllodata(evento,appoggio,appoggio1);
 
 
         //Tornare indietro
@@ -235,10 +266,13 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
 
     }
 
-    void controllodata(Map<String, Object> evento, String appoggio){
+    void controllodata(Map<String, Object> evento, String appoggio, String appoggio1){
         Calendar cal = Calendar.getInstance();
         boolean condevento=false;
         int l = appoggio.length();
+        int l1= appoggio1.length();
+        System.out.println("la lunghezza è stocazzooooo"+ l1);
+        System.out.println("l'orario scelto è"+ appoggio1);
         switch (l) {
             case 9:
                 anno = Integer.valueOf(appoggio.substring(l - 4, l));
@@ -251,6 +285,16 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
                 giorno = Integer.valueOf(appoggio.substring(l - 10, l - 8));
                 break;
         }
+       /* switch (l1){
+            case 4:
+                minuti = Integer.valueOf(appoggio1.substring(l1-2,l));
+                ora = Integer.valueOf(appoggio1.charAt(0))-48;
+            case 5:
+                minuti = Integer.valueOf(appoggio1.substring(l1-2,l));
+                ora = Integer.valueOf(appoggio1.substring(l1-5,l-3));
+        }*/
+        System.out.println("orario scelto "+ ora);
+        System.out.println("minuti scelti "+ minuti);
         if (anno >= cal.get(Calendar.YEAR)) {
             if ((mese-1) >= cal.get(Calendar.MONTH)) {
                 if (giorno >= cal.get(Calendar.DAY_OF_MONTH))
