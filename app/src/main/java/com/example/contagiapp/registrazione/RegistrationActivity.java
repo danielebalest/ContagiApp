@@ -2,6 +2,7 @@ package com.example.contagiapp.registrazione;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -22,11 +23,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
+import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -61,6 +64,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     private TextInputEditText psw2;
 
 
+    private Utente utente = new Utente();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,34 +239,41 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         TextInputEditText name = (TextInputEditText) findViewById(R.id.editTextName);
         String nome = name.getText().toString();
         user.put("nome", nome);
+        utente.setNome(nome);
 
         TextInputEditText surname = (TextInputEditText) findViewById(R.id.editTextSurname);
         String cognome = surname.getText().toString();
         user.put("cognome", cognome);
-
+        utente.setCognome(cognome);
 
         RadioGroup radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
         int Idselezionato = radiogroup.getCheckedRadioButtonId();
         RadioButton radiosex = (RadioButton) findViewById(Idselezionato);
         user.put("genere", radiosex.getText().toString());
+        utente.setGenere(radiosex.getText().toString());
 
         TextView date = (TextView) findViewById(R.id.editTextDataNascita);
         final String appoggio = date.getText().toString();
 
         Spinner nazione = (Spinner) findViewById(R.id.spinnerNazioni);
         user.put("nazione", nazione.getSelectedItem().toString());
+        utente.setNazione(nazione.getSelectedItem().toString());
 
         Spinner regione = (Spinner) findViewById(R.id.spinnerRegione);
         user.put("regione", regione.getSelectedItem().toString());
+        utente.setRegione(regione.getSelectedItem().toString());
 
         Spinner provincia = (Spinner) findViewById(R.id.spinnerProvince);
         user.put("province", provincia.getSelectedItem().toString());
+        utente.setProvince(provincia.getSelectedItem().toString());
 
         Spinner citta = (Spinner) findViewById(R.id.spinnerCitta);
         user.put("citta", citta.getSelectedItem().toString());
+        utente.setCitta(citta.getSelectedItem().toString());
 
         EditText telefono = (EditText) findViewById(R.id.editTextPhone);
         user.put("telefono", telefono.getText().toString());
+        utente.setTelefono(telefono.getText().toString());
 
         EditText password = (EditText) findViewById(R.id.editTextTextPassword);
         final String psw1 = password.getText().toString();
@@ -277,9 +288,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot querySnapshots) {
-
                         controlli(querySnapshots.isEmpty(), user, email, psw1, psw2, appoggio);
-
                     }
                 });
     }
@@ -317,11 +326,12 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
         if (anno <= (cal.get(Calendar.YEAR) - 14)) {
             if ((mese-1) <= cal.get(Calendar.MONTH)) {
-                if (giorno <= cal.get(Calendar.DAY_OF_MONTH))
+                if (giorno <= cal.get(Calendar.DAY_OF_MONTH)) {
                     user1.put("dataNascita", appoggio);
-                else conddata= true;
-            }else conddata= true;
-        }else conddata= true;
+                    utente.setDataNascita(appoggio);
+                } else conddata= true;
+            } else conddata= true;
+        } else conddata= true;
 
 
         if(!email.isEmpty()){
@@ -361,8 +371,19 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                     psw2Layout.setError(null);
                     user1.put("password", psw1);
                     user1.put("mail", email);
+                    utente.setPassword(psw1);
+                    utente.setMail(email);
                     db.collection("Utenti").add(user1);
+
+                    SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(utente);
+                    editor.putString("utente", json);
+                    editor.commit ();
+
                     openMainActivity();
+                    finish();
                 } else {
                     Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
                     mailLayout.setError("Mail già esistente");

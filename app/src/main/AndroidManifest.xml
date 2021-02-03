@@ -17,7 +17,6 @@
         android:theme="@style/AppTheme"
         android:largeHeap="true">
 
-        <activity android:name=".utente.ProfiloActivity" />
         <activity
             android:name=".registrazione.RegistrationActivity"
             android:parentActivityName=".WelcomeActivity"/>
@@ -29,35 +28,31 @@
             android:theme="@style/LauncherTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
+        <activity android:name=".utente.ProfiloActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.ProfiloActivity"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".WelcomeActivity"
             android:theme="@style/NoActionBar">
         </activity>
-
         <activity android:name=".MainActivity" />
         <activity android:name=".eventi.NewEventsFragment">
             <intent-filter>
                 <action android:name="android.intent.action.NewEventsFragment" />
             </intent-filter>
         </activity>
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${mapsApiKey}"
             />
-
-
-
         <activity android:name=".gruppi.GroupSearch">
             <intent-filter>
                 <action android:name="android.intent.action.GroupSearch" />
@@ -73,7 +68,5 @@
                 <action android:name="android.intent.action.FriendProfile" />
             </intent-filter>
         </activity>
-
     </application>
-
 </manifest>
