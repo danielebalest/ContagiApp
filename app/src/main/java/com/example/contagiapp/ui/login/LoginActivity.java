@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.StringRes;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
+import com.example.contagiapp.WelcomeActivity;
 import com.example.contagiapp.registrazione.RegistrationActivity;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,8 +30,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -74,7 +78,6 @@ public class LoginActivity extends AppCompatActivity {
                     passwordTextLayout.setError(null);
                     CheckBox ricordami = (CheckBox) findViewById(R.id.checkBox);
                     ricord = ricordami.isChecked();
-                    System.out.println(ricord);
                     openMain();
                 }
             }
@@ -150,21 +153,15 @@ public class LoginActivity extends AppCompatActivity {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         Utente utente = document.toObject(Utente.class);
 
-                                        //TODO non cancellate i commenti in questo try
-                                        try {
-                                            FileOutputStream osw1 = openFileOutput("Utente", MODE_PRIVATE);
-                                            OutputStreamWriter osw = new OutputStreamWriter(osw1);
-                                            osw.write(utente.getMail());
-                                            osw.write(utente.getPassword());
+                                        SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = prefs.edit();
+                                        //editor.putString ("Mail",utente.getMail());
+                                        //editor.putString("Password",utente.getPassword());
 
-                                            //questo toast può essere cancellato ma per il momento lasciatelo
-                                            Toast.makeText(getApplicationContext(), "Saved to " + getFilesDir() + "/Utente", Toast.LENGTH_LONG).show();
-
-                                            osw.flush();
-                                            osw.close();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
+                                        Gson gson = new Gson();
+                                        String json = gson.toJson(utente);
+                                        editor.putString("utente", json);
+                                        editor.commit ();
                                     }
                                 } else {
                                     Log.d(TAG, "Error getting documents: ", task.getException());
@@ -174,6 +171,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(mainIntent);
+                    finish();
                 }
             }
         });
