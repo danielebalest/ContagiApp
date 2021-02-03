@@ -3,9 +3,13 @@ package com.example.contagiapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+
+import com.example.contagiapp.utente.Utente;
+import com.google.gson.Gson;
 
 public class LaunchScreenActivity extends AppCompatActivity {
 
@@ -17,11 +21,21 @@ public class LaunchScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
-
                 /*per andare alla welcomeActivity*/
-                Intent welcomeIntent = new Intent(LaunchScreenActivity.this, WelcomeActivity.class);
-                startActivity(welcomeIntent);
+                SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
+                Gson gson = new Gson();
+                String json = prefs.getString("utente", "no");
+                Utente utente = gson.fromJson(json, Utente.class);
+
+                if(json != "no") {
+                    Intent welcomeIntent = new Intent(LaunchScreenActivity.this, MainActivity.class);
+                    startActivity(welcomeIntent);
+                    finish();
+                } else {
+                    Intent welcomeIntent = new Intent(LaunchScreenActivity.this, WelcomeActivity.class);
+                    startActivity(welcomeIntent);
+                    finish();
+                }
             }
         },
             1000);  //la Launch Screen rimarrà visibile per 1 secondi

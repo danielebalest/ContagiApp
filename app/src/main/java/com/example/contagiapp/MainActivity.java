@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -41,12 +42,18 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();
-
-
-
-
     }
 
+
+    /*@Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent miaActivity = new Intent(MainActivity.class);
+            startActivity(miaActivity);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }*/
 
     private void checkMyPermission(){
         Dexter.withActivity(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {

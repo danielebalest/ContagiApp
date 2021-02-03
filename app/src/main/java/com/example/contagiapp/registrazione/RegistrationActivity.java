@@ -223,6 +223,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     public void openMainActivity(){
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);
+        finish();
+        finishAfterTransition();
     }
 
 
