@@ -308,6 +308,7 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
             db.collection("Eventi").add(evento);
             Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
             finish();
+            //provaaaaaaaa
         }
     }
 
