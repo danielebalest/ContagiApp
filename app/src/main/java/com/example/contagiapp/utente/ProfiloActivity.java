@@ -99,8 +99,6 @@ public class ProfiloActivity extends AppCompatActivity {
                 editor.clear();
                 editor.commit();
 
-                //TODO verdere come cancellare login temporaneo quando si chiude l'app
-
                 Intent welcome = new Intent(ProfiloActivity.this, WelcomeActivity.class);
                 startActivity(welcome);
                 finish();

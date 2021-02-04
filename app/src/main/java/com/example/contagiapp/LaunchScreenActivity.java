@@ -21,9 +21,17 @@ public class LaunchScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                /*per andare alla welcomeActivity*/
                 SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
                 String json = prefs.getString("utente", "no");
+
+                SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo", MODE_PRIVATE);
+                String json1 = prefs1.getString("mail", "no");
+
+                if(json1 == "no") {
+                    SharedPreferences.Editor editor = prefs1.edit();
+                    editor.clear();
+                    editor.commit();
+                }
 
                 if(json != "no") {
                     Intent welcomeIntent = new Intent(LaunchScreenActivity.this, MainActivity.class);
