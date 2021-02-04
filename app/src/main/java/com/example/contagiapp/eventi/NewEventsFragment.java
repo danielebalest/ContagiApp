@@ -177,35 +177,33 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
                 dataEvento.setText(date);
             }
         };
-        //orario
+        //orario visualizzato come cristo comanda
+
         orarioDellEvento = new TimePickerDialog.OnTimeSetListener() {
-            boolean condorario= false;
-            boolean condminuto= false;
-
             @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            public void onTimeSet(TimePicker view, int hour, int minute) {
+                boolean condorario= false;
+                boolean condminuto= false;
 
-                if(hourOfDay<=9){
+                if(hour<=9){
                     condorario=true;
                 }
                 if(minute<=9){
                     condminuto=true;
                 }
+
                 String time=null;
-                Log.d(TAG,"onTimeSet: time: " +hourOfDay + ":" + minute);
-                if(condorario &&  condminuto){
-                    time= "0" + hourOfDay + ":0" + minute;
+                Log.d(TAG,"onTimeSet: time: " +hour + ":" + minute);
+                if(condorario && condminuto){
+                    time= "0" + hour + ":0" + minute;
                 }else if (condorario){
-                    time= "0" + hourOfDay + ":" + minute;
+                    time= "0"+ hour + ":" + minute;
                 }else if(condminuto){
-                    time=  + hourOfDay + ":0" + minute;
-                }
-                System.out.println("l'orario è :"+condorario);
-                System.out.println("il minuto è :"+condminuto);
+                    time= + hour + ":0" + minute;
+                }else time= + hour + ":" + minute;
+
                 orarioEvento.setText(time);
             }
-
-
         };
     }
 
@@ -263,7 +261,7 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
     void controllodata(Map<String, Object> evento, String appoggio, String appoggio1){
         Calendar cal = Calendar.getInstance();
         boolean condevento=false;
-        boolean condorario= true;
+        boolean condorario2= true;
         int l = appoggio.length();
         int l1= appoggio1.length();
         System.out.println("la lunghezza è stocazzooooo "+ l1);
@@ -280,19 +278,19 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
                 giorno = Integer.valueOf(appoggio.substring(l - 10, l - 8));
                 break;
         }
-                minapp = Integer.valueOf(appoggio1.substring(3,5));
-                oraapp = Integer.valueOf(appoggio1.substring(0,2));
+        minapp = Integer.valueOf(appoggio1.substring(3,5));
+        oraapp = Integer.valueOf(appoggio1.substring(0,2));
 
         System.out.println("orario scelto "+ oraapp);
         System.out.println("minuti scelti "+ minapp);
         if (anno >= cal.get(Calendar.YEAR)) {
             if ((mese-1) >= cal.get(Calendar.MONTH)) {
                 if (giorno >= cal.get(Calendar.DAY_OF_MONTH))
-                    if(oraapp>= (cal.get(Calendar.HOUR_OF_DAY))+1) {
+                    if(oraapp>= (cal.get(Calendar.HOUR_OF_DAY)+1)) {
                         evento.put("data", appoggio);
                         evento.put("orario evento", appoggio1);
-                        condorario=false;
-                    } else condevento= true;
+                        condorario2=false;
+                    }
             }else condevento= true;
         }else condevento= true;
 
@@ -300,7 +298,7 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
             Toast.makeText(this, "data non valida",Toast.LENGTH_SHORT).show();
             finish();
             startActivity(getIntent());
-        }else if(condorario) {
+        }else if(condorario2) {
             Toast.makeText(this, "orario non valido",Toast.LENGTH_SHORT).show();
             finish();
             startActivity(getIntent());
