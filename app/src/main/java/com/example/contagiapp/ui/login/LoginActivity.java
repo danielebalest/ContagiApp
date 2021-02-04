@@ -155,9 +155,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                         SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
                                         SharedPreferences.Editor editor = prefs.edit();
-                                        //editor.putString ("Mail",utente.getMail());
-                                        //editor.putString("Password",utente.getPassword());
-
                                         Gson gson = new Gson();
                                         String json = gson.toJson(utente);
                                         editor.putString("utente", json);
@@ -168,6 +165,11 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }
                         });
+                    } else {
+                        SharedPreferences prefs = getApplicationContext().getSharedPreferences("LoginTemporaneo", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("mail", username);
+                        editor.commit ();
                     }
                     Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(mainIntent);

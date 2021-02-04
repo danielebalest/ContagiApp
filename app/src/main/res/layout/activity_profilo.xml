@@ -6,54 +6,65 @@
     android:layout_height="match_parent"
     tools:context=".utente.ProfiloActivity">
 
-    <LinearLayout
-        android:id="@+id/linear"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:orientation = "horizontal"
-        >
-
-
-
-        <ListView
-            android:id = "@+id/list_profilo"
-            android:layout_width = "wrap_content"
-            android:layout_height = "match_parent"
-            android:divider = "#000"
-            android:dividerHeight = "1dp"
-            android:footerDividersEnabled = "false"
-            android:headerDividersEnabled = "false"/>
-
-    </LinearLayout>
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linear"
+        android:layout_height="match_parent">
 
-        android:orientation="vertical">
-
-        <com.google.android.material.button.MaterialButton
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#43A047"
-            android:text="Modifica dati"
-            android:layout_margin="10dp"
-            app:icon="@drawable/ic_pencil_24dp">
-        </com.google.android.material.button.MaterialButton>
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/certificato"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/red"
-            android:text="inserisci certificato"
-            android:layout_margin = "10dp"
-            app:icon="@drawable/ic_baseline_add_24">
-        </Button>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/list_profilo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="525dp"
+                    android:divider="#000"
+                    android:dividerHeight="1dp"
+                    android:footerDividersEnabled="false"
+                    android:headerDividersEnabled="false">
+
+                </ListView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:background="#43A047"
+                    android:text="Modifica dati"
+                    app:icon="@drawable/ic_pencil_24dp"></com.google.android.material.button.MaterialButton>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:background="#43A047"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="Log Out"
+                    app:backgroundTint="#F10A0A"></com.google.android.material.button.MaterialButton>
+
+                <Button
+                    android:id="@+id/certificato"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:background="@color/red"
+                    android:text="inserisci certificato"
+                    app:icon="@drawable/ic_baseline_add_24"></Button>
 
 
+            </LinearLayout>
 
-    </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
 </RelativeLayout>
