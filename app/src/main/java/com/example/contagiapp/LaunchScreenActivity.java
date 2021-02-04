@@ -25,7 +25,7 @@ public class LaunchScreenActivity extends AppCompatActivity {
                 SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
                 Gson gson = new Gson();
                 String json = prefs.getString("utente", "no");
-                Utente utente = gson.fromJson(json, Utente.class);
+                //Utente utente = gson.fromJson(json, Utente.class);
 
                 if(json != "no") {
                     Intent welcomeIntent = new Intent(LaunchScreenActivity.this, MainActivity.class);
