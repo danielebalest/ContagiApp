@@ -2,14 +2,19 @@ package com.example.contagiapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.KeyEvent;
@@ -31,13 +36,16 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int PERMISSION_CODE = 0;
+    private static final int REQUEST_ENABLE_BT = 1;
     private BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkMyPermission();
-
+        checkMyBL();
         bottomNavigationView=findViewById(R.id.bottomNav);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
@@ -54,12 +62,48 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }*/
+    //per bluetooth
+    private void checkMyBL(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                        MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},PERMISSION_CODE
+                        );
+            }
+        }
 
+        // Inizializza Bluetooth adapter
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+
+        if (bluetoothAdapter == null) {
+            // Il dispositivo non supporta il  Bluetooth
+        }
+        //controlla se il ble è supportato
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, "ble non supportato", Toast.LENGTH_SHORT).show();
+        }
+        // apre la finestra di dialogo per l'attivazione del bluetooth
+       if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+           Toast.makeText(this,"schifoso il signore",Toast.LENGTH_SHORT).show();
+       }
+
+
+
+    }
+
+    //per gps
     private void checkMyPermission(){
         Dexter.withActivity(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse response) {
-                Toast.makeText(MainActivity.this, "Permesso concesso", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Permesso gps concesso", Toast.LENGTH_SHORT).show();
             }
 
             @Override
