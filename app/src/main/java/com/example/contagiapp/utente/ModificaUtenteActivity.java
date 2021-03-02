@@ -76,7 +76,7 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
     //TODO fare le cose scritte sotto:
     //rivedere il fatto di utilizzare le regioni e province (con spinner) quindi se toglierli e mettere solo spinner nazioni e una textbox per la città
     //ricontrollare tutto il codice di questa classe
-    //aggiungere una viewbox sopra il sesso
+    //vedere se modificare la pagina profilo utente aggiungendo altre cose o togliendo quelle già presenti
 
 
 
