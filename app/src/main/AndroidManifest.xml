@@ -50,6 +50,11 @@
                 <action android:name="android.intent.action.NewEventsFragment" />
             </intent-filter>
         </activity>
+        <activity android:name=".utente.ModificaUtenteActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.ModificaUtenteActivity" />
+            </intent-filter>
+        </activity>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

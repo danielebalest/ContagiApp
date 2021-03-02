@@ -12,6 +12,7 @@ public class Utente {
     private String province;
     private String regione;
     private String telefono;
+    private String mailPath;
 
     public Utente() {
     }
@@ -103,4 +104,8 @@ public class Utente {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
+    public String getMailPath() { return mailPath; }
+
+    public void setMailPath(String mailPath) { this.mailPath = mailPath; }
 }

@@ -39,6 +39,7 @@ public class ProfiloActivity extends AppCompatActivity {
     private Button certificato;
     private ListView listViewProfilo;
     private Button logout;
+    private Button modifica;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Utente utente;
 
@@ -89,6 +90,16 @@ public class ProfiloActivity extends AppCompatActivity {
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, arrayListProfilo);
         listViewProfilo.setAdapter(arrayAdapter);
+
+        modifica = (Button) findViewById(R.id.modifica_dati);
+        modifica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mod = new Intent(ProfiloActivity.this, ModificaUtenteActivity.class);
+                startActivity(mod);
+                finish();
+            }
+        });
 
         logout = (Button) findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {

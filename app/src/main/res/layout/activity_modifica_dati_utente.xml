@@ -22,62 +22,72 @@
             android:layout_marginTop="32dp"
             android:fontFamily="@font/muli_semi_bold"
             android:gravity="center"
-            android:text="@string/signUp"
+            android:text="Modifica dati"
             android:textAllCaps="true"
             android:textColor="@android:color/holo_blue_dark"
             android:textSize="40sp"></TextView>
 
         <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputNameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:hint="Nome"
-        app:endIconMode="clear_text"
-        app:errorEnabled="true"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextName"
+            android:id="@+id/textInputNameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:labelFor="@id/editTextSurname"
+            android:layout_marginTop="32dp"
+            android:hint="Nome"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            />
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:labelFor="@id/editTextSurname"
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputSurnameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:hint="Cognome"
-        app:endIconMode="clear_text"
-        app:errorEnabled="true"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        >
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextSurname"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputSurnameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="10dp"
+            android:hint="Cognome"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextSurname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Genere"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+            android:textColor="#2196F3"
+            android:textColorHint="#2196F3"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <RadioGroup
             android:id="@+id/radiogroup"
             android:layout_width="71dp"
-            android:layout_height="68dp"
-            android:layout_marginTop="20dp">
+            android:layout_height="68dp">
 
             <RadioButton
                 android:id="@+id/radioButton1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="M"
-                android:checked="true"/>
+                android:checked="true"
+                android:text="M" />
 
             <RadioButton
                 android:id="@+id/radioButton2"
@@ -104,13 +114,12 @@
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
-        
+
 
         <Spinner
             android:id="@+id/spinnerNazioni"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-
             android:entries="@array/nazioni"
             android:popupBackground="@color/gray"
             android:backgroundTint="@color/colorPrimary"
@@ -155,7 +164,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-            />
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -212,12 +221,11 @@
             android:id="@+id/modificaDati"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="32dp"
             android:backgroundTint="#1E88E5"
-            android:layout_gravity="center"
-            android:text="@string/signUp"
-            android:textColor="#FFFFFF"
-            />
+            android:text="Salva modifiche"
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
 </ScrollView>
