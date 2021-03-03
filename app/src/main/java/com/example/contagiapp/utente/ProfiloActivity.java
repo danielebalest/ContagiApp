@@ -2,19 +2,25 @@ package com.example.contagiapp.utente;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.example.contagiapp.BuildConfig;
 import com.example.contagiapp.HomeFragment;
 import com.example.contagiapp.NotifyFragment;
 import com.example.contagiapp.R;
@@ -31,10 +37,18 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
 
 public class ProfiloActivity extends AppCompatActivity {
     private static final int PHOTO_REQUEST_CODE = 0;
+    static final int REQUEST_IMAGE_CAPTURE = 0;
     private static final String TAG = "ProfiloActivity";
     private Button certificato;
     private ListView listViewProfilo;
@@ -108,7 +122,7 @@ public class ProfiloActivity extends AppCompatActivity {
                 SharedPreferences prefs = getApplicationContext ().getSharedPreferences("Login", MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.clear();
-                editor.commit();
+                editor.apply();
 
                 Intent welcome = new Intent(ProfiloActivity.this, WelcomeActivity.class);
                 startActivity(welcome);
@@ -122,7 +136,45 @@ public class ProfiloActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(photoIntent, PHOTO_REQUEST_CODE);
+               dispatchTakePictureIntent();
             }
         });
+    }
+    String currentPhotoPath;
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()),
+                        BuildConfig.APPLICATION_ID + ".provider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+    @NotNull
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 }
