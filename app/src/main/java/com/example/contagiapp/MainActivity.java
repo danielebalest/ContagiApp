@@ -7,19 +7,27 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.AdvertiseData;
+import android.bluetooth.le.AdvertiseSettings;
+import android.bluetooth.le.BluetoothLeAdvertiser;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.contagiapp.data.amici.FriendsFragment;
@@ -34,11 +42,22 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_CODE = 0;
     private static final int REQUEST_ENABLE_BT = 1;
-    private BottomNavigationView bottomNavigationView;
+
+    private BluetoothLeScanner bluetoothLeScanner =
+            BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner();
+    private boolean mScanning;
+    private Handler handler = new Handler();
+
+
+    // Stops scanning after 10 seconds.
+    private static final long SCAN_PERIOD = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,22 +65,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         checkMyPermission();
         checkMyBL();
-        bottomNavigationView=findViewById(R.id.bottomNav);
+
+        // Tiene lo schermo acceso
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        final BluetoothManager bluetoothManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+
+
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            Toast.makeText(this,"schifoso il signore",Toast.LENGTH_SHORT).show();
+        }
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();
     }
 
 
-    /*@Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent miaActivity = new Intent(MainActivity.class);
-            startActivity(miaActivity);
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }*/
     //per bluetooth
     private void checkMyBL(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -74,27 +97,6 @@ public class MainActivity extends AppCompatActivity {
                         );
             }
         }
-
-        // Inizializza Bluetooth adapter
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
-
-        if (bluetoothAdapter == null) {
-            // Il dispositivo non supporta il  Bluetooth
-        }
-        //controlla se il ble è supportato
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, "ble non supportato", Toast.LENGTH_SHORT).show();
-        }
-        // apre la finestra di dialogo per l'attivazione del bluetooth
-       if (!bluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-           Toast.makeText(this,"schifoso il signore",Toast.LENGTH_SHORT).show();
-       }
-
-
 
     }
 
