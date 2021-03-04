@@ -1,13 +1,14 @@
 package com.example.contagiapp.utente;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -47,7 +48,6 @@ import java.util.Date;
 import java.util.Objects;
 
 public class ProfiloActivity extends AppCompatActivity {
-    private static final int PHOTO_REQUEST_CODE = 0;
     static final int REQUEST_IMAGE_CAPTURE = 0;
     private static final String TAG = "ProfiloActivity";
     private Button certificato;
@@ -56,12 +56,15 @@ public class ProfiloActivity extends AppCompatActivity {
     private Button modifica;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Utente utente;
+    private ImageView immagine;
+    String imageFileName;
+    String currentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilo);
-
+        immagine= findViewById(R.id.immaginecertificato);
         listViewProfilo = (ListView) findViewById(R.id.list_profilo);
         ArrayList<String> arrayListProfilo = new ArrayList<>();
 
@@ -70,7 +73,7 @@ public class ProfiloActivity extends AppCompatActivity {
         String json = prefs.getString("utente", "no");
 
         //TODO verificare il controllo
-        if(json != "no") {
+        if(!json.equals("no")) {
             utente = gson.fromJson(json, Utente.class);
         } else {
             SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo", MODE_PRIVATE);
@@ -132,19 +135,14 @@ public class ProfiloActivity extends AppCompatActivity {
 
         certificato = (Button) findViewById(R.id.certificato);
         certificato.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(photoIntent, PHOTO_REQUEST_CODE);
-               dispatchTakePictureIntent();
+               dispatchTakePictureIntent(photoIntent);
             }
         });
     }
-    String currentPhotoPath;
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+
+    private void dispatchTakePictureIntent(@NotNull Intent takePictureIntent) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
@@ -160,12 +158,22 @@ public class ProfiloActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode== RESULT_OK ){
+            Bitmap bitmap= BitmapFactory.decodeFile(currentPhotoPath);
+            immagine.setImageBitmap(bitmap);
+            immagine.setRotation(90);
+        }
     }
+
     @NotNull
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */

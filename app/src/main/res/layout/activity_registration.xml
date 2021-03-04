@@ -3,6 +3,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scattapropic"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".utente.ProfiloActivity">
@@ -10,9 +11,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".registrazione.RegistrationActivity"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="20dp"
+        tools:context=".registrazione.RegistrationActivity">
 
         <TextView
             android:id="@+id/textViewAccedi"
@@ -28,42 +29,42 @@
             android:textSize="40sp"></TextView>
 
         <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputNameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:hint="Nome"
-        app:endIconMode="clear_text"
-        app:errorEnabled="true"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextName"
+            android:id="@+id/textInputNameLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:labelFor="@id/editTextSurname"
+            android:layout_marginTop="32dp"
+            android:hint="Nome"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
 
-            />
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:labelFor="@id/editTextSurname"
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputSurnameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:hint="Cognome"
-        app:endIconMode="clear_text"
-        app:errorEnabled="true"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        >
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextSurname"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputSurnameLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="10dp"
+            android:hint="Cognome"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextSurname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         <RadioGroup
@@ -76,8 +77,8 @@
                 android:id="@+id/radioButton1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="M"
-                android:checked="true"/>
+                android:checked="true"
+                android:text="M" />
 
             <RadioButton
                 android:id="@+id/radioButton2"
@@ -88,34 +89,33 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputBirthLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="@string/birth"
             app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:errorEnabled="true">
 
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextDataNascita"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:editable="false"/>
+                android:editable="false" />
 
         </com.google.android.material.textfield.TextInputLayout>
-        
+
 
         <Spinner
             android:id="@+id/spinnerNazioni"
             android:layout_width="match_parent"
             android:layout_height="40dp"
 
-            android:entries="@array/nazioni"
-            android:popupBackground="@color/gray"
             android:backgroundTint="@color/colorPrimary"
+            android:entries="@array/nazioni"
             android:focusableInTouchMode="true"
-            />
+            android:popupBackground="@color/gray" />
 
         <Spinner
             android:id="@+id/spinnerRegione"
@@ -123,50 +123,49 @@
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:entries="@array/regioniItaliane"
-            android:focusableInTouchMode="true"/>
+            android:focusableInTouchMode="true" />
 
         <Spinner
             android:id="@+id/spinnerProvince"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:entries="@array/ProvincePuglia"
-            />
+            android:entries="@array/ProvincePuglia" />
 
         <Spinner
             android:id="@+id/spinnerCitta"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:entries="@array/Citta"
-            />
+            android:entries="@array/Citta" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputEmailLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="@string/prompt_email"
             app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:errorEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextTextEmailAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-            />
+                android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputPhoneLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="@string/phone"
             app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:errorEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPhone"
                 android:layout_width="match_parent"
@@ -176,48 +175,63 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputPasswordLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="@string/prompt_password"
             app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:errorEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                />
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputRepeatPasswordLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="@string/repeat_password"
             app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:errorEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextRepeatPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                />
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/scattafoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@color/red"
+            android:text="scatta foto profilo"
+            app:icon="@drawable/ic_baseline_add_24"></Button>
+
+        <ImageView
+            android:id="@+id/propic"
+            android:layout_width="120dp"
+            android:layout_height="160dp" />
 
         <Button
             android:id="@+id/modificaDati"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="32dp"
             android:backgroundTint="#1E88E5"
-            android:layout_gravity="center"
             android:text="@string/signUp"
-            android:textColor="#FFFFFF"
-            />
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
 </ScrollView>

@@ -50,14 +50,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_CODE = 0;
     private static final int REQUEST_ENABLE_BT = 1;
 
-    private BluetoothLeScanner bluetoothLeScanner =
-            BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner();
-    private boolean mScanning;
-    private Handler handler = new Handler();
-
-
-    // Stops scanning after 10 seconds.
-    private static final long SCAN_PERIOD = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
