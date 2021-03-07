@@ -1,5 +1,9 @@
 package com.example.contagiapp.utente;
 
+import android.widget.ImageView;
+
+import java.io.File;
+
 public class Utente {
     private String citta;
     private String cognome;
@@ -13,6 +17,7 @@ public class Utente {
     private String regione;
     private String telefono;
     private String mailPath;
+ //   private ImageView propic;
 
     public Utente() {
     }
@@ -108,4 +113,9 @@ public class Utente {
     public String getMailPath() { return mailPath; }
 
     public void setMailPath(String mailPath) { this.mailPath = mailPath; }
+
+  //  public ImageView getPropic(){ return propic; }
+
+   // public void setPropic(ImageView propic){ this.propic= propic;  }
+
 }

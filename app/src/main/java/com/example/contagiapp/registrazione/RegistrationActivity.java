@@ -1,6 +1,7 @@
 package com.example.contagiapp.registrazione;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -25,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -32,13 +34,17 @@ import androidx.core.content.FileProvider;
 import com.example.contagiapp.BuildConfig;
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
-import com.example.contagiapp.utente.ModificaUtenteActivity;
 import com.example.contagiapp.utente.Utente;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -51,19 +57,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private TextView dataNascita;
-    private Button signUpButton;
-    private Button scattafoto;
     private DatePickerDialog.OnDateSetListener dataDiNascita;
     private static final String TAG = "RegistrationActivity";
     // Access a Cloud Firestore instance from your Activity
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private int anno = 0, mese = 0, giorno = 0;
+    FirebaseStorage storage;
+    StorageReference storageReference;
+    private Uri filePath;
 
+    private int anno = 0, mese = 0, giorno = 0;
     //Per gli errori
     private TextInputLayout nomeLayout;
     private TextInputLayout cognomeLayout;
@@ -85,7 +92,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     static final int REQUEST_IMAGE_CAPTURE = 0;
     private ImageView immagine;
     String imageFileName;
-    String currentPhotoPath;
+    static String currentPhotoPath;
     private Utente utente = new Utente();
 
     @Override
@@ -93,6 +100,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         immagine= findViewById(R.id.propic);
+        storage= FirebaseStorage.getInstance();
+        storageReference= storage.getReferenceFromUrl("gs://contagiapp-c5306.appspot.com/");
 
         //Spinner per nazioni
         Spinner spinnerNazioni = findViewById(R.id.spinnerNazioni);
@@ -118,7 +127,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         psw2Layout = (TextInputLayout) findViewById(R.id.textInputRepeatPasswordLayout);
 
         // collegamento button registrati con la mainActivity
-        signUpButton = (Button) findViewById(R.id.modificaDati);
+        Button signUpButton = (Button) findViewById(R.id.modificaDati);
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,8 +172,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         });
 
         //Date Picker
-        dataNascita = (TextView) findViewById(R.id.editTextDataNascita);
-        dataNascita.setOnClickListener(new View.OnClickListener() {
+        data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
@@ -193,10 +201,10 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 }else
                     date = dayOfMonth + "/" + month + "/" + year;
 
-                dataNascita.setText(date);
+                data.setText(date);
             }
         };
-        scattafoto= findViewById(R.id.scattafoto);
+        Button scattafoto = findViewById(R.id.scattafoto);
         scattafoto.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -214,17 +222,17 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         }
         // Continue only if the File was successfully created
         if (photoFile != null) {
-            Uri photoURI = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()),
+            filePath = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()),
                     BuildConfig.APPLICATION_ID + ".provider", photoFile);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
     @NotNull
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        imageFileName = "PROPIC_" + timeStamp + "_";
+       // String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        imageFileName = "PROPIC";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
@@ -246,35 +254,72 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         }
     }
 
+    private void uploadImage(String mail) {
+
+        if(filePath != null)
+        {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference ref = storageReference.child("files/"+mail+".jpg");
+
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(RegistrationActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(RegistrationActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                            progressDialog.dismiss();
+                        }
+                    });
+        }
+    }
+
     private int controlli_TextInput(TextInputEditText name, TextInputLayout nomeLayout, TextInputEditText surname, TextInputLayout cognomeLayout, TextInputEditText mail, TextInputLayout mailLayout,
                                     TextInputEditText birth, TextInputLayout dataLayout, TextInputEditText phone, TextInputLayout phoneLayout, TextInputEditText psw1, TextInputLayout psw1Layout,
                                     TextInputEditText psw2, TextInputLayout psw2Layout){
 
-        if(isEmpty(name) == true){
+        if(isEmpty(name)){
             return 1;
         }else nomeLayout.setError(null);
 
-        if(isEmpty(surname) == true){
+        if(isEmpty(surname)){
             return 2;
         }else cognomeLayout.setError(null);
 
-        if(isEmpty(birth) == true){
+        if(isEmpty(birth)){
             return 3;
         }else dataLayout.setError(null);
 
-        if(isEmpty(mail)  == true){
+        if(isEmpty(mail)){
             return 4;
         }else mailLayout.setError(null);
 
-        if(isEmpty(phone) == true){
+        if(isEmpty(phone)){
             return 5;
         }else phoneLayout.setError(null);
 
-        if(isEmpty(psw1)  == true){
+        if(isEmpty(psw1)){
             return 6;
         }else psw1Layout.setError(null);
 
-        if(isEmpty(psw2)  == true){
+        if(isEmpty(psw2)){
             return 7;
         }else psw2Layout.setError(null);
 
@@ -282,9 +327,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     }
 
     private boolean isEmpty(TextInputEditText etText) {
-        if(etText.getText().toString().length() > 0)
-            return false;
-        return true;
+        return etText.getText().toString().length() <= 0;
     }
 
     public void openMainActivity(){
@@ -345,6 +388,9 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
         EditText mail = (EditText) findViewById(R.id.editTextTextEmailAddress);
         final String email = mail.getText().toString();
+
+
+
 
         db.collection("Utenti").whereEqualTo("mail", email).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -432,12 +478,14 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                         utente.setMail(email);
                         db.collection("Utenti").document(email).set(user1);
 
+                        uploadImage(utente.getMail());
                         SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         Gson gson = new Gson();
                         String json = gson.toJson(utente);
                         editor.putString("utente", json);
-                        editor.commit ();
+                        editor.apply ();
+
 
                         openMainActivity();
                         finish();

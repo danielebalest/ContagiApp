@@ -104,6 +104,7 @@ public class ProfiloActivity extends AppCompatActivity {
         arrayListProfilo.add("Provincia di residenza: "+utente.getProvince());
         arrayListProfilo.add("Città di residenza: "+utente.getCitta());
         arrayListProfilo.add("Telefono: "+utente.getTelefono());
+      //  arrayListProfilo.add("Propic"+ utente.getPropic());
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, arrayListProfilo);
         listViewProfilo.setAdapter(arrayAdapter);
