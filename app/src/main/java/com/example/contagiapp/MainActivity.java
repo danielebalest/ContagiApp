@@ -116,7 +116,9 @@ public class MainActivity extends AppCompatActivity {
 
         Fragment SettingFragment= new SettingFragment();
         if(id == R.id.nav_setting){
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, SettingFragment).commit();
+            //getSupportFragmentManager().beginTransaction().replace(R.id.container, SettingFragment).commit();
+            Intent settingIntent = new Intent(this, SettingActivity.class);
+            startActivity(settingIntent);
         }
 
         if(id == R.id.nav_account){

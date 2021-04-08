@@ -36,11 +36,16 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -58,9 +63,7 @@ import java.util.Map;
 public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCallback {
 
     MapView mapView;
-
     EditText editTextLuogo;
-    TextView textViewLuogo;
 
 
     private static final String TAG = "NewEventsFragment";
@@ -85,29 +88,38 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
         setContentView(R.layout.fragment_new_events);
 
         editTextLuogo = findViewById(R.id.editLuogoEvento);
-        textViewLuogo = findViewById(R.id.text_viewLuogo);
-
-
 
         //inizializza l' SDK
 
-
+/*
         Places.initialize(getApplicationContext(), "AIzaSyDaZTesWrbtKYHmXv8grh73xk3kjMBzMT4");
-        editTextLuogo.setFocusable(false);
-        editTextLuogo.setOnClickListener(new View.OnClickListener() {
+        PlacesClient placesClient = Places.createClient(this);
+
+
+
+        AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        autocompleteSupportFragment.setTypeFilter(TypeFilter.ADDRESS);
+
+        autocompleteSupportFragment.setLocationBias(RectangularBounds.newInstance(
+                new LatLng(-33.880490, 151.184363),
+                new LatLng(-33.858754, 151.229596)));
+        autocompleteSupportFragment.setCountries("IN");
+
+        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
+        autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
-            public void onClick(View v) {
-                List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
+            public void onPlaceSelected(@NonNull Place place) {
+                Log.i(TAG, "Place" + place.getName() + ", " + place.getId());
+            }
 
-                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(NewEventsFragment.this);
-
-                startActivityForResult(intent, 100);
+            @Override
+            public void onError(@NonNull Status status) {
+                Log.i(TAG, "errore" + status);
             }
         });
-
-
-
-
+*/
 
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
@@ -207,22 +219,7 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
         };
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 100 && resultCode == RESULT_OK){
-            //quando ha successo
-            //inizializza place
-            Place place = Autocomplete.getPlaceFromIntent(data);
 
-            editTextLuogo.setText(place.getAddress());
-
-            textViewLuogo.setText(String.format("Nome luogo :   %s", place.getName()));
-        }else if (resultCode == AutocompleteActivity.RESULT_ERROR){
-            Status status = Autocomplete.getStatusFromIntent(data);
-            Toast.makeText(getApplicationContext(), status.getStatusMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private void openMainActivity() {
         Map<String, Object> evento = new HashMap<>();

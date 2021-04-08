@@ -39,7 +39,10 @@
                     android:layout_margin="10dp"
                     android:background="#43A047"
                     android:text="Modifica dati"
-                    app:icon="@drawable/ic_pencil_24dp"></com.google.android.material.button.MaterialButton>
+                    app:icon="@drawable/ic_pencil_24dp"
+                    app:cornerRadius="20dp"
+                    style="@style/Widget.MaterialComponents.Button"
+                    ></com.google.android.material.button.MaterialButton>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/logout"

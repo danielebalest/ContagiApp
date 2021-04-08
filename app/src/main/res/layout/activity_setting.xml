@@ -14,7 +14,7 @@
         android:id="@+id/btnSegnalaPositività"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:text="Segnala Positività"
+        android:text="@string/SegnalaPositività"
         android:textAlignment="viewStart"
         app:icon="@drawable/ic_baseline_keyboard_arrow_right_24"
         app:iconGravity="end"
@@ -26,9 +26,9 @@
         android:id="@+id/SwitchDarkTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         android:text="Tema scuro">
-        </com.google.android.material.switchmaterial.SwitchMaterial>
+    </com.google.android.material.switchmaterial.SwitchMaterial>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="wrap_content"
@@ -39,9 +39,9 @@
         android:id="@+id/btnNotify"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:text="Notifiche"
+        android:text="@string/Notifiche"
         android:textAlignment="viewStart"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         app:icon="@drawable/ic_baseline_keyboard_arrow_right_24"
         app:iconGravity="end"
         app:cornerRadius="20dp"
@@ -52,25 +52,14 @@
         android:id="@+id/btnPrivacy"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:text="Informativa e privacy"
+        android:text="@string/InformativaPrivacy"
         android:textAlignment="viewStart"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         app:icon="@drawable/ic_baseline_keyboard_arrow_right_24"
         app:iconGravity="end"
         app:cornerRadius="20dp"
         style = "@style/Widget.MaterialComponents.Button.OutlinedButton"
         ></com.google.android.material.button.MaterialButton>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLanguage"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="Cambia Lingua"
-        android:textAlignment="viewStart"
-        android:layout_marginTop="32dp"
-        app:icon="@drawable/ic_baseline_language_24"
-        app:iconGravity="end"
-        app:cornerRadius="20dp"
-        style = "@style/Widget.MaterialComponents.Button.OutlinedButton"
-        ></com.google.android.material.button.MaterialButton>
+
 </LinearLayout>

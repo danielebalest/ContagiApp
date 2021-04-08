@@ -70,7 +70,7 @@ public class GroupFragment extends Fragment {
         crea_gruppo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), GroupAdd.class);
+                Intent intent = new Intent(getActivity(), CreaGruppoActivity.class);
                 startActivity(intent);
             }
         });

@@ -23,6 +23,16 @@
     <string name="remember_me">Remember me</string>
     <string name="createAccount">Create account</string>
 
+    //Nomi AppBar
+    <string name="settings">Settings</string>
+
+    //bottoni in impostazioni
+    <string name="SegnalaPositività">Reports positivity</string>
+    <string name="DarkTheme">Dark Theme</string>
+    <string name="Notifiche">Notify</string>
+    <string name="InformativaPrivacy">Information e privacy</string>
+
+
     //ERRORI
 
 

@@ -23,6 +23,15 @@
     <string name="remember_me">Ricordami</string>
     <string name="createAccount">Crea account</string>
 
+    //Nomi AppBar
+    <string name="settings">Impostazioni</string>
+
+    //bottoni in impostazioni
+    <string name="SegnalaPositività">Segnala positività</string>
+    <string name="DarkTheme">Tema scruro</string>
+    <string name="Notifiche">Notifiche</string>
+    <string name="InformativaPrivacy">Informativa e privacy</string>
+
     <string-array name="nazioni">
         <item>Italia</item>
         <item>Francia</item>
@@ -51,5 +60,6 @@
         <item>Bari</item>
         <item>Molfetta</item>
     </string-array>
+
 
 </resources>

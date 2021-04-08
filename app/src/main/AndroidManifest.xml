@@ -1,36 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.contagiapp">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <!--per google maps -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- per google maps -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <!--per bluetooth (anche low energy) -->
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- per bluetooth (anche low energy) -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:largeHeap="true">
-
+        android:theme="@style/AppTheme">
+        <activity android:name=".data.amici.ProfiloUtentiActivity"></activity>
+        <activity android:name=".data.amici.AddFriendsActivity" />
+        <activity android:name=".gruppi.InvitaAmiciGruppoActivity" />
+        <activity android:name=".gruppi.AddImgGruppoActivity" />
+        <activity android:name=".gruppi.CreaGruppoActivity" />
+        <activity
+            android:name=".SettingActivity"
+            android:label="@string/settings" />
         <activity
             android:name=".registrazione.RegistrationActivity"
-            android:parentActivityName=".WelcomeActivity"/>
+            android:parentActivityName=".WelcomeActivity" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:parentActivityName=".WelcomeActivity" />
@@ -39,18 +46,18 @@
             android:theme="@style/LauncherTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".utente.ProfiloActivity">
             <intent-filter>
-                <action android:name="android.intent.action.ProfiloActivity"/>
+                <action android:name="android.intent.action.ProfiloActivity" />
             </intent-filter>
         </activity>
         <activity
             android:name=".WelcomeActivity"
-            android:theme="@style/NoActionBar">
-        </activity>
+            android:theme="@style/NoActionBar" />
         <activity android:name=".MainActivity" />
         <activity android:name=".eventi.NewEventsFragment">
             <intent-filter>
@@ -62,13 +69,14 @@
                 <action android:name="android.intent.action.ModificaUtenteActivity" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${mapsApiKey}"
-            />
+            android:value="${mapsApiKey}" />
+
         <activity android:name=".gruppi.GroupSearch">
             <intent-filter>
                 <action android:name="android.intent.action.GroupSearch" />
@@ -84,6 +92,7 @@
                 <action android:name="android.intent.action.FriendProfile" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -94,4 +103,5 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
-    </manifest>
+
+</manifest>
