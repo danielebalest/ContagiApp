@@ -4,25 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.contagiapp.R;
-import com.example.contagiapp.gruppi.CreaGruppoActivity;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.contagiapp.UserAdapter;
+import com.example.contagiapp.utente.Utente;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,36 +46,15 @@ public class FriendsFragment extends Fragment {
     private TextView textViewFriends;
     private FloatingActionButton aggiungi_amici;
 
+    ArrayList<Utente> utenti;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view;
         view = inflater.inflate(R.layout.fragment_friends, container, false);
 
 
-        /*
-        listView = (ListView)view.findViewById(R.id.list_view_friends);
 
-        ArrayList<String> arrayListFriend = new ArrayList<>();
-
-        arrayListFriend.add("Utente1");
-        arrayListFriend.add("Utente2");
-        arrayListFriend.add("Utente3");
-        arrayListFriend.add("Utente4");
-        arrayListFriend.add("Utente5");
-        arrayListFriend.add("Utente6");
-
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, arrayListFriend);
-        listView.setAdapter(arrayAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), FriendProfile.class);
-                startActivity(intent);
-            }
-
-
-        });*/
 
         editText = view.findViewById(R.id.search_field);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -99,12 +77,30 @@ public class FriendsFragment extends Fragment {
               }
           });
 
-        listView = view.findViewById(R.id.ListViewMyFriends);
-        visualizzaMieiAmici(view);
 
 
+        RecyclerView recyclerView =  view.findViewById(R.id.recyclerView);
+
+        Utente u1 = new Utente();
+        u1.setNome("Pinco");
+        u1.setCognome("Pallino");
+
+        Utente u2 = new Utente();
+        u2.setNome("Roberto");
+        u2.setCognome("Pillo");
 
 
+        //Todo: devo ottenere questi dati dal db. Vedere come esempio
+        utenti = new ArrayList<>();
+        utenti.add(u1);
+        utenti.add(u2);
+/*
+        UserAdapter adapter = new UserAdapter(utenti);
+
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.VERTICAL, true));
+
+*/
       return view;
 
     }
@@ -113,7 +109,7 @@ public class FriendsFragment extends Fragment {
 
     //Crasha porca puttana
     public void visualizzaMieiAmici(View view){
-        textViewFriends = (TextView) view.findViewById(R.id.textViewAmici);
+        //textViewFriends = (TextView) view.findViewById(R.id.textViewAmici);
         Map<String, Object> amici = new HashMap<>();
        /*db.collection("Amici").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override

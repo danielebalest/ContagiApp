@@ -58,7 +58,7 @@
             android:text="Avanti"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="50dp"
-            android:onClick="AddImgGruoup"/>
+            android:onClick="addImgGruoup"/>
 
         <androidx.core.widget.ContentLoadingProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"

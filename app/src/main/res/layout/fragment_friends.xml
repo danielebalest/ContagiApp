@@ -32,16 +32,11 @@
         android:layout_below="@+id/search_field"
         android:layout_marginTop="20dp">
 
-        <ListView
-            android:id="@+id/ListViewMyFriends"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/textViewAmici"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </TextView>
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/user_row"/>
 
 
 

@@ -3,6 +3,8 @@ package com.example.contagiapp.utente;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class Utente {
     private String citta;
@@ -114,6 +116,28 @@ public class Utente {
 
     public void setMailPath(String mailPath) { this.mailPath = mailPath; }
 
+    public int getAge(){
+        int age;
+        GregorianCalendar cal = new GregorianCalendar(); //per ottenere il giorno di oggi
+
+        String dataNascita = getDataNascita();
+        String [] values = dataNascita.split("/");
+        int giornoMese = Integer.parseInt(values[0]);
+        int mese = Integer.parseInt(values[1]);
+        int anno = Integer.parseInt(values[2]);
+
+
+        age = cal.get(Calendar.YEAR) - anno;
+        if(cal.get(Calendar.MONTH) == mese){
+            if(cal.get(Calendar.DAY_OF_MONTH) < giornoMese){
+                age --;
+            }
+        }else if(cal.get(Calendar.MONTH) < mese){
+            age --;
+        }
+
+        return age;
+    }
   //  public ImageView getPropic(){ return propic; }
 
    // public void setPropic(ImageView propic){ this.propic= propic;  }

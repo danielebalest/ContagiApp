@@ -3,24 +3,19 @@ package com.example.contagiapp.gruppi;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.service.autofill.OnClickAction;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.contagiapp.GruppoAdapter;
 import com.example.contagiapp.R;
-import com.example.contagiapp.eventi.NewEventsFragment;
-import com.example.contagiapp.ui.login.LoginActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -34,13 +29,14 @@ import java.util.ArrayList;
 public class GroupFragment extends Fragment {
 
     public GroupFragment() {
-
     }
 
     private FloatingActionButton crea_gruppo;
     private Button visualizza_gruppo;
-    ListView listViewGruppi;
     TextInputEditText editText;
+
+    ListView listView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,23 +44,28 @@ public class GroupFragment extends Fragment {
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_group, container, false);
-        listViewGruppi = (ListView)view.findViewById(R.id.list_groups);
-        ArrayList<String> arrayListGruppi = new ArrayList<>();
 
-        arrayListGruppi.add("Gruppo1");
-        arrayListGruppi.add("Gruppo2");
-        arrayListGruppi.add("Gruppo3");
+        //costruisci data source
+        ArrayList<Gruppo> arrayListGruppi = new ArrayList<Gruppo>();
+        //crea un adapter per convertire l'array in view
+        GruppoAdapter adapter = new GruppoAdapter(getActivity().getApplicationContext(), arrayListGruppi);
+        //collega adapter alla listView
+        listView = view.findViewById(R.id.ListViewGroup);
+        listView.setAdapter(adapter);
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, arrayListGruppi);
-        listViewGruppi.setAdapter(arrayAdapter);
 
-        listViewGruppi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), GroupSearch.class);
-                startActivity(intent);
-            }
-        });
+        //popolamento
+        Gruppo g1 = new Gruppo();
+        Gruppo g2 = new Gruppo();
+        Gruppo g3 = new Gruppo();
+
+        g1.setNomeGruppo("g1");
+        g1.setDescrizione("d1");
+        g2.setNomeGruppo("g2");
+        g3.setNomeGruppo("g3");
+        adapter.add(g1);
+        adapter.add(g2);
+        adapter.add(g3);
 
         crea_gruppo = view.findViewById(R.id.FAB_groups);
         crea_gruppo.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +88,6 @@ public class GroupFragment extends Fragment {
                 return false;
             }
         });
-
 
         return view;
     }

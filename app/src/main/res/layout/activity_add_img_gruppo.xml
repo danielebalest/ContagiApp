@@ -47,6 +47,7 @@
             android:layout_height="wrap_content"
             android:text="Carica immagine di copertina"
             android:layout_centerVertical="true"
+            android:onClick="selectImg"
             app:icon="@drawable/ic_baseline_add_24" />
 
 

@@ -13,11 +13,13 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCreaGruppo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Avanti"
+            android:text="Crea Gruppo"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="50dp" />
+            android:layout_marginBottom="50dp"
+            android:onClick="addGroupToDb"/>
 
         <androidx.core.widget.ContentLoadingProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"

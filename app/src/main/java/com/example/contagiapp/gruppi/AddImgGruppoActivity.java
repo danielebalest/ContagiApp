@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.contagiapp.R;
 
@@ -16,11 +18,25 @@ public class AddImgGruppoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_img_gruppo);
     }
 
-    public void InvitaAmici(View view) {
-    }
+
 
     public void invitaAmici(View view) {
         Intent invitaIntent = new Intent(this, InvitaAmiciGruppoActivity.class);
         startActivity(invitaIntent);
+
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            String nomeGruppo = extras.getString("nomeGruppo");
+            String descrGruppo = extras.getString("descrGruppo");
+        }else Toast.makeText(getApplicationContext(), "ERRORE", Toast.LENGTH_LONG).show();
+    }
+
+    public void selectImg(View view) {
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK);
+        pickIntent.setType("image/*");
+
+        startActivity(pickIntent);
     }
 }
