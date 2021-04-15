@@ -41,10 +41,8 @@ public class AddFriendsActivity extends AppCompatActivity  {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private TextView textViewData;
-    private ListView listView;
     private RecyclerView recyclerView;
 
-    ArrayList<String> list = new ArrayList<String>();   //lista che conterrà le informazioni principali degli utenti
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
     ArrayAdapter<String> arrayAdapter;
 
@@ -62,26 +60,22 @@ public class AddFriendsActivity extends AppCompatActivity  {
 
     public void loadUser() {
         Map<String, Object> user = new HashMap<>();
-        //listView = findViewById(R.id.ListViewAllUser);
         recyclerView = findViewById(R.id.rvUtenti);
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
 
         db.collection("Utenti").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     Utente user = documentSnapshot.toObject(Utente.class);
-                    String nome = user.getNome();
-                    String cognome = user.getCognome();
 
                     String id = documentSnapshot.getId();
                     idList.add(id);
-                    list.add(nome + " " + cognome);
                     utenti.add(user);
-
                 }
 
+
                 UserAdapter adapter = new UserAdapter(utenti);
+
 
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(AddFriendsActivity.this, LinearLayoutManager.VERTICAL, true));
@@ -103,10 +97,6 @@ public class AddFriendsActivity extends AppCompatActivity  {
                     }
 
                 }));
-
-
-
-
             }
         });//Todo: onFailure
     }
