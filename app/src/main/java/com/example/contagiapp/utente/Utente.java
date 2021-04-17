@@ -3,6 +3,7 @@ package com.example.contagiapp.utente;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -19,7 +20,25 @@ public class Utente {
     private String regione;
     private String telefono;
     private String mailPath;
- //   private ImageView propic;
+    private ArrayList<String> amici;
+    private String amic;
+
+    public String getAmic() {
+        return amic;
+    }
+
+    public void setAmic(String amic) {
+        this.amic = amic;
+    }
+//   private ImageView propic;
+
+    public ArrayList<String> getAmici() {
+        return amici;
+    }
+
+    public void setAmici(ArrayList<String> amici) {
+        this.amici = amici;
+    }
 
     public Utente() {
     }
@@ -141,5 +160,7 @@ public class Utente {
   //  public ImageView getPropic(){ return propic; }
 
    // public void setPropic(ImageView propic){ this.propic= propic;  }
+
+
 
 }

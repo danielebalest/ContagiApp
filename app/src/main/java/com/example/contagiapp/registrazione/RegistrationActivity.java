@@ -52,6 +52,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -94,6 +95,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     String imageFileName;
     static String currentPhotoPath;
     private Utente utente = new Utente();
+    private ArrayList<String> friends = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -393,6 +395,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
 
 
+
         db.collection("Utenti").whereEqualTo("mail", email).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -477,6 +480,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                         user1.put("mailPath", email);
                         utente.setPassword(psw1);
                         utente.setMail(email);
+                        utente.setAmici(friends);
+                        user1.put("amici", friends);
                         db.collection("Utenti").document(email).set(user1);
 
                         uploadImage(utente.getMail());

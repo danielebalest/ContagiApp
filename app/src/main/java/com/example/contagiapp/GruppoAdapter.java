@@ -9,32 +9,60 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.contagiapp.gruppi.Gruppo;
+import com.example.contagiapp.utente.Utente;
 
 import java.util.ArrayList;
 
-public class GruppoAdapter extends ArrayAdapter<Gruppo> {
-    public GruppoAdapter(Context context, ArrayList< Gruppo> users){
-        super(context, 0, users);
+public class GruppoAdapter extends RecyclerView.Adapter<GruppoAdapter.ViewHolder> {
+    private ArrayList<Gruppo> listaGruppi;
+
+    public GruppoAdapter(ArrayList< Gruppo> gruppi){
+        listaGruppi = gruppi;
     }
+
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        //Ottieni item dalla posizione
-        Gruppo gruppo = getItem(position);
+    public GruppoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
 
-        if(convertView==null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_gruppo, parent, false);
+        View usertView = inflater.inflate(R.layout.item_gruppo, parent, false);
+
+        GruppoAdapter.ViewHolder viewHolder = new GruppoAdapter.ViewHolder(usertView);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Gruppo gruppo = listaGruppi.get(position);
+        TextView textViewNomeGruppo = holder.nomeGruppoTextView;
+
+        textViewNomeGruppo.setText(gruppo.getNomeGruppo());
+    }
+
+    @Override
+    public int getItemCount() {
+        return listaGruppi.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public TextView nomeGruppoTextView;
+        UserAdapter.OnUserListener onUserListener;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            this.onUserListener = onUserListener;
+            nomeGruppoTextView =  itemView.findViewById(R.id.tvNameGroup);
+
         }
 
-        TextView tvNomeGruppo = convertView.findViewById(R.id.tvNome);
-        TextView tvDescGruppo = convertView.findViewById(R.id.tvDescr);
-
-        tvNomeGruppo.setText(gruppo.getNomeGruppo());
-        tvDescGruppo.setText(gruppo.getDescrizione());
-
-        return convertView;
+        @Override
+        public void onClick(View v) {
+            onUserListener.onItemClick(getAdapterPosition());
+        }
     }
 }

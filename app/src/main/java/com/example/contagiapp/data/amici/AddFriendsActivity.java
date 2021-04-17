@@ -44,7 +44,7 @@ public class AddFriendsActivity extends AppCompatActivity  {
     private RecyclerView recyclerView;
 
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
-    ArrayAdapter<String> arrayAdapter;
+
 
     ArrayList<Utente> utenti = new ArrayList<Utente>();
     @Override
@@ -52,11 +52,8 @@ public class AddFriendsActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friends);
 
-        textViewData = findViewById(R.id.TextViewAllUser);
-
         loadUser();
     }
-
 
     public void loadUser() {
         Map<String, Object> user = new HashMap<>();
@@ -72,7 +69,6 @@ public class AddFriendsActivity extends AppCompatActivity  {
                     idList.add(id);
                     utenti.add(user);
                 }
-
 
                 UserAdapter adapter = new UserAdapter(utenti);
 
@@ -100,8 +96,6 @@ public class AddFriendsActivity extends AppCompatActivity  {
             }
         });//Todo: onFailure
     }
-
-
 
     private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
         private GestureDetector gestureDetector;

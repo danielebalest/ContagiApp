@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,10 +22,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
     private List<Utente> mUsers;
     private ArrayList<Utente> utenti = new ArrayList<Utente>();
-    private OnUserListener mOnUserListener;
+
 
     public UserAdapter(List<Utente> users){
-        //this.mOnUserListener = onUserListener;
         mUsers = users;
     }
 
@@ -36,14 +36,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
         View usertView = inflater.inflate(R.layout.user_row, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(usertView, mOnUserListener);
+        ViewHolder viewHolder = new ViewHolder(usertView);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Utente user = mUsers.get(position);
-
         TextView textViewNome = holder.nomeTextView;
         TextView textViewCognome = holder.cognomeTextView;
 
@@ -65,13 +64,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
         public TextView cognomeTextView;
         OnUserListener onUserListener;
 
-        public ViewHolder(@NonNull View itemView, OnUserListener onUserListener) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.onUserListener = onUserListener;
             nomeTextView =  itemView.findViewById(R.id.tvNameUser);
             cognomeTextView = itemView.findViewById(R.id.tvSurnameUser);
 
-            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -82,6 +80,5 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
     public interface OnUserListener{
         void onItemClick(int position);
     }
-
 
 }

@@ -3,10 +3,12 @@ package com.example.contagiapp.data.amici;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +20,17 @@ import android.widget.TextView;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
+import com.example.contagiapp.gruppi.CreaGruppoActivity;
 import com.example.contagiapp.utente.Utente;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +55,8 @@ public class FriendsFragment extends Fragment {
     private TextView textViewFriends;
     private FloatingActionButton aggiungi_amici;
 
-    ArrayList<Utente> utenti;
+    ArrayList<Utente> amici;
+    ArrayList<String> listaAmici = new ArrayList<String>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,6 +91,28 @@ public class FriendsFragment extends Fragment {
 
         RecyclerView recyclerView =  view.findViewById(R.id.recyclerView);
 
+        String mailUtenteLoggato;
+
+        //Otteniamo la lista della mail degli amici
+        db.collection("Utenti")
+                .document("abbbbaaaa@gmail.com").get()
+                .addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        DocumentSnapshot document = (DocumentSnapshot) task.getResult();
+                        ArrayList<String> listaMail = (ArrayList<String>) document.get("amici");
+                        Log.d("lista", String.valueOf(listaMail));
+                    }
+                });
+
+
+
+        ArrayList<Utente> aaaaaa = new ArrayList<Utente>();
+        Utente a1 = new Utente();
+        Utente a2 = new Utente();
+
+        a1.setMail("chiusura@gmail.com");
+        //Todo: devo ottenere questi dati dal db. Vedere come esempio
         Utente u1 = new Utente();
         u1.setNome("Pinco");
         u1.setCognome("Pallino");
@@ -89,18 +121,19 @@ public class FriendsFragment extends Fragment {
         u2.setNome("Roberto");
         u2.setCognome("Pillo");
 
+        amici = new ArrayList<Utente>();
+        amici.add(a1);
+        amici.add(u2);
 
-        //Todo: devo ottenere questi dati dal db. Vedere come esempio
-        utenti = new ArrayList<>();
-        utenti.add(u1);
-        utenti.add(u2);
-/*
-        UserAdapter adapter = new UserAdapter(utenti);
+
+
+        UserAdapter adapter = new UserAdapter(amici);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.VERTICAL, true));
 
-*/
+
+      getUtente("dani@gmail.com");
       return view;
 
     }
@@ -128,7 +161,35 @@ public class FriendsFragment extends Fragment {
     public void addFriends(){
         Intent addFriendsIntent = new Intent(getActivity(), AddFriendsActivity.class);
         startActivity(addFriendsIntent);
+    }
 
+    public void getUtente(String mailAmico){ //ricordati che deve essere Utente e non void
+        //final Utente user = null;
+        db.collection("Utenti")
+                .whereEqualTo(String.valueOf(getId()), mailAmico) //SICURAMENTE QUESTO NON VA BENE
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                String data = "";
+                Log.d("data", data);
+                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    String nome = documentSnapshot.getString("nome");
+                    String cognome = documentSnapshot.getString("cognome");
+                    String mail = documentSnapshot.getString("mail");
+                    data = data + "NOME: " + nome + " COGNOME: " + cognome + "\n";
+                }
+
+                Log.d("booooooooooo", data);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Failure", String.valueOf(e));
+            }
+        });
+
+
+        //return user;
     }
 
 

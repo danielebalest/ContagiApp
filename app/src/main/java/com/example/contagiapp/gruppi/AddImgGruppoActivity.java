@@ -21,16 +21,20 @@ public class AddImgGruppoActivity extends AppCompatActivity {
 
 
     public void invitaAmici(View view) {
-        Intent invitaIntent = new Intent(this, InvitaAmiciGruppoActivity.class);
-        startActivity(invitaIntent);
-
-
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             String nomeGruppo = extras.getString("nomeGruppo");
             String descrGruppo = extras.getString("descrGruppo");
+
+            Intent invitaIntent = new Intent(this, InvitaAmiciGruppoActivity.class);
+            invitaIntent.putExtra("nomeGruppo", nomeGruppo);
+            invitaIntent.putExtra("descrGruppo", descrGruppo);
+            startActivity(invitaIntent);
+
         }else Toast.makeText(getApplicationContext(), "ERRORE", Toast.LENGTH_LONG).show();
+
     }
+
 
     public void selectImg(View view) {
 

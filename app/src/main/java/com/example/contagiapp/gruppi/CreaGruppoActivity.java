@@ -34,7 +34,6 @@ public class CreaGruppoActivity extends AppCompatActivity {
         imgIntent.putExtra("nomeGruppo", nomeGruppo);
         imgIntent.putExtra("descrGruppo", descrGruppo);
         startActivity(imgIntent);
-
     }
 
 
