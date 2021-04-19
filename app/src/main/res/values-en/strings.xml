@@ -19,6 +19,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="phone">Cellulare</string>
     <string name="search">Search</string>
+    <string name="invite">Invite</string>
 
     <string name="remember_me">Remember me</string>
     <string name="createAccount">Create account</string>

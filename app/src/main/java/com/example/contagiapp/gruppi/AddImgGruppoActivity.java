@@ -37,10 +37,8 @@ public class AddImgGruppoActivity extends AppCompatActivity {
 
 
     public void selectImg(View view) {
-
         Intent pickIntent = new Intent(Intent.ACTION_PICK);
         pickIntent.setType("image/*");
-
         startActivity(pickIntent);
     }
 }

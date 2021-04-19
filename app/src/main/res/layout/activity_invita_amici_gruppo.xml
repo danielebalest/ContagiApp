@@ -8,9 +8,32 @@
     android:padding="20dp"
     tools:context=".gruppi.InvitaAmiciGruppoActivity">
 
+    <TextView
+        android:id="@+id/tvInvitaAmici"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="Invita i tuoi amici al gruppo"
+        android:textSize="20dp"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width = "match_parent"
+        android:layout_height = "450dp"
+        android:orientation = "horizontal"
+        android:layout_marginTop="20dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvInvitaAmici"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/user_row"/>
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rvInvitaAmici">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCreaGruppo"

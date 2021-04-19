@@ -27,7 +27,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".data.amici.ProfiloUtentiActivity"></activity>
+        <activity android:name=".data.amici.ProfiloUtentiActivity" />
         <activity android:name=".data.amici.AddFriendsActivity" />
         <activity android:name=".gruppi.InvitaAmiciGruppoActivity" />
         <activity android:name=".gruppi.AddImgGruppoActivity" />

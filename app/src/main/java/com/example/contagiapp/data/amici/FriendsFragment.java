@@ -59,8 +59,7 @@ public class FriendsFragment extends Fragment {
     private FloatingActionButton aggiungi_amici;
     private RecyclerView recyclerView;
 
-    ArrayList<Utente> amici;
-    ArrayList<String> listaAmici = new ArrayList<String>();
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,7 +106,7 @@ public class FriendsFragment extends Fragment {
                             tvListaMail.setText("Non hai ancora nessun amico");
                         }
                         Log.d("lista", String.valueOf(listaMail));
-                        getFriends(listaMail);
+                        getFriends(listaMail, recyclerView);
                     }
                 });
         return view;
@@ -120,14 +119,14 @@ public class FriendsFragment extends Fragment {
         startActivity(addFriendsIntent);
     }
 
-    public void getFriends(ArrayList<String> listaAmici){
+    public void getFriends(ArrayList<String> listaAmici, final RecyclerView recyclerView){
         /*
         metodo che svolge le seguenti operazioni:
          1)date in input le mail degli amici ottiene, per ciascuno, i seguenti dati dal database: nome, cognome, mail
          2)crea per ognuno un nuovo tipo Utente che aggiunge ad una lista
          3) passa la lista all'adapter del recycler View che poi permetterà la visualizzazione della lista di CardView degli amici sull'app
          */
-        amici = new ArrayList<Utente>();
+        final ArrayList<Utente> amici = new ArrayList<Utente>();
         for(int i=0; i < listaAmici.size(); i++){
             db.collection("Utenti")
                     .document(listaAmici.get(i))

@@ -19,6 +19,7 @@
     <string name="login_failed">"Accesso fallito"</string>
     <string name="phone">Cellulare</string>
     <string name="search">Cerca</string>
+    <string name="invite">Invita</string>
 
     <string name="remember_me">Ricordami</string>
     <string name="createAccount">Crea account</string>
@@ -31,6 +32,7 @@
     <string name="DarkTheme">Tema scruro</string>
     <string name="Notifiche">Notifiche</string>
     <string name="InformativaPrivacy">Informativa e privacy</string>
+
 
     <string-array name="nazioni">
         <item>Italia</item>
@@ -53,6 +55,8 @@
         <item>BR</item>
         <item>TA</item>
     </string-array>
+
+
 
     //ERRORI
 
