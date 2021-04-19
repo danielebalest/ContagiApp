@@ -40,7 +40,6 @@ import java.util.Map;
 public class AddFriendsActivity extends AppCompatActivity  {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private TextView textViewData;
     private RecyclerView recyclerView;
 
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
@@ -56,9 +55,7 @@ public class AddFriendsActivity extends AppCompatActivity  {
     }
 
     public void loadUser() {
-        Map<String, Object> user = new HashMap<>();
         recyclerView = findViewById(R.id.rvUtenti);
-
         db.collection("Utenti").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -71,7 +68,6 @@ public class AddFriendsActivity extends AppCompatActivity  {
                 }
 
                 UserAdapter adapter = new UserAdapter(utenti);
-
 
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(AddFriendsActivity.this, LinearLayoutManager.VERTICAL, true));
@@ -115,7 +111,6 @@ public class AddFriendsActivity extends AppCompatActivity  {
                         clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
                     }
                 }
-
             });
         }
 

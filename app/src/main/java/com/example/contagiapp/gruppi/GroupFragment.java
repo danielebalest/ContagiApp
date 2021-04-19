@@ -66,6 +66,7 @@ public class GroupFragment extends Fragment {
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_group, container, false);
+
         tvTuoiGruppi = view.findViewById(R.id.tvTuoiGruppi);
         rvGruppi = view.findViewById(R.id.rvGruppi);
         loadGruppi();
@@ -97,21 +98,7 @@ public class GroupFragment extends Fragment {
     }
 
     private void loadGruppi() {
-
-        Gson gson = new Gson();
-        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
-        String json = prefs.getString("utente", "no");
-        String mailAdmin;
-        //TODO capire il funzionamento
-        if(!json.equals("no")) {
-            utente = gson.fromJson(json, Utente.class);
-            mailAdmin = utente.getMail();
-            Log.d("mail", mailAdmin);
-        } else {
-            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
-            mailAdmin = prefs1.getString("mail", "no");
-            Log.d("mail", mailAdmin);
-        }
+        String mailAdmin = getMailUtenteLoggato();
 
 
         db.collection("Gruppo").whereEqualTo("admin", mailAdmin).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -134,6 +121,24 @@ public class GroupFragment extends Fragment {
 
             }
         });
+    }
+
+    private String getMailUtenteLoggato(){
+        Gson gson = new Gson();
+        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String json = prefs.getString("utente", "no");
+        String mailUtenteLoggato;
+        //TODO capire il funzionamento
+        if(!json.equals("no")) {
+            utente = gson.fromJson(json, Utente.class);
+            mailUtenteLoggato = utente.getMail();
+            Log.d("mailutenteLoggato", mailUtenteLoggato);
+        } else {
+            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
+            mailUtenteLoggato = prefs1.getString("mail", "no");
+            Log.d("mail", mailUtenteLoggato);
+        }
+        return mailUtenteLoggato;
     }
 
     private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {

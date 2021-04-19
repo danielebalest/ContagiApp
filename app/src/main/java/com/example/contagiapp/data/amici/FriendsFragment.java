@@ -1,6 +1,8 @@
 package com.example.contagiapp.data.amici;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,6 +33,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +57,7 @@ public class FriendsFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private TextView textViewFriends;
     private FloatingActionButton aggiungi_amici;
+    private RecyclerView recyclerView;
 
     ArrayList<Utente> amici;
     ArrayList<String> listaAmici = new ArrayList<String>();
@@ -74,7 +78,6 @@ public class FriendsFragment extends Fragment {
                     //da inserire metodo per la ricerca
                     return true;
                 }
-
                 return false;
             }
         });
@@ -86,111 +89,91 @@ public class FriendsFragment extends Fragment {
                   addFriends();
               }
           });
+        recyclerView =  view.findViewById(R.id.recyclerView);
+        final TextView tvListaMail = view.findViewById(R.id.tvTuoiAmici);
 
 
 
-        RecyclerView recyclerView =  view.findViewById(R.id.recyclerView);
-
-        String mailUtenteLoggato;
-
+        String mailUtenteLoggato = getMailUtenteLoggato();
         //Otteniamo la lista della mail degli amici
         db.collection("Utenti")
-                .document("abbbbaaaa@gmail.com").get()
+                .document(mailUtenteLoggato).get()
                 .addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
                         DocumentSnapshot document = (DocumentSnapshot) task.getResult();
                         ArrayList<String> listaMail = (ArrayList<String>) document.get("amici");
+                        if(listaMail.isEmpty()){
+                            tvListaMail.setText("Non hai ancora nessun amico");
+                        }
                         Log.d("lista", String.valueOf(listaMail));
+                        getFriends(listaMail);
                     }
                 });
-
-
-
-        ArrayList<Utente> aaaaaa = new ArrayList<Utente>();
-        Utente a1 = new Utente();
-        Utente a2 = new Utente();
-
-        a1.setMail("chiusura@gmail.com");
-        //Todo: devo ottenere questi dati dal db. Vedere come esempio
-        Utente u1 = new Utente();
-        u1.setNome("Pinco");
-        u1.setCognome("Pallino");
-
-        Utente u2 = new Utente();
-        u2.setNome("Roberto");
-        u2.setCognome("Pillo");
-
-        amici = new ArrayList<Utente>();
-        amici.add(a1);
-        amici.add(u2);
-
-
-
-        UserAdapter adapter = new UserAdapter(amici);
-
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.VERTICAL, true));
-
-
-      getUtente("dani@gmail.com");
-      return view;
-
+        return view;
     }
 
 
-
-    //Crasha porca puttana
-    public void visualizzaMieiAmici(View view){
-        //textViewFriends = (TextView) view.findViewById(R.id.textViewAmici);
-        Map<String, Object> amici = new HashMap<>();
-       /*db.collection("Amici").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                String data = "";
-                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                    String mail = documentSnapshot.getString("amici");
-                    data = data + mail + "\n";
-                }
-                //textViewFriends.setText(data);
-            }
-        });*/
-
-    }
 
     public void addFriends(){
         Intent addFriendsIntent = new Intent(getActivity(), AddFriendsActivity.class);
         startActivity(addFriendsIntent);
     }
 
-    public void getUtente(String mailAmico){ //ricordati che deve essere Utente e non void
-        //final Utente user = null;
-        db.collection("Utenti")
-                .whereEqualTo(String.valueOf(getId()), mailAmico) //SICURAMENTE QUESTO NON VA BENE
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                String data = "";
-                Log.d("data", data);
-                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    String nome = documentSnapshot.getString("nome");
-                    String cognome = documentSnapshot.getString("cognome");
-                    String mail = documentSnapshot.getString("mail");
-                    data = data + "NOME: " + nome + " COGNOME: " + cognome + "\n";
+    public void getFriends(ArrayList<String> listaAmici){
+        /*
+        metodo che svolge le seguenti operazioni:
+         1)date in input le mail degli amici ottiene, per ciascuno, i seguenti dati dal database: nome, cognome, mail
+         2)crea per ognuno un nuovo tipo Utente che aggiunge ad una lista
+         3) passa la lista all'adapter del recycler View che poi permetterà la visualizzazione della lista di CardView degli amici sull'app
+         */
+        amici = new ArrayList<Utente>();
+        for(int i=0; i < listaAmici.size(); i++){
+            db.collection("Utenti")
+                    .document(listaAmici.get(i))
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Utente user = new Utente();
+                            user.setNome(documentSnapshot.getString("nome"));
+                            user.setCognome(documentSnapshot.getString("cognome"));
+                            user.setMail(documentSnapshot.getString("mail"));
+                            Log.d("Nome utente", String.valueOf(user.getNome()));
+
+
+                            amici.add(user);
+                            Log.d("amiciSize", String.valueOf(amici.size()));
+                            UserAdapter adapter = new UserAdapter(amici);
+
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.VERTICAL, true));
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("error", "errore");
                 }
+            });
+        }
 
-                Log.d("booooooooooo", data);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("Failure", String.valueOf(e));
-            }
-        });
-
-
-        //return user;
     }
 
-
+    private String getMailUtenteLoggato(){
+        Gson gson = new Gson();
+        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String json = prefs.getString("utente", "no");
+        String mailUtenteLoggato;
+        //TODO capire il funzionamento
+        if(!json.equals("no")) {
+            Utente utente = gson.fromJson(json, Utente.class);
+            mailUtenteLoggato = utente.getMail();
+            Log.d("mailutenteLoggato", mailUtenteLoggato);
+        } else {
+            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
+            mailUtenteLoggato = prefs1.getString("mail", "no");
+            Log.d("mail", mailUtenteLoggato);
+        }
+        return mailUtenteLoggato;
+    }
 }
