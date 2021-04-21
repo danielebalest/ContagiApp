@@ -4,79 +4,113 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    tools:context=".eventi.NewEventsFragment">
+    tools:context=".eventi.NewEventsActivity">
 
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="20dp"
+            android:padding="20dp"
+            android:gravity="center"
             android:text="Inserire dati dell'evento"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:fontFamily="sans-serif-black"
             android:textSize="26sp"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/textNameEvent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Nome evento"
-            android:inputType="textPersonName"
-            android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/editTextNumber"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputNomeEventoLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:layout_marginTop="32dp"
+            android:hint="Nome evento"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextNomeEvento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:labelFor="@id/editTextNomeEvento"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputNumMaxPartecipantiLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:hint="Numero massimo di partecipanti"
-            android:inputType="number"
-            android:textSize="24sp" />
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextNumMaxPartecipanti"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:labelFor="@id/editTextNumMaxPartecipanti"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/dataEvento"
             android:layout_width="match_parent"
-            android:layout_height="59dp"
+            android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Data Evento"
-            android:textSize="24sp" />
+            android:layout_marginTop="10dp"
+            android:textSize="20sp" />
         <TextClock
             android:id="@+id/orarioEvento"
             android:layout_width="match_parent"
-            android:layout_height="59dp"
+            android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Orario Evento"
-            android:textSize="24sp" />
+            android:layout_marginTop="10dp"
+            android:textSize="20sp" />
 
 
-        <EditText
-            android:id="@+id/editTextTextMultiLine"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputDescrEvento"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:ems="10"
-            android:gravity="start|top"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:hint="Descrizione evento"
-            android:inputType="textMultiLine"
-            android:textSize="24sp" />
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextDescrEvento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:labelFor="@id/editTextDescrEvento"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="  Nazione:"
-            android:textSize="24sp" />
+            android:text="Nazione:"
+            android:textSize="20sp" />
 
         <Spinner
             android:id="@+id/spinnerNazioni"
@@ -84,26 +118,44 @@
             android:layout_height="44dp"
             android:entries="@array/nazioni" />
 
-        <EditText
-            android:id="@+id/editCittaEvento"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputCitta"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:layout_marginTop="32dp"
             android:hint="Città"
-            android:inputType="textPersonName"
-            android:textSize="24sp" />
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextCitta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:labelFor="@id/editTextCitta"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-        <EditText
-            android:id="@+id/editLuogoEvento"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputIndirizzo"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Luogo evento"
-            android:textSize="24sp"
-            />
+            android:layout_marginTop="32dp"
+            android:hint="Indirizzo"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
 
-
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextIndirizzo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:labelFor="@id/editTextIndirizzo"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
 

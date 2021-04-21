@@ -27,7 +27,8 @@
             android:id="@+id/rvInvitaAmici"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/user_row"/>
+            tools:listitem="@layout/user_row"
+            />
     </LinearLayout>
 
     <RelativeLayout

@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.contagiapp.eventi.NewEventsFragment;
+import com.example.contagiapp.eventi.NewEventsActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HomeFragment extends Fragment {
@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
         new_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), NewEventsFragment.class);
+                Intent intent = new Intent(getActivity(), NewEventsActivity.class);
                 startActivity(intent);
             }
         });

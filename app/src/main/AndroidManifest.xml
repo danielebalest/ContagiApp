@@ -59,10 +59,11 @@
             android:name=".WelcomeActivity"
             android:theme="@style/NoActionBar" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".eventi.NewEventsFragment">
+        <activity android:name=".eventi.NewEventsActivity">
             <intent-filter>
-                <action android:name="android.intent.action.NewEventsFragment" />
+                <action android:name="android.intent.action.NewEventsActivity" />
             </intent-filter>
+
         </activity>
         <activity android:name=".utente.ModificaUtenteActivity">
             <intent-filter>
@@ -85,11 +86,6 @@
         <activity android:name=".gruppi.GroupAdd">
             <intent-filter>
                 <action android:name="android.intent.action.GroupAdd" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".data.amici.FriendProfile">
-            <intent-filter>
-                <action android:name="android.intent.action.FriendProfile" />
             </intent-filter>
         </activity>
 

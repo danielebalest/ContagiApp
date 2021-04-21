@@ -74,10 +74,9 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
             gruppo.setNomeGruppo(nomeGruppo);
             gruppo.setDescrizione(descrGruppo);
             gruppoCollection.add(gruppo);
-        }else Toast.makeText(getApplicationContext(), "ERRORE", Toast.LENGTH_LONG).show();
+        }else Toast.makeText(getApplicationContext(), "ERRORE", Toast.LENGTH_SHORT).show();
 
-
-
+       Toast.makeText(getApplicationContext(), "Gruppo creato", Toast.LENGTH_SHORT);
     }
 
 
@@ -98,6 +97,8 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
         }
         return mailUtenteLoggato;
     }
+
+
 
     public void getFriends(ArrayList<String> listaAmici, final RecyclerView recyclerView){
         /*

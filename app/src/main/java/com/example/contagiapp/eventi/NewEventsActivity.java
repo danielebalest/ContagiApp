@@ -3,7 +3,9 @@ package com.example.contagiapp.eventi;
 import android.app.AuthenticationRequiredException;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -32,6 +34,8 @@ import com.example.contagiapp.NotifyFragment;
 import com.example.contagiapp.R;
 import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.gruppi.GroupFragment;
+import com.example.contagiapp.gruppi.Gruppo;
+import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -48,7 +52,9 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.time.Clock;
@@ -60,7 +66,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCallback {
+public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     MapView mapView;
     EditText editTextLuogo;
@@ -74,12 +80,8 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
     private TimePickerDialog.OnTimeSetListener orarioDellEvento;
 
 
-
-
-
-
-
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference eventiCollection = db.collection("Eventi");
     private int anno = 0, mese = 0, giorno = 0, ora=0, minuti=0, oraapp=0, minapp=0;
 
     @Override
@@ -87,39 +89,8 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_new_events);
 
-        editTextLuogo = findViewById(R.id.editLuogoEvento);
+        editTextLuogo = findViewById(R.id.editTextIndirizzo);
 
-        //inizializza l' SDK
-
-/*
-        Places.initialize(getApplicationContext(), "AIzaSyDaZTesWrbtKYHmXv8grh73xk3kjMBzMT4");
-        PlacesClient placesClient = Places.createClient(this);
-
-
-
-        AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-
-        autocompleteSupportFragment.setTypeFilter(TypeFilter.ADDRESS);
-
-        autocompleteSupportFragment.setLocationBias(RectangularBounds.newInstance(
-                new LatLng(-33.880490, 151.184363),
-                new LatLng(-33.858754, 151.229596)));
-        autocompleteSupportFragment.setCountries("IN");
-
-        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-
-        autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(@NonNull Place place) {
-                Log.i(TAG, "Place" + place.getName() + ", " + place.getId());
-            }
-
-            @Override
-            public void onError(@NonNull Status status) {
-                Log.i(TAG, "errore" + status);
-            }
-        });
-*/
 
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
@@ -132,7 +103,8 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
         creaEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMainActivity();
+                //openMainActivity();
+                addEventToDb();
             }
         });
 
@@ -146,15 +118,11 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
                 int hour = cal.get(Calendar.HOUR);
                 int minute = cal.get(Calendar.MINUTE);
                 TimePickerDialog dialog;
-                dialog = new TimePickerDialog(NewEventsFragment.this, android.R.style.Theme_Material_InputMethod, orarioDellEvento,hour,minute,true);
+                dialog = new TimePickerDialog(NewEventsActivity.this, android.R.style.Theme_Material_InputMethod, orarioDellEvento,hour,minute,true);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));
                 dialog.show();
-
             }
         });
-
-
-
 
         dataEvento = (TextView) findViewById(R.id.dataEvento);
         dataEvento.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +134,7 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog dialog = new DatePickerDialog(
-                        NewEventsFragment.this,
+                        NewEventsActivity.this,
                         android.R.style.Theme_Material_InputMethod,
                         dataDellEvento,
                         year, month, day);
@@ -174,6 +142,8 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
                 dialog.show();
             }
         });
+
+
 
         dataDellEvento = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -220,14 +190,53 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
     }
 
 
+    private void addEventToDb(){
+
+
+        EditText nome = findViewById(R.id.editTextNomeEvento);
+        EditText descrizione = findViewById(R.id.editTextDescrEvento);
+        EditText numeroMaxP = findViewById(R.id.editTextNumMaxPartecipanti);
+        TextView data = findViewById(R.id.dataEvento);
+        TextClock orario= findViewById(R.id.orarioEvento);
+        EditText citta = findViewById(R.id.editTextCitta);
+        EditText indirizzo = findViewById(R.id.editTextIndirizzo);
+
+        Evento evento = new Evento();
+        evento.setAdmin(getMailUtenteLoggato());
+        evento.setNome(nome.getText().toString());
+        evento.setDescrizione(descrizione.getText().toString());
+        evento.setNumeroMaxPartecipanti(Integer.parseInt(numeroMaxP.getText().toString()));
+        evento.setData(data.getText().toString()); //da vedere controllo
+        evento.setOrario(orario.getText().toString());
+        evento.setCitta(citta.getText().toString());
+        evento.setIndirizzo(indirizzo.getText().toString());
+
+
+        Log.d("getIndirizzo", String.valueOf(evento.getIndirizzo()));
+        Log.d("getData", String.valueOf(evento.getData()));
+        Log.d("getOrario", String.valueOf(evento.getOrario()));
+
+
+        if(dataOraValide(evento, evento.getData(), evento.getOrario())){
+            db.collection("Eventi").add(evento);
+            Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
+            //finish();
+        }else {
+            finish();
+            startActivity(getIntent());
+        }
+
+
+    }
+
 
     private void openMainActivity() {
         Map<String, Object> evento = new HashMap<>();
 
-        TextView nome = (TextView) findViewById(R.id.textNameEvent);
+        TextView nome = (TextView) findViewById(R.id.editTextNomeEvento);
         evento.put("nome", nome.getText().toString());
 
-        TextView numeroP = (TextView) findViewById(R.id.editTextNumber);
+        TextView numeroP = (TextView) findViewById(R.id.editTextNumMaxPartecipanti);
         evento.put("num_partecipanti", numeroP.getText().toString());
 
         TextView data = (TextView) findViewById(R.id.dataEvento);
@@ -236,23 +245,21 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
         TextClock orario= (TextClock) findViewById(R.id.orarioEvento);
         String appoggio1=orario.getText().toString();
 
-        TextView descrizione = (TextView) findViewById(R.id.editTextTextMultiLine);
+        TextView descrizione = (TextView) findViewById(R.id.editTextDescrEvento);
         evento.put("descrizione", descrizione.getText().toString());
 
         Spinner nazione = (Spinner) findViewById(R.id.spinnerNazioni);
         evento.put("nazione", nazione.getSelectedItem().toString());
 
-        TextView citta = (TextView) findViewById(R.id.editCittaEvento);
+        TextView citta = (TextView) findViewById(R.id.editTextCitta);
         evento.put("citta", citta.getText().toString());
 
-        TextView luogo = (TextView) findViewById(R.id.editCittaEvento);
-        evento.put("luogo", luogo.getText().toString());
-        controllodata(evento,appoggio,appoggio1);
+        TextView luogo = (TextView) findViewById(R.id.editTextCitta);
 
+        controllodata(evento,appoggio,appoggio1);
 
         //Tornare indietro
         this.finish();
-
     }
 
     void controllodata(Map<String, Object> evento, String appoggio, String appoggio1){
@@ -307,6 +314,74 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
+    private Boolean dataOraValide(Evento evento, String data, String orario){
+        Boolean validita;
+        Calendar cal = Calendar.getInstance();
+        boolean condevento=false;
+        boolean condorario2= true;
+        int l = data.length();
+        int l1= orario.length();
+        System.out.println("la lunghezza è stocazzooooo "+ l1);
+        System.out.println("l'orario scelto è "+ orario);
+        switch (l) {
+            case 9:
+                anno = Integer.valueOf(data.substring(l - 4, l));
+                mese = Integer.valueOf(data.substring(l - 7, l - 5));
+                giorno = Integer.valueOf(data.charAt(0)) - 48;
+                break;
+            case 10:
+                anno = Integer.valueOf(data.substring(l - 4, l));
+                mese = Integer.valueOf(data.substring(l - 7, l - 5));
+                giorno = Integer.valueOf(data.substring(l - 10, l - 8));
+                break;
+        }
+        minapp = Integer.valueOf(orario.substring(3,5));
+        oraapp = Integer.valueOf(orario.substring(0,2));
+
+        System.out.println("orario scelto "+ oraapp);
+        System.out.println("minuti scelti "+ minapp);
+        if (anno >= cal.get(Calendar.YEAR)) {
+            if ((mese-1) >= cal.get(Calendar.MONTH)) {
+                if (giorno >= cal.get(Calendar.DAY_OF_MONTH))
+                    if(oraapp>= (cal.get(Calendar.HOUR_OF_DAY)+1)) {
+                        evento.setData(data);
+                        evento.setOrario(orario);
+                        condorario2=false;
+                    }
+            }else condevento= true;
+        }else condevento= true;
+
+        if(condevento){
+            Toast.makeText(this, "data non valida",Toast.LENGTH_SHORT).show();
+            validita = false;
+        }else if(condorario2) {
+            Toast.makeText(this, "orario non valido",Toast.LENGTH_SHORT).show();
+            validita = false;
+        }else{
+            validita = true;
+            //provaaaaaaaa
+        }
+        return validita;
+    }
+
+    private String getMailUtenteLoggato(){
+        Gson gson = new Gson();
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String json = prefs.getString("utente", "no");
+        String mailUtenteLoggato;
+        //TODO capire il funzionamento
+        if(!json.equals("no")) {
+            Utente utente = gson.fromJson(json, Utente.class);
+            mailUtenteLoggato = utente.getMail();
+            Log.d("mailutenteLoggato", mailUtenteLoggato);
+        } else {
+            SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
+            mailUtenteLoggato = prefs1.getString("mail", "no");
+            Log.d("mail", mailUtenteLoggato);
+        }
+        return mailUtenteLoggato;
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -350,4 +425,6 @@ public class NewEventsFragment extends AppCompatActivity implements OnMapReadyCa
         super.onLowMemory();
         mapView.onLowMemory();
     }
+
+
 };

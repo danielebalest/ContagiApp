@@ -38,7 +38,7 @@ public class EventsFragment extends Fragment {
         new_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), NewEventsFragment.class);
+                Intent intent = new Intent(getActivity(), NewEventsActivity.class);
                 startActivity(intent);
             }
         });

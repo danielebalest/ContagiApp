@@ -43,9 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:labelFor="@id/editTextSurname"
-
-                />
+                android:labelFor="@id/editTextSurname"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

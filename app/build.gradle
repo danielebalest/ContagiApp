@@ -82,4 +82,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.android.support:cardview-v7:29.1.0'
+    implementation 'com.github.gifffert:ExpandableTextView:0.1.6'
 }
