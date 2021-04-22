@@ -20,6 +20,8 @@
     <string name="phone">Cellulare</string>
     <string name="search">Cerca</string>
     <string name="invite">Invita</string>
+    <string name="participants">Partecipanti</string>
+    <string name="available">disponibili</string>
 
     <string name="remember_me">Ricordami</string>
     <string name="createAccount">Crea account</string>

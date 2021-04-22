@@ -33,10 +33,10 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvGruppi"
+            android:id="@+id/rvEventi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/item_evento"/>
+            tools:listitem="@layout/item_event"/>
 
     </LinearLayout>
 

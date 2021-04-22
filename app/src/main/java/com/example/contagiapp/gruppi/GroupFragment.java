@@ -69,7 +69,7 @@ public class GroupFragment extends Fragment {
 
         tvTuoiGruppi = view.findViewById(R.id.tvTuoiGruppi);
         rvGruppi = view.findViewById(R.id.rvGruppi);
-        loadGruppi();
+        caricaGruppi();
 
 
         crea_gruppo = view.findViewById(R.id.FAB_groups);
@@ -97,11 +97,13 @@ public class GroupFragment extends Fragment {
         return view;
     }
 
-    private void loadGruppi() {
+    private void caricaGruppi() {
         String mailAdmin = getMailUtenteLoggato();
 
 
-        db.collection("Gruppo").whereEqualTo("admin", mailAdmin).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection("Gruppo").whereEqualTo("admin", mailAdmin)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
@@ -117,10 +119,8 @@ public class GroupFragment extends Fragment {
                 GruppoAdapter adapter = new GruppoAdapter(listaGruppi);
                 rvGruppi.setAdapter(adapter);
                 rvGruppi.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-
             }
-        });
+        }); //toDo onFailure
     }
 
     private String getMailUtenteLoggato(){

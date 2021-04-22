@@ -34,9 +34,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View usertView = inflater.inflate(R.layout.user_row, parent, false);
+        View userView = inflater.inflate(R.layout.user_row, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(usertView);
+        ViewHolder viewHolder = new ViewHolder(userView);
         return viewHolder;
     }
 
@@ -48,8 +48,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
         textViewNome.setText(user.getNome());
         textViewCognome.setText(user.getCognome());
-
-
 
     }
 

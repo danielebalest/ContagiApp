@@ -13,6 +13,7 @@ public class Evento {
     private ArrayList<String> partecipanti;
     private int numeroMaxPartecipanti;
     private int numPartecipanti;
+    private int numeroPostiDisponibili;
 
     public Evento(){
     }
@@ -93,7 +94,15 @@ public class Evento {
         return numPartecipanti;
     }
 
-    public void setNumPartecipanti(ArrayList<String> partecipanti) {
-        this.numPartecipanti = partecipanti.size();
+    public void setNumPartecipanti(int numPartecipanti) {
+        this.numPartecipanti = numPartecipanti;
+    }
+
+    public int getNumeroPostiDisponibili() {
+        return numeroPostiDisponibili;
+    }
+
+    public void setNumeroPostiDisponibili(int numeroPostiDisponibili) {
+        this.numeroPostiDisponibili = numeroPostiDisponibili;
     }
 }
