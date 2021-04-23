@@ -39,7 +39,7 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             String idUtenteSelezionato = extras.getString("id");
-            Toast.makeText(getApplicationContext(), "Profilo Utente: " + idUtenteSelezionato, Toast.LENGTH_LONG).show();
+            Log.d("idUtenteSelezionato:", String.valueOf(idUtenteSelezionato));
 
             db.collection("Utenti")
                     .document(idUtenteSelezionato)

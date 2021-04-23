@@ -80,6 +80,7 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
     private TimePickerDialog.OnTimeSetListener orarioDellEvento;
 
 
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference eventiCollection = db.collection("Eventi");
     private int anno = 0, mese = 0, giorno = 0, ora=0, minuti=0, oraapp=0, minapp=0;
@@ -210,6 +211,9 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
         evento.setOrario(orario.getText().toString());
         evento.setCitta(citta.getText().toString());
         evento.setIndirizzo(indirizzo.getText().toString());
+
+        ArrayList<String> partecipanti = new ArrayList<String>(); //inizializzo un array vuoto
+        evento.setPartecipanti(partecipanti);
 
 
         Log.d("getIndirizzo", String.valueOf(evento.getIndirizzo()));

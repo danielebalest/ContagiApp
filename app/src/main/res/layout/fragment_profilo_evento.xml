@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/con"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".eventi.ProfiloEventoFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp" />
+
+    <TextView
+        android:id="@+id/tvNomeEvento2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Titolo Evento"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:padding="20dp"/>
+
+    <TextView
+        android:id="@+id/tvDescrEvento2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descrizione dell'evento"
+        android:padding="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_event_24">
+        </ImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvDataEvento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Data" />
+
+            <TextView
+                android:id="@+id/tvOrarioEvento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Orario" />
+
+            </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_location_on_24">
+        </ImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvCittaEvento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Città" />
+
+            <TextView
+                android:id="@+id/tvIndirizzoEvento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Indirizzo" />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

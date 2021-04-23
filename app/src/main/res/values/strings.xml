@@ -59,13 +59,14 @@
     </string-array>
 
 
-
     //ERRORI
 
     <string-array name="Citta">
         <item>Bari</item>
         <item>Molfetta</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

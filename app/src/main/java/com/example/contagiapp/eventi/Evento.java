@@ -13,7 +13,7 @@ public class Evento {
     private ArrayList<String> partecipanti;
     private int numeroMaxPartecipanti;
     private int numPartecipanti;
-    private int numeroPostiDisponibili;
+    private int numeroPostiDisponibili = numeroMaxPartecipanti - numPartecipanti;
 
     public Evento(){
     }
@@ -102,7 +102,7 @@ public class Evento {
         return numeroPostiDisponibili;
     }
 
-    public void setNumeroPostiDisponibili(int numeroPostiDisponibili) {
-        this.numeroPostiDisponibili = numeroPostiDisponibili;
+    public void setNumeroPostiDisponibili(int numeroMaxPartecipanti, int numParticipanti) {
+        this.numeroPostiDisponibili = numeroMaxPartecipanti - numParticipanti ;
     }
 }

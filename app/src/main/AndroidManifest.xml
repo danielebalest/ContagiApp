@@ -35,9 +35,11 @@
         <activity
             android:name=".SettingActivity"
             android:label="@string/settings" />
+
         <activity
             android:name=".registrazione.RegistrationActivity"
             android:parentActivityName=".WelcomeActivity" />
+
         <activity
             android:name=".ui.login.LoginActivity"
             android:parentActivityName=".WelcomeActivity" />

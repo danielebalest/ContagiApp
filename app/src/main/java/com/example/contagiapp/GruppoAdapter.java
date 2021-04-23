@@ -1,6 +1,7 @@
 package com.example.contagiapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +41,12 @@ public class GruppoAdapter extends RecyclerView.Adapter<GruppoAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Gruppo gruppo = listaGruppi.get(position);
         TextView textViewNomeGruppo = holder.nomeGruppoTextView;
+        TextView textViewNumPartecipantiGruppo = holder.numPartecipantiGruppo;
 
         textViewNomeGruppo.setText(gruppo.getNomeGruppo());
+        Log.d("getNumPartecipanti", String.valueOf(gruppo.getNroPartecipanti()));
+        textViewNumPartecipantiGruppo.setText(gruppo.getNroPartecipanti() + " partecipanti");
+        //textViewNumPartecipantiGruppo.setText((String.valueOf(gruppo.getNroPartecipanti()));
     }
 
     @Override
@@ -51,12 +56,14 @@ public class GruppoAdapter extends RecyclerView.Adapter<GruppoAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView nomeGruppoTextView;
+        public TextView numPartecipantiGruppo;
         UserAdapter.OnUserListener onUserListener;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.onUserListener = onUserListener;
             nomeGruppoTextView =  itemView.findViewById(R.id.tvNameGroup);
+            numPartecipantiGruppo = itemView.findViewById(R.id.tvNumPartecipantiGruppo);
 
         }
 

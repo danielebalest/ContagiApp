@@ -93,6 +93,7 @@ public class AddFriendsActivity extends AppCompatActivity  {
         });//Todo: onFailure
     }
 
+    //per il click
     private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
         private GestureDetector gestureDetector;
         private ClickListener clickListener;

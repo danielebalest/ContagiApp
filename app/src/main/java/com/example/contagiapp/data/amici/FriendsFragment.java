@@ -11,14 +11,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
@@ -58,6 +61,7 @@ public class FriendsFragment extends Fragment {
     private TextView textViewFriends;
     private FloatingActionButton aggiungi_amici;
     private RecyclerView recyclerView;
+    ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
 
 
 
@@ -145,8 +149,29 @@ public class FriendsFragment extends Fragment {
                             Log.d("amiciSize", String.valueOf(amici.size()));
                             UserAdapter adapter = new UserAdapter(amici);
 
+                            String id = user.getMail();
+                            idList.add(id);
+
                             recyclerView.setAdapter(adapter);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.VERTICAL, true));
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+                            recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new RecyclerTouchListener.ClickListener() {
+                                @Override
+                                public void onClick(View view, int position) {
+                                    String idUtenteSelezionato = idList.get(position);
+                                    Log.i("idList: ", idUtenteSelezionato);
+
+                                    Intent profiloIntent = new Intent(getActivity(), ProfiloUtentiActivity.class);
+                                    profiloIntent.putExtra("id", idUtenteSelezionato);
+                                    startActivity(profiloIntent);
+                                }
+
+                                @Override
+                                public void onLongClick(View view, int position) {
+
+                                }
+
+                            }));
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -174,5 +199,54 @@ public class FriendsFragment extends Fragment {
             Log.d("mail", mailUtenteLoggato);
         }
         return mailUtenteLoggato;
+    }
+
+    //per il click
+    private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+        private GestureDetector gestureDetector;
+        private FriendsFragment.RecyclerTouchListener.ClickListener clickListener;
+
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final FriendsFragment.RecyclerTouchListener.ClickListener clickListener) {
+            this.clickListener = clickListener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                public void onLongPress(MotionEvent e) {
+                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                    if (child != null && clickListener != null) {
+                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+
+            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+                clickListener.onClick(child, rv.getChildAdapterPosition(child));
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
+
+        public interface ClickListener {
+            void onClick(View view, int position);
+
+            void onLongClick(View view, int position);
+        }
     }
 }
