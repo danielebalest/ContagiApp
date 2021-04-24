@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,10 +22,13 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.contagiapp.GruppoAdapter;
 import com.example.contagiapp.R;
 import com.example.contagiapp.data.amici.AddFriendsActivity;
+import com.example.contagiapp.eventi.EventsFragment;
+import com.example.contagiapp.eventi.ProfiloEventoFragment;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -52,7 +56,7 @@ public class GroupFragment extends Fragment {
     private Button visualizza_gruppo;
     TextInputEditText editText;
 
-    ArrayList<Gruppo> listaGruppi = new ArrayList<Gruppo>();
+    ArrayList<Gruppo> listaGruppi;
     ArrayList<String> listaId = new ArrayList<String>();
 
     ListView listView;
@@ -94,10 +98,15 @@ public class GroupFragment extends Fragment {
             }
         });
 
+
+
+
         return view;
     }
 
+
     private void caricaGruppi() {
+        listaGruppi = new ArrayList<Gruppo>();
         String mailAdmin = getMailUtenteLoggato();
 
 
@@ -112,6 +121,8 @@ public class GroupFragment extends Fragment {
                     listaId.add(id);
                     listaGruppi.add(gruppo);
                     Log.d("Lista Gruppi", String.valueOf(listaGruppi));
+                    Log.d("Lista_ID", String.valueOf(listaId));
+
                 }
                 if(listaGruppi.isEmpty()){
                     tvTuoiGruppi.setText("Non hai ancora creato un gruppo. Crea subito uno");
@@ -119,6 +130,34 @@ public class GroupFragment extends Fragment {
                 GruppoAdapter adapter = new GruppoAdapter(listaGruppi);
                 rvGruppi.setAdapter(adapter);
                 rvGruppi.setLayoutManager(new LinearLayoutManager(getActivity()));
+                rvGruppi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvGruppi, new RecyclerTouchListener.ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+
+                        String idGruppoSelezionato = listaId.get(position);
+                        Log.i("idList: ", idGruppoSelezionato);
+                        Toast.makeText(getActivity().getApplicationContext(), idGruppoSelezionato, Toast.LENGTH_SHORT).show();
+
+                        ProfiloGruppoFragment fragment = new ProfiloGruppoFragment();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("idGruppo", idGruppoSelezionato);
+
+                        fragment.setArguments(bundle);
+
+                        //richiamo il fragment
+                        FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                        fr.replace(R.id.container,fragment);
+                        fr.addToBackStack(null); //serve per tornare al fragment precedente
+                        fr.commit();
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+
+                }));
             }
         }); //toDo onFailure
     }

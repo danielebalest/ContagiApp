@@ -102,6 +102,7 @@ public class EventsFragment extends Fragment {
                         rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
                             @Override
                             public void onClick(View view, int position) {
+
                                 String idEventoSelezionato = idList.get(position);
                                 Log.i("idList: ", idEventoSelezionato);
                                 Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
