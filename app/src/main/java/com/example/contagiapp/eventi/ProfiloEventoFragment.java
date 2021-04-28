@@ -36,7 +36,8 @@ import java.util.Map;
 public class ProfiloEventoFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    private final static String storageDirectory = "eventi";
 
     public ProfiloEventoFragment() {
         // Required empty public constructor
@@ -71,24 +72,29 @@ public class ProfiloEventoFragment extends Fragment {
 
                 //recupero l'immagine dallo storage
                 Log.d("eventi/idEvento","eventi/"+idEvento);
-                storageRef.child("eventi/" + idEvento).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        String sUrl = uri.toString(); //otteniamo il token del'immagine
-                        Log.d("sUrl", sUrl);
-                        Picasso.get().load(sUrl).into(img);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("OnFailure Exception", String.valueOf(e));
-                    }
-                });
+
+                caricaImgDaStorage(storageRef, storageDirectory, idEvento, img );
 
             }
         });
 
         return view;
+    }
+
+    private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
+        storageRef.child(directory + "/" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String sUrl = uri.toString(); //otteniamo il token del'immagine
+                Log.d("sUrl", sUrl);
+                Picasso.get().load(sUrl).into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("OnFailure Exception", String.valueOf(e));
+            }
+        });
     }
 
     private void caricaEvento(String idEvento, final View view){

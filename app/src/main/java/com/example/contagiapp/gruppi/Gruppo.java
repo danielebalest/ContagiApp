@@ -3,12 +3,21 @@ package com.example.contagiapp.gruppi;
 import java.util.ArrayList;
 
 public class Gruppo {
+    private String idGruppo;
     private String admin;
     private String nomeGruppo;
     private String descrizione;
     private int nroPartecipanti;
 
     public Gruppo() {
+    }
+
+    public String getIdGruppo() {
+        return idGruppo;
+    }
+
+    public void setIdGruppo(String idGruppo) {
+        this.idGruppo = idGruppo;
     }
 
     public Gruppo(String nomeGruppo) {

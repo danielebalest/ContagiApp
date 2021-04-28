@@ -40,15 +40,20 @@
         android:background="@drawable/box"
         android:padding="10dp">
 
+
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAddImg"
+            android:id="@+id/btnAddImgCopertina"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Carica immagine di copertina"
             android:layout_centerVertical="true"
-            android:onClick="selectImg"
             app:icon="@drawable/ic_baseline_add_24" />
+
+        <ImageView
+            android:id="@+id/imageViewCopertinaGruppo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 
     </RelativeLayout>

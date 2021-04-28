@@ -165,6 +165,13 @@
             android:onClick="addImgEvent">
         </com.google.android.material.button.MaterialButton>
 
+        <ImageView
+            android:id="@+id/immagineEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="150dp"
+            android:adjustViewBounds="true"/>
+
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/map_view"

@@ -216,6 +216,13 @@
             android:text="scatta foto profilo"
             app:icon="@drawable/ic_baseline_add_24"></Button>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddImgUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="20dp"/>
+
         <ImageView
             android:id="@+id/propic"
             android:layout_width="120dp"

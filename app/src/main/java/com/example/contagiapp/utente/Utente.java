@@ -21,16 +21,8 @@ public class Utente {
     private String telefono;
     private String mailPath;
     private ArrayList<String> amici;
-    private String amic;
 
-    public String getAmic() {
-        return amic;
-    }
 
-    public void setAmic(String amic) {
-        this.amic = amic;
-    }
-//   private ImageView propic;
 
     public ArrayList<String> getAmici() {
         return amici;

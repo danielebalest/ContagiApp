@@ -19,16 +19,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.contagiapp.GruppoAdapter;
 import com.example.contagiapp.R;
-import com.example.contagiapp.data.amici.AddFriendsActivity;
-import com.example.contagiapp.eventi.EventsFragment;
-import com.example.contagiapp.eventi.ProfiloEventoFragment;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -53,13 +47,11 @@ public class GroupFragment extends Fragment {
     private Utente utente;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FloatingActionButton crea_gruppo;
-    private Button visualizza_gruppo;
     TextInputEditText editText;
 
     ArrayList<Gruppo> listaGruppi;
     ArrayList<String> listaId = new ArrayList<String>();
 
-    ListView listView;
     RecyclerView rvGruppi;
     TextView tvTuoiGruppi;
 

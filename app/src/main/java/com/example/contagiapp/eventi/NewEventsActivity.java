@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.time.Clock;
@@ -483,7 +485,10 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
 
         if(requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             imageUri = data.getData();
+            ImageView imageView= findViewById(R.id.immagineEvento);
+            Picasso.get().load(imageUri).into(imageView); //mette l'immagine nell'ImageView di questa activity
         }
+
     }
 
     private  void uploadImage(){
@@ -492,7 +497,7 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
         pd.show();
 
         if((imageUri != null) && (documentId != null)){
-            final StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("eventi").child(documentId); //todo: metterci IDevento
+            final StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("eventi").child(documentId);
 
             fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override

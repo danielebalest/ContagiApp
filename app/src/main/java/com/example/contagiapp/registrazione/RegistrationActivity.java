@@ -37,6 +37,7 @@ import com.example.contagiapp.R;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,6 +47,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,6 +65,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
     private DatePickerDialog.OnDateSetListener dataDiNascita;
     private static final String TAG = "RegistrationActivity";
     // Access a Cloud Firestore instance from your Activity
@@ -96,6 +99,10 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     static String currentPhotoPath;
     private Utente utente = new Utente();
     private ArrayList<String> friends = new ArrayList<String>();
+
+    //per importare immagini
+    private static final int PICK_IMAGE = 1;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,7 +220,24 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 dispatchTakePictureIntent(photoIntent);
             }
         });
+
+        MaterialButton addImgUser = findViewById(R.id.btnAddImgUser);
+        addImgUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openImage();
+            }
+        });
     }
+
+    private void openImage(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+    }
+
+
     private void dispatchTakePictureIntent(@NotNull Intent takePictureIntent) {
         // Create the File where the photo should go
         File photoFile = null;

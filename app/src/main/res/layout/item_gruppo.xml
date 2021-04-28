@@ -21,9 +21,9 @@
             android:padding="16dp">
 
             <ImageView
-                android:id="@+id/imgUser"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:id="@+id/imgGruppo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 
                 android:src="@drawable/ic_group_black_24dp"/>
             <TextView
