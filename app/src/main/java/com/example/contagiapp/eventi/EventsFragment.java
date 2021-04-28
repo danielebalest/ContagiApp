@@ -18,9 +18,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.contagiapp.R;
 import com.example.contagiapp.data.amici.AddFriendsActivity;
 import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
@@ -30,6 +32,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -46,12 +51,19 @@ public class EventsFragment extends Fragment {
     ArrayList<Evento> listaEventi = new ArrayList<Evento>();
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
 
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_events, container, false);
+
+
+
 
         rvEventi = view.findViewById(R.id.rvEventi);
         caricaEventi();

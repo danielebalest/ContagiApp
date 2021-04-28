@@ -1,27 +1,42 @@
 package com.example.contagiapp.eventi;
 
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
 import com.example.contagiapp.utente.Utente;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import java.util.Map;
 
 
 public class ProfiloEventoFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
     public ProfiloEventoFragment() {
         // Required empty public constructor
@@ -37,12 +52,42 @@ public class ProfiloEventoFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_profilo_evento, container, false);
 
         Bundle bundle = getArguments();
-        String idEvento = bundle.getString("idEvento");
+        final String idEvento = bundle.getString("idEvento");
         Log.d("idEvento", String.valueOf(idEvento));
 
         caricaEvento(idEvento, view);
 
-        // Inflate the layout for this fragment
+
+        final ImageView img = view.findViewById(R.id.imgProfiloEvento);
+
+
+        db.collection("Eventi").document(idEvento)
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                final StorageReference storageRef = storage.getReference();
+
+                //recupero l'immagine dallo storage
+                Log.d("eventi/idEvento","eventi/"+idEvento);
+                storageRef.child("eventi/" + idEvento).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String sUrl = uri.toString(); //otteniamo il token del'immagine
+                        Log.d("sUrl", sUrl);
+                        Picasso.get().load(sUrl).into(img);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("OnFailure Exception", String.valueOf(e));
+                    }
+                });
+
+            }
+        });
+
         return view;
     }
 

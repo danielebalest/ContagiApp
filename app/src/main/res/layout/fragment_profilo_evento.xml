@@ -9,8 +9,11 @@
 
     <!-- TODO: Update blank fragment layout -->
     <ImageView
+        android:id="@+id/imgProfiloEvento"
         android:layout_width="match_parent"
-        android:layout_height="150dp" />
+        android:layout_height="wrap_content"
+        android:maxHeight="250dp"
+        android:adjustViewBounds="true" />
 
     <TextView
         android:id="@+id/tvNomeEvento2"

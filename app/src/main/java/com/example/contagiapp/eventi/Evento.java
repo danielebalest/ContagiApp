@@ -3,6 +3,7 @@ package com.example.contagiapp.eventi;
 import java.util.ArrayList;
 
 public class Evento {
+    private String idEvento;
     private String nome;
     private String descrizione;
     private String citta;
@@ -15,7 +16,16 @@ public class Evento {
     private int numPartecipanti;
     private int numeroPostiDisponibili = numeroMaxPartecipanti - numPartecipanti;
 
+
     public Evento(){
+    }
+
+    public String getIdEvento() {
+        return idEvento;
+    }
+
+    public void setIdEvento(String idEvento) {
+        this.idEvento = idEvento;
     }
 
     public String getNome() {
@@ -105,4 +115,5 @@ public class Evento {
     public void setNumeroPostiDisponibili(int numeroMaxPartecipanti, int numParticipanti) {
         this.numeroPostiDisponibili = numeroMaxPartecipanti - numParticipanti ;
     }
+
 }

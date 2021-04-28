@@ -157,6 +157,13 @@
                 android:labelFor="@id/editTextIndirizzo"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddImgEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aggiungi immagine"
+            android:onClick="addImgEvent">
+        </com.google.android.material.button.MaterialButton>
 
 
         <com.google.android.gms.maps.MapView

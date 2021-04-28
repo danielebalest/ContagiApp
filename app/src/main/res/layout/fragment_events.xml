@@ -27,7 +27,7 @@
     <LinearLayout
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
-        android:orientation = "horizontal"
+        android:orientation = "vertical"
         android:layout_below="@+id/search_field"
         android:layout_marginBottom="60dp">
 
@@ -37,6 +37,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/item_event"/>
+
+
+
 
     </LinearLayout>
 

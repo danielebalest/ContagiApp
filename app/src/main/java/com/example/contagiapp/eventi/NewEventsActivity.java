@@ -2,12 +2,15 @@ package com.example.contagiapp.eventi;
 
 import android.app.AuthenticationRequiredException;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.os.SystemClock;
@@ -41,6 +44,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
@@ -53,7 +61,12 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 
 import java.text.DateFormat;
@@ -64,6 +77,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -71,18 +85,21 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
     MapView mapView;
     EditText editTextLuogo;
 
-
+    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private static final String TAG = "NewEventsFragment";
+
     private Button creaEvento;
     private TextView dataEvento;
     private TextClock orarioEvento;
     private DatePickerDialog.OnDateSetListener dataDellEvento;
     private TimePickerDialog.OnTimeSetListener orarioDellEvento;
 
-
+    public static final int PICK_IMAGE = 1;
+    private Uri imageUri;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference eventiCollection = db.collection("Eventi");
+    String documentId = null;
     private int anno = 0, mese = 0, giorno = 0, ora=0, minuti=0, oraapp=0, minapp=0;
 
     @Override
@@ -202,7 +219,7 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
         EditText citta = findViewById(R.id.editTextCitta);
         EditText indirizzo = findViewById(R.id.editTextIndirizzo);
 
-        Evento evento = new Evento();
+        final Evento evento = new Evento();
         evento.setAdmin(getMailUtenteLoggato());
         evento.setNome(nome.getText().toString());
         evento.setDescrizione(descrizione.getText().toString());
@@ -222,8 +239,25 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
 
 
         if(dataOraValide(evento, evento.getData(), evento.getOrario())){
-            db.collection("Eventi").add(evento);
+            db.collection("Eventi").add(evento)
+            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    documentId = documentReference.getId();
+                    evento.setIdEvento(documentId);
+                    uploadImage();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w(TAG, "Error adding document", e);
+                }
+            });
+
             Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
+
             //finish();
         }else {
             finish();
@@ -431,4 +465,57 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
 
+    public void addImgEvent(View view) {
+        openImage();
+    }
+
+
+    private void openImage(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == PICK_IMAGE && resultCode == RESULT_OK){
+            imageUri = data.getData();
+        }
+    }
+
+    private  void uploadImage(){
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Caricamento");
+        pd.show();
+
+        if((imageUri != null) && (documentId != null)){
+            final StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("eventi").child(documentId); //todo: metterci IDevento
+
+            fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String url = uri.toString();
+
+                            Log.d("downloadUrl", url);
+                            pd.dismiss();
+                            Toast.makeText(NewEventsActivity.this, "immagine caricata", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnCanceledListener(new OnCanceledListener() {
+                        @Override
+                        public void onCanceled() {
+                            Toast.makeText(NewEventsActivity.this, "immagine non caricata", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+        }
+
+
+    }
 };
