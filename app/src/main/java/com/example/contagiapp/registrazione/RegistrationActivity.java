@@ -34,9 +34,13 @@ import androidx.core.content.FileProvider;
 import com.example.contagiapp.BuildConfig;
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
+import com.example.contagiapp.eventi.NewEventsActivity;
 import com.example.contagiapp.utente.Utente;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -237,6 +241,54 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == PICK_IMAGE && resultCode == RESULT_OK){
+            imageUri = data.getData();
+            ImageView imageView= findViewById(R.id.propic);
+            Picasso.get().load(imageUri).into(imageView); //mette l'immagine nell'ImageView di questa activity
+        }
+
+    }
+
+    private  void uploadImageToStorage(String documentId){
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Caricamento");
+        pd.show();
+
+        Log.d("imageUri", String.valueOf(imageUri));
+        Log.d("documentID", String.valueOf(documentId));
+
+        if((imageUri != null) && (documentId != null)){
+            final StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("imgUtenti").child(documentId);
+
+            fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String url = uri.toString();
+
+                            Log.d("downloadUrl", url);
+                            //pd.dismiss();
+                            Toast.makeText(RegistrationActivity.this, "immagine caricata", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnCanceledListener(new OnCanceledListener() {
+                        @Override
+                        public void onCanceled() {
+                            Toast.makeText(RegistrationActivity.this, "immagine non caricata", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+        }
+
+    }
+
+
 
     private void dispatchTakePictureIntent(@NotNull Intent takePictureIntent) {
         // Create the File where the photo should go
@@ -270,6 +322,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -279,6 +333,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
             immagine.setRotation(90);
         }
     }
+     */
 
     private void uploadImage(String mail) {
 
@@ -508,7 +563,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                         user1.put("amici", friends);
                         db.collection("Utenti").document(email).set(user1);
 
-                        uploadImage(utente.getMail());
+                        //uploadImage(utente.getMail()); //
+                        uploadImageToStorage(utente.getMail());
                         SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         Gson gson = new Gson();
@@ -527,4 +583,6 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
             }
         }
     }
+
+
 }

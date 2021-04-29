@@ -30,13 +30,18 @@ import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.eventi.EventsFragment;
 import com.example.contagiapp.gruppi.GroupFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -56,15 +61,19 @@ public class ProfiloActivity extends AppCompatActivity {
     private Button modifica;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Utente utente;
-    private ImageView immagine;
+    private ImageView imgCertificato;
+    private ImageView imgViewProfiloUtente;
     String imageFileName;
     String currentPhotoPath;
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    private final static String storageDirectory = "imgUtenti";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilo);
-        immagine= findViewById(R.id.immaginecertificato);
+        imgCertificato= findViewById(R.id.immaginecertificato);
+        imgViewProfiloUtente = findViewById(R.id.imgProfiloUtente);
         listViewProfilo = (ListView) findViewById(R.id.list_profilo);
         ArrayList<String> arrayListProfilo = new ArrayList<>();
 
@@ -104,6 +113,8 @@ public class ProfiloActivity extends AppCompatActivity {
         arrayListProfilo.add("Provincia di residenza: "+utente.getProvince());
         arrayListProfilo.add("Città di residenza: "+utente.getCitta());
         arrayListProfilo.add("Telefono: "+utente.getTelefono());
+
+        caricaImgDaStorage(storageRef, storageDirectory, utente.getMail(), imgViewProfiloUtente);
       //  arrayListProfilo.add("Propic"+ utente.getPropic());
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, arrayListProfilo);
@@ -143,6 +154,22 @@ public class ProfiloActivity extends AppCompatActivity {
         });
     }
 
+    private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
+        storageRef.child(directory + "/" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String sUrl = uri.toString(); //otteniamo il token del'immagine
+                Log.d("sUrl", sUrl);
+                Picasso.get().load(sUrl).into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("OnFailure Exception", String.valueOf(e));
+            }
+        });
+    }
+
     private void dispatchTakePictureIntent(@NotNull Intent takePictureIntent) {
             // Create the File where the photo should go
             File photoFile = null;
@@ -165,8 +192,8 @@ public class ProfiloActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode== RESULT_OK ){
             Bitmap bitmap= BitmapFactory.decodeFile(currentPhotoPath);
-            immagine.setImageBitmap(bitmap);
-            immagine.setRotation(90);
+            imgCertificato.setImageBitmap(bitmap);
+            imgCertificato.setRotation(90);
         }
     }
 

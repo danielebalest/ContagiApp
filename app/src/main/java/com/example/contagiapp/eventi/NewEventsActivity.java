@@ -487,16 +487,16 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
 
         if(requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             imageUri = data.getData();
-            ImageView imageView= findViewById(R.id.immagineEvento);
+            ImageView imageView= findViewById(R.id.propic);
             Picasso.get().load(imageUri).into(imageView); //mette l'immagine nell'ImageView di questa activity
         }
 
     }
 
     private  void uploadImage(){
-        //final ProgressDialog pd = new ProgressDialog(this);
-        //pd.setMessage("Caricamento");
-        //pd.show();
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Caricamento");
+        pd.show();
 
         Log.d("imageUri", String.valueOf(imageUri));
         Log.d("documentID", String.valueOf(documentId));
@@ -525,7 +525,6 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
                 }
             });
         }
-
 
     }
 };
