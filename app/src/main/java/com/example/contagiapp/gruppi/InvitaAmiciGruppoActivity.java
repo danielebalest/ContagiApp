@@ -93,7 +93,6 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
             imageUri = Uri.parse(extras.getString("imageUri"));
 
-
             final Gruppo gruppo = new Gruppo();
             gruppo.setAdmin(mailAdmin);
             gruppo.setNomeGruppo(nomeGruppo);
@@ -104,6 +103,8 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
                     documentId = documentReference.getId();
                     gruppo.setIdGruppo(documentId);
                     Log.d("documentId", String.valueOf(documentId));
+                    Log.d("getIdGruppo", String.valueOf(gruppo.getIdGruppo()));
+                    db.collection("Gruppo").document(documentId).update("idGruppo", documentId);
                     uploadImage(documentId);
                 }
             });

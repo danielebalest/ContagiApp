@@ -69,6 +69,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
+import com.google.protobuf.StringValue;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -248,6 +249,7 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
                     Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                     documentId = documentReference.getId();
                     evento.setIdEvento(documentId);
+                    db.collection("Eventi").document(documentId).update("idEvento", documentId);
                     uploadImage();
                 }
             })
@@ -260,7 +262,7 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
 
             Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
 
-            //finish();
+            finish();
         }else {
             finish();
             startActivity(getIntent());
@@ -492,9 +494,12 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private  void uploadImage(){
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Caricamento");
-        pd.show();
+        //final ProgressDialog pd = new ProgressDialog(this);
+        //pd.setMessage("Caricamento");
+        //pd.show();
+
+        Log.d("imageUri", String.valueOf(imageUri));
+        Log.d("documentID", String.valueOf(documentId));
 
         if((imageUri != null) && (documentId != null)){
             final StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("eventi").child(documentId);
@@ -508,7 +513,7 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
                             String url = uri.toString();
 
                             Log.d("downloadUrl", url);
-                            pd.dismiss();
+                            //pd.dismiss();
                             Toast.makeText(NewEventsActivity.this, "immagine caricata", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnCanceledListener(new OnCanceledListener() {
