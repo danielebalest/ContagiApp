@@ -73,7 +73,7 @@ public class ProfiloActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilo);
         imgCertificato= findViewById(R.id.immaginecertificato);
-        imgViewProfiloUtente = findViewById(R.id.imgProfiloUtente);
+        imgViewProfiloUtente = findViewById(R.id.imgProfilo);
         listViewProfilo = (ListView) findViewById(R.id.list_profilo);
         ArrayList<String> arrayListProfilo = new ArrayList<>();
 

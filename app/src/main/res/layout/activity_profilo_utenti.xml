@@ -8,6 +8,24 @@
     android:padding="20dp"
     tools:context=".data.amici.ProfiloUtentiActivity">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        app:cardCornerRadius="150dp"
+        app:cardElevation="0dp">
+
+        <ImageView
+            android:id="@+id/imageViewProfiloUtente"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_baseline_account_circle_24_gray"/>
+
+    </androidx.cardview.widget.CardView>
+
+
+
 
     <TextView
         android:id="@+id/textViewNomeCognome"

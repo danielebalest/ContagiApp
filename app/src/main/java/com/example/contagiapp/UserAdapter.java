@@ -53,11 +53,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
         Utente user = mUsers.get(position);
         TextView textViewNome = holder.nomeTextView;
         TextView textViewCognome = holder.cognomeTextView;
+        TextView textViewAge = holder.ageTextView;
         final ImageView imageViewUser = holder.imgUtente;
         String idUtente = user.getMail();
 
         textViewNome.setText(user.getNome());
         textViewCognome.setText(user.getCognome());
+        textViewAge.setText(user.getAge() + " "  + "anni");
 
         //recupero l'immagine dallo storage
         Log.d("imgUtenti/idUtente","imgUtenti/"+idUtente);
@@ -89,6 +91,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView nomeTextView;
         public TextView cognomeTextView;
+        public TextView ageTextView;
         public ImageView imgUtente;
         OnUserListener onUserListener;
 
@@ -98,7 +101,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
             nomeTextView =  itemView.findViewById(R.id.tvNameUser);
             cognomeTextView = itemView.findViewById(R.id.tvSurnameUser);
             imgUtente = itemView.findViewById(R.id.imgUser);
-
+            ageTextView = itemView.findViewById(R.id.tvAgeUser);
         }
 
         @Override

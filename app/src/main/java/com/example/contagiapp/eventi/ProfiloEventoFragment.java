@@ -36,7 +36,7 @@ import java.util.Map;
 public class ProfiloEventoFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private final static String storageDirectory = "eventi";
 
     public ProfiloEventoFragment() {
@@ -67,8 +67,6 @@ public class ProfiloEventoFragment extends Fragment {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                final StorageReference storageRef = storage.getReference();
 
                 //recupero l'immagine dallo storage
                 Log.d("eventi/idEvento","eventi/"+idEvento);
