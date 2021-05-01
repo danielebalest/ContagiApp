@@ -525,6 +525,5 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
                 }
             });
         }
-
     }
 };

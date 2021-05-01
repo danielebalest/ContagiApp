@@ -41,7 +41,6 @@
         android:id="@+id/btnRichiesta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="inviaRichiesta"
         android:text="Aggiungi agli amici">
     </com.google.android.material.button.MaterialButton>
 

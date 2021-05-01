@@ -21,8 +21,22 @@ public class Utente {
     private String telefono;
     private String mailPath;
     private ArrayList<String> amici;
+    private ArrayList<String> richiesteRicevute;
 
+    public Utente() {
+    }
 
+    public ArrayList<String> getRichiesteRicevute() {
+        return richiesteRicevute;
+    }
+
+    public void setRichiesteRicevute(ArrayList<String> richiesteRicevute) {
+        this.richiesteRicevute = richiesteRicevute;
+    }
+
+    public void addRichiesta(String mailMittente){
+        richiesteRicevute.add(mailMittente);
+    }
 
     public ArrayList<String> getAmici() {
         return amici;
@@ -30,9 +44,6 @@ public class Utente {
 
     public void setAmici(ArrayList<String> amici) {
         this.amici = amici;
-    }
-
-    public Utente() {
     }
 
     public String getCitta() {

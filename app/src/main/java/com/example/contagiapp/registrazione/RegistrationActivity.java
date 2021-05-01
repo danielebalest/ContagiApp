@@ -103,6 +103,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     static String currentPhotoPath;
     private Utente utente = new Utente();
     private ArrayList<String> friends = new ArrayList<String>();
+    private ArrayList<String> richieste = new ArrayList<String>();
 
     //per importare immagini
     private static final int PICK_IMAGE = 1;
@@ -560,7 +561,9 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                         utente.setPassword(psw1);
                         utente.setMail(email);
                         utente.setAmici(friends);
+                        utente.setRichiesteRicevute(richieste);
                         user1.put("amici", friends);
+                        user1.put("richiesteRicevute", richieste);
                         db.collection("Utenti").document(email).set(user1);
 
                         //uploadImage(utente.getMail()); //

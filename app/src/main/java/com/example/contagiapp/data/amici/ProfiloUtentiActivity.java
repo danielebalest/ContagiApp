@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +23,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
 * questa activity permette la visualizzazione del profilo dell'utente selezionato dalla ListView di addFriends
@@ -36,6 +43,7 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
     TextView textViewCitta;
     TextView textViewAge;
     ImageView imageViewProfiloUtente;
+    MaterialButton btnRichiesta;
 
 
     @Override
@@ -47,6 +55,7 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
         textViewCitta = findViewById(R.id.textViewCitta);
         textViewAge = findViewById(R.id.textViewAge);
         imageViewProfiloUtente = findViewById(R.id.imageViewProfiloUtente);
+        btnRichiesta = findViewById(R.id.btnRichiesta);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -61,7 +70,7 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists()) {
 
-                                Utente user = documentSnapshot.toObject(Utente.class);
+                                final Utente user = documentSnapshot.toObject(Utente.class);
                                 String nome = user.getNome();
                                 String cognome = user.getCognome();
                                 String citta = user.getCitta();
@@ -69,8 +78,25 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                 textViewNomeCognome.setText(nome + " " + cognome);
                                 textViewCitta.setText(citta);
                                 textViewAge.setText(String.valueOf(age));
-
                                 caricaImgDaStorage(storageRef, storageDirectory, idUtenteSelezionato, imageViewProfiloUtente);
+
+                                btnRichiesta.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        String profiloLoggato = getMailUtenteLoggato();
+
+                                        user.addRichiesta(profiloLoggato);
+
+                                        db.collection("Utenti").document(idUtenteSelezionato)
+                                                .update("richiesteRicevute", user.getRichiesteRicevute());
+
+                                        btnRichiesta.setText("Richiesta inviata");
+                                        btnRichiesta.setClickable(false);
+                                    }
+                                });
+
+                                //aggiornaRichieste(idUtenteSelezionato, profiloLoggato, user);
+
                             } else {
                                 Toast.makeText(ProfiloUtentiActivity.this, "Documents does not exist", Toast.LENGTH_SHORT);
                             }
@@ -81,8 +107,18 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                     Toast.makeText(ProfiloUtentiActivity.this, "Errore", Toast.LENGTH_SHORT);
                 }
             });
+
+
+
         }
     }
+
+
+    private void aggiornaRichieste(String mailDestinatario, String mailMittente, Utente utente) {
+
+    }
+
+
 
     private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
         storageRef.child(directory + "/" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
@@ -100,9 +136,22 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
         });
     }
 
-    public void inviaRichiesta(View view) {
-        //Todo: implementare richieste di amicizia
-        MaterialButton b = findViewById(R.id.btnRichiesta);
-
+    private String getMailUtenteLoggato(){
+        Gson gson = new Gson();
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String json = prefs.getString("utente", "no");
+        String mailUtenteLoggato;
+        //TODO capire il funzionamento
+        if(!json.equals("no")) {
+            Utente utente = gson.fromJson(json, Utente.class);
+            mailUtenteLoggato = utente.getMail();
+            Log.d("mailutenteLoggato", mailUtenteLoggato);
+        } else {
+            SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
+            mailUtenteLoggato = prefs1.getString("mail", "no");
+            Log.d("mail", mailUtenteLoggato);
+        }
+        return mailUtenteLoggato;
     }
+
 }
