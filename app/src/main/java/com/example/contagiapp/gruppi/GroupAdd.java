@@ -10,8 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.contagiapp.HomeFragment;
-import com.example.contagiapp.MainActivity;
-import com.example.contagiapp.NotifyFragment;
+import com.example.contagiapp.notifiche.NotifyFragment;
 import com.example.contagiapp.R;
 import com.example.contagiapp.WelcomeActivity;
 import com.example.contagiapp.data.amici.FriendsFragment;

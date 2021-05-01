@@ -38,9 +38,6 @@
             android:layout_height="wrap_content"
             tools:listitem="@layout/item_event"/>
 
-
-
-
     </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

@@ -1,4 +1,4 @@
-package com.example.contagiapp.data.amici;
+package com.example.contagiapp.notifiche;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,88 +12,49 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
-import com.example.contagiapp.gruppi.CreaGruppoActivity;
+import com.example.contagiapp.data.amici.FriendsFragment;
+import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FriendsFragment extends Fragment {
+public class NotifyFragment extends Fragment {
 
-    public FriendsFragment() {
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
+
+    public NotifyFragment() {
         // Required empty public constructor
     }
 
 
-
-    private Button visualizza_profilo;
-    ListView listView;
-    TextInputEditText editText;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FloatingActionButton aggiungi_amici;
-    private RecyclerView recyclerView;
-    ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
-
-
-
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view;
-        view = inflater.inflate(R.layout.fragment_friends, container, false);
+        view = inflater.inflate(R.layout.fragment_notify, container, false);
 
-
-
-
-        editText = view.findViewById(R.id.search_field);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    //da inserire metodo per la ricerca
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        aggiungi_amici = view.findViewById(R.id.FAB_friends);
-        aggiungi_amici.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  addFriends();
-              }
-          });
-        recyclerView =  view.findViewById(R.id.recyclerView);
-        final TextView tvListaMail = view.findViewById(R.id.tvTuoiAmici);
-
+        final RecyclerView recyclerView =  view.findViewById(R.id.rvNotify);
 
 
         String mailUtenteLoggato = getMailUtenteLoggato();
@@ -104,35 +65,28 @@ public class FriendsFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task task) {
                         DocumentSnapshot document = (DocumentSnapshot) task.getResult();
-                        ArrayList<String> listaMail = (ArrayList<String>) document.get("amici");
-                        if(listaMail.isEmpty()){
-                            tvListaMail.setText("Non hai ancora nessun amico");
-                        }
+                        ArrayList<String> listaMail = (ArrayList<String>) document.get("richiesteRicevute");
+
                         Log.d("lista", String.valueOf(listaMail));
-                        getFriends(listaMail, recyclerView);
+                        getRichieste(listaMail, recyclerView);
                     }
                 });
         return view;
     }
 
 
-
-    public void addFriends(){
-        Intent addFriendsIntent = new Intent(getActivity(), AddFriendsActivity.class);
-        startActivity(addFriendsIntent);
-    }
-
-    public void getFriends(ArrayList<String> listaAmici, final RecyclerView recyclerView){
+    public void getRichieste(ArrayList<String> listaRichieste, final RecyclerView recyclerView){
         /*
         metodo che svolge le seguenti operazioni:
          1)date in input le mail degli amici ottiene, per ciascuno, i seguenti dati dal database: nome, cognome, mail
          2)crea per ognuno un nuovo tipo Utente che aggiunge ad una lista
          3) passa la lista all'adapter del recycler View che poi permetterà la visualizzazione della lista di CardView degli amici sull'app
          */
-        final ArrayList<Utente> amici = new ArrayList<Utente>();
-        for(int i=0; i < listaAmici.size(); i++){
+
+        final ArrayList<Utente> utenti = new ArrayList<Utente>();
+        for(int i=0; i < listaRichieste.size(); i++){
             db.collection("Utenti")
-                    .document(listaAmici.get(i))
+                    .document(listaRichieste.get(i))
                     .get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -144,9 +98,9 @@ public class FriendsFragment extends Fragment {
                             Log.d("Nome utente", String.valueOf(user.getNome()));
 
 
-                            amici.add(user);
-                            Log.d("amiciSize", String.valueOf(amici.size()));
-                            UserAdapter adapter = new UserAdapter(amici);
+                            utenti.add(user);
+                            Log.d("richiesteSize", String.valueOf(utenti.size()));
+                            RichiesteAdapter adapter = new RichiesteAdapter(utenti);
 
                             String id = user.getMail();
                             idList.add(id);
@@ -154,7 +108,7 @@ public class FriendsFragment extends Fragment {
                             recyclerView.setAdapter(adapter);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-                            recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new RecyclerTouchListener.ClickListener() {
+                            recyclerView.addOnItemTouchListener(new NotifyFragment.RecyclerTouchListener(getActivity(), recyclerView, new NotifyFragment.RecyclerTouchListener.ClickListener() {
                                 @Override
                                 public void onClick(View view, int position) {
                                     String idUtenteSelezionato = idList.get(position);
@@ -182,6 +136,7 @@ public class FriendsFragment extends Fragment {
 
     }
 
+
     private String getMailUtenteLoggato(){
         Gson gson = new Gson();
         SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
@@ -203,9 +158,9 @@ public class FriendsFragment extends Fragment {
     //per il click
     private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
         private GestureDetector gestureDetector;
-        private FriendsFragment.RecyclerTouchListener.ClickListener clickListener;
+        private NotifyFragment.RecyclerTouchListener.ClickListener clickListener;
 
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final FriendsFragment.RecyclerTouchListener.ClickListener clickListener) {
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final NotifyFragment.RecyclerTouchListener.ClickListener clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
