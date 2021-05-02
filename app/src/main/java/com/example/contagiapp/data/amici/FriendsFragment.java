@@ -141,6 +141,8 @@ public class FriendsFragment extends Fragment {
                             user.setNome(documentSnapshot.getString("nome"));
                             user.setCognome(documentSnapshot.getString("cognome"));
                             user.setMail(documentSnapshot.getString("mail"));
+                            user.setDataNascita(documentSnapshot.getString("dataNascita"));
+                            Log.d("dataNascita", String.valueOf(user.getDataNascita()));
                             Log.d("Nome utente", String.valueOf(user.getNome()));
 
 

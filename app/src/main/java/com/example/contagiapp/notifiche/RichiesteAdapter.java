@@ -67,6 +67,7 @@ public class RichiesteAdapter extends RecyclerView.Adapter<com.example.contagiap
         TextView textViewAge = holder.ageTextView;
         final ImageView imageViewUser = holder.imgUtente;
         final MaterialButton btnAccetta = holder.btnAccetta;
+        final MaterialButton btnRifiuta = holder.btnRifiuta;
         final String idUtente = user.getMail();
 
 
@@ -99,17 +100,37 @@ public class RichiesteAdapter extends RecyclerView.Adapter<com.example.contagiap
             public void onClick(View v) {
 
                 user.addAmico(mailUtenteLoggato);
+
                 btnAccetta.setText("Accettato");
                 btnAccetta.setClickable(false);
+
+                //aggiunge alla lista amici dell'utente che ha inviato la richiesta, la mail dell'utente loggato
                 db.collection("Utenti").document(idUtente)
                         .update("amici", user.getAmici());
 
-                //Todo: aggiungi amico al profiloLoggato
-                utenteLoggato.addAmico(idUtente);
 
+                utenteLoggato.addAmico(idUtente);
+                //aggiunge alla lista amici dell'utente loggato che ha ricevuto la richiesta, la mail dell'utente che ha inviato la richiesta
                 db.collection("Utenti").document(mailUtenteLoggato)
                         .update("amici", utenteLoggato.getAmici());
 
+
+                //rimuovere richiesta  per l'utente loggato
+                utenteLoggato.rimuoviRichiesta(idUtente);
+                db.collection("Utenti").document(mailUtenteLoggato)
+                        .update("richiesteRicevute", utenteLoggato.getRichiesteRicevute());
+
+            }
+        });
+
+
+        btnRifiuta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //rimuovere richiesta  per l'utente loggato
+                utenteLoggato.rimuoviRichiesta(idUtente);
+                db.collection("Utenti").document(mailUtenteLoggato)
+                        .update("richiesteRicevute", utenteLoggato.getRichiesteRicevute());
             }
         });
     }
@@ -126,6 +147,7 @@ public class RichiesteAdapter extends RecyclerView.Adapter<com.example.contagiap
         public TextView ageTextView;
         public ImageView imgUtente;
         public MaterialButton btnAccetta;
+        public MaterialButton btnRifiuta;
         com.example.contagiapp.notifiche.RichiesteAdapter.OnUserListener onUserListener;
 
         public ViewHolder(@NonNull View itemView) {
@@ -136,6 +158,7 @@ public class RichiesteAdapter extends RecyclerView.Adapter<com.example.contagiap
             imgUtente = itemView.findViewById(R.id.imgUserRichiesta);
             ageTextView = itemView.findViewById(R.id.tvAgeUserRichiesta);
             btnAccetta = itemView.findViewById(R.id.btnAccetta);
+            btnRifiuta = itemView.findViewById(R.id.btnRifiuta);
         }
 
         @Override

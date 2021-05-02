@@ -38,6 +38,10 @@ public class Utente {
         richiesteRicevute.add(mailMittente);
     }
 
+    public void rimuoviRichiesta(String mailMittente){
+        richiesteRicevute.remove(mailMittente);
+    }
+
     public ArrayList<String> getAmici() {
         return amici;
     }

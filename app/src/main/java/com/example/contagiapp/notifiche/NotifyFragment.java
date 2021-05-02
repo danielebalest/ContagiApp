@@ -99,6 +99,7 @@ public class NotifyFragment extends Fragment {
                             user.setDataNascita(documentSnapshot.getString("dataNascita"));
                             user.setCitta(documentSnapshot.getString("citta"));
                             user.setAmici((ArrayList<String>) documentSnapshot.get("amici"));
+                            user.setRichiesteRicevute((ArrayList<String>) documentSnapshot.get("richiesteRicevute"));
 
                             Log.d("amici", String.valueOf(user.getAmici()));
 
