@@ -61,6 +61,7 @@ public class FriendsFragment extends Fragment {
     private FloatingActionButton aggiungi_amici;
     private RecyclerView recyclerView;
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
+    ArrayList<String> listaMail;
 
 
 
@@ -88,6 +89,7 @@ public class FriendsFragment extends Fragment {
         aggiungi_amici.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
+
                   addFriends();
               }
           });
@@ -104,7 +106,7 @@ public class FriendsFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task task) {
                         DocumentSnapshot document = (DocumentSnapshot) task.getResult();
-                        ArrayList<String> listaMail = (ArrayList<String>) document.get("amici");
+                        listaMail = (ArrayList<String>) document.get("amici");
                         if(listaMail.isEmpty()){
                             tvListaMail.setText("Non hai ancora nessun amico");
                         }
@@ -119,6 +121,8 @@ public class FriendsFragment extends Fragment {
 
     public void addFriends(){
         Intent addFriendsIntent = new Intent(getActivity(), AddFriendsActivity.class);
+        addFriendsIntent.putExtra("listaMailAmici", listaMail);
+        addFriendsIntent.putExtra("mailUtenteLoggato", getMailUtenteLoggato());
         startActivity(addFriendsIntent);
     }
 

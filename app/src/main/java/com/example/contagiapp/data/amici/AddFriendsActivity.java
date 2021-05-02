@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,8 +25,10 @@ import com.example.contagiapp.UserAdapter;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 
 import java.util.ArrayList;
@@ -51,12 +54,25 @@ public class AddFriendsActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friends);
 
-        loadUser();
+        Bundle bundle = getIntent().getExtras();
+        ArrayList<String> listaMailAmici = (ArrayList<String>) bundle.get("listaMailAmici");
+        String mailUtenteLoggato = bundle.getString("mailUtenteLoggato");
+        listaMailAmici.add(mailUtenteLoggato);
+        Log.d("listaMailAmici", String.valueOf(listaMailAmici));
+
+
+        caricaUtentiNonAmici(listaMailAmici);
     }
 
-    public void loadUser() {
+    public void caricaUtentiNonAmici( ArrayList<String> listaAmici) {
         recyclerView = findViewById(R.id.rvUtenti);
-        db.collection("Utenti").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+
+
+        db.collection("Utenti")
+                .whereNotIn(FieldPath.documentId(), listaAmici)
+                //.whereNotEqualTo(FieldPath.documentId(), a.get(1))
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
@@ -140,5 +156,7 @@ public class AddFriendsActivity extends AppCompatActivity  {
 
             void onLongClick(View view, int position);
         }
+
+
     }
 }
