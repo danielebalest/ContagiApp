@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
@@ -95,19 +96,53 @@ public class NotifyFragment extends Fragment {
                             user.setNome(documentSnapshot.getString("nome"));
                             user.setCognome(documentSnapshot.getString("cognome"));
                             user.setMail(documentSnapshot.getString("mail"));
-                            Log.d("Nome utente", String.valueOf(user.getNome()));
+                            user.setDataNascita(documentSnapshot.getString("dataNascita"));
+                            user.setCitta(documentSnapshot.getString("citta"));
+                            user.setAmici((ArrayList<String>) documentSnapshot.get("amici"));
+
+                            Log.d("amici", String.valueOf(user.getAmici()));
 
 
                             utenti.add(user);
                             Log.d("richiesteSize", String.valueOf(utenti.size()));
-                            RichiesteAdapter adapter = new RichiesteAdapter(utenti);
+
+                            db.collection("Utenti").document(getMailUtenteLoggato())
+                                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    DocumentSnapshot document = (DocumentSnapshot) task.getResult();
+
+                                }
+                            });
+
+                            //
+                            //apro il documento dell'utente loggato
+                            //nell'adapter vengono aggiornati gli amici al click del bottone Accetta
+                            db.collection("Utenti").document(getMailUtenteLoggato())
+                                    .get()
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            if (documentSnapshot.exists()){
+                                                final Utente utenteLoggato = documentSnapshot.toObject(Utente.class);
+                                                RichiesteAdapter adapter = new RichiesteAdapter(utenti, getMailUtenteLoggato(), utenteLoggato);
+                                                recyclerView.setAdapter(adapter);
+                                                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+                                            }else {
+                                                Toast.makeText(getActivity(), "Documents does not exist", Toast.LENGTH_SHORT);
+                                            }
+                                        }
+                                    });
+
+                            //RichiesteAdapter adapter = new RichiesteAdapter(utenti, getMailUtenteLoggato(), utenteLoggato);
 
                             String id = user.getMail();
                             idList.add(id);
 
-                            recyclerView.setAdapter(adapter);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+
+/*
                             recyclerView.addOnItemTouchListener(new NotifyFragment.RecyclerTouchListener(getActivity(), recyclerView, new NotifyFragment.RecyclerTouchListener.ClickListener() {
                                 @Override
                                 public void onClick(View view, int position) {
@@ -125,13 +160,19 @@ public class NotifyFragment extends Fragment {
                                 }
 
                             }));
+                            */
+
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Log.d("error", "errore");
                 }
+
+
             });
+
+
         }
 
     }
@@ -156,6 +197,7 @@ public class NotifyFragment extends Fragment {
     }
 
     //per il click
+    /*
     private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
         private GestureDetector gestureDetector;
         private NotifyFragment.RecyclerTouchListener.ClickListener clickListener;
@@ -203,4 +245,5 @@ public class NotifyFragment extends Fragment {
             void onLongClick(View view, int position);
         }
     }
+     */
 }

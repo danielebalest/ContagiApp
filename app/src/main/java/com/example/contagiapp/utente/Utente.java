@@ -46,6 +46,11 @@ public class Utente {
         this.amici = amici;
     }
 
+    public void addAmico(String mailAmico){
+        amici.add(mailAmico);
+    }
+
+
     public String getCitta() {
         return citta;
     }

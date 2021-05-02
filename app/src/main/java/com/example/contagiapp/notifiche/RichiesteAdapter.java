@@ -1,6 +1,7 @@
 package com.example.contagiapp.notifiche;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,8 +18,11 @@ import com.example.contagiapp.R;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 import com.google.protobuf.StringValue;
 import com.squareup.picasso.Picasso;
 
@@ -28,13 +32,19 @@ import java.util.List;
 public class RichiesteAdapter extends RecyclerView.Adapter<com.example.contagiapp.notifiche.RichiesteAdapter.ViewHolder>{
 
     private List<Utente> mUsers;
+    private String mailUtenteLoggato;
+    private Utente utenteLoggato;
     private ArrayList<Utente> utenti = new ArrayList<Utente>();
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
 
-    public RichiesteAdapter(List<Utente> users){
+    public RichiesteAdapter(List<Utente> users, String mailUtenteLoggato, Utente utenteLoggato){
         mUsers = users;
+        this.mailUtenteLoggato = mailUtenteLoggato;
+        this.utenteLoggato = utenteLoggato;
+
     }
 
     @NonNull
@@ -51,17 +61,20 @@ public class RichiesteAdapter extends RecyclerView.Adapter<com.example.contagiap
 
     @Override
     public void onBindViewHolder(@NonNull com.example.contagiapp.notifiche.RichiesteAdapter.ViewHolder holder, int position) {
-        Utente user = mUsers.get(position);
+        final Utente user = mUsers.get(position);
         TextView textViewNome = holder.nomeTextView;
         TextView textViewCognome = holder.cognomeTextView;
         TextView textViewAge = holder.ageTextView;
         final ImageView imageViewUser = holder.imgUtente;
-        String idUtente = user.getMail();
+        final MaterialButton btnAccetta = holder.btnAccetta;
+        final String idUtente = user.getMail();
+
 
         textViewNome.setText(user.getNome());
         textViewCognome.setText(user.getCognome());
-        //Log.d("user.getAge()", String.valueOf(user.getAge()));
-        //textViewAge.setText(user.getAge() + " "  + "anni");
+        textViewAge.setText(user.getAge() + " "  + "anni");
+
+
 
         //recupero l'immagine dallo storage
         Log.d("imgUtenti/idUtente","imgUtenti/"+idUtente);
@@ -81,7 +94,24 @@ public class RichiesteAdapter extends RecyclerView.Adapter<com.example.contagiap
                     }
                 });
 
+        btnAccetta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                user.addAmico(mailUtenteLoggato);
+                btnAccetta.setText("Accettato");
+                btnAccetta.setClickable(false);
+                db.collection("Utenti").document(idUtente)
+                        .update("amici", user.getAmici());
+
+                //Todo: aggiungi amico al profiloLoggato
+                utenteLoggato.addAmico(idUtente);
+
+                db.collection("Utenti").document(mailUtenteLoggato)
+                        .update("amici", utenteLoggato.getAmici());
+
+            }
+        });
     }
 
     @Override
@@ -95,6 +125,7 @@ public class RichiesteAdapter extends RecyclerView.Adapter<com.example.contagiap
         public TextView cognomeTextView;
         public TextView ageTextView;
         public ImageView imgUtente;
+        public MaterialButton btnAccetta;
         com.example.contagiapp.notifiche.RichiesteAdapter.OnUserListener onUserListener;
 
         public ViewHolder(@NonNull View itemView) {
@@ -104,6 +135,7 @@ public class RichiesteAdapter extends RecyclerView.Adapter<com.example.contagiap
             cognomeTextView = itemView.findViewById(R.id.tvSurnameUserRichiesta);
             imgUtente = itemView.findViewById(R.id.imgUserRichiesta);
             ageTextView = itemView.findViewById(R.id.tvAgeUserRichiesta);
+            btnAccetta = itemView.findViewById(R.id.btnAccetta);
         }
 
         @Override
@@ -114,5 +146,7 @@ public class RichiesteAdapter extends RecyclerView.Adapter<com.example.contagiap
     public interface OnUserListener{
         void onItemClick(int position);
     }
+
+
 
 }
