@@ -74,7 +74,7 @@ public class RichiesteAdapter extends RecyclerView.Adapter<com.example.contagiap
         textViewNome.setText(user.getNome());
         textViewCognome.setText(user.getCognome());
         textViewAge.setText(user.getAge() + " "  + "anni");
-
+        Log.d("user.getNome()", String.valueOf(user.getNome()));
 
 
         //recupero l'immagine dallo storage

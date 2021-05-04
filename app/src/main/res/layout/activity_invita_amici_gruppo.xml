@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/user_row"
-            />
+            android:focusable="true"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -43,7 +43,7 @@
             android:text="Crea Gruppo"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="50dp"
-            android:onClick="addGroupToDb"/>
+            />
 
         <androidx.core.widget.ContentLoadingProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"

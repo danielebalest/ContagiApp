@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -81,6 +82,7 @@ public class GruppoAdapter extends RecyclerView.Adapter<GruppoAdapter.ViewHolder
             nomeGruppoTextView =  itemView.findViewById(R.id.tvNameGroup);
             numPartecipantiGruppo = itemView.findViewById(R.id.tvNumPartecipantiGruppo);
             imgGruppo = itemView.findViewById(R.id.imgGruppo);
+
         }
 
         @Override

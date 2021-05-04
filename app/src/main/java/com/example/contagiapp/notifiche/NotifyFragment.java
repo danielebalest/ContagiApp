@@ -23,6 +23,7 @@ import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
 import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
+import com.example.contagiapp.gruppi.Gruppo;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -55,8 +56,8 @@ public class NotifyFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_notify, container, false);
 
-        final RecyclerView recyclerView =  view.findViewById(R.id.rvNotify);
-
+        final RecyclerView recyclerViewRichieste =  view.findViewById(R.id.rvRichieste);
+        final RecyclerView recyclerViewInviti =  view.findViewById(R.id.rvInviti);
 
         String mailUtenteLoggato = getMailUtenteLoggato();
         //Otteniamo la lista della mail degli amici
@@ -66,12 +67,19 @@ public class NotifyFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task task) {
                         DocumentSnapshot document = (DocumentSnapshot) task.getResult();
-                        ArrayList<String> listaMail = (ArrayList<String>) document.get("richiesteRicevute");
+                        ArrayList<String> listaMailRichieste = (ArrayList<String>) document.get("richiesteRicevute");
+                        ArrayList<String> listaInviti = (ArrayList<String>) document.get("invitiRicevuti");
 
-                        Log.d("lista", String.valueOf(listaMail));
-                        getRichieste(listaMail, recyclerView);
+                        Log.d("listaMailRichieste", String.valueOf(listaMailRichieste));
+                        Log.d("listaInviti", String.valueOf(listaInviti));
+                        getRichieste(listaMailRichieste, recyclerViewRichieste);
+                        getInviti(listaInviti, recyclerViewInviti);
+
+
                     }
                 });
+
+
         return view;
     }
 
@@ -162,6 +170,73 @@ public class NotifyFragment extends Fragment {
 
                             }));
                             */
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("error", "errore");
+                }
+
+
+            });
+
+
+        }
+
+    }
+
+    public void getInviti(final ArrayList<String> listaInviti, final RecyclerView recyclerView){
+        /*
+        metodo che svolge le seguenti operazioni:
+         1)date in input le mail degli amici ottiene, per ciascuno, i seguenti dati dal database: nome, cognome, mail
+         2)crea per ognuno un nuovo tipo Utente che aggiunge ad una lista
+         3) passa la lista all'adapter del recycler View che poi permetterà la visualizzazione della lista di CardView degli amici sull'app
+         */
+
+        final ArrayList<Gruppo> gruppi = new ArrayList<Gruppo>();
+        for(int i=0; i < listaInviti.size(); i++){
+            db.collection("Gruppo")
+                    .document(listaInviti.get(i))
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Gruppo gruppo = new Gruppo();
+                            gruppo.setNomeGruppo(documentSnapshot.getString("nomeGruppo"));
+                            gruppo.setAdmin(documentSnapshot.getString("admin"));
+                            gruppo.setDescrizione(documentSnapshot.getString("descrizione"));
+                            gruppo.setIdGruppo(documentSnapshot.getString("idGruppo"));
+                            //gruppo.setNroPartecipanti((Integer) documentSnapshot.get("nroPartecipanti"));
+                            gruppo.setPartecipanti((ArrayList<String>) documentSnapshot.get("partecipanti"));
+                            Log.d("setPartecipanti", String.valueOf((ArrayList<String>) documentSnapshot.get("partecipanti")));
+
+                            Log.d("idGruppo", String.valueOf(documentSnapshot.getString("idGruppo")));
+
+
+                            gruppi.add(gruppo);
+                            Log.d("gruppi.size()", String.valueOf(gruppi.size()));
+
+
+
+
+                            db.collection("Utenti").document(getMailUtenteLoggato())
+                                    .get()
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            if (documentSnapshot.exists()){
+                                                final Utente utenteLoggato = documentSnapshot.toObject(Utente.class);
+                                                utenteLoggato.setInvitiRicevuti(listaInviti);
+                                                InvitiAdapter adapter = new InvitiAdapter(gruppi, getMailUtenteLoggato(), utenteLoggato);
+                                                recyclerView.setAdapter(adapter);
+                                                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+                                            }else {
+                                                Toast.makeText(getActivity(), "Documents does not exist", Toast.LENGTH_SHORT);
+                                            }
+                                        }
+                                    });
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {

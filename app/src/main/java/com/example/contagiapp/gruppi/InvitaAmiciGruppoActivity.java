@@ -15,6 +15,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,6 +24,9 @@ import android.widget.Toast;
 import com.example.contagiapp.AddUserAdapter;
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
+import com.example.contagiapp.UserAdapter;
+import com.example.contagiapp.data.amici.FriendsFragment;
+import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
 import com.example.contagiapp.eventi.NewEventsActivity;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCanceledListener;
@@ -47,6 +52,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
     private CollectionReference gruppoCollection = db.collection("Gruppo");
     Uri imageUri;
     String documentId;
+    ArrayList<String> idList = new ArrayList<String>();
 
 
     @Override
@@ -93,10 +99,13 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
             imageUri = Uri.parse(extras.getString("imageUri"));
 
+            ArrayList<String> listaMailPartecipanti = new ArrayList<String>();
+
             final Gruppo gruppo = new Gruppo();
             gruppo.setAdmin(mailAdmin);
             gruppo.setNomeGruppo(nomeGruppo);
             gruppo.setDescrizione(descrGruppo);
+            gruppo.setPartecipanti(listaMailPartecipanti);
             gruppoCollection.add(gruppo).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
@@ -154,15 +163,34 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
                             user.setNome(documentSnapshot.getString("nome"));
                             user.setCognome(documentSnapshot.getString("cognome"));
                             user.setMail(documentSnapshot.getString("mail"));
+                            user.setDataNascita(documentSnapshot.getString("dataNascita"));
                             Log.d("Nome utente", String.valueOf(user.getNome()));
-
+                            Log.d("dataNascita", String.valueOf(user.getDataNascita()));
 
                             amici.add(user);
                             Log.d("amiciSize", String.valueOf(amici.size()));
                             AddUserAdapter adapter = new AddUserAdapter(amici);
 
+                            String id = user.getMail();
+                            idList.add(id);
+
                             recyclerView.setAdapter(adapter);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, true));
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                            recyclerView.addOnItemTouchListener(new InvitaAmiciGruppoActivity.RecyclerTouchListener(InvitaAmiciGruppoActivity.this, recyclerView, new InvitaAmiciGruppoActivity.RecyclerTouchListener.ClickListener() {
+                                @Override
+                                public void onClick(View view, int position) {
+
+
+                                }
+
+                                @Override
+                                public void onLongClick(View view, int position) {
+                                    String idUtenteSelezionato = idList.get(position);
+                                    Log.i("idList1: ", idUtenteSelezionato);
+                                }
+
+                            }));
+
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -213,5 +241,54 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
     }
 
+    //per il click
+    private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+        private GestureDetector gestureDetector;
+        private InvitaAmiciGruppoActivity.RecyclerTouchListener.ClickListener clickListener;
+
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final InvitaAmiciGruppoActivity.RecyclerTouchListener.ClickListener clickListener) {
+            this.clickListener = clickListener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                public void onLongPress(MotionEvent e) {
+                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                    if (child != null && clickListener != null) {
+                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+
+            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+                clickListener.onClick(child, rv.getChildAdapterPosition(child));
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
+
+        public interface ClickListener {
+            void onClick(View view, int position);
+
+            void onLongClick(View view, int position);
+        }
+
+    }
 
 }

@@ -56,14 +56,17 @@ public class AddImgGruppoActivity extends AppCompatActivity {
             String nomeGruppo = extras.getString("nomeGruppo");
             String descrGruppo = extras.getString("descrGruppo");
 
+            if(imageUri != null){
+                Intent invitaIntent = new Intent(this, InvitaAmiciGruppoActivity.class);
+                invitaIntent.putExtra("nomeGruppo", nomeGruppo);
+                invitaIntent.putExtra("descrGruppo", descrGruppo);
+                invitaIntent.putExtra("imageUri", imageUri.toString());
+                startActivity(invitaIntent);
+            }else  Toast.makeText(getApplicationContext(), "Inserire immagine", Toast.LENGTH_SHORT).show();
 
-            Intent invitaIntent = new Intent(this, InvitaAmiciGruppoActivity.class);
-            invitaIntent.putExtra("nomeGruppo", nomeGruppo);
-            invitaIntent.putExtra("descrGruppo", descrGruppo);
-            invitaIntent.putExtra("imageUri", imageUri.toString());
-            startActivity(invitaIntent);
 
-        }else Toast.makeText(getApplicationContext(), "ERRORE", Toast.LENGTH_LONG).show();
+
+        }else Toast.makeText(getApplicationContext(), "ERRORE", Toast.LENGTH_SHORT).show();
 
     }
 

@@ -7,7 +7,9 @@ public class Gruppo {
     private String admin;
     private String nomeGruppo;
     private String descrizione;
+    private ArrayList<String> partecipanti;
     private int nroPartecipanti;
+
 
     public Gruppo() {
     }
@@ -57,6 +59,18 @@ public class Gruppo {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public ArrayList<String> getPartecipanti() {
+        return partecipanti;
+    }
+
+    public void setPartecipanti(ArrayList<String> partecipanti) {
+        this.partecipanti = partecipanti;
+    }
+
+    public void addPartecipante(String mailPartecipante){
+        partecipanti.add(mailPartecipante);
     }
 
     public int getNroPartecipanti() {

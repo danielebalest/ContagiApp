@@ -22,8 +22,24 @@ public class Utente {
     private String mailPath;
     private ArrayList<String> amici;
     private ArrayList<String> richiesteRicevute;
+    private ArrayList<String> invitiRicevuti;
 
     public Utente() {
+    }
+
+    public ArrayList<String> getInvitiRicevuti() {
+        return invitiRicevuti;
+    }
+
+    public void setInvitiRicevuti(ArrayList<String> invitiRicevuti) {
+        this.invitiRicevuti = invitiRicevuti;
+    }
+    public void addInvito(String idGruppo){
+        invitiRicevuti.add(idGruppo);
+    }
+
+    public void rimuoviInvito(String idGruppo){
+        invitiRicevuti.remove(idGruppo);
     }
 
     public ArrayList<String> getRichiesteRicevute() {
@@ -169,6 +185,8 @@ public class Utente {
 
         return age;
     }
+
+
   //  public ImageView getPropic(){ return propic; }
 
    // public void setPropic(ImageView propic){ this.propic= propic;  }

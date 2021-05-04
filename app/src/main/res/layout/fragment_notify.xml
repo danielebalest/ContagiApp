@@ -8,9 +8,15 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvNotify"
+        android:id="@+id/rvRichieste"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/item_richiesta"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvInviti"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/item_invito"/>
 
 </LinearLayout>
