@@ -48,7 +48,6 @@ public class NotifyFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -187,12 +186,7 @@ public class NotifyFragment extends Fragment {
     }
 
     public void getInviti(final ArrayList<String> listaInviti, final RecyclerView recyclerView){
-        /*
-        metodo che svolge le seguenti operazioni:
-         1)date in input le mail degli amici ottiene, per ciascuno, i seguenti dati dal database: nome, cognome, mail
-         2)crea per ognuno un nuovo tipo Utente che aggiunge ad una lista
-         3) passa la lista all'adapter del recycler View che poi permetterà la visualizzazione della lista di CardView degli amici sull'app
-         */
+
 
         final ArrayList<Gruppo> gruppi = new ArrayList<Gruppo>();
         for(int i=0; i < listaInviti.size(); i++){
@@ -216,7 +210,6 @@ public class NotifyFragment extends Fragment {
 
                             gruppi.add(gruppo);
                             Log.d("gruppi.size()", String.valueOf(gruppi.size()));
-
 
 
 

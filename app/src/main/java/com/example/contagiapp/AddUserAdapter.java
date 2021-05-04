@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -30,14 +33,17 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
 
     private List<Utente> mUsers;
     private ArrayList<Utente> utenti = new ArrayList<Utente>();
+    private ArrayList<String> utentiSelezionati;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
 
 
 
 
-    public AddUserAdapter(List<Utente> users){
+    public AddUserAdapter(List<Utente> users, ArrayList<String> utentiSelezionati){
         mUsers = users;
+        this.utentiSelezionati = utentiSelezionati;
     }
 
 
@@ -56,14 +62,16 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull AddUserAdapter.ViewHolder holder, int position) {
-        Utente user = mUsers.get(position);
+        final Utente user = mUsers.get(position);
         TextView textViewNome = holder.nomeTextView;
         TextView textViewCognome = holder.cognomeTextView;
         final ImageView imageViewUser = holder.imgUtente;
         String idUtente = user.getMail();
+        CheckBox checkBox = holder.checkBox;
 
         textViewNome.setText(user.getNome());
         textViewCognome.setText(user.getCognome());
+
 
         //recupero l'immagine dallo storage
         Log.d("imgUtenti/idUtente","imgUtenti/"+idUtente);
@@ -83,21 +91,34 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
                     }
                 });
 
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    utentiSelezionati.add(user.getMail());
+                    Log.d("utentiSelezionati", String.valueOf(utentiSelezionati));
+
+                    db.collection("Utenti").document(user.getMail()).update("invitiRicevuti", "GfDqvqvlXwTLJx4yjVLj");
+                }
+                if(!isChecked){
+                    if(user.getMail() !=null){
+                        utentiSelezionati.remove(user.getMail());
+                        Log.d("utentiSelezionati", String.valueOf(utentiSelezionati));
+                    }
+                }
+
+            }
+        });
     }
+
+
+
 
     @Override
     public int getItemCount() {
         return mUsers.size();
     }
 
-    public ArrayList<Utente> getSelected() {
-        ArrayList<Utente> selectedUtenti = new ArrayList<>();
-        for(Utente utente : mUsers){
-            selectedUtenti.add(utente);
-        }
-
-        return selectedUtenti;
-    }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
@@ -120,9 +141,7 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    checkBox.setChecked(true);
                     onUserListener.onItemClick(getAdapterPosition());
-
                 }
             });
 

@@ -187,6 +187,7 @@ public class Utente {
     }
 
 
+
   //  public ImageView getPropic(){ return propic; }
 
    // public void setPropic(ImageView propic){ this.propic= propic;  }

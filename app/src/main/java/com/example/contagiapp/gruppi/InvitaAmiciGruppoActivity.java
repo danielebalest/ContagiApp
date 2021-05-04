@@ -19,6 +19,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.contagiapp.AddUserAdapter;
@@ -53,12 +54,14 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
     Uri imageUri;
     String documentId;
     ArrayList<String> idList = new ArrayList<String>();
+    ArrayList<String> listaInvitati = new ArrayList<String>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invita_amici_gruppo);
+
 
         btnCreaGruppo = findViewById(R.id.btnCreaGruppo);
         btnCreaGruppo.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +71,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
                 //todo: devo tornare al fragment GroupFragment
             }
         });
+
 
         final RecyclerView rvInvitaAmici = findViewById(R.id.rvInvitaAmici);
         String mailAdmin = getMailUtenteLoggato();
@@ -79,10 +83,12 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
                         DocumentSnapshot document = (DocumentSnapshot) task.getResult();
                         ArrayList<String> listaMail = (ArrayList<String>) document.get("amici");
                         if(listaMail.isEmpty()){
-                            //tvListaMail.setText("Non hai ancora nessun amico");
+                            TextView tvInvitaAmici = findViewById(R.id.tvInvitaAmici);
+                            tvInvitaAmici.setText("Non hai ancora nessun amico");
                         }
                         Log.d("lista", String.valueOf(listaMail));
-                        getFriends(listaMail, rvInvitaAmici);
+                        listaInvitati = getFriends(listaMail, rvInvitaAmici);
+                        Log.d("listaInvitati", String.valueOf(listaInvitati));
                     }
                 });
     }
@@ -115,11 +121,21 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
                     Log.d("getIdGruppo", String.valueOf(gruppo.getIdGruppo()));
                     db.collection("Gruppo").document(documentId).update("idGruppo", documentId);
                     uploadImage(documentId);
+
+                    //aggiungo inviti
+                    /*
+                    for(int i = 0; i < listaInvitati.size(); i++){
+                        db.collection("Utenti").document(listaInvitati.get(i)).update("invitiRicevuti", gruppo.getIdGruppo());
+                    }
+                     */
                 }
             });
         }else Toast.makeText(getApplicationContext(), "ERRORE", Toast.LENGTH_SHORT).show();
 
        Toast.makeText(getApplicationContext(), "Gruppo creato", Toast.LENGTH_SHORT);
+
+
+
 
     }
 
@@ -144,7 +160,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
 
 
-    public void getFriends(ArrayList<String> listaAmici, final RecyclerView recyclerView){
+    public ArrayList<String> getFriends(ArrayList<String> listaAmici, final RecyclerView recyclerView){
         /*
         metodo che svolge le seguenti operazioni:
          1)date in input le mail degli amici ottiene, per ciascuno, i seguenti dati dal database: nome, cognome, mail
@@ -152,6 +168,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
          3) passa la lista all'adapter del recycler View che poi permetterà la visualizzazione della lista di CardView degli amici sull'app
          */
         final ArrayList<Utente> amici = new ArrayList<Utente>();
+        final ArrayList<String> listaInvitati = new ArrayList<String>();
         for(int i=0; i < listaAmici.size(); i++){
             db.collection("Utenti")
                     .document(listaAmici.get(i))
@@ -169,7 +186,8 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
                             amici.add(user);
                             Log.d("amiciSize", String.valueOf(amici.size()));
-                            AddUserAdapter adapter = new AddUserAdapter(amici);
+                            AddUserAdapter adapter = new AddUserAdapter(amici, listaInvitati);
+
 
                             String id = user.getMail();
                             idList.add(id);
@@ -199,6 +217,8 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
                 }
             });
         }
+        Log.d("listaInvitati", String.valueOf(listaInvitati));
+        return listaInvitati;
     }
 
     private  void uploadImage(String documentId){
