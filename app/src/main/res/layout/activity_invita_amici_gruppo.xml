@@ -37,10 +37,10 @@
         android:layout_below="@+id/rvInvitaAmici">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCreaGruppo"
+            android:id="@+id/btnTermina"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Crea Gruppo"
+            android:text="termina"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="50dp"
             />

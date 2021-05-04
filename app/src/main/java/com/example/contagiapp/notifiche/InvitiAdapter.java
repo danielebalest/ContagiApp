@@ -97,6 +97,7 @@ public class InvitiAdapter extends RecyclerView.Adapter<com.example.contagiapp.n
 
                 btnAccettaInvito.setText("Accettato");
                 btnAccettaInvito.setClickable(false);
+                btnRifiutaInvito.setVisibility(View.GONE);
 
                 //aggiunge alla lista partecipanti del gruppo la mail dell'utente loggato
                 db.collection("Gruppo").document(idGruppo)
@@ -116,6 +117,10 @@ public class InvitiAdapter extends RecyclerView.Adapter<com.example.contagiapp.n
         btnRifiutaInvito.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnRifiutaInvito.setText("Rifiutato");
+                btnRifiutaInvito.setClickable(false);
+                btnAccettaInvito.setVisibility(View.GONE);
+
                 //rimuovere invito  per l'utente loggato
                 utenteLoggato.rimuoviInvito(idGruppo);
                 db.collection("Utenti").document(mailUtenteLoggato)

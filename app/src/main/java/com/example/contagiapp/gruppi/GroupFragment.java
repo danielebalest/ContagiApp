@@ -159,7 +159,6 @@ public class GroupFragment extends Fragment {
         SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
         String json = prefs.getString("utente", "no");
         String mailUtenteLoggato;
-        //TODO capire il funzionamento
         if(!json.equals("no")) {
             utente = gson.fromJson(json, Utente.class);
             mailUtenteLoggato = utente.getMail();

@@ -2,12 +2,12 @@ package com.example.contagiapp.gruppi;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -48,13 +48,9 @@ import java.util.ArrayList;
 
 public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
-    private Button btnCreaGruppo;
+    private Button btn;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference gruppoCollection = db.collection("Gruppo");
-    Uri imageUri;
-    String documentId;
     ArrayList<String> idList = new ArrayList<String>();
-    ArrayList<String> listaInvitati = new ArrayList<String>();
 
 
     @Override
@@ -63,12 +59,14 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_invita_amici_gruppo);
 
 
-        btnCreaGruppo = findViewById(R.id.btnCreaGruppo);
-        btnCreaGruppo.setOnClickListener(new View.OnClickListener() {
+        btn = findViewById(R.id.btnTermina);
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addGroupToDb();
+                Intent mainIntent = new Intent(InvitaAmiciGruppoActivity.this, MainActivity.class);
+                startActivity(mainIntent);
                 //todo: devo tornare al fragment GroupFragment
+
             }
         });
 
@@ -87,57 +85,14 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
                             tvInvitaAmici.setText("Non hai ancora nessun amico");
                         }
                         Log.d("lista", String.valueOf(listaMail));
-                        listaInvitati = getFriends(listaMail, rvInvitaAmici);
-                        Log.d("listaInvitati", String.valueOf(listaInvitati));
+                        getFriends(listaMail, rvInvitaAmici);
+
                     }
                 });
     }
 
 
-    public void addGroupToDb() {
-        String mailAdmin = getMailUtenteLoggato();
 
-
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            String nomeGruppo = extras.getString("nomeGruppo");
-            String descrGruppo = extras.getString("descrGruppo");
-
-            imageUri = Uri.parse(extras.getString("imageUri"));
-
-            ArrayList<String> listaMailPartecipanti = new ArrayList<String>();
-
-            final Gruppo gruppo = new Gruppo();
-            gruppo.setAdmin(mailAdmin);
-            gruppo.setNomeGruppo(nomeGruppo);
-            gruppo.setDescrizione(descrGruppo);
-            gruppo.setPartecipanti(listaMailPartecipanti);
-            gruppoCollection.add(gruppo).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    documentId = documentReference.getId();
-                    gruppo.setIdGruppo(documentId);
-                    Log.d("documentId", String.valueOf(documentId));
-                    Log.d("getIdGruppo", String.valueOf(gruppo.getIdGruppo()));
-                    db.collection("Gruppo").document(documentId).update("idGruppo", documentId);
-                    uploadImage(documentId);
-
-                    //aggiungo inviti
-                    /*
-                    for(int i = 0; i < listaInvitati.size(); i++){
-                        db.collection("Utenti").document(listaInvitati.get(i)).update("invitiRicevuti", gruppo.getIdGruppo());
-                    }
-                     */
-                }
-            });
-        }else Toast.makeText(getApplicationContext(), "ERRORE", Toast.LENGTH_SHORT).show();
-
-       Toast.makeText(getApplicationContext(), "Gruppo creato", Toast.LENGTH_SHORT);
-
-
-
-
-    }
 
 
     private String getMailUtenteLoggato(){
@@ -145,7 +100,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
         String json = prefs.getString("utente", "no");
         String mailUtenteLoggato;
-        //TODO capire il funzionamento
+
         if(!json.equals("no")) {
             Utente utente = gson.fromJson(json, Utente.class);
             mailUtenteLoggato = utente.getMail();
@@ -160,106 +115,75 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
 
 
-    public ArrayList<String> getFriends(ArrayList<String> listaAmici, final RecyclerView recyclerView){
+    public void getFriends(ArrayList<String> listaAmici, final RecyclerView recyclerView){
         /*
         metodo che svolge le seguenti operazioni:
          1)date in input le mail degli amici ottiene, per ciascuno, i seguenti dati dal database: nome, cognome, mail
          2)crea per ognuno un nuovo tipo Utente che aggiunge ad una lista
          3) passa la lista all'adapter del recycler View che poi permetterà la visualizzazione della lista di CardView degli amici sull'app
          */
-        final ArrayList<Utente> amici = new ArrayList<Utente>();
-        final ArrayList<String> listaInvitati = new ArrayList<String>();
-        for(int i=0; i < listaAmici.size(); i++){
-            db.collection("Utenti")
-                    .document(listaAmici.get(i))
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Utente user = new Utente();
-                            user.setNome(documentSnapshot.getString("nome"));
-                            user.setCognome(documentSnapshot.getString("cognome"));
-                            user.setMail(documentSnapshot.getString("mail"));
-                            user.setDataNascita(documentSnapshot.getString("dataNascita"));
-                            Log.d("Nome utente", String.valueOf(user.getNome()));
-                            Log.d("dataNascita", String.valueOf(user.getDataNascita()));
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            final String idGruppo = extras.getString("idGruppo");
+            Log.d("idGruppo2", String.valueOf(idGruppo));
 
-                            amici.add(user);
-                            Log.d("amiciSize", String.valueOf(amici.size()));
-                            AddUserAdapter adapter = new AddUserAdapter(amici, listaInvitati);
+            final ArrayList<Utente> amici = new ArrayList<Utente>();
+            for(int i=0; i < listaAmici.size(); i++){
+                db.collection("Utenti")
+                        .document(listaAmici.get(i))
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                Utente user = new Utente();
+                                user.setNome(documentSnapshot.getString("nome"));
+                                user.setCognome(documentSnapshot.getString("cognome"));
+                                user.setMail(documentSnapshot.getString("mail"));
+                                user.setDataNascita(documentSnapshot.getString("dataNascita"));
+                                Log.d("Nome utente", String.valueOf(user.getNome()));
+                                Log.d("dataNascita", String.valueOf(user.getDataNascita()));
 
-
-                            String id = user.getMail();
-                            idList.add(id);
-
-                            recyclerView.setAdapter(adapter);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                            recyclerView.addOnItemTouchListener(new InvitaAmiciGruppoActivity.RecyclerTouchListener(InvitaAmiciGruppoActivity.this, recyclerView, new InvitaAmiciGruppoActivity.RecyclerTouchListener.ClickListener() {
-                                @Override
-                                public void onClick(View view, int position) {
+                                amici.add(user);
+                                Log.d("amiciSize", String.valueOf(amici.size()));
+                                AddUserAdapter adapter = new AddUserAdapter(amici, idGruppo);
 
 
-                                }
+                                String id = user.getMail();
+                                idList.add(id);
 
-                                @Override
-                                public void onLongClick(View view, int position) {
-                                    String idUtenteSelezionato = idList.get(position);
-                                    Log.i("idList1: ", idUtenteSelezionato);
-                                }
-
-                            }));
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("error", "errore");
-                }
-            });
-        }
-        Log.d("listaInvitati", String.valueOf(listaInvitati));
-        return listaInvitati;
-    }
-
-    private  void uploadImage(String documentId){
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Caricamento");
-        pd.show();
+                                recyclerView.setAdapter(adapter);
+                                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                                recyclerView.addOnItemTouchListener(new InvitaAmiciGruppoActivity.RecyclerTouchListener(InvitaAmiciGruppoActivity.this, recyclerView, new InvitaAmiciGruppoActivity.RecyclerTouchListener.ClickListener() {
+                                    @Override
+                                    public void onClick(View view, int position) {
 
 
-        //Log.d("documentId2", documentId);
-        //Log.d("uri", imageUri.toString());
-        if((imageUri != null) && (documentId != null)){
-            final StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("imgGruppi").child(documentId);
+                                    }
 
-            fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            String url = uri.toString();
+                                    @Override
+                                    public void onLongClick(View view, int position) {
+                                        String idUtenteSelezionato = idList.get(position);
+                                        Log.i("idList1: ", idUtenteSelezionato);
+                                    }
 
-                            Log.d("downloadUrl", url);
-                            pd.dismiss();
-                            Toast.makeText(InvitaAmiciGruppoActivity.this, "immagine caricata", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnCanceledListener(new OnCanceledListener() {
-                        @Override
-                        public void onCanceled() {
-                            Toast.makeText(InvitaAmiciGruppoActivity.this, "immagine non caricata", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            });
-        }else {
-            pd.dismiss();
-            Toast.makeText(InvitaAmiciGruppoActivity.this, "Errore", Toast.LENGTH_SHORT).show();
-            Log.e("Errore", "imageUri o documentId nulli");
-            Log.d("documentId2", String.valueOf(documentId));
+                                }));
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("error", "errore");
+                    }
+                });
+            }
+
         }
 
+
+
     }
+
+
 
     //per il click
     private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {

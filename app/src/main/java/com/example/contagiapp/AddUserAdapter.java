@@ -15,11 +15,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.contagiapp.gruppi.Gruppo;
 import com.example.contagiapp.utente.Utente;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -33,17 +37,18 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
 
     private List<Utente> mUsers;
     private ArrayList<Utente> utenti = new ArrayList<Utente>();
-    private ArrayList<String> utentiSelezionati;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    String idGruppo;
 
 
 
 
 
-    public AddUserAdapter(List<Utente> users, ArrayList<String> utentiSelezionati){
+
+    public AddUserAdapter(List<Utente> users, String idGruppo){
         mUsers = users;
-        this.utentiSelezionati = utentiSelezionati;
+        this.idGruppo = idGruppo;
     }
 
 
@@ -67,7 +72,7 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
         TextView textViewCognome = holder.cognomeTextView;
         final ImageView imageViewUser = holder.imgUtente;
         String idUtente = user.getMail();
-        CheckBox checkBox = holder.checkBox;
+        final CheckBox checkBox = holder.checkBox;
 
         textViewNome.setText(user.getNome());
         textViewCognome.setText(user.getCognome());
@@ -91,35 +96,46 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
                     }
                 });
 
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    utentiSelezionati.add(user.getMail());
-                    Log.d("utentiSelezionati", String.valueOf(utentiSelezionati));
 
-                    db.collection("Utenti").document(user.getMail()).update("invitiRicevuti", "GfDqvqvlXwTLJx4yjVLj");
-                }
-                if(!isChecked){
-                    if(user.getMail() !=null){
-                        utentiSelezionati.remove(user.getMail());
-                        Log.d("utentiSelezionati", String.valueOf(utentiSelezionati));
+        db.collection("Utenti").document(user.getMail()).get()
+                .addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        DocumentSnapshot document = (DocumentSnapshot) task.getResult();
+                        final ArrayList<String> listaInviti = (ArrayList<String>) document.get("invitiRicevuti");
+
+                        Log.d("listaInviti", String.valueOf(String.valueOf(listaInviti) + "  Utente:"  +  String.valueOf(user.getMail())));
+
+                        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                if(isChecked){
+
+                                    listaInviti.add(idGruppo);
+                                    db.collection("Utenti").document(user.getMail()).update("invitiRicevuti", listaInviti);
+                                    Log.d("listaInvitiAdd", String.valueOf(String.valueOf(listaInviti) + "  Utente:"  +  String.valueOf(user.getMail())));
+                                }
+                                if(!isChecked){
+                                    if(user.getMail() !=null){
+
+                                        listaInviti.remove(idGruppo);
+                                        db.collection("Utenti").document(user.getMail()).update("invitiRicevuti", listaInviti);
+                                        Log.d("listaInvitiRemove", String.valueOf(String.valueOf(listaInviti) + "  Utente:"  +  String.valueOf(user.getMail())));
+                                    }
+                                }
+
+                            }
+                        });
+
                     }
-                }
-
-            }
-        });
+                }); //fine  db.collection("Utenti").document(user.getMail()).get()
     }
-
-
 
 
     @Override
     public int getItemCount() {
         return mUsers.size();
     }
-
-
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
         public TextView nomeTextView;
@@ -128,7 +144,6 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
         MaterialCheckBox checkBox;
         AddUserAdapter.OnUserListener onUserListener;
 
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.onUserListener = onUserListener;
@@ -136,7 +151,6 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
             cognomeTextView = itemView.findViewById(R.id.tvSurnameAddUser);
             imgUtente = itemView.findViewById(R.id.imgAddUser);
             checkBox = itemView.findViewById(R.id.checkBoxAddUser);
-
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -147,15 +161,14 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
 
         }
 
-
         @Override
         public boolean onLongClick(View v) {
             return false;
         }
     }
+
     public interface OnUserListener{
         void onItemClick(int position);
-
 
     }
 }
