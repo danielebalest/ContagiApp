@@ -50,9 +50,12 @@ public class GroupFragment extends Fragment {
     TextInputEditText editText;
 
     ArrayList<Gruppo> listaGruppi;
-    ArrayList<String> listaId = new ArrayList<String>();
+    ArrayList<Gruppo> listaGruppiPartecipante;
+    ArrayList<String> listaIdGruppiCreati = new ArrayList<String>();
+    ArrayList<String> listaIdGruppiPartecipante = new ArrayList<String>();
 
-    RecyclerView rvGruppi;
+    RecyclerView rvGruppiCreati;
+    RecyclerView rvGruppiPartecipante;
     TextView tvTuoiGruppi;
 
 
@@ -64,7 +67,8 @@ public class GroupFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_group, container, false);
 
         tvTuoiGruppi = view.findViewById(R.id.tvTuoiGruppi);
-        rvGruppi = view.findViewById(R.id.rvGruppi);
+        rvGruppiCreati = view.findViewById(R.id.rvGruppiCreati);
+        rvGruppiPartecipante = view.findViewById(R.id.rvGruppiPartecipante);
         caricaGruppi();
 
 
@@ -99,6 +103,7 @@ public class GroupFragment extends Fragment {
 
     private void caricaGruppi() {
         listaGruppi = new ArrayList<Gruppo>();
+        listaGruppiPartecipante = new ArrayList<Gruppo>();
         String mailAdmin = getMailUtenteLoggato();
 
 
@@ -110,27 +115,28 @@ public class GroupFragment extends Fragment {
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
                     String id = documentSnapshot.getId();
-                    listaId.add(id);
+                    gruppo.aggiornaNroPartecipanti(gruppo.getPartecipanti());
+                    listaIdGruppiCreati.add(id);
                     listaGruppi.add(gruppo);
                     Log.d("Lista Gruppi", String.valueOf(listaGruppi));
-                    Log.d("Lista_ID", String.valueOf(listaId));
+                    Log.d("Lista_ID", String.valueOf(listaIdGruppiCreati));
 
                 }
                 if(listaGruppi.isEmpty()){
-                    tvTuoiGruppi.setText("Non hai ancora creato un gruppo. Crea subito uno");
+                    tvTuoiGruppi.setText("Non hai ancora nessun gruppo. Crea subito uno");
                 }
                 GruppoAdapter adapter = new GruppoAdapter(listaGruppi);
-                rvGruppi.setAdapter(adapter);
-                rvGruppi.setLayoutManager(new LinearLayoutManager(getActivity()));
-                rvGruppi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvGruppi, new RecyclerTouchListener.ClickListener() {
+                rvGruppiCreati.setAdapter(adapter);
+                rvGruppiCreati.setLayoutManager(new LinearLayoutManager(getActivity()));
+                rvGruppiCreati.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvGruppiCreati, new RecyclerTouchListener.ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
-
-                        String idGruppoSelezionato = listaId.get(position);
+                        Log.i("lista1: ", String.valueOf(listaIdGruppiCreati));
+                        String idGruppoSelezionato = listaIdGruppiCreati.get(position);
                         Log.i("idList: ", idGruppoSelezionato);
-                        Toast.makeText(getActivity().getApplicationContext(), idGruppoSelezionato, Toast.LENGTH_SHORT).show();
 
-                        ProfiloGruppoFragment fragment = new ProfiloGruppoFragment();
+
+                        ProfiloGruppoAdminFragment fragment = new ProfiloGruppoAdminFragment();
 
                         Bundle bundle = new Bundle();
                         bundle.putString("idGruppo", idGruppoSelezionato);
@@ -152,6 +158,64 @@ public class GroupFragment extends Fragment {
                 }));
             }
         }); //toDo onFailure
+
+        db.collection("Gruppo").whereArrayContains("partecipanti", getMailUtenteLoggato())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
+
+                            Log.d("gruppo.getPartecipanti", String.valueOf(gruppo.getPartecipanti()));
+                            gruppo.setPartecipanti(gruppo.getPartecipanti());
+                            gruppo.aggiornaNroPartecipanti(gruppo.getPartecipanti());
+
+                            String id = documentSnapshot.getId();
+                            listaIdGruppiPartecipante.add(id);
+                            listaGruppiPartecipante.add(gruppo);
+                            Log.d("ListaGruppiPartecipante", String.valueOf(listaGruppiPartecipante));
+                            Log.d("Lista_ID", String.valueOf(listaIdGruppiCreati));
+
+                            if(!listaGruppiPartecipante.isEmpty()){
+                                tvTuoiGruppi.setText("I tuoi gruppi");
+                            }
+
+                            GruppoAdapter adapter = new GruppoAdapter(listaGruppiPartecipante);
+                            rvGruppiPartecipante.setAdapter(adapter);
+                            rvGruppiPartecipante.setLayoutManager(new LinearLayoutManager(getActivity()));
+                            rvGruppiPartecipante.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvGruppiPartecipante, new RecyclerTouchListener.ClickListener() {
+                                @Override
+                                public void onClick(View view, int position) {
+                                    Log.i("lista2: ", String.valueOf(listaIdGruppiPartecipante));
+                                    String idGruppoSelezionato = listaIdGruppiPartecipante.get(position);
+                                    Log.i("idGruppoSelezionato: ", idGruppoSelezionato);
+
+                                    ProfiloGruppoFragment fragment = new ProfiloGruppoFragment();
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("idGruppo", idGruppoSelezionato);
+
+                                    fragment.setArguments(bundle);
+
+                                    //richiamo il fragment
+                                    FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                                    fr.replace(R.id.container,fragment);
+                                    fr.addToBackStack(null); //serve per tornare al fragment precedente
+                                    fr.commit();
+                                }
+
+                                @Override
+                                public void onLongClick(View view, int position) {
+
+                                }
+
+                            }));
+                        }
+                    }
+                });
+
+
     }
 
     private String getMailUtenteLoggato(){

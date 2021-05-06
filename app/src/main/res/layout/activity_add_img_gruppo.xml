@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Dai un'idea alle persone di cosa tratta i tuo gruppo con una foto."
+        android:text="Dai un'idea alle persone di cosa tratta il tuo gruppo con una foto."
         android:textSize="22dp"
         android:textStyle="italic"
         />

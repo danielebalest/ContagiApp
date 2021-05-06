@@ -119,6 +119,7 @@ public class EventsFragment extends Fragment {
                                 Log.i("idList: ", idEventoSelezionato);
                                 Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
 
+
                                 ProfiloEventoFragment fragment = new ProfiloEventoFragment();
 
                                 Bundle bundle = new Bundle();

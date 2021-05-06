@@ -80,4 +80,8 @@ public class Gruppo {
     public void setNroPartecipanti(int nroPartecipanti) {
         this.nroPartecipanti = nroPartecipanti;
     }
+
+    public void aggiornaNroPartecipanti(ArrayList<String> partecipanti) {
+        this.nroPartecipanti = partecipanti.size();
+    }
 }

@@ -38,17 +38,23 @@
     <LinearLayout
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
-        android:orientation = "horizontal"
+        android:orientation = "vertical"
         android:layout_below="@+id/tvTuoiGruppi"
         android:layout_marginTop="20dp">
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvGruppi"
+            android:id="@+id/rvGruppiCreati"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/item_gruppo"/>
 
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvGruppiPartecipante"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_gruppo"/>
     </LinearLayout>
 
 

@@ -22,6 +22,7 @@ import com.example.contagiapp.eventi.NewEventsActivity;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -36,6 +37,8 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class AddImgGruppoActivity extends AppCompatActivity {
 
@@ -58,6 +61,7 @@ public class AddImgGruppoActivity extends AppCompatActivity {
                 selectImage();
             }
         });
+
     }
 
 
@@ -70,9 +74,9 @@ public class AddImgGruppoActivity extends AppCompatActivity {
             String descrGruppo = extras.getString("descrGruppo");
 
             if(imageUri != null){
-                addGroupToDb(nomeGruppo, descrGruppo, imageUri);
+                addGroupToDb(nomeGruppo, descrGruppo);
 
-            }else Toast.makeText(getApplicationContext(), "Inserire immagine", Toast.LENGTH_SHORT).show();
+            }else Toasty.warning(getApplicationContext(), "Inserire immagine", Toast.LENGTH_SHORT).show();
 
 
 
@@ -80,7 +84,7 @@ public class AddImgGruppoActivity extends AppCompatActivity {
 
     }
 
-    public void addGroupToDb(String nomeGruppo, String descrGruppo, Uri imageUri) {
+    public void addGroupToDb(String nomeGruppo, String descrGruppo) {
         String mailAdmin = getMailUtenteLoggato();
 
             ArrayList<String> listaMailPartecipanti = new ArrayList<String>();
@@ -98,6 +102,7 @@ public class AddImgGruppoActivity extends AppCompatActivity {
                     Log.d("documentId", String.valueOf(documentId));
                     Log.d("getIdGruppo", String.valueOf(gruppo.getIdGruppo()));
                     db.collection("Gruppo").document(documentId).update("idGruppo", documentId);
+                    Toasty.success(AddImgGruppoActivity.this, "Gruppo creato", Toast.LENGTH_LONG).show();
                     uploadImage(documentId);
 
                     Intent invitaIntent = new Intent(AddImgGruppoActivity.this, InvitaAmiciGruppoActivity.class);
@@ -105,10 +110,15 @@ public class AddImgGruppoActivity extends AppCompatActivity {
                     startActivity(invitaIntent);
 
                 }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toasty.error(AddImgGruppoActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                }
             });
 
 
-        Toast.makeText(getApplicationContext(), "Gruppo creato", Toast.LENGTH_SHORT);
+
 
 
     }
@@ -157,12 +167,12 @@ public class AddImgGruppoActivity extends AppCompatActivity {
 
                             Log.d("downloadUrl", url);
                             pd.dismiss();
-                            Toast.makeText(AddImgGruppoActivity.this, "immagine caricata", Toast.LENGTH_SHORT).show();
+                            Toasty.success(AddImgGruppoActivity.this, "immagine caricata", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnCanceledListener(new OnCanceledListener() {
                         @Override
                         public void onCanceled() {
-                            Toast.makeText(AddImgGruppoActivity.this, "immagine non caricata", Toast.LENGTH_SHORT).show();
+                            Toasty.error(AddImgGruppoActivity.this, "immagine non caricata", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

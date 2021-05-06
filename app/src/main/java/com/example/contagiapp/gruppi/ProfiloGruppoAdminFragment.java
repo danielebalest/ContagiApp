@@ -1,10 +1,12 @@
 package com.example.contagiapp.gruppi;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,14 +20,12 @@ import android.widget.Toast;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
-import com.example.contagiapp.eventi.Evento;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -35,15 +35,13 @@ import java.util.ArrayList;
 import es.dmoral.toasty.Toasty;
 
 
-public class ProfiloGruppoFragment extends Fragment {
-
+public class ProfiloGruppoAdminFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private final static String storageDirectory = "imgGruppi";
     private ArrayList<Utente> listaPartecipanti = new ArrayList<Utente>();
 
-
-    public ProfiloGruppoFragment() {
+    public ProfiloGruppoAdminFragment() {
         // Required empty public constructor
     }
 
@@ -52,9 +50,9 @@ public class ProfiloGruppoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view;
-        view =  inflater.inflate(R.layout.fragment_profilo_gruppo, container, false);
+        view =  inflater.inflate(R.layout.fragment_profilo_gruppo_admin, container, false);
 
         Bundle bundle = getArguments();
         final String idGruppo = bundle.getString("idGruppo");
@@ -62,26 +60,39 @@ public class ProfiloGruppoFragment extends Fragment {
 
         caricaGruppo(idGruppo, view);
 
-        MaterialButton btnAbbandonaGruppo = view.findViewById(R.id.btnAbbandonaGruppo);
-        btnAbbandonaGruppo.setOnClickListener(new View.OnClickListener() {
+        MaterialButton btnInvita = view.findViewById(R.id.btnAdminInvitaAmici);
+        MaterialButton btnEliminaGruppo = view.findViewById(R.id.btnEliminaGruppo);
+        btnInvita.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent invitaIntent = new Intent(getActivity(), InvitaAmiciGruppoActivity.class);
+                invitaIntent.putExtra("idGruppo", idGruppo);
+                //invitaIntent.putExtra("listaMailPartecipanti", mailPartecipanti);
+                startActivity(invitaIntent);
+            }
+        });
+
+        btnEliminaGruppo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 db.collection("Gruppo")
                         .document(idGruppo)
-                        .get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
-                                    ArrayList<String> listaMailPartecipanti = gruppo.getPartecipanti();
-
-
-                                    listaMailPartecipanti.remove("minocannito@gmail.com");
-                                    db.collection("Gruppo").document(idGruppo).update("partecipanti", listaMailPartecipanti);
-
-                                    //todo: tornare al fragment precedente
-                                }
+                            public void onSuccess(Void aVoid) {
+                                Log.d("document", "DocumentSnapshot successfully deleted!");
+                                Toasty.success(getActivity(), "Gruppo eliminato", Toast.LENGTH_SHORT);
+                                
+                                Intent mainIntent = new Intent(getActivity(), ProfiloGruppoFragment.class);
+                                startActivity(mainIntent);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("document", "Error deleting document", e);
+                                Toasty.error(getActivity(), "Gruppo non eliminato", Toast.LENGTH_SHORT);
                             }
                         });
 
@@ -90,8 +101,6 @@ public class ProfiloGruppoFragment extends Fragment {
 
         return view;
     }
-
-
 
     private void caricaGruppo(final String idGruppo, final View view){
         db.collection("Gruppo")
@@ -111,21 +120,19 @@ public class ProfiloGruppoFragment extends Fragment {
 
                     Log.d("nomeGruppo", String.valueOf(nome));
 
-                    TextView tvNomeGruppo = view.findViewById(R.id.tvNomeProfiloGruppo);
-                    TextView tvDescGruppo = view.findViewById(R.id.tvDescrProfiloGruppo);
-                    TextView tvAdmin = view.findViewById(R.id.tvAdmin);
-                    final TextView tvNroPartecipanti = view.findViewById(R.id.tvNumPartecipantiProfiloGruppo);
+                    TextView tvNomeGruppo = view.findViewById(R.id.tvNomeProfiloGruppoAdmin);
+                    TextView tvDescGruppo = view.findViewById(R.id.tvDescrProfiloGruppoAdmin);
+                    final TextView tvNroPartecipanti = view.findViewById(R.id.tvNumPartecipantiProfiloGruppoAdmin);
 
 
                     tvNomeGruppo.setText(nome);
                     tvDescGruppo.setText(descrizione);
                     tvNroPartecipanti.setText("Partecipanti" + "(" + String.valueOf(nroPartecipanti) + ")");
-                    tvAdmin.setText(admin);
 
 
 
 
-                    final RecyclerView rvPartecipanti = view.findViewById(R.id.rvPartecipantiProfiloGruppo);
+                    final RecyclerView rvPartecipanti = view.findViewById(R.id.rvPartecipantiProfiloGruppoAdmin);
                     Log.d("mailPartecipanti.size()", String.valueOf(mailPartecipanti.size()));
                     for(int i=0; i < mailPartecipanti.size(); i++){
                         db.collection("Utenti")
@@ -156,7 +163,7 @@ public class ProfiloGruppoFragment extends Fragment {
                     rvPartecipanti.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-                    ImageView imageViewProfiloGruppo = view.findViewById(R.id.imgProfiloGruppo);
+                    ImageView imageViewProfiloGruppo = view.findViewById(R.id.imgProfiloGruppoAdmin);
                     caricaImgDaStorage(storageRef, storageDirectory, idGruppo, imageViewProfiloGruppo);
 
                 } else {
@@ -166,7 +173,6 @@ public class ProfiloGruppoFragment extends Fragment {
         });
 
     }
-
 
     private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
         storageRef.child(directory + "/" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
