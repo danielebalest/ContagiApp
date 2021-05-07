@@ -35,11 +35,9 @@
         <activity
             android:name=".SettingActivity"
             android:label="@string/settings" />
-
         <activity
             android:name=".registrazione.RegistrationActivity"
             android:parentActivityName=".WelcomeActivity" />
-
         <activity
             android:name=".ui.login.LoginActivity"
             android:parentActivityName=".WelcomeActivity" />
@@ -65,7 +63,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.NewEventsActivity" />
             </intent-filter>
-
         </activity>
         <activity android:name=".utente.ModificaUtenteActivity">
             <intent-filter>

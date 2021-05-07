@@ -32,7 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="descrizione"
-            android:background="@drawable/box"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:padding="20dp"></TextView>
 
         <LinearLayout

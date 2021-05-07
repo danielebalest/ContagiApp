@@ -35,8 +35,8 @@
     <string name="Notifiche">Notify</string>
     <string name="InformativaPrivacy">Information e privacy</string>
 
+    <string name="mapbox_access_token">MAPBOX_ACCESS_TOKEN</string>
 
-    //ERRORI
 
 
 </resources>
