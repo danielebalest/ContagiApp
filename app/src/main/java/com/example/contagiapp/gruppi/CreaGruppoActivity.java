@@ -4,19 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+
 import com.example.contagiapp.R;
-import com.google.android.libraries.places.api.Places;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
-
 import es.dmoral.toasty.Toasty;
 
 public class CreaGruppoActivity extends AppCompatActivity {
+
 
 
     TextInputEditText editTextNomeGruppo;
@@ -38,10 +38,12 @@ public class CreaGruppoActivity extends AppCompatActivity {
 
 
 
-
-
-
     }
+
+
+
+
+
 
     public void controlloEditText(String nomeGruppo, String descrGruppo) {
         TextInputLayout textInputLayoutNome = findViewById(R.id.TextLayoutNomeGruppo);

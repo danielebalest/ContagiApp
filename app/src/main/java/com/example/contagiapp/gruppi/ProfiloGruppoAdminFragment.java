@@ -1,5 +1,7 @@
 package com.example.contagiapp.gruppi;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -62,6 +65,8 @@ public class ProfiloGruppoAdminFragment extends Fragment {
 
         MaterialButton btnInvita = view.findViewById(R.id.btnAdminInvitaAmici);
         MaterialButton btnEliminaGruppo = view.findViewById(R.id.btnEliminaGruppo);
+        MaterialButton btnModificaGruppo = view.findViewById(R.id.btnModificaGruppo);
+
         btnInvita.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,34 +77,78 @@ public class ProfiloGruppoAdminFragment extends Fragment {
             }
         });
 
+
+
         btnEliminaGruppo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.collection("Gruppo")
-                        .document(idGruppo)
-                        .delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d("document", "DocumentSnapshot successfully deleted!");
-                                Toasty.success(getActivity(), "Gruppo eliminato", Toast.LENGTH_SHORT);
-                                
-                                Intent mainIntent = new Intent(getActivity(), ProfiloGruppoFragment.class);
-                                startActivity(mainIntent);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w("document", "Error deleting document", e);
-                                Toasty.error(getActivity(), "Gruppo non eliminato", Toast.LENGTH_SHORT);
-                            }
-                        });
 
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                builder1.setMessage("Sicuro di eliminare il gruppo?");
+                builder1.setPositiveButton("Sì", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+
+                        eliminaGruppo(idGruppo);
+
+                    }
+                });
+
+                builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            }
+        });
+
+        btnModificaGruppo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ModificaGruppoFragment fragment = new ModificaGruppoFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("idGruppo", idGruppo);
+
+                fragment.setArguments(bundle);
+
+                //richiamo il fragment
+                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                fr.replace(R.id.container,fragment);
+                fr.addToBackStack(null); //serve per tornare al fragment precedente
+                fr.commit();
             }
         });
 
         return view;
+    }
+
+    private void eliminaGruppo(String idGruppo){
+        db.collection("Gruppo")
+                .document(idGruppo)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("document", "DocumentSnapshot successfully deleted!");
+                        Toasty.success(getActivity(), "Gruppo eliminato", Toast.LENGTH_SHORT).show();
+
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("document", "Error deleting document", e);
+                        Toasty.error(getActivity(), "Gruppo non eliminato", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void caricaGruppo(final String idGruppo, final View view){

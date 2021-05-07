@@ -1,5 +1,9 @@
 package com.example.contagiapp.gruppi;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -28,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -66,24 +71,28 @@ public class ProfiloGruppoFragment extends Fragment {
         btnAbbandonaGruppo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.collection("Gruppo")
-                        .document(idGruppo)
-                        .get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
-                                    ArrayList<String> listaMailPartecipanti = gruppo.getPartecipanti();
 
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                builder1.setMessage("Sei sicuro di abbandonare il gruppo?");
 
-                                    listaMailPartecipanti.remove("minocannito@gmail.com");
-                                    db.collection("Gruppo").document(idGruppo).update("partecipanti", listaMailPartecipanti);
+                builder1.setPositiveButton("Sì", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        abbandonaGruppo(idGruppo, getMailUtenteLoggato());
+                    }
+                });
 
-                                    //todo: tornare al fragment precedente
-                                }
+                builder1.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
                             }
                         });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
 
             }
         });
@@ -92,6 +101,26 @@ public class ProfiloGruppoFragment extends Fragment {
     }
 
 
+    private void abbandonaGruppo(final String idGruppo, final String mailUtenteLoggato){
+        db.collection("Gruppo")
+                .document(idGruppo)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
+                            ArrayList<String> listaMailPartecipanti = gruppo.getPartecipanti();
+
+
+                            listaMailPartecipanti.remove(mailUtenteLoggato);
+                            db.collection("Gruppo").document(idGruppo).update("partecipanti", listaMailPartecipanti);
+
+                            //todo: tornare al fragment precedente
+                        }
+                    }
+                });
+    }
 
     private void caricaGruppo(final String idGruppo, final View view){
         db.collection("Gruppo")
@@ -182,5 +211,23 @@ public class ProfiloGruppoFragment extends Fragment {
                 Log.d("OnFailure Exception", String.valueOf(e));
             }
         });
+    }
+
+    private String getMailUtenteLoggato(){
+        Gson gson = new Gson();
+        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String json = prefs.getString("utente", "no");
+        String mailUtenteLoggato;
+        //TODO capire il funzionamento
+        if(!json.equals("no")) {
+            Utente utente = gson.fromJson(json, Utente.class);
+            mailUtenteLoggato = utente.getMail();
+            Log.d("mailutenteLoggato", mailUtenteLoggato);
+        } else {
+            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
+            mailUtenteLoggato = prefs1.getString("mail", "no");
+            Log.d("mail", mailUtenteLoggato);
+        }
+        return mailUtenteLoggato;
     }
 }

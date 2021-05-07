@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gruppi.CreaGruppoActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="20dp"
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/TextLayoutNomeGruppo"
+        android:id="@+id/TextLayoutModificaNomeGruppo"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,19 +18,16 @@
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextNomeGruppo"
+            android:id="@+id/editTextModificaNomeGruppo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:labelFor="@id/editTextSurname"
-            android:lines="1"
-            />
+            android:lines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
-
-
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/TextLayoutDescrGruppo"
+        android:id="@+id/TextLayoutModificaDescrGruppo"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,37 +37,43 @@
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextDescrGruppo"
+            android:id="@+id/editTextModificaDescrGruppo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:labelFor="@id/editTextSurname"
-            android:lines="1"
-            />
+            android:lines="1" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="200dp"
+        android:background="@drawable/box"
+        android:padding="10dp">
+
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnModificaImgCopertina"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Avanti"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="50dp"
-            android:onClick="addImgGruoup"/>
+            android:text="Modifica immagine di copertina"
+            android:layout_centerVertical="true"
+            app:icon="@drawable/ic_pencil_24dp" />
 
-        <androidx.core.widget.ContentLoadingProgressBar
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        <ImageView
+            android:id="@+id/imageViewModificaCopertinaGruppo"
             android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:indeterminate="false"
-            android:progress="33"
-            android:layout_alignParentBottom="true" />
+            android:layout_height="match_parent"/>
+
     </RelativeLayout>
 
-
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSalvaModifiche"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:text="Salva modifiche"/>
 
 </LinearLayout>
