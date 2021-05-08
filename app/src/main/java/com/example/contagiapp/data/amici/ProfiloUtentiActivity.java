@@ -57,9 +57,10 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
         imageViewProfiloUtente = findViewById(R.id.imageViewProfiloUtente);
         btnRichiesta = findViewById(R.id.btnRichiesta);
 
-        Bundle extras = getIntent().getExtras();
+        final Bundle extras = getIntent().getExtras();
         if(extras != null) {
             final String idUtenteSelezionato = extras.getString("id");
+            final String amico = extras.getString("amico");
             Log.d("idUtenteSelezionato:", String.valueOf(idUtenteSelezionato));
 
             db.collection("Utenti")
@@ -80,20 +81,33 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                 textViewAge.setText(String.valueOf(age));
                                 caricaImgDaStorage(storageRef, storageDirectory, idUtenteSelezionato, imageViewProfiloUtente);
 
-                                btnRichiesta.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        String profiloLoggato = getMailUtenteLoggato();
+                                if(amico.equals("no")) {
+                                    btnRichiesta.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
 
-                                        user.addRichiesta(profiloLoggato);
+                                            String profiloLoggato = getMailUtenteLoggato();
 
-                                        db.collection("Utenti").document(idUtenteSelezionato)
-                                                .update("richiesteRicevute", user.getRichiesteRicevute());
+                                            user.addRichiesta(profiloLoggato);
 
-                                        btnRichiesta.setText("Richiesta inviata");
-                                        btnRichiesta.setClickable(false);
-                                    }
-                                });
+                                            db.collection("Utenti").document(idUtenteSelezionato)
+                                                    .update("richiesteRicevute", user.getRichiesteRicevute());
+
+                                            btnRichiesta.setText("Richiesta inviata");
+                                            btnRichiesta.setClickable(false);
+                                        }
+                                    });
+                                } else {
+                                    btnRichiesta.setText("Rimuovi amico");
+
+                                    btnRichiesta.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            rimuoviAmico(idUtenteSelezionato, extras.getString("mailLoggato"));
+                                            //TODO finish();
+                                        }
+                                    });
+                                }
 
                                 //aggiornaRichieste(idUtenteSelezionato, profiloLoggato, user);
 
@@ -152,6 +166,17 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
             Log.d("mail", mailUtenteLoggato);
         }
         return mailUtenteLoggato;
+    }
+
+    private void rimuoviAmico(final String idUtenteSelezionato, final String mail) {
+        db.collection("Utenti").document(mail).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                ArrayList<String> am = (ArrayList<String>) documentSnapshot.get("amici");
+                am.remove(idUtenteSelezionato);
+                db.collection("Utenti").document(mail).update("amici", am);
+            }
+        });
     }
 
 }

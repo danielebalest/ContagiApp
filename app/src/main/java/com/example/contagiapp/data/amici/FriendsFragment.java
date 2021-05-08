@@ -168,6 +168,8 @@ public class FriendsFragment extends Fragment {
 
                                     Intent profiloIntent = new Intent(getActivity(), ProfiloUtentiActivity.class);
                                     profiloIntent.putExtra("id", idUtenteSelezionato);
+                                    profiloIntent.putExtra( "amico", "si");
+                                    profiloIntent.putExtra("mailLoggato", getMailUtenteLoggato());
                                     startActivity(profiloIntent);
                                 }
 

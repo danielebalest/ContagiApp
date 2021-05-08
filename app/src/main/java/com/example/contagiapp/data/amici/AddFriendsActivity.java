@@ -96,6 +96,7 @@ public class AddFriendsActivity extends AppCompatActivity  {
 
                         Intent profiloIntent = new Intent(AddFriendsActivity.this, ProfiloUtentiActivity.class );
                         profiloIntent.putExtra("id", idUtenteSelezionato);
+                        profiloIntent.putExtra( "amico", "no");
                         startActivity(profiloIntent);
                     }
 
