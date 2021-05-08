@@ -52,15 +52,6 @@
         android:padding="10dp">
 
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnModificaImgCopertina"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Modifica immagine di copertina"
-            android:layout_centerVertical="true"
-            app:icon="@drawable/ic_pencil_24dp" />
-
         <ImageView
             android:id="@+id/imageViewModificaCopertinaGruppo"
             android:layout_width="match_parent"

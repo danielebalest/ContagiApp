@@ -58,6 +58,8 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invita_amici_gruppo);
 
+        Bundle extras = getIntent().getExtras();
+        final String idGruppo = extras.getString("idGruppo");
 
         btn = findViewById(R.id.btnTermina);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -79,13 +81,29 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task task) {
                         DocumentSnapshot document = (DocumentSnapshot) task.getResult();
-                        ArrayList<String> listaMail = (ArrayList<String>) document.get("amici");
-                        if(listaMail.isEmpty()){
+                        final ArrayList<String> amiciNonPartecipanti = (ArrayList<String>) document.get("amici");
+                        if(amiciNonPartecipanti.isEmpty()){
                             TextView tvInvitaAmici = findViewById(R.id.tvInvitaAmici);
                             tvInvitaAmici.setText("Non hai ancora nessun amico");
                         }
-                        Log.d("lista", String.valueOf(listaMail));
-                        getFriends(listaMail, rvInvitaAmici);
+                        Log.d("lista", String.valueOf(amiciNonPartecipanti));
+
+                        //recupero listaPartecipanti
+                        db.collection("Gruppo").document(idGruppo)
+                                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
+                                ArrayList<String> listaPartecipanti = gruppo.getPartecipanti();
+                                Log.d("listaPartecipanti", String.valueOf(listaPartecipanti));
+
+                                for(int i=0; i<listaPartecipanti.size(); i++){
+                                    amiciNonPartecipanti.remove(listaPartecipanti.get(i));  //rimuovo gli amici che già partecipano al gruppo
+                                }
+
+                                getFriends(amiciNonPartecipanti, idGruppo, rvInvitaAmici);
+                            }
+                        });
 
                     }
                 });
@@ -115,69 +133,67 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
 
 
-    public void getFriends(ArrayList<String> listaAmici, final RecyclerView recyclerView){
+    public void getFriends(ArrayList<String> listaAmici, final String idGruppo, final RecyclerView recyclerView){
         /*
         metodo che svolge le seguenti operazioni:
          1)date in input le mail degli amici ottiene, per ciascuno, i seguenti dati dal database: nome, cognome, mail
          2)crea per ognuno un nuovo tipo Utente che aggiunge ad una lista
          3) passa la lista all'adapter del recycler View che poi permetterà la visualizzazione della lista di CardView degli amici sull'app
          */
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            final String idGruppo = extras.getString("idGruppo");
-            Log.d("idGruppo2", String.valueOf(idGruppo));
 
-            final ArrayList<Utente> amici = new ArrayList<Utente>();
-            for(int i=0; i < listaAmici.size(); i++){
-                db.collection("Utenti")
-                        .document(listaAmici.get(i))
-                        .get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                Utente user = new Utente();
-                                user.setNome(documentSnapshot.getString("nome"));
-                                user.setCognome(documentSnapshot.getString("cognome"));
-                                user.setMail(documentSnapshot.getString("mail"));
-                                user.setDataNascita(documentSnapshot.getString("dataNascita"));
-                                Log.d("Nome utente", String.valueOf(user.getNome()));
-                                Log.d("dataNascita", String.valueOf(user.getDataNascita()));
+        Log.d("idGruppo2", String.valueOf(idGruppo));
 
-                                amici.add(user);
-                                Log.d("amiciSize", String.valueOf(amici.size()));
-                                AddUserAdapter adapter = new AddUserAdapter(amici, idGruppo);
+        final ArrayList<Utente> amici = new ArrayList<Utente>();
+        for(int i=0; i < listaAmici.size(); i++){
+            db.collection("Utenti")
+                    .document(listaAmici.get(i))
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Utente user = new Utente();
+                            user.setNome(documentSnapshot.getString("nome"));
+                            user.setCognome(documentSnapshot.getString("cognome"));
+                            user.setMail(documentSnapshot.getString("mail"));
+                            user.setDataNascita(documentSnapshot.getString("dataNascita"));
+                            Log.d("Nome utente", String.valueOf(user.getNome()));
+                            Log.d("dataNascita", String.valueOf(user.getDataNascita()));
+
+                            amici.add(user);
+                            Log.d("amiciSize", String.valueOf(amici.size()));
+                            AddUserAdapter adapter = new AddUserAdapter(amici, idGruppo);
 
 
-                                String id = user.getMail();
-                                idList.add(id);
+                            String id = user.getMail();
+                            idList.add(id);
 
-                                recyclerView.setAdapter(adapter);
-                                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                                recyclerView.addOnItemTouchListener(new InvitaAmiciGruppoActivity.RecyclerTouchListener(InvitaAmiciGruppoActivity.this, recyclerView, new InvitaAmiciGruppoActivity.RecyclerTouchListener.ClickListener() {
-                                    @Override
-                                    public void onClick(View view, int position) {
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                            recyclerView.addOnItemTouchListener(new InvitaAmiciGruppoActivity.RecyclerTouchListener(InvitaAmiciGruppoActivity.this, recyclerView, new InvitaAmiciGruppoActivity.RecyclerTouchListener.ClickListener() {
+                                @Override
+                                public void onClick(View view, int position) {
 
 
-                                    }
+                                }
 
-                                    @Override
-                                    public void onLongClick(View view, int position) {
-                                        String idUtenteSelezionato = idList.get(position);
-                                        Log.i("idList1: ", idUtenteSelezionato);
-                                    }
+                                @Override
+                                public void onLongClick(View view, int position) {
+                                    String idUtenteSelezionato = idList.get(position);
+                                    Log.i("idList1: ", idUtenteSelezionato);
+                                }
 
-                                }));
+                            }));
 
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("error", "errore");
-                    }
-                });
-            }
-
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("error", "errore");
+                }
+            });
         }
+
+
 
 
 

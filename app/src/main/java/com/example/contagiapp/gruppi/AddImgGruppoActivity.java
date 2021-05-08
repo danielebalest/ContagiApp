@@ -146,7 +146,7 @@ public class AddImgGruppoActivity extends AppCompatActivity {
         startActivityForResult(pickIntent, PICK_IMAGE);
     }
 
-    private  void uploadImage(String documentId){
+    private void uploadImage(String documentId){
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Caricamento");
         pd.show();

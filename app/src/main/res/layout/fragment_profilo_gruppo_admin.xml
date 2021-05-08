@@ -38,6 +38,36 @@
             android:textColor="@color/black"
             android:padding="20dp"></TextView>
 
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAdminInvitaAmici"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Invita amici"
+                app:icon="@drawable/ic_baseline_add_24"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                ></com.google.android.material.button.MaterialButton>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnModificaGruppo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:icon="@drawable/ic_pencil_24dp"
+                android:layout_margin="10dp"
+                android:text="Modifica gruppo"/>
+
+
+        </LinearLayout>
+
+
         <TextView
             android:id="@+id/tvNumPartecipantiProfiloGruppoAdmin"
             android:layout_width="match_parent"
@@ -48,14 +78,6 @@
             android:paddingTop="20dp"
             android:paddingLeft="20dp"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAdminInvitaAmici"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Invita amici"
-            app:icon="@drawable/ic_baseline_add_24"
-            ></com.google.android.material.button.MaterialButton>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPartecipantiProfiloGruppoAdmin"
@@ -63,14 +85,7 @@
             android:layout_height="match_parent"
             tools:listitem="@layout/item_partecipanti"></androidx.recyclerview.widget.RecyclerView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnModificaGruppo"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            app:icon="@drawable/ic_pencil_24dp"
-            android:text="Modifica gruppo"/>
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEliminaGruppo"

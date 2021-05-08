@@ -162,7 +162,6 @@ public class ProfiloGruppoAdminFragment extends Fragment {
                     Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
                     String nome = gruppo.getNomeGruppo();
                     String descrizione = gruppo.getDescrizione();
-                    String admin = gruppo.getAdmin();
                     final ArrayList<String> mailPartecipanti = gruppo.getPartecipanti();
                     gruppo.aggiornaNroPartecipanti(mailPartecipanti);
                     int nroPartecipanti = gruppo.getNroPartecipanti();

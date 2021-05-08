@@ -1,28 +1,51 @@
 package com.example.contagiapp.gruppi;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.contagiapp.R;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import es.dmoral.toasty.Toasty;
 
 public class ModificaGruppoFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    private final static String storageDirectory = "imgGruppi";
+
+    private Uri imageUri;
+    ImageView imageViewModificaCopertina;
+
+    String idGruppo;
+
+    private final static int PICK_IMAGE = 1;
 
     public ModificaGruppoFragment() {
         // Required empty public constructor
@@ -40,9 +63,10 @@ public class ModificaGruppoFragment extends Fragment {
 
         final EditText nome = view.findViewById(R.id.editTextModificaNomeGruppo);
         final EditText descr = view.findViewById(R.id.editTextModificaDescrGruppo);
+        imageViewModificaCopertina = view.findViewById(R.id.imageViewModificaCopertinaGruppo);
 
         Bundle bundle = getArguments();
-        final String idGruppo = bundle.getString("idGruppo");
+        idGruppo = bundle.getString("idGruppo");
         Log.d("idGruppo ModificaFrag", String.valueOf(idGruppo));
 
 
@@ -67,9 +91,20 @@ public class ModificaGruppoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 modifica(idGruppo, nome, descr, view);
+                uploadImage(idGruppo);
             }
         });
 
+
+
+        caricaImgDaStorage(storageRef, storageDirectory, idGruppo, imageViewModificaCopertina);
+
+        imageViewModificaCopertina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
 
         return view;
     }
@@ -81,8 +116,19 @@ public class ModificaGruppoFragment extends Fragment {
                     .document(idGruppo)
                     .update("nomeGruppo", nome.getText().toString(), "descrizione", descr.getText().toString());
             Toasty.success(getActivity(), "Gruppo modificato", Toast.LENGTH_SHORT).show();
-        }
 
+            ProfiloGruppoAdminFragment fragment = new ProfiloGruppoAdminFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putString("idGruppo", idGruppo);
+
+            fragment.setArguments(bundle);
+            //richiamo il fragment
+            FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+            fr.replace(R.id.container,fragment);
+            fr.addToBackStack(null); //serve per tornare al fragment precedente
+            fr.commit();
+        }
 
     }
 
@@ -122,4 +168,88 @@ public class ModificaGruppoFragment extends Fragment {
         return isValid;
     }
 
+    private void selectImage(){
+        Intent pickIntent = new Intent(Intent.ACTION_PICK);
+        pickIntent.setType("image/*");
+        startActivityForResult(pickIntent, PICK_IMAGE);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == PICK_IMAGE && resultCode == -1){
+            imageUri = data.getData();
+            Log.d("imageUri", String.valueOf(imageUri));
+
+            ImageView imageView= getView().findViewById(R.id.imageViewModificaCopertinaGruppo);
+            Picasso.get().load(imageUri).into(imageView); //mette l'immagine nell'ImageView di questa activity
+
+            imageViewModificaCopertina.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectImage();
+                }
+            });
+
+        }
+
+    }
+
+    private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
+        storageRef.child(directory + "/" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String sUrl = uri.toString(); //otteniamo il token del'immagine
+                Log.d("sUrl", sUrl);
+                Picasso.get().load(sUrl).into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("OnFailure Exception", String.valueOf(e));
+            }
+        });
+    }
+
+    private void uploadImage(String documentId){
+        final ProgressDialog pd = new ProgressDialog(getActivity());
+        pd.setMessage("Caricamento");
+        pd.show();
+
+
+        //Log.d("documentId2", documentId);
+        //Log.d("uri", imageUri.toString());
+        if((imageUri != null) && (documentId != null)){
+            final StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("imgGruppi").child(documentId);
+
+            fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String url = uri.toString();
+
+                            Log.d("downloadUrl", url);
+                            pd.dismiss();
+                            Toasty.success(getActivity(), "immagine caricata", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnCanceledListener(new OnCanceledListener() {
+                        @Override
+                        public void onCanceled() {
+                            Toasty.error(getActivity(), "immagine non caricata", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+        }else {
+            pd.dismiss();
+            Toast.makeText(getActivity(), "Errore", Toast.LENGTH_SHORT).show();
+            Log.e("Errore", "imageUri o documentId nulli");
+            Log.d("documentId2", String.valueOf(documentId));
+        }
+
+    }
 }
