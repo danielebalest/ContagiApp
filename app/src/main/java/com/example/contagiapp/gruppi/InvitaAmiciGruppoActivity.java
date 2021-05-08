@@ -161,12 +161,13 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
                             amici.add(user);
                             Log.d("amiciSize", String.valueOf(amici.size()));
-                            AddUserAdapter adapter = new AddUserAdapter(amici, idGruppo);
+
 
 
                             String id = user.getMail();
                             idList.add(id);
 
+                            AddUserAdapter adapter = new AddUserAdapter(amici, idGruppo);
                             recyclerView.setAdapter(adapter);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
                             recyclerView.addOnItemTouchListener(new InvitaAmiciGruppoActivity.RecyclerTouchListener(InvitaAmiciGruppoActivity.this, recyclerView, new InvitaAmiciGruppoActivity.RecyclerTouchListener.ClickListener() {

@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +20,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.contagiapp.AddUserAdapter;
 import com.example.contagiapp.R;
+import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,6 +37,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import es.dmoral.toasty.Toasty;
 
 public class ModificaGruppoFragment extends Fragment {
@@ -46,6 +52,7 @@ public class ModificaGruppoFragment extends Fragment {
     String idGruppo;
 
     private final static int PICK_IMAGE = 1;
+    final ArrayList<Utente> listaPartecipanti = new ArrayList<Utente>();
 
     public ModificaGruppoFragment() {
         // Required empty public constructor
@@ -96,7 +103,6 @@ public class ModificaGruppoFragment extends Fragment {
         });
 
 
-
         caricaImgDaStorage(storageRef, storageDirectory, idGruppo, imageViewModificaCopertina);
 
         imageViewModificaCopertina.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +111,57 @@ public class ModificaGruppoFragment extends Fragment {
                 selectImage();
             }
         });
+
+
+        final RecyclerView rvRimuoviPartecipante = view.findViewById(R.id.rvModificaGruppo);
+
+
+        //recupero listaPartecipanti
+        db.collection("Gruppo").document(idGruppo)
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
+                final ArrayList<String> listaMailPartecipanti = gruppo.getPartecipanti();
+                Log.d("listaMailPartecipanti", String.valueOf(listaMailPartecipanti));
+
+
+                for (int i = 0; i < listaMailPartecipanti.size(); i++) {
+                    db.collection("Utenti")
+                            .document(listaMailPartecipanti.get(i))
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    Utente user = new Utente();
+                                    user.setNome(documentSnapshot.getString("nome"));
+                                    user.setCognome(documentSnapshot.getString("cognome"));
+                                    user.setMail(documentSnapshot.getString("mail"));
+                                    user.setDataNascita(documentSnapshot.getString("dataNascita"));
+                                    Log.d("Nome utente", String.valueOf(user.getNome()));
+                                    Log.d("dataNascita", String.valueOf(user.getDataNascita()));
+
+
+                                    listaPartecipanti.add(user);
+                                    Log.d("amiciSize", String.valueOf(listaPartecipanti.size()));
+
+                                    RimuoviPartecipanteAdapter adapter = new RimuoviPartecipanteAdapter(listaPartecipanti, idGruppo);
+                                    rvRimuoviPartecipante.setAdapter(adapter);
+                                    rvRimuoviPartecipante.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                                }
+                            });
+
+                }
+
+                Log.d("listaPartecipanti", String.valueOf(listaPartecipanti));
+
+
+
+            }
+        });
+
+
+
 
         return view;
     }
