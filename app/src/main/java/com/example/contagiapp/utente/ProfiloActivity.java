@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -67,7 +68,7 @@ public class ProfiloActivity extends AppCompatActivity {
         imgCertificato= findViewById(R.id.immaginecertificato);
         imgViewProfiloUtente = findViewById(R.id.imgProfilo);
         listViewProfilo = (ListView) findViewById(R.id.list_profilo);
-        ArrayList<String> arrayListProfilo = new ArrayList<>();
+        final ArrayList<String> arrayListProfilo = new ArrayList<>();
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
         Gson gson = new Gson();
@@ -76,41 +77,51 @@ public class ProfiloActivity extends AppCompatActivity {
         //TODO verificare il controllo
         if(!json.equals("no")) {
             utente = gson.fromJson(json, Utente.class);
+
+            riempiListView(arrayListProfilo);
+
+            caricaImgDaStorage(storageRef, storageDirectory, utente.getMail(), imgViewProfiloUtente);
         } else {
             SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo", MODE_PRIVATE);
             String username = prefs1.getString("mail", "no");
+            Log.d("username", String.valueOf(username));
 
-            db.collection("Utenti").whereEqualTo("mail", username)
-                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            utente = document.toObject(Utente.class);
+
+            db.collection("Utenti")
+                    .document(username)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                            utente = new Utente();
+                            utente = documentSnapshot.toObject(Utente.class);
+                            utente.setNome(documentSnapshot.getString("nome"));
+                            utente.setCognome(documentSnapshot.getString("cognome"));
+                            utente.setMail(documentSnapshot.getString("mail"));
+                            utente.setDataNascita(documentSnapshot.getString("dataNascita"));
+                            utente.setGenere(documentSnapshot.getString("genere"));
+                            utente.setNazione(documentSnapshot.getString("nazione"));
+                            utente.setRegione(documentSnapshot.getString("regione"));
+                            utente.setProvince(documentSnapshot.getString("province"));
+                            utente.setCitta(documentSnapshot.getString("citta"));
+                            utente.setTelefono(documentSnapshot.getString("telefono"));
+
+                            riempiListView(arrayListProfilo);
                         }
-                    } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
-                    }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "Documento non esiste");
                 }
             });
         }
 
-        arrayListProfilo.add("Nome: "+utente.getNome());
-        arrayListProfilo.add("Cognome: "+utente.getCognome());
-        arrayListProfilo.add("Mail: "+utente.getMail());
-        arrayListProfilo.add("Data di Nascita: "+utente.getDataNascita());
-        arrayListProfilo.add("Genere: "+utente.getGenere());
-        arrayListProfilo.add("Nazione di residenza: "+utente.getNazione());
-        arrayListProfilo.add("Regione di residenza: "+utente.getRegione());
-        arrayListProfilo.add("Provincia di residenza: "+utente.getProvince());
-        arrayListProfilo.add("Città di residenza: "+utente.getCitta());
-        arrayListProfilo.add("Telefono: "+utente.getTelefono());
 
-        caricaImgDaStorage(storageRef, storageDirectory, utente.getMail(), imgViewProfiloUtente);
-      //  arrayListProfilo.add("Propic"+ utente.getPropic());
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, arrayListProfilo);
-        listViewProfilo.setAdapter(arrayAdapter);
+        //arrayListProfilo.add("Propic"+ utente.getPropic());
+
+
 
         modifica = (Button) findViewById(R.id.modifica_dati);
         modifica.setOnClickListener(new View.OnClickListener() {
@@ -144,6 +155,25 @@ public class ProfiloActivity extends AppCompatActivity {
                dispatchTakePictureIntent(photoIntent);
             }
         });
+    }
+
+
+    private void riempiListView(ArrayList<String> arrayListProfilo){
+        arrayListProfilo.add("Nome: "+utente.getNome());
+        arrayListProfilo.add("Cognome: "+utente.getCognome());
+        arrayListProfilo.add("Mail: "+utente.getMail());
+        arrayListProfilo.add("Data di Nascita: "+utente.getDataNascita());
+        arrayListProfilo.add("Genere: "+utente.getGenere());
+        arrayListProfilo.add("Nazione di residenza: "+utente.getNazione());
+        arrayListProfilo.add("Regione di residenza: "+utente.getRegione());
+        arrayListProfilo.add("Provincia di residenza: "+utente.getProvince());
+        arrayListProfilo.add("Città di residenza: "+utente.getCitta());
+        arrayListProfilo.add("Telefono: "+utente.getTelefono());
+
+        caricaImgDaStorage(storageRef, storageDirectory, utente.getMail(), imgViewProfiloUtente);
+        Log.d("arrayListProfilo", String.valueOf(arrayListProfilo));
+        ArrayAdapter arrayAdapter = new ArrayAdapter(ProfiloActivity.this, R.layout.support_simple_spinner_dropdown_item, arrayListProfilo);
+        listViewProfilo.setAdapter(arrayAdapter);
     }
 
     private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
