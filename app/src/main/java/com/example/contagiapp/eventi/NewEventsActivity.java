@@ -457,7 +457,7 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
 
         if(requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             imageUri = data.getData();
-            ImageView imageView= findViewById(R.id.propic);
+            ImageView imageView= findViewById(R.id.immagineEvento);
             Picasso.get().load(imageUri).into(imageView); //mette l'immagine nell'ImageView di questa activity
         }
 
