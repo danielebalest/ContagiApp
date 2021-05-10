@@ -23,7 +23,9 @@ import android.widget.Toast;
 import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
 import com.example.contagiapp.utente.Utente;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,22 +48,23 @@ public class AddFriendsActivity extends AppCompatActivity  {
     private RecyclerView recyclerView;
 
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
-
-
     ArrayList<Utente> utenti = new ArrayList<Utente>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friends);
 
-        Bundle bundle = getIntent().getExtras();
-        ArrayList<String> listaMailAmici = (ArrayList<String>) bundle.get("listaMailAmici");
-        String mailUtenteLoggato = bundle.getString("mailUtenteLoggato");
-        listaMailAmici.add(mailUtenteLoggato);
-        Log.d("listaMailAmici", String.valueOf(listaMailAmici));
-
-
-        caricaUtentiNonAmici(listaMailAmici);
+        Bundle extras = getIntent().getExtras();
+        if(extras.getString("aggiungere").equals("si")) {
+            ArrayList<String> listaMailAmici = (ArrayList<String>) extras.get("listaMailAmici");
+            String mailUtenteLoggato = extras.getString("mailUtenteLoggato");
+            listaMailAmici.add(mailUtenteLoggato);
+            Log.d("listaMailAmici", String.valueOf(listaMailAmici));
+            caricaUtentiNonAmici(listaMailAmici);
+        } else {
+            caricaAmicicCercati(extras);
+        }
     }
 
     public void caricaUtentiNonAmici( ArrayList<String> listaAmici) {
@@ -108,6 +111,64 @@ public class AddFriendsActivity extends AppCompatActivity  {
                 }));
             }
         });//Todo: onFailure
+    }
+
+    public Utente[] ut;
+    public void caricaAmicicCercati(final Bundle extras) {
+        final String cerca = extras.getString("cerca");
+
+        db.collection("Utenti").get().
+                addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Utente user = documentSnapshot.toObject(Utente.class);
+                            String id = documentSnapshot.getId();
+
+                            String trov = user.getNome() + " " + user.getCognome();
+                            if (trov.toLowerCase().contains(cerca.toLowerCase())) {
+                                idList.add(id);
+                                utenti.add(user);
+                            }
+                        }
+
+                        UserAdapter adapter = new UserAdapter(utenti);
+
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(AddFriendsActivity.this, LinearLayoutManager.VERTICAL, false));
+                        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(AddFriendsActivity.this, recyclerView, new RecyclerTouchListener.ClickListener() {
+                            @Override
+                            public void onClick(View view, int position) {
+                                final String idUtenteSelezionato = idList.get(position);  //finalmente cristo
+                                Log.i("idList: ", idUtenteSelezionato);
+                                Toast.makeText(getApplicationContext(), idUtenteSelezionato, Toast.LENGTH_LONG).show();
+
+                                final Intent profiloIntent = new Intent(AddFriendsActivity.this, ProfiloUtentiActivity.class );
+                                profiloIntent.putExtra("id", idUtenteSelezionato);
+
+                                db.collection("Utenti").document(extras.getString("mail")).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        ArrayList<String> am = (ArrayList<String>) documentSnapshot.get("amici");
+                                        if(am.contains(idUtenteSelezionato)) {
+                                            profiloIntent.putExtra( "amico", "si");
+                                        } else {
+                                            profiloIntent.putExtra( "amico", "no");
+                                        }
+                                    }
+                                });
+
+                                startActivity(profiloIntent);
+                            }
+
+                            @Override
+                            public void onLongClick(View view, int position) {
+
+                            }
+
+                        }));
+                    }
+                });
     }
 
     //per il click

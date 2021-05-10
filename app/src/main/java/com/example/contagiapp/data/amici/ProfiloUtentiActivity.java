@@ -58,7 +58,7 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
         btnRichiesta = findViewById(R.id.btnRichiesta);
 
         final Bundle extras = getIntent().getExtras();
-        if(extras != null) {
+        if(extras.getString("id") != null) {
             final String idUtenteSelezionato = extras.getString("id");
             final String amico = extras.getString("amico");
             Log.d("idUtenteSelezionato:", String.valueOf(idUtenteSelezionato));
@@ -121,9 +121,6 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                     Toast.makeText(ProfiloUtentiActivity.this, "Errore", Toast.LENGTH_SHORT);
                 }
             });
-
-
-
         }
     }
 
@@ -175,6 +172,15 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                 ArrayList<String> am = (ArrayList<String>) documentSnapshot.get("amici");
                 am.remove(idUtenteSelezionato);
                 db.collection("Utenti").document(mail).update("amici", am);
+            }
+        });
+
+        db.collection("Utenti").document(idUtenteSelezionato).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                ArrayList<String> am = (ArrayList<String>) documentSnapshot.get("amici");
+                am.remove(mail);
+                db.collection("Utenti").document(idUtenteSelezionato).update("amici", am);
             }
         });
     }

@@ -78,7 +78,11 @@ public class FriendsFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    //da inserire metodo per la ricerca
+                    Intent intent = new Intent(getActivity(), AddFriendsActivity.class);
+                    intent.putExtra("aggiungere", "no");
+                    intent.putExtra("cerca", editText.getText().toString());
+                    intent.putExtra("mail", getMailUtenteLoggato());
+                    startActivity(intent);
                     return true;
                 }
                 return false;
@@ -121,6 +125,7 @@ public class FriendsFragment extends Fragment {
 
     public void addFriends(){
         Intent addFriendsIntent = new Intent(getActivity(), AddFriendsActivity.class);
+        addFriendsIntent.putExtra("aggiungere", "si");
         addFriendsIntent.putExtra("listaMailAmici", listaMail);
         addFriendsIntent.putExtra("mailUtenteLoggato", getMailUtenteLoggato());
         startActivity(addFriendsIntent);
