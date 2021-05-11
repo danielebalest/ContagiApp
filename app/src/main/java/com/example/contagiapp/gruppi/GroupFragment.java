@@ -11,6 +11,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -19,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,7 +84,9 @@ public class GroupFragment extends Fragment {
             }
         });
 
-        editText = view.findViewById(R.id.search_field);
+        Log.d("listaIdGruppiCreati", String.valueOf(listaIdGruppiCreati));
+
+        editText = view.findViewById(R.id.search_field_group);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -94,10 +99,22 @@ public class GroupFragment extends Fragment {
             }
         });
 
-
-
-
         return view;
+    }
+
+
+
+
+    private ArrayList<String> ricerca(String testoInserito, ArrayList<String> listaInCuiCercare){
+
+
+        ArrayList<String> elementiTrovati = new ArrayList<String>();
+        for(int i=0; i < listaInCuiCercare.size(); i++){
+            if(listaInCuiCercare.get(i).toLowerCase().contains(testoInserito.toLowerCase())){
+                elementiTrovati.add(listaInCuiCercare.get(i));
+            }
+        }
+        return elementiTrovati;
     }
 
 
@@ -125,6 +142,8 @@ public class GroupFragment extends Fragment {
                 if(listaGruppi.isEmpty()){
                     tvTuoiGruppi.setText("Non hai ancora nessun gruppo. Crea subito uno");
                 }
+
+
                 GruppoAdapter adapter = new GruppoAdapter(listaGruppi);
                 rvGruppiCreati.setAdapter(adapter);
                 rvGruppiCreati.setLayoutManager(new LinearLayoutManager(getActivity()));

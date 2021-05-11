@@ -28,6 +28,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.contagiapp.R;
+import com.example.contagiapp.gruppi.AddImgGruppoActivity;
+import com.example.contagiapp.gruppi.CreaGruppoActivity;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -38,6 +40,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -51,6 +54,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import es.dmoral.toasty.Toasty;
 
 
 public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -192,50 +197,52 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
         EditText citta = findViewById(R.id.editTextCitta);
         EditText indirizzo = findViewById(R.id.editTextIndirizzo);
 
-        final Evento evento = new Evento();
-        evento.setAdmin(getMailUtenteLoggato());
-        evento.setNome(nome.getText().toString());
-        evento.setDescrizione(descrizione.getText().toString());
-        evento.setNumeroMaxPartecipanti(Integer.parseInt(numeroMaxP.getText().toString()));
-        evento.setData(data.getText().toString()); //da vedere controllo
-        evento.setOrario(orario.getText().toString());
-        evento.setCitta(citta.getText().toString());
-        evento.setIndirizzo(indirizzo.getText().toString());
+        if(controlloEditText(nome.getText().toString(), numeroMaxP.getText().toString(), descrizione.getText().toString(), citta.getText().toString(), indirizzo.getText().toString())){
+            final Evento evento = new Evento();
+            evento.setAdmin(getMailUtenteLoggato());
+            evento.setNome(nome.getText().toString());
+            evento.setDescrizione(descrizione.getText().toString());
+            evento.setNumeroMaxPartecipanti(Integer.parseInt(numeroMaxP.getText().toString()));
+            evento.setData(data.getText().toString()); //da vedere controllo
+            evento.setOrario(orario.getText().toString());
+            evento.setCitta(citta.getText().toString());
+            evento.setIndirizzo(indirizzo.getText().toString());
 
-        ArrayList<String> partecipanti = new ArrayList<String>(); //inizializzo un array vuoto
-        evento.setPartecipanti(partecipanti);
-
-
-        Log.d("getIndirizzo", String.valueOf(evento.getIndirizzo()));
-        Log.d("getData", String.valueOf(evento.getData()));
-        Log.d("getOrario", String.valueOf(evento.getOrario()));
+            ArrayList<String> partecipanti = new ArrayList<String>(); //inizializzo un array vuoto
+            evento.setPartecipanti(partecipanti);
 
 
-        if(dataOraValide(evento, evento.getData(), evento.getOrario())){
-            db.collection("Eventi").add(evento)
-            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                    documentId = documentReference.getId();
-                    evento.setIdEvento(documentId);
-                    db.collection("Eventi").document(documentId).update("idEvento", documentId);
-                    uploadImage();
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.w(TAG, "Error adding document", e);
-                }
-            });
+            Log.d("getIndirizzo", String.valueOf(evento.getIndirizzo()));
+            Log.d("getData", String.valueOf(evento.getData()));
+            Log.d("getOrario", String.valueOf(evento.getOrario()));
 
-            Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
 
-            finish();
-        }else {
-            finish();
-            startActivity(getIntent());
+            if(dataOraValide(evento, evento.getData(), evento.getOrario())){
+                db.collection("Eventi").add(evento)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                documentId = documentReference.getId();
+                                evento.setIdEvento(documentId);
+                                db.collection("Eventi").document(documentId).update("idEvento", documentId);
+                                uploadImage();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error adding document", e);
+                            }
+                        });
+
+                Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
+
+                finish();
+            }else {
+                finish();
+                startActivity(getIntent());
+            }
         }
 
 
@@ -461,6 +468,80 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
             Picasso.get().load(imageUri).into(imageView); //mette l'immagine nell'ImageView di questa activity
         }
 
+    }
+
+    public boolean controlloEditText(String nomeEvento, String numMaxPartecipanti, String descrEvento, String citta, String indirizzo) {
+        boolean isValid = false;
+
+        TextInputLayout textInputLayoutNome = findViewById(R.id.textInputNomeEventoLayout);
+        TextInputLayout textInputLayoutNumMaxPartecipanti = findViewById(R.id.textInputNumMaxPartecipantiLayout);
+        TextInputLayout textInputLayoutDescrEvento = findViewById(R.id.textInputDescrEvento);
+        TextInputLayout textInputLayoutCitta = findViewById(R.id.textInputCitta);
+        TextInputLayout textInputLayoutIndirizzo = findViewById(R.id.textInputIndirizzo);
+
+        if ((!nomeEvento.isEmpty()) && (!numMaxPartecipanti.isEmpty()) && (!descrEvento.isEmpty()) && (!citta.isEmpty()) && (!indirizzo.isEmpty())) { //se sono tutti validi
+            textInputLayoutNome.setErrorEnabled(false);
+            textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);
+            textInputLayoutDescrEvento.setErrorEnabled(false);
+            textInputLayoutCitta.setErrorEnabled(false);
+            textInputLayoutIndirizzo.setErrorEnabled(false);
+            isValid = true;
+
+        } else {
+            if (nomeEvento.isEmpty() && numMaxPartecipanti.isEmpty() && descrEvento.isEmpty() && citta.isEmpty() && indirizzo.isEmpty()) { //se sono tutti vuoti
+                Toasty.warning(NewEventsActivity.this, "Inserisci tutti i campi", Toast.LENGTH_SHORT).show();
+
+                textInputLayoutNome.setError("Inserisci nome dell'evento");
+                textInputLayoutNumMaxPartecipanti.setError("Inserisci descrizione del gruppo");
+                textInputLayoutDescrEvento.setError("Inserisci descrizione");
+                textInputLayoutCitta.setError("Inserisci città");
+                textInputLayoutIndirizzo.setError("Inserisci indirizzo");
+            } else {
+
+                //se solo uno tra tutti è vuoto
+                if (indirizzo.isEmpty()) {
+                    textInputLayoutIndirizzo.setError("Inserisci indirizzo");
+                    textInputLayoutNome.setErrorEnabled(false);
+                    textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);
+                    textInputLayoutDescrEvento.setErrorEnabled(false);
+                    textInputLayoutCitta.setErrorEnabled(false);
+                }
+
+                if (citta.isEmpty()) {
+                    textInputLayoutCitta.setError("Inserisci città");
+                    textInputLayoutNome.setErrorEnabled(false);
+                    textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);
+                    textInputLayoutDescrEvento.setErrorEnabled(false);
+                    textInputLayoutIndirizzo.setErrorEnabled(false);
+                }
+
+                if (descrEvento.isEmpty()) {
+                    textInputLayoutDescrEvento.setError("Inserisci descrizione");
+                    textInputLayoutNome.setErrorEnabled(false);
+                    textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);
+                    textInputLayoutCitta.setErrorEnabled(false);
+                    textInputLayoutIndirizzo.setErrorEnabled(false);
+                }
+
+                if (numMaxPartecipanti.isEmpty()) {
+                    textInputLayoutNumMaxPartecipanti.setError("Inserisci numero massimo dei partecipanti");
+                    textInputLayoutNome.setErrorEnabled(false);
+                    textInputLayoutDescrEvento.setErrorEnabled(false);
+                    textInputLayoutCitta.setErrorEnabled(false);
+                    textInputLayoutIndirizzo.setErrorEnabled(false);
+                }
+
+                if (nomeEvento.isEmpty()) {
+                    textInputLayoutNome.setError("Inserisci nome del gruppo");
+                    textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);
+                    textInputLayoutDescrEvento.setErrorEnabled(false);
+                    textInputLayoutCitta.setErrorEnabled(false);
+                    textInputLayoutIndirizzo.setErrorEnabled(false);
+                }
+
+            }
+        }
+        return isValid;
     }
 
     private  void uploadImage(){
