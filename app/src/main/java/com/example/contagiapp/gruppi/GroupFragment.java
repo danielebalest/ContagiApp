@@ -1,5 +1,6 @@
 package com.example.contagiapp.gruppi;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,17 +22,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.utente.Utente;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
@@ -50,16 +55,23 @@ public class GroupFragment extends Fragment {
     private Utente utente;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FloatingActionButton crea_gruppo;
-    TextInputEditText editText;
+    TextInputEditText editTextSearch;
 
-    ArrayList<Gruppo> listaGruppi;
+    ArrayList<Gruppo> listaTuttiGruppi;
     ArrayList<Gruppo> listaGruppiPartecipante;
     ArrayList<String> listaIdGruppiCreati = new ArrayList<String>();
     ArrayList<String> listaIdGruppiPartecipante = new ArrayList<String>();
 
+
+    ArrayList<Gruppo> listaGruppiCreatiTrovati = new ArrayList<Gruppo>();
+    ArrayList<Gruppo> listaGruppiPartecipanteTrovati = new ArrayList<Gruppo>();
+    ArrayList<String> listaNomiGruppiCreati = new ArrayList<String>();
+    ArrayList<String> listaNomiGruppiPartecipante = new ArrayList<String>();
+
     RecyclerView rvGruppiCreati;
     RecyclerView rvGruppiPartecipante;
     TextView tvTuoiGruppi;
+
 
 
     @Override
@@ -72,8 +84,9 @@ public class GroupFragment extends Fragment {
         tvTuoiGruppi = view.findViewById(R.id.tvTuoiGruppi);
         rvGruppiCreati = view.findViewById(R.id.rvGruppiCreati);
         rvGruppiPartecipante = view.findViewById(R.id.rvGruppiPartecipante);
-        caricaGruppi();
+        editTextSearch = view.findViewById(R.id.search_field_group);
 
+        caricaGruppi();
 
         crea_gruppo = view.findViewById(R.id.FAB_groups);
         crea_gruppo.setOnClickListener(new View.OnClickListener() {
@@ -84,20 +97,10 @@ public class GroupFragment extends Fragment {
             }
         });
 
-        Log.d("listaIdGruppiCreati", String.valueOf(listaIdGruppiCreati));
 
-        editText = view.findViewById(R.id.search_field_group);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    //da inserire metodo per la ricerca
-                    return true;
-                }
 
-                return false;
-            }
-        });
+
+
 
         return view;
     }
@@ -119,7 +122,7 @@ public class GroupFragment extends Fragment {
 
 
     private void caricaGruppi() {
-        listaGruppi = new ArrayList<Gruppo>();
+        listaTuttiGruppi = new ArrayList<Gruppo>();
         listaGruppiPartecipante = new ArrayList<Gruppo>();
         String mailAdmin = getMailUtenteLoggato();
 
@@ -132,19 +135,29 @@ public class GroupFragment extends Fragment {
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
                     String id = documentSnapshot.getId();
+
+
                     gruppo.aggiornaNroPartecipanti(gruppo.getPartecipanti());
                     listaIdGruppiCreati.add(id);
-                    listaGruppi.add(gruppo);
-                    Log.d("Lista Gruppi", String.valueOf(listaGruppi));
+
+                    if(!listaNomiGruppiCreati.contains(gruppo.getNomeGruppo())){
+                        listaNomiGruppiCreati.add(gruppo.getNomeGruppo());
+                    }
+
+
+                    listaTuttiGruppi.add(gruppo);
+                    Log.d("Lista Gruppi", String.valueOf(listaTuttiGruppi));
                     Log.d("Lista_ID", String.valueOf(listaIdGruppiCreati));
+                    Log.d("ListaNomiGruppiCreat", String.valueOf(listaNomiGruppiCreati));
 
                 }
-                if(listaGruppi.isEmpty()){
+                if(listaTuttiGruppi.isEmpty()){
                     tvTuoiGruppi.setText("Non hai ancora nessun gruppo. Crea subito uno");
                 }
 
 
-                GruppoAdapter adapter = new GruppoAdapter(listaGruppi);
+
+                GruppoAdapter adapter = new GruppoAdapter(listaTuttiGruppi);
                 rvGruppiCreati.setAdapter(adapter);
                 rvGruppiCreati.setLayoutManager(new LinearLayoutManager(getActivity()));
                 rvGruppiCreati.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvGruppiCreati, new RecyclerTouchListener.ClickListener() {
@@ -175,6 +188,7 @@ public class GroupFragment extends Fragment {
                     }
 
                 }));
+
             }
         }); //toDo onFailure
 
@@ -195,6 +209,11 @@ public class GroupFragment extends Fragment {
                             listaGruppiPartecipante.add(gruppo);
                             Log.d("ListaGruppiPartecipante", String.valueOf(listaGruppiPartecipante));
                             Log.d("Lista_ID", String.valueOf(listaIdGruppiCreati));
+
+                            if(!listaNomiGruppiPartecipante.contains(gruppo.getNomeGruppo())){
+                                listaNomiGruppiPartecipante.add(gruppo.getNomeGruppo());
+                            }
+
 
                             if(!listaGruppiPartecipante.isEmpty()){
                                 tvTuoiGruppi.setText("I tuoi gruppi");
@@ -235,6 +254,112 @@ public class GroupFragment extends Fragment {
                 });
 
 
+        if(!editTextSearch.toString().isEmpty()){
+
+
+            editTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        listaTuttiGruppi.clear();
+                        listaGruppiPartecipante.clear();
+                        listaGruppiCreatiTrovati.clear();
+                        listaGruppiPartecipanteTrovati.clear();
+                        listaIdGruppiCreati.clear();
+                        listaIdGruppiPartecipante.clear();
+
+                        //da inserire metodo per la ricerca
+
+                        ArrayList<String> nomeGruppiCreatiTrovati = new ArrayList<String>();
+                        ArrayList<String> nomeGruppiPartecipantiTrovati = new ArrayList<String>();
+                        nomeGruppiCreatiTrovati = ricerca(editTextSearch.getText().toString(), listaNomiGruppiCreati);
+                        nomeGruppiPartecipantiTrovati = ricerca(editTextSearch.getText().toString(), listaNomiGruppiPartecipante);
+//todo
+                        Log.d("listaInCuiCercare", String.valueOf(listaNomiGruppiCreati));
+                        Log.d("gruppiTrovati", String.valueOf(nomeGruppiCreatiTrovati));
+
+
+
+
+                        //ottengo l'id del gruppoTrovato
+                        for(int i = 0; i < nomeGruppiCreatiTrovati.size(); i++){
+                            db.collection("Gruppo")
+                                    .whereEqualTo("nomeGruppo", nomeGruppiCreatiTrovati.get(i))
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Gruppo gruppoTrovato = document.toObject(Gruppo.class);
+                                                listaGruppiCreatiTrovati.add(gruppoTrovato);
+                                                listaIdGruppiCreati.add(gruppoTrovato.getIdGruppo());
+
+                                                String id = document.getId();
+
+                                            }
+                                            Log.d("listaGruppiTrovati", String.valueOf(listaGruppiCreatiTrovati));
+                                            Log.d("listaGruppiCreati_ID", String.valueOf(listaIdGruppiCreati));
+
+                                            GruppoAdapter adapter = new GruppoAdapter(listaGruppiCreatiTrovati);
+                                            rvGruppiCreati.setAdapter(adapter);
+                                            rvGruppiCreati.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+                                        }
+                                    });
+                        }
+
+                        for(int i = 0; i < nomeGruppiPartecipantiTrovati.size(); i++){
+                            db.collection("Gruppo")
+                                    .whereEqualTo("nomeGruppo", nomeGruppiPartecipantiTrovati.get(i))
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Gruppo gruppoTrovato = document.toObject(Gruppo.class);
+
+                                                listaGruppiPartecipanteTrovati.add(gruppoTrovato);
+
+                                                listaIdGruppiPartecipante.add(gruppoTrovato.getIdGruppo());
+
+                                                String id = document.getId();
+                                                listaIdGruppiPartecipante.add(id);
+                                            }
+                                            Log.d("listaGruppiPartTrovati", String.valueOf(listaGruppiPartecipanteTrovati));
+                                            Log.d("listaGruppiParte_ID", String.valueOf(listaIdGruppiPartecipante));
+
+                                            GruppoAdapter adapter = new GruppoAdapter(listaGruppiPartecipanteTrovati);
+                                            rvGruppiPartecipante.setAdapter(adapter);
+                                            rvGruppiPartecipante.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+                                        }
+                                    });
+                        }
+
+                        hideSoftKeyboard(getActivity()); //nascode la tastiera dopo aver cliccato il tasto cerca nella tastiera
+                        return true;
+                    }
+
+                    return false;
+                }
+            });
+
+        }
+    }
+
+    //funzione che nasconde la tastiera
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        if(inputMethodManager.isAcceptingText()){
+            inputMethodManager.hideSoftInputFromWindow(
+                    activity.getCurrentFocus().getWindowToken(),
+                    0
+            );
+        }
     }
 
     private String getMailUtenteLoggato(){
