@@ -340,8 +340,6 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
         boolean condorario3= true;
         int l = data.length();
         int l1= orario.length();
-        System.out.println("la lunghezza è stocazzooooo "+ l1);
-        System.out.println("l'orario scelto è "+ orario);
         switch (l) {
             case 9:
                 anno = Integer.valueOf(data.substring(l - 4, l));
@@ -357,14 +355,6 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
         minapp = Integer.valueOf(orario.substring(3,5));
         oraapp = Integer.valueOf(orario.substring(0,2));
 
-        System.out.println("l'anno in cui viviamo è "+cal.get(Calendar.YEAR) + (anno >= cal.get(Calendar.YEAR)));
-        System.out.println("il mese in cui viviamo è "+cal.get(Calendar.MONTH+1)+ ((mese) >= cal.get(Calendar.MONTH)));
-        System.out.println("il giorno in cui viviamo è "+cal.get(Calendar.DAY_OF_MONTH)+ (giorno >= cal.get(Calendar.DAY_OF_MONTH)));
-        System.out.println(" condizione orario"+(oraapp>= (cal.get(Calendar.HOUR_OF_DAY))));
-
-        System.out.println("orario secondo sto cristo di server " +(cal.get(Calendar.HOUR_OF_DAY)));
-        System.out.println("orario scelto "+ oraapp);
-        System.out.println("minuti scelti "+ minapp);
         if (anno >= cal.get(Calendar.YEAR)) {
             if ((mese) >= cal.get(Calendar.MONTH)) {
                 if (giorno >= cal.get(Calendar.DAY_OF_MONTH)) {
@@ -373,13 +363,14 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
                             System.out.println("arrivo qui");
                             evento.setData(data);
                             evento.setOrario(orario);
+                          //  evento.setPartecipanti(getMailUtenteLoggato().charAt());
                             condorario3 = false;
                             condevento2=true;
                         }
-                    } else condevento2 = true;
-                } else condevento2 = true;
-            } else condevento2 = true;
-        } else condevento2 = true;
+                    } else {condevento2 = true; condorario3= false;}
+                } else {condevento2 = true; condorario3= false;}
+            } else {condevento2 = true; condorario3= false;}
+        } else {condevento2 = true; condorario3= false;}
 
         if(!condevento2){
             Toast.makeText(this, "data non valida",Toast.LENGTH_SHORT).show();
@@ -390,6 +381,8 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
             validita = false;
         }else{
             validita = true;
+            evento.setData(data);
+            evento.setOrario(orario);
         }
         return validita;
     }
