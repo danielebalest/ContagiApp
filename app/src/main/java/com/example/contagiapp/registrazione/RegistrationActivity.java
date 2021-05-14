@@ -219,6 +219,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 data.setText(date);
             }
         };
+
+
         Button scattafoto = findViewById(R.id.scattafoto);
         scattafoto.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -564,6 +566,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                         utente.setAmici(friends);
                         utente.setRichiesteRicevute(richieste);
                         utente.setInvitiRicevuti(inviti);
+                        //utente.setStato("giallo");
+                        user1.put("stato", "giallo");
                         user1.put("amici", friends);
                         user1.put("richiesteRicevute", richieste);
                         user1.put("invitiRicevuti", inviti);

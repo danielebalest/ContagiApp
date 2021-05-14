@@ -20,6 +20,7 @@ public class Utente {
     private String regione;
     private String telefono;
     private String mailPath;
+    private String stato;
     private ArrayList<String> amici;
     private ArrayList<String> richiesteRicevute;
     private ArrayList<String> invitiRicevuti;
@@ -70,6 +71,13 @@ public class Utente {
         amici.add(mailAmico);
     }
 
+    public String getStato() {
+        return stato;
+    }
+
+    public void setStato(String stato) {
+        this.stato = stato;
+    }
 
     public String getCitta() {
         return citta;

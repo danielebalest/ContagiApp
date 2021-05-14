@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.eventi.EventsFragment;
 import com.example.contagiapp.gruppi.GroupFragment;
+import com.example.contagiapp.impostazioni.SettingActivity;
 import com.example.contagiapp.notifiche.NotifyFragment;
 import com.example.contagiapp.utente.ProfiloActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        Fragment SettingFragment= new SettingFragment();
+
         if(id == R.id.nav_setting){
             //getSupportFragmentManager().beginTransaction().replace(R.id.container, SettingFragment).commit();
             Intent settingIntent = new Intent(this, SettingActivity.class);

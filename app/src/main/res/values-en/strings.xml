@@ -31,6 +31,7 @@
 
     //bottoni in impostazioni
     <string name="SegnalaPositività">Reports positivity</string>
+    <string name="SegnalaNegatività">Reports negativity</string>
     <string name="DarkTheme">Dark Theme</string>
     <string name="Notifiche">Notify</string>
     <string name="InformativaPrivacy">Information e privacy</string>
