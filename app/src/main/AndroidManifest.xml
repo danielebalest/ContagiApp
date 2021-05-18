@@ -27,15 +27,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".impostazioni.SegnalaPositivitaActivity"></activity>
+
+        <activity
+            android:name=".impostazioni.SegnalaPositivitaActivity"
+            android:parentActivityName=".impostazioni.SettingActivity">
+        </activity>
+
         <activity android:name=".data.amici.ProfiloUtentiActivity" />
         <activity android:name=".data.amici.AddFriendsActivity" />
         <activity android:name=".gruppi.InvitaAmiciGruppoActivity" />
-        <activity android:name=".gruppi.AddImgGruppoActivity" />
+
+        <activity
+            android:name=".gruppi.AddImgGruppoActivity"
+            android:parentActivityName=".gruppi.CreaGruppoActivity">
+        </activity>
+
         <activity android:name=".gruppi.CreaGruppoActivity" />
         <activity
             android:name=".impostazioni.SettingActivity"
-            android:label="@string/settings" />
+            android:label="@string/settings"/>
         <activity
             android:name=".registrazione.RegistrationActivity"
             android:parentActivityName=".WelcomeActivity" />
@@ -77,17 +87,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${mapsApiKey}" />
-
-        <activity android:name=".gruppi.GroupSearch">
-            <intent-filter>
-                <action android:name="android.intent.action.GroupSearch" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".gruppi.GroupAdd">
-            <intent-filter>
-                <action android:name="android.intent.action.GroupAdd" />
-            </intent-filter>
-        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

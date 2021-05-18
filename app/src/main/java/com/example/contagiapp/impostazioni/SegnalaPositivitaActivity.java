@@ -41,6 +41,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import es.dmoral.toasty.Toasty;
 
@@ -64,25 +65,17 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_segnala_positivita);
 
         final EditText editTextData = findViewById(R.id.editTextDataPositivita);
-
-
-        /*
-        final DatePickerDialog datePickerDialog = new DatePickerDialog(
-                SegnalaPositivitaActivity.this,
-                android.R.style.Theme_Material_InputMethod,
-                data,
-                year, month, day);
-*/
-
-
+        final TextInputLayout textInputLayoutData = findViewById(R.id.textInputLayoutDataPositivita);
 
         editTextData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH);
-                int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH); //giorno di oggi
+                int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+
 
 
 
@@ -92,6 +85,16 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 editTextData.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                                //int dayOfYear = dayOfMonth + 30 * month;
+
+                                Calendar cal = Calendar.getInstance();
+                                cal.set(Calendar.YEAR, year);
+                                cal.set(Calendar.MONTH, month);
+                                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                int giornoDellAnno = cal.get(Calendar.DAY_OF_YEAR);
+
+                                Log.d("giornoDellAnno", String.valueOf(cal.get(Calendar.DAY_OF_YEAR)));
+                                controlloData(editTextData, textInputLayoutData, giornoDellAnno);
                             }
                         },
                         year, month, dayOfMonth);
@@ -100,6 +103,9 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
 
             }
         });
+
+
+
 
         btnAddImgPositivita = findViewById(R.id.btnAddImgPositivita);
         btnAddImgPositivita.setOnClickListener(new View.OnClickListener() {
@@ -118,18 +124,23 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
         });
 
 
-        completaSegnalazione = findViewById(R.id.btnCompletaSegnalazione);
-        completaSegnalazione.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //todo: cambiare stato utente in rosso
-                uploadImage(getMailUtenteLoggato());
-                cambiaStatoUtente("rosso");
+            completaSegnalazione = findViewById(R.id.btnCompletaSegnalazione);
+            completaSegnalazione.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                Intent i = new Intent(SegnalaPositivitaActivity.this, SettingActivity.class);
-                startActivity(i);
-            }
-        });
+                    if(uri != null && !textInputLayoutData.isErrorEnabled()){
+                        uploadImage(getMailUtenteLoggato());
+                        cambiaStatoUtente("rosso");
+
+                        Intent i = new Intent(SegnalaPositivitaActivity.this, SettingActivity.class);
+                        startActivity(i);
+                    }else
+                        Toasty.warning(SegnalaPositivitaActivity.this, "Inserisci data e/o certificato", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
 
     }
 
@@ -139,6 +150,30 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
                 .update("stato", nuovoStato);
     }
 
+
+    private void controlloData(EditText editTextData, TextInputLayout textInputLayoutData, int dayOfYear){
+        String data = editTextData.getText().toString();
+
+        //todo: controllo da sistemare. Deve tenere conto anche dell'anno
+        Calendar cal = Calendar.getInstance();
+        int dayOfYearToday = cal.get(Calendar.DAY_OF_YEAR);
+
+
+        if(editTextData == null){
+            textInputLayoutData.setError("inserisci data");
+        }else{
+            textInputLayoutData.setErrorEnabled(false);
+            if((dayOfYear - dayOfYearToday) > 0){
+                textInputLayoutData.setError("Data successiva a quella di oggi");
+            }else if ((dayOfYearToday - dayOfYear) > 30){
+                textInputLayoutData.setError("E' trascorso molto tempo");
+                Toasty.warning(SegnalaPositivitaActivity.this, "E' trascorso molto tempo", Toast.LENGTH_SHORT).show();
+            }else
+
+                textInputLayoutData.setErrorEnabled(false);
+        }
+
+    }
 
     private void scegliDocumento(){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -173,8 +208,6 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
         pd.show();
 
 
-        //Log.d("documentId2", documentId);
-        //Log.d("uri", imageUri.toString());
         if((uri != null) && (documentId != null)){
             final StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("certificatiPositivita").child(documentId);
 

@@ -162,6 +162,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Aggiungi immagine"
+            app:cornerRadius="20dp"
             android:onClick="addImgEvent">
         </com.google.android.material.button.MaterialButton>
 
@@ -179,13 +180,14 @@
             android:layout_height="200dp">
         </com.google.android.gms.maps.MapView>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonCreaEvento"
             android:layout_width="152dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="50dp"
+            app:cornerRadius="20dp"
             android:text="Crea" />
 
     </LinearLayout>

@@ -225,6 +225,7 @@
             android:layout_marginTop="32dp"
             android:backgroundTint="#1E88E5"
             android:text="Salva modifiche"
+            app:cornerRadius="20dp"
             android:textColor="#FFFFFF" />
 
     </LinearLayout>

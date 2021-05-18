@@ -53,33 +53,40 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:background="#43A047"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="10dp"
                     android:text="Modifica dati"
+                    android:textSize="16dp"
                     app:icon="@drawable/ic_pencil_24dp"
                     app:cornerRadius="20dp"
-                    style="@style/Widget.MaterialComponents.Button"
-                    ></com.google.android.material.button.MaterialButton>
+                    android:padding="10dp"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/logout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:background="#43A047"
-                    android:backgroundTint="#FFFFFF"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="10dp"
+                    android:padding="10dp"
+                    app:cornerRadius="20dp"
                     android:text="Log Out"
-                    app:backgroundTint="#F10A0A"></com.google.android.material.button.MaterialButton>
+                    android:textSize="16dp"
+                    app:backgroundTint="#F10A0A"/>
+
+
 
                 <Button
                     android:id="@+id/certificato"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:background="@color/red"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="10dp"
                     android:text="inserisci certificato"
+                    android:textSize="16dp"
+                    app:cornerRadius="20dp"
+                    android:padding="10dp"
                     app:icon="@drawable/ic_baseline_add_24"></Button>
 
                 <ImageView

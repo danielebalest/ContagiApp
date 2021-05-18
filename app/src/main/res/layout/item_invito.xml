@@ -84,6 +84,7 @@
                     android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:text="accetta"
+                    app:cornerRadius="20dp"
                     android:backgroundTint="#2E6C01">
 
                 </com.google.android.material.button.MaterialButton>
@@ -95,6 +96,7 @@
                     android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:text="rifiuta"
+                    app:cornerRadius="20dp"
                     android:backgroundTint="#870F0F">
 
                 </com.google.android.material.button.MaterialButton>

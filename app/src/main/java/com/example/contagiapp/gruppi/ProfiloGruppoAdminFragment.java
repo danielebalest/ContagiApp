@@ -92,6 +92,16 @@ public class ProfiloGruppoAdminFragment extends Fragment {
 
                         eliminaGruppo(idGruppo);
 
+                        Bundle bundle = new Bundle();
+                        GroupFragment fragment = new GroupFragment();
+                        fragment.setArguments(bundle);
+
+                        //richiamo il fragment
+                        FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                        fr.replace(R.id.container,fragment);
+                        fr.addToBackStack(null); //serve per tornare al fragment precedente
+                        fr.commit();
+
                     }
                 });
 

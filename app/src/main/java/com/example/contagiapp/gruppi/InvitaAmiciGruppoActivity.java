@@ -69,6 +69,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
                 startActivity(mainIntent);
                 //todo: devo tornare al fragment GroupFragment
 
+
             }
         });
 

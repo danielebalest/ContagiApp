@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -116,7 +117,15 @@ public class ProfiloGruppoFragment extends Fragment {
                             listaMailPartecipanti.remove(mailUtenteLoggato);
                             db.collection("Gruppo").document(idGruppo).update("partecipanti", listaMailPartecipanti);
 
-                            //todo: tornare al fragment precedente
+                            Bundle bundle = new Bundle();
+                            GroupFragment fragment = new GroupFragment();
+                            fragment.setArguments(bundle);
+
+                            //richiamo il fragment
+                            FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                            fr.replace(R.id.container,fragment);
+                            fr.addToBackStack(null); //serve per tornare al fragment precedente
+                            fr.commit();
                         }
                     }
                 });
