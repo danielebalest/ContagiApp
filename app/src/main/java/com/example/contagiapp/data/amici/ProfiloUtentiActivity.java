@@ -40,6 +40,9 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
     private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private final static String storageDirectory = "imgUtenti";
     TextView textViewNomeCognome;
+    TextView textViewNazione;
+    TextView textViewDataNascita;
+    TextView textViewGenere;
     TextView textViewCitta;
     TextView textViewAge;
     ImageView imageViewProfiloUtente;
@@ -54,6 +57,9 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
         textViewNomeCognome = findViewById(R.id.textViewNomeCognome);
         textViewCitta = findViewById(R.id.textViewCitta);
         textViewAge = findViewById(R.id.textViewAge);
+        textViewNazione = findViewById(R.id.textViewNazione);
+        textViewDataNascita = findViewById(R.id.textViewDataNascita);
+        textViewGenere = findViewById(R.id.textViewGenere);
         imageViewProfiloUtente = findViewById(R.id.imageViewProfiloUtente);
         btnRichiesta = findViewById(R.id.btnRichiesta);
 
@@ -75,38 +81,52 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                 String nome = user.getNome();
                                 String cognome = user.getCognome();
                                 String citta = user.getCitta();
+                                String nazione = user.getNazione();
+                                String dataNascita = user.getDataNascita();
+                                String genere = user.getGenere();
                                 int age = user.getAge();
+
                                 textViewNomeCognome.setText(nome + " " + cognome);
                                 textViewCitta.setText(citta);
                                 textViewAge.setText(String.valueOf(age));
+                                textViewNazione.setText(nazione);
+                                textViewDataNascita.setText(dataNascita);
+                                textViewGenere.setText(genere);
                                 caricaImgDaStorage(storageRef, storageDirectory, idUtenteSelezionato, imageViewProfiloUtente);
 
-                                if(amico.equals("no")) {
-                                    btnRichiesta.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-
-                                            String profiloLoggato = getMailUtenteLoggato();
-
-                                            user.addRichiesta(profiloLoggato);
-
-                                            db.collection("Utenti").document(idUtenteSelezionato)
-                                                    .update("richiesteRicevute", user.getRichiesteRicevute());
-
-                                            btnRichiesta.setText("Richiesta inviata");
-                                            btnRichiesta.setClickable(false);
-                                        }
-                                    });
+                                if(user.getRichiesteRicevute().contains(extras.getString("mailUtenteLoggato"))) {
+                                    btnRichiesta.setText("Richiesta inviata");
+                                    btnRichiesta.setClickable(false);
                                 } else {
-                                    btnRichiesta.setText("Rimuovi amico");
+                                    if(amico.equals("no")) {
+                                        btnRichiesta.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
 
-                                    btnRichiesta.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            rimuoviAmico(idUtenteSelezionato, extras.getString("mailLoggato"));
-                                            //TODO finish();
-                                        }
-                                    });
+                                                String profiloLoggato = getMailUtenteLoggato();
+
+                                                user.addRichiesta(profiloLoggato);
+
+                                                db.collection("Utenti").document(idUtenteSelezionato)
+                                                        .update("richiesteRicevute", user.getRichiesteRicevute());
+
+                                                btnRichiesta.setText("Richiesta inviata");
+                                                btnRichiesta.setClickable(false);
+                                                finish();
+                                                //getSupportFragmentManager().beginTransaction().replace(R.id.amici, new FriendsFragment()).commit();
+                                            }
+                                        });
+                                    } else {
+                                        btnRichiesta.setText("Rimuovi amico");
+
+                                        btnRichiesta.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                rimuoviAmico(idUtenteSelezionato, extras.getString("mailLoggato"));
+                                                finish();
+                                            }
+                                        });
+                                    }
                                 }
 
                                 //aggiornaRichieste(idUtenteSelezionato, profiloLoggato, user);

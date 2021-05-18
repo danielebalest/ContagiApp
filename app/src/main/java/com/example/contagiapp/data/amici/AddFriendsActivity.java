@@ -47,8 +47,9 @@ public class AddFriendsActivity extends AppCompatActivity  {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private RecyclerView recyclerView;
 
-    ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
-    ArrayList<Utente> utenti = new ArrayList<Utente>();
+    ArrayList<String> idList = new ArrayList<>(); //lista che conterrà gli id cioè le mail degli utenti
+    ArrayList<Utente> utenti = new ArrayList<>();
+    ArrayList<String> amiciLoggato;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,17 +58,22 @@ public class AddFriendsActivity extends AppCompatActivity  {
 
         Bundle extras = getIntent().getExtras();
         if(extras.getString("aggiungere").equals("si")) {
-            ArrayList<String> listaMailAmici = (ArrayList<String>) extras.get("listaMailAmici");
+            ArrayList<String> listaMailAmici;
+
+            if(extras.getStringArrayList("listaMailAmici") == null) {
+                listaMailAmici = new ArrayList<>();
+            } else listaMailAmici = extras.getStringArrayList("listaMailAmici");
+
             String mailUtenteLoggato = extras.getString("mailUtenteLoggato");
             listaMailAmici.add(mailUtenteLoggato);
             Log.d("listaMailAmici", String.valueOf(listaMailAmici));
-            caricaUtentiNonAmici(listaMailAmici);
+            caricaUtentiNonAmici(listaMailAmici, mailUtenteLoggato);
         } else {
             caricaAmicicCercati(extras);
         }
     }
 
-    public void caricaUtentiNonAmici( ArrayList<String> listaAmici) {
+    public void caricaUtentiNonAmici(ArrayList<String> listaAmici, final String mailUtenteLoggato) {
         recyclerView = findViewById(R.id.rvUtenti);
 
 
@@ -99,6 +105,7 @@ public class AddFriendsActivity extends AppCompatActivity  {
 
                         Intent profiloIntent = new Intent(AddFriendsActivity.this, ProfiloUtentiActivity.class );
                         profiloIntent.putExtra("id", idUtenteSelezionato);
+                        profiloIntent.putExtra("mailUtenteLoggato", mailUtenteLoggato);
                         profiloIntent.putExtra( "amico", "no");
                         startActivity(profiloIntent);
                     }
@@ -113,11 +120,19 @@ public class AddFriendsActivity extends AppCompatActivity  {
         });//Todo: onFailure
     }
 
-    public Utente[] ut;
     public void caricaAmicicCercati(final Bundle extras) {
+        recyclerView = findViewById(R.id.rvUtenti);
         final String cerca = extras.getString("cerca");
+        final String mail = extras.getString("mail");
 
-        db.collection("Utenti").get().
+        db.collection("Utenti").document(mail).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                amiciLoggato = (ArrayList<String>) documentSnapshot.get("amici");
+            }
+        });
+
+        db.collection("Utenti").whereNotEqualTo("mailPath", mail).get().
                 addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -145,18 +160,13 @@ public class AddFriendsActivity extends AppCompatActivity  {
 
                                 final Intent profiloIntent = new Intent(AddFriendsActivity.this, ProfiloUtentiActivity.class );
                                 profiloIntent.putExtra("id", idUtenteSelezionato);
+                                profiloIntent.putExtra("mailUtenteLoggato", mail);
 
-                                db.collection("Utenti").document(extras.getString("mail")).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        ArrayList<String> am = (ArrayList<String>) documentSnapshot.get("amici");
-                                        if(am.contains(idUtenteSelezionato)) {
-                                            profiloIntent.putExtra( "amico", "si");
-                                        } else {
-                                            profiloIntent.putExtra( "amico", "no");
-                                        }
-                                    }
-                                });
+                                if(amiciLoggato.contains(idUtenteSelezionato)) {
+                                    profiloIntent.putExtra( "amico", "si");
+                                } else {
+                                    profiloIntent.putExtra( "amico", "no");
+                                }
 
                                 startActivity(profiloIntent);
                             }

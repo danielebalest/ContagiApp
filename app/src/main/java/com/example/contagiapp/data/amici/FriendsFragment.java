@@ -72,7 +72,6 @@ public class FriendsFragment extends Fragment {
 
 
 
-
         editText = view.findViewById(R.id.search_field);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

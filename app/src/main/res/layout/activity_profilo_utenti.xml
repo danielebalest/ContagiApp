@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
+    android:id="@+id/amici"
     tools:context=".data.amici.ProfiloUtentiActivity">
 
     <androidx.cardview.widget.CardView
@@ -25,52 +26,147 @@
     </androidx.cardview.widget.CardView>
 
 
-
-
     <TextView
         android:id="@+id/textViewNomeCognome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="32dp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
+        android:background="@drawable/layout_bg"
+        android:backgroundTint="#F10A0A"
         android:gravity="center"
-        ></TextView>
+        android:textColor="@color/black"
+        android:layout_margin="10dp"
+        android:textSize="32dp"
+        android:textStyle="bold"></TextView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRichiesta"
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
+        android:textSize="20dp"
+        android:textStyle="bold"
         android:layout_height="wrap_content"
-        android:text="Aggiungi agli amici">
-    </com.google.android.material.button.MaterialButton>
-
+        android:text="Aggiungi agli amici"></com.google.android.material.button.MaterialButton>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/layout_bg"
+        android:backgroundTint="#03A9F4"
+        android:layout_margin="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="  Data di nascita: "
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewDataNascita"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/layout_bg"
+        android:backgroundTint="#03A9F4"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textViewCitta"
-            android:layout_width="match_parent"
+            android:id="@+id/textView17"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22dp"
-            android:textStyle="bold"
+            android:gravity="center"
+            android:text="  Età: "
             android:textColor="@color/black"
-            android:layout_weight="1"
-            ></TextView>
+            android:textSize="25dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textViewAge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="22dp"
-            android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_weight="1"
-            ></TextView>
+            android:textSize="25dp"
+            android:textStyle="bold"></TextView>
 
-        </LinearLayout>
 
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="  Genere: "
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewGenere"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="  "
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/layout_bg"
+        android:layout_margin="5dp"
+        android:backgroundTint="#03A9F4"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  Residenza: "
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            android:gravity="center"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewNazione"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewCitta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            android:gravity="center"
+            android:textStyle="bold"></TextView>
+    </LinearLayout>
 
 </LinearLayout>
