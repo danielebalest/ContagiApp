@@ -27,25 +27,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".impostazioni.SegnalaNegativita"></activity>
         <activity
             android:name=".impostazioni.SegnalaPositivitaActivity"
-            android:parentActivityName=".impostazioni.SettingActivity">
-        </activity>
-
+            android:parentActivityName=".impostazioni.SettingActivity" />
         <activity android:name=".data.amici.ProfiloUtentiActivity" />
         <activity android:name=".data.amici.AddFriendsActivity" />
         <activity android:name=".gruppi.InvitaAmiciGruppoActivity" />
-
         <activity
             android:name=".gruppi.AddImgGruppoActivity"
-            android:parentActivityName=".gruppi.CreaGruppoActivity">
-        </activity>
-
+            android:parentActivityName=".gruppi.CreaGruppoActivity" />
         <activity android:name=".gruppi.CreaGruppoActivity" />
         <activity
             android:name=".impostazioni.SettingActivity"
-            android:label="@string/settings"/>
+            android:label="@string/settings" />
         <activity
             android:name=".registrazione.RegistrationActivity"
             android:parentActivityName=".WelcomeActivity" />

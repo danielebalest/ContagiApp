@@ -25,6 +25,16 @@ public class Utente {
     private ArrayList<String> richiesteRicevute;
     private ArrayList<String> invitiRicevuti;
 
+    public String getDataPositivita() {
+        return dataPositivita;
+    }
+
+    public void setDataPositivita(String dataPositivita) {
+        this.dataPositivita = dataPositivita;
+    }
+
+    private String dataPositivita;
+
     public Utente() {
     }
 
