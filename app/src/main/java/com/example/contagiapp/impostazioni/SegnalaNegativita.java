@@ -151,11 +151,7 @@ public class SegnalaNegativita extends AppCompatActivity {
                 .update("stato", nuovoStato);
     }
 
-    private void controlloSuDataPositivita(final String dataNegativita){
-        boolean value = false;
 
-
-    }
 
     private void controlloData(EditText editTextData, final TextInputLayout textInputLayoutData, final int dayOfYearNegativita, int anno){
         /*
@@ -200,29 +196,32 @@ public class SegnalaNegativita extends AppCompatActivity {
                         Utente utente = documentSnapshot.toObject(Utente.class);
                         String dataPositivita = utente.getDataPositivita();
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                        Date parse = null;
-                        try {
-                            parse = sdf.parse(dataPositivita);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                        if(dataPositivita != null){
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                            Date parse = null;
+                            try {
+                                parse = sdf.parse(dataPositivita);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            Calendar c = Calendar.getInstance();
+                            c.setTime(parse);
+
+
+                            int dayOfYearPositivita = c.get(Calendar.DAY_OF_YEAR);
+
+
+                            Log.d("dayOfYearPositivita", String.valueOf(dayOfYearPositivita));
+                            Log.d("dayOfYearNegativita", String.valueOf(dayOfYearNegativita));
+
+
+                            if((dayOfYearNegativita - dayOfYearPositivita) < 10){
+                                Log.d("differenza", String.valueOf((dayOfYearNegativita - dayOfYearPositivita)));
+                                textInputLayoutData.setError("Devono essere trascorsi almeno 10 giorni dalla positività");
+                            }
                         }
 
-                        Calendar c = Calendar.getInstance();
-                        c.setTime(parse);
-
-
-                        int dayOfYearPositivita = c.get(Calendar.DAY_OF_YEAR);
-
-
-                        Log.d("dayOfYearPositivita", String.valueOf(dayOfYearPositivita));
-                        Log.d("dayOfYearNegativita", String.valueOf(dayOfYearNegativita));
-
-
-                        if((dayOfYearNegativita - dayOfYearPositivita) < 10){
-                            Log.d("differenza", String.valueOf((dayOfYearNegativita - dayOfYearPositivita)));
-                            textInputLayoutData.setError("Devono essere trascorsi almeno 10 giorni dalla positività");
-                        }
                     }
                 });
 
@@ -236,6 +235,8 @@ public class SegnalaNegativita extends AppCompatActivity {
                 .document(getMailUtenteLoggato())
                 .update("dataNegativita", data);
     }
+
+
 
     private void scegliImmagine(){
         Intent intent = new Intent(Intent.ACTION_PICK);

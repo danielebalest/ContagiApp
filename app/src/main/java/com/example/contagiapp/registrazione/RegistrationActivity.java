@@ -571,6 +571,7 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                         user1.put("amici", friends);
                         user1.put("richiesteRicevute", richieste);
                         user1.put("invitiRicevuti", inviti);
+
                         db.collection("Utenti").document(email).set(user1);
 
                         //uploadImage(utente.getMail()); //

@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -40,9 +42,10 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         btnSegnalaPositivita = findViewById(R.id.btnSegnalaPositività);
         btnSegnalaNegativita = findViewById(R.id.btnSegnalaNegatività);
+        MaterialButton btnNotifiche = findViewById(R.id.btnNotify);
 
-        db.collection("Utenti").
-                document(getMailUtenteLoggato())
+        db.collection("Utenti")
+                .document(getMailUtenteLoggato())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -53,36 +56,33 @@ public class SettingActivity extends AppCompatActivity {
 
                 String dataPositività = utente.getDataPositivita();
 
+                if(dataPositività != null){
+                    try {
+                        Date dataPositività1=new SimpleDateFormat("dd/MM/yyyy").parse(dataPositività);
+                        Log.d("date1", String.valueOf(dataPositività1));
 
-                try {
-                    Date dataPositività1=new SimpleDateFormat("dd/MM/yyyy").parse(dataPositività);
-                    Log.d("date1", String.valueOf(dataPositività1));
+
+                        Date dataAttuale = new Date(System.currentTimeMillis());
+                        Log.d("date", String.valueOf(dataAttuale));
+
+                        dataPositività1.getMonth();
+                        dataAttuale.getMonth();
+                        int differenzaDiData = Math.abs(dataPositività1.getDate() - dataAttuale.getDate()); //todo: da sistemare se i mesi sono diversi
+                        Log.d("differenzaDiData", String.valueOf(differenzaDiData));
+
+                        if(differenzaDiData < 10){
+                            btnSegnalaNegativita.setClickable(false);
+                            btnSegnalaNegativita.setVisibility(View.INVISIBLE);
+                        }
 
 
-                    Date dataAttuale = new Date(System.currentTimeMillis());
-                    Log.d("date", String.valueOf(dataAttuale));
-
-                    dataPositività1.getMonth();
-                    dataAttuale.getMonth();
-                    int differenzaDiData = Math.abs(dataPositività1.getDate() - dataAttuale.getDate()); //todo: da sistemare se i mesi sono diversi
-                    Log.d("differenzaDiData", String.valueOf(differenzaDiData));
-
-                    if(differenzaDiData < 10){
-                        btnSegnalaNegativita.setClickable(false);
-                        btnSegnalaNegativita.setVisibility(View.INVISIBLE);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
                 }
-
-
-
 
             }
         });
-
 
         btnSegnalaPositivita.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +100,15 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        btnNotifiche.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                intent.putExtra("android.provider.extra.APP_PACKAGE", getPackageName());
+                startActivity(intent);
+            }
+        });
     }
 
     private String getMailUtenteLoggato(){
