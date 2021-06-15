@@ -19,4 +19,9 @@
         android:layout_height="wrap_content"
         tools:listitem="@layout/item_invito"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvEventiACuiPartecipo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/item_promemoria_evento"/>
 </LinearLayout>

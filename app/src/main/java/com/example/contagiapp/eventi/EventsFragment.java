@@ -93,8 +93,6 @@ public class EventsFragment extends Fragment {
     }
 
     private void caricaEventi(){
-
-
         listaEventi = new ArrayList<Evento>();
         db.collection("Eventi").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

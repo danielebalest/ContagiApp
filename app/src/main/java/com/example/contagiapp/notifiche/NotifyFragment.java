@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +24,10 @@ import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
 import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
+import com.example.contagiapp.eventi.EventAdapter;
+import com.example.contagiapp.eventi.Evento;
+import com.example.contagiapp.eventi.EventsFragment;
+import com.example.contagiapp.eventi.ProfiloEventoFragment;
 import com.example.contagiapp.gruppi.Gruppo;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,6 +36,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -43,6 +49,8 @@ public class NotifyFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
+    RecyclerView rvEventiACuiPartecipo;
+    ArrayList<Evento> listaEventi = new ArrayList<Evento>();
 
     public NotifyFragment() {
         // Required empty public constructor
@@ -57,6 +65,7 @@ public class NotifyFragment extends Fragment {
 
         final RecyclerView recyclerViewRichieste =  view.findViewById(R.id.rvRichieste);
         final RecyclerView recyclerViewInviti =  view.findViewById(R.id.rvInviti);
+        rvEventiACuiPartecipo = view.findViewById(R.id.rvEventiACuiPartecipo);
 
         String mailUtenteLoggato = getMailUtenteLoggato();
         //Otteniamo la lista della mail degli amici
@@ -73,11 +82,10 @@ public class NotifyFragment extends Fragment {
                         Log.d("listaInviti", String.valueOf(listaInviti));
                         getRichieste(listaMailRichieste, recyclerViewRichieste);
                         getInviti(listaInviti, recyclerViewInviti);
-
-
                     }
                 });
 
+        caricaEventi(rvEventiACuiPartecipo);
 
         return view;
     }
@@ -263,6 +271,32 @@ public class NotifyFragment extends Fragment {
             Log.d("mail", mailUtenteLoggato);
         }
         return mailUtenteLoggato;
+    }
+
+    private void caricaEventi(final RecyclerView rvEventi){
+
+        listaEventi = new ArrayList<Evento>();
+
+
+        db.collection("Eventi")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            Evento evento = documentSnapshot.toObject(Evento.class);
+                            listaEventi.add(evento);
+
+                            String id = documentSnapshot.getId();
+                            idList.add(id);
+
+                        }
+                        EventPartecipanteAdapter adapter = new EventPartecipanteAdapter(listaEventi);
+
+                        rvEventi.setAdapter(adapter);
+                        rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    }
+                }); //toDo onFailure
     }
 
     //per il click
