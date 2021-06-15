@@ -21,17 +21,22 @@ import com.example.contagiapp.R;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import es.dmoral.toasty.Toasty;
 
@@ -146,7 +151,13 @@ public class SegnalaNegativita extends AppCompatActivity {
                 .update("stato", nuovoStato);
     }
 
-    private void controlloData(EditText editTextData, TextInputLayout textInputLayoutData, int dayOfYear, int anno){
+    private void controlloSuDataPositivita(final String dataNegativita){
+        boolean value = false;
+
+
+    }
+
+    private void controlloData(EditText editTextData, final TextInputLayout textInputLayoutData, final int dayOfYearNegativita, int anno){
         /*
         * regole. La data del tampone negativo deve:
         * 1) essere inferiore o pari alla data attuale OK
@@ -169,15 +180,53 @@ public class SegnalaNegativita extends AppCompatActivity {
             if(anno < annoAttuale){
                 textInputLayoutData.setError("E' trascorso molto tempo");
             }else {
-                if((dayOfYear - dayOfYearToday) > 0){
+                if((dayOfYearNegativita - dayOfYearToday) > 0){
                     textInputLayoutData.setError("Data successiva a quella di oggi");
-                }else if ((dayOfYearToday - dayOfYear) > 5){
+                }else if ((dayOfYearToday - dayOfYearNegativita) > 5){
                     textInputLayoutData.setError("E' trascorso molto tempo");
                     Toasty.warning(SegnalaNegativita.this, "E' trascorso molto tempo", Toast.LENGTH_SHORT).show();
                 }else
                     textInputLayoutData.setErrorEnabled(false);
             }
         }
+
+        //CONTROLLO SU DATA POSITIVITA'
+        db.collection("Utenti")
+                .document(getMailUtenteLoggato())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Utente utente = documentSnapshot.toObject(Utente.class);
+                        String dataPositivita = utente.getDataPositivita();
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        Date parse = null;
+                        try {
+                            parse = sdf.parse(dataPositivita);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(parse);
+
+
+                        int dayOfYearPositivita = c.get(Calendar.DAY_OF_YEAR);
+
+
+                        Log.d("dayOfYearPositivita", String.valueOf(dayOfYearPositivita));
+                        Log.d("dayOfYearNegativita", String.valueOf(dayOfYearNegativita));
+
+
+                        if((dayOfYearNegativita - dayOfYearPositivita) < 10){
+                            Log.d("differenza", String.valueOf((dayOfYearNegativita - dayOfYearPositivita)));
+                            textInputLayoutData.setError("Devono essere trascorsi almeno 10 giorni dalla positività");
+                        }
+                    }
+                });
+
+
     }
 
 

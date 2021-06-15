@@ -43,7 +43,8 @@ public class SettingActivity extends AppCompatActivity {
 
         db.collection("Utenti").
                 document(getMailUtenteLoggato())
-                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Utente utente = documentSnapshot.toObject(Utente.class);
