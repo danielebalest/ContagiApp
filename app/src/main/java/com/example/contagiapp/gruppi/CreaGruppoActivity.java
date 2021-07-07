@@ -35,15 +35,7 @@ public class CreaGruppoActivity extends AppCompatActivity {
         String descrGruppo = editTextDescrGruppo.getText().toString();
 
         controlloEditText(nomeGruppo, descrGruppo);
-
-
-
     }
-
-
-
-
-
 
     public void controlloEditText(String nomeGruppo, String descrGruppo) {
         TextInputLayout textInputLayoutNome = findViewById(R.id.TextLayoutNomeGruppo);

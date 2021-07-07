@@ -63,11 +63,8 @@ public class EventsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_events, container, false);
 
 
-
-
         rvEventi = view.findViewById(R.id.rvEventi);
         caricaEventi();
-
 
         new_event = view.findViewById(R.id.floating_action_button);
         new_event.setOnClickListener(new View.OnClickListener() {

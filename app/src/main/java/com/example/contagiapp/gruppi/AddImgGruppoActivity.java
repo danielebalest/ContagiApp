@@ -94,6 +94,7 @@ public class AddImgGruppoActivity extends AppCompatActivity {
             gruppo.setNomeGruppo(nomeGruppo);
             gruppo.setDescrizione(descrGruppo);
             gruppo.setPartecipanti(listaMailPartecipanti);
+            gruppo.setStatoGruppo(null);
             gruppoCollection.add(gruppo).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {

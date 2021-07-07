@@ -92,6 +92,10 @@ public class Evento {
         this.partecipanti = partecipanti;
     }
 
+    public void addPartecipantiGruppo(ArrayList<String> partecipantiGruppo){
+        getPartecipanti().addAll(partecipantiGruppo);
+    }
+
     public int getNumeroMaxPartecipanti() {
         return numeroMaxPartecipanti;
     }

@@ -9,10 +9,13 @@ public class Gruppo {
     private String descrizione;
     private ArrayList<String> partecipanti;
     private int nroPartecipanti;
+    private String statoGruppo;
 
 
     public Gruppo() {
     }
+
+
 
     public String getIdGruppo() {
         return idGruppo;
@@ -83,5 +86,13 @@ public class Gruppo {
 
     public void aggiornaNroPartecipanti(ArrayList<String> partecipanti) {
         this.nroPartecipanti = partecipanti.size();
+    }
+
+    public String getStatoGruppo() {
+        return statoGruppo;
+    }
+
+    public void setStatoGruppo(String statoGruppo) {
+        this.statoGruppo = statoGruppo;
     }
 }

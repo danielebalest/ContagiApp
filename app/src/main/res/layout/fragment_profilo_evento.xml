@@ -113,5 +113,11 @@
         android:layout_height="wrap_content"
         android:text="Partecipa" />
 
+    <Button
+        android:id="@+id/partecipa_evento_gruppo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Partecipa come gruppo" />
+
 
 </LinearLayout>

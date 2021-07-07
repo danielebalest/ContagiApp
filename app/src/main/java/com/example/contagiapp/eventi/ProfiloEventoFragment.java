@@ -1,12 +1,14 @@
 package com.example.contagiapp.eventi;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import com.example.contagiapp.R;
 import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
+import com.example.contagiapp.gruppi.ProfiloGruppoAdminFragment;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,31 +47,13 @@ public class ProfiloEventoFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private final static String storageDirectory = "eventi";
-    private Button partecipa;
+    private Button btnPartecipa;
+    private Button btnPartecipaComeGruppo;
     public  Evento evento;
 
     public ProfiloEventoFragment() {
         // Required empty public constructor
     }
-    private String getMailUtenteLoggato(){
-        Gson gson = new Gson();
-        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
-        String json = prefs.getString("utente", "no");
-        String mailUtenteLoggato;
-        //TODO capire il funzionamento
-        if(!json.equals("no")) {
-            Utente utente = gson.fromJson(json, Utente.class);
-            mailUtenteLoggato = utente.getMail();
-            Log.d("mailutenteLoggato", mailUtenteLoggato);
-        } else {
-            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
-            mailUtenteLoggato = prefs1.getString("mail", "no");
-            Log.d("mail", mailUtenteLoggato);
-        }
-        return mailUtenteLoggato;
-    }
-
-
 
 
     @Override
@@ -83,10 +68,12 @@ public class ProfiloEventoFragment extends Fragment {
         Log.d("idEvento", String.valueOf(idEvento));
 
         caricaEvento(idEvento, view);
-        partecipa= view.findViewById(R.id.partecipa_evento);
+        btnPartecipa= view.findViewById(R.id.partecipa_evento);
+        btnPartecipaComeGruppo = view.findViewById(R.id.partecipa_evento_gruppo);
+
         final String mailutente= getMailUtenteLoggato();
         final ArrayList<String> partecipanti = new ArrayList<>();
-        partecipa.setOnClickListener(new View.OnClickListener() {
+        btnPartecipa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(evento.getAdmin().equals(mailutente)) {
@@ -114,6 +101,29 @@ public class ProfiloEventoFragment extends Fragment {
         }
         });
 
+
+        btnPartecipaComeGruppo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PartecipazioneGruppoFragment fragment = new PartecipazioneGruppoFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("idEvento", idEvento);
+
+                fragment.setArguments(bundle);
+
+                Log.d("idEv", idEvento);
+
+                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                fr.replace(R.id.container,fragment);
+                fr.addToBackStack(null); //serve per tornare al fragment precedente
+                fr.commit();
+
+
+            }
+        });
+
         final ImageView img = view.findViewById(R.id.imgProfiloEvento);
 
 
@@ -124,14 +134,34 @@ public class ProfiloEventoFragment extends Fragment {
 
 
                 //recupero l'immagine dallo storage
-                Log.d("eventi/idEvento","eventi/"+idEvento);
+                Log.d("eventi/idEvento","eventi/" + idEvento);
 
                 caricaImgDaStorage(storageRef, storageDirectory, idEvento, img );
 
             }
         });
 
+
+
         return view;
+    }
+
+    private String getMailUtenteLoggato(){
+        Gson gson = new Gson();
+        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String json = prefs.getString("utente", "no");
+        String mailUtenteLoggato;
+        //TODO capire il funzionamento
+        if(!json.equals("no")) {
+            Utente utente = gson.fromJson(json, Utente.class);
+            mailUtenteLoggato = utente.getMail();
+            Log.d("mailutenteLoggato", mailUtenteLoggato);
+        } else {
+            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
+            mailUtenteLoggato = prefs1.getString("mail", "no");
+            Log.d("mail", mailUtenteLoggato);
+        }
+        return mailUtenteLoggato;
     }
 
     private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
