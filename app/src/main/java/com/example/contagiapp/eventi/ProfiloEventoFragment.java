@@ -49,7 +49,7 @@ public class ProfiloEventoFragment extends Fragment {
     private final static String storageDirectory = "eventi";
     private Button btnPartecipa;
     private Button btnPartecipaComeGruppo;
-    public  Evento evento;
+    public Evento evento;
 
     public ProfiloEventoFragment() {
         // Required empty public constructor
@@ -93,8 +93,8 @@ public class ProfiloEventoFragment extends Fragment {
                         partecipanti.add(getMailUtenteLoggato());
                         assert evento != null;
                         evento.setPartecipanti(partecipanti);
-                        int postidisp= evento.getNumeroPostiDisponibili() -1;
-                        db.collection("Eventi").document(idEvento).update("numeroPostiDisponibili", postidisp);
+                        int postiDisp = evento.getNumeroPostiDisponibili() -1;
+                        db.collection("Eventi").document(idEvento).update("numeroPostiDisponibili", postiDisp);
                         db.collection("Eventi").document(idEvento).update("partecipanti", partecipanti);
                         Toast.makeText(getContext(), "Iscrizione aggiunta!", Toast.LENGTH_LONG).show();
             }

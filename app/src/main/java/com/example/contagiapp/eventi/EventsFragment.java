@@ -2,6 +2,7 @@ package com.example.contagiapp.eventi;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,14 +27,18 @@ import com.bumptech.glide.Glide;
 import com.example.contagiapp.R;
 import com.example.contagiapp.data.amici.AddFriendsActivity;
 import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
+import com.example.contagiapp.notifiche.EventPartecipanteAdapter;
+import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -48,9 +53,11 @@ public class EventsFragment extends Fragment {
     private FloatingActionButton new_event;
     TextInputEditText editText;
     RecyclerView rvEventi;
+    RecyclerView rvEventiCreati;
     ArrayList<Evento> listaEventi = new ArrayList<Evento>();
+    ArrayList<Evento> listaEventiCreati = new ArrayList<Evento>();
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
-
+    ArrayList<String> listaIDEventoUtenteLoggato = new ArrayList<String>();
 
 
 
@@ -64,6 +71,9 @@ public class EventsFragment extends Fragment {
 
 
         rvEventi = view.findViewById(R.id.rvEventi);
+        rvEventiCreati = view.findViewById(R.id.rvEventiCreati);
+
+        caricaEventiCreati();
         caricaEventi();
 
         new_event = view.findViewById(R.id.floating_action_button);
@@ -89,14 +99,81 @@ public class EventsFragment extends Fragment {
         return view;
     }
 
+    private void caricaEventiCreati(){
+        db.collection("Eventi")
+                .whereEqualTo("admin", getMailUtenteLoggato())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            String idEvento = documentSnapshot.getId();
+                            listaIDEventoUtenteLoggato.add(idEvento);
+
+                            Evento evento = documentSnapshot.toObject(Evento.class);
+                            listaEventiCreati.add(evento);
+                        }
+                        Log.d("listaIDEventoUtenteLog", String.valueOf(listaIDEventoUtenteLoggato));
+
+                        EventAdapter adapter = new EventAdapter(listaEventiCreati);
+                        rvEventiCreati.setAdapter(adapter);
+                        rvEventiCreati.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        Log.d("listaEventiCreati1", String.valueOf(listaEventiCreati));
+                        rvEventiCreati.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
+                            @Override
+                            public void onClick(View view, int position) {
+                            //ToDo: devo andare in un'altra activity o fragment che mi fa vedere la lista dei prenotati
+
+                                String idEventoSelezionato = idList.get(position);
+                                Log.i("idList: ", idEventoSelezionato);
+                                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
+
+
+                                ProfiloEventoAdminFragment fragment = new ProfiloEventoAdminFragment();
+
+                                Bundle bundle = new Bundle();
+                                bundle.putString("idEvento", idEventoSelezionato);
+
+                                fragment.setArguments(bundle);
+
+
+                                //richiamo il fragment
+
+                                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                                fr.replace(R.id.container,fragment);
+                                fr.addToBackStack(null); //serve per tornare al fragment precedente
+                                fr.commit();
+                            }
+
+                            @Override
+                            public void onLongClick(View view, int position) {
+
+                            }
+
+                        }));
+
+                    }
+                });
+
+    }
+
     private void caricaEventi(){
+
+        //ToDo: devo escludere gli eventi a cui l'utente è admin 
+
+
+
+
         listaEventi = new ArrayList<Evento>();
-        db.collection("Eventi").get()
+        db.collection("Eventi")
+                //.whereNotIn(FieldPath.documentId(), listaEventiCreati) //ToDo: recuperare listaEventiCreati che appare sempre vuota
+                .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
                             Evento evento = documentSnapshot.toObject(Evento.class);
+
                             listaEventi.add(evento);
 
                             String id = documentSnapshot.getId();
@@ -143,6 +220,23 @@ public class EventsFragment extends Fragment {
                 }); //toDo onFailure
     }
 
+    private String getMailUtenteLoggato(){
+        Utente utente;
+        Gson gson = new Gson();
+        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String json = prefs.getString("utente", "no");
+        String mailUtenteLoggato;
+        if(!json.equals("no")) {
+            utente = gson.fromJson(json, Utente.class);
+            mailUtenteLoggato = utente.getMail();
+            Log.d("mailutenteLoggato", mailUtenteLoggato);
+        } else {
+            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
+            mailUtenteLoggato = prefs1.getString("mail", "no");
+            Log.d("mail", mailUtenteLoggato);
+        }
+        return mailUtenteLoggato;
+    }
 
     //per il click
     private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {

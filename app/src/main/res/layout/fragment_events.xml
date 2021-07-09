@@ -31,12 +31,19 @@
         android:layout_below="@+id/search_field"
         android:layout_marginBottom="60dp">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvEventiCreati"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_event"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvEventi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/item_event"/>
+
+
 
     </LinearLayout>
 

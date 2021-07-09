@@ -91,29 +91,13 @@ public class PartecipazioneGruppoFragment extends Fragment {
                             Log.d("listaPartecipantiEvento", String.valueOf(listaPartecipantiEvento));
                         }
 
-
                     }
                 });
         // Inflate the layout for this fragment
         return view;
     }
 
-    private String getMailUtenteLoggato(){
-        Gson gson = new Gson();
-        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
-        String json = prefs.getString("utente", "no");
-        String mailUtenteLoggato;
-        if(!json.equals("no")) {
-            utente = gson.fromJson(json, Utente.class);
-            mailUtenteLoggato = utente.getMail();
-            Log.d("mailutenteLoggato", mailUtenteLoggato);
-        } else {
-            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
-            mailUtenteLoggato = prefs1.getString("mail", "no");
-            Log.d("mail", mailUtenteLoggato);
-        }
-        return mailUtenteLoggato;
-    }
+
 
     private void caricaGruppi() {
         listaGruppiCreati = new ArrayList<Gruppo>();
@@ -164,8 +148,8 @@ public class PartecipazioneGruppoFragment extends Fragment {
                                             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                    //devo recuperare tutti i partecipanti al gruppo
-                                                    //aggiungere questi alla lista dei partecipanti all'evento (metterndoci i controlli se quell'email già esiste)
+                                                    //recupero tutti i partecipanti al gruppo
+                                                    //aggiungo questi alla lista dei partecipanti all'evento (metterndoci i controlli se quell'email già esiste)
 
                                                     if(documentSnapshot.exists()){
                                                         Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
@@ -184,6 +168,7 @@ public class PartecipazioneGruppoFragment extends Fragment {
                                                         }
 
                                                         //devo aggiungere su firebase alla lista dei partecipanti la nuova lista
+
 
                                                     }
                                                 }
@@ -211,6 +196,24 @@ public class PartecipazioneGruppoFragment extends Fragment {
 
                     }
                 }); //toDo onFailure
+    }
+
+    private String getMailUtenteLoggato(){
+        Gson gson = new Gson();
+        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String json = prefs.getString("utente", "no");
+        String mailUtenteLoggato;
+
+        if(!json.equals("no")) {
+            utente = gson.fromJson(json, Utente.class);
+            mailUtenteLoggato = utente.getMail();
+            Log.d("mailutenteLoggato", mailUtenteLoggato);
+        } else {
+            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
+            mailUtenteLoggato = prefs1.getString("mail", "no");
+            Log.d("mail", mailUtenteLoggato);
+        }
+        return mailUtenteLoggato;
     }
 
     private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
