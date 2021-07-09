@@ -54,7 +54,7 @@ public class ProfiloActivity extends AppCompatActivity {
     private Button modifica;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Utente utente;
-    private ImageView imgCertificato;
+    //private ImageView imgCertificato;
     private ImageView imgViewProfiloUtente;
     String imageFileName;
     String currentPhotoPath;
@@ -65,7 +65,7 @@ public class ProfiloActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilo);
-        imgCertificato= findViewById(R.id.immaginecertificato);
+        //imgCertificato= findViewById(R.id.immaginecertificato);
         imgViewProfiloUtente = findViewById(R.id.imgProfilo);
         listViewProfilo = (ListView) findViewById(R.id.list_profilo);
         final ArrayList<String> arrayListProfilo = new ArrayList<>();
@@ -148,13 +148,13 @@ public class ProfiloActivity extends AppCompatActivity {
             }
         });
 
-        certificato = (Button) findViewById(R.id.certificato);
+        /*certificato = (Button) findViewById(R.id.certificato);
         certificato.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                dispatchTakePictureIntent(photoIntent);
             }
-        });
+        });*/
     }
 
 
@@ -192,7 +192,7 @@ public class ProfiloActivity extends AppCompatActivity {
         });
     }
 
-    private void dispatchTakePictureIntent(@NotNull Intent takePictureIntent) {
+   /* private void dispatchTakePictureIntent(@NotNull Intent takePictureIntent) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
@@ -207,9 +207,9 @@ public class ProfiloActivity extends AppCompatActivity {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
-        }
+        }*/
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode== RESULT_OK ){
@@ -226,13 +226,13 @@ public class ProfiloActivity extends AppCompatActivity {
         imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,
+                ".jpg",
+                storageDir
         );
 
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
-    }
+    }*/
 }

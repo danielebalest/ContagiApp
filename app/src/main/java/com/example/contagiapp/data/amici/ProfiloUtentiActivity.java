@@ -123,6 +123,13 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(View v) {
                                                 rimuoviAmico(idUtenteSelezionato, extras.getString("mailLoggato"));
+
+                                                /*refresh della pagina friendsfragment (non funziona)
+                                                SharedPreferences prefs = getApplicationContext().getSharedPreferences("Refresh", MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = prefs.edit();
+                                                editor.putInt("refresh", 1);
+                                                editor.commit ();*/
+
                                                 finish();
                                             }
                                         });

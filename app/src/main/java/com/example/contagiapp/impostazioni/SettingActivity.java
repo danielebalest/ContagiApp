@@ -65,15 +65,25 @@ public class SettingActivity extends AppCompatActivity {
                         Date dataAttuale = new Date(System.currentTimeMillis());
                         Log.d("date", String.valueOf(dataAttuale));
 
-                        dataPositività1.getMonth();
-                        dataAttuale.getMonth();
-                        int differenzaDiData = Math.abs(dataPositività1.getDate() - dataAttuale.getDate()); //todo: da sistemare se i mesi sono diversi
+                        //dataPositività1.getMonth();
+                        //dataAttuale.getMonth();
+
+                        if(dataPositività1.getYear() == dataAttuale.getYear()) {
+                            if(dataPositività1.getMonth() == dataAttuale.getMonth()) {
+                                if(Math.abs(dataPositività1.getDay() - dataAttuale.getDay()) < 14) {
+                                    btnSegnalaNegativita.setClickable(false);
+                                    btnSegnalaNegativita.setVisibility(View.INVISIBLE);
+                                }
+                            }
+                        }
+
+                        /*int differenzaDiData = Math.abs(dataPositività1.getDate() - dataAttuale.getDate()); //todo: da sistemare se i mesi sono diversi
                         Log.d("differenzaDiData", String.valueOf(differenzaDiData));
 
                         if(differenzaDiData < 10){
                             btnSegnalaNegativita.setClickable(false);
                             btnSegnalaNegativita.setVisibility(View.INVISIBLE);
-                        }
+                        }*/
 
 
                     } catch (ParseException e) {

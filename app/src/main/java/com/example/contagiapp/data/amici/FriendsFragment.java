@@ -70,6 +70,13 @@ public class FriendsFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_friends, container, false);
 
+        /*SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("Refresh",Context.MODE_PRIVATE);
+        int refresh = prefs1.getInt("refresh", 0);
+        if(refresh==1) {
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+            SharedPreferences settings = getActivity().getApplicationContext().getSharedPreferences("Refresh", Context.MODE_PRIVATE);
+            settings.edit().clear().commit();
+        }*/
 
 
         editText = view.findViewById(R.id.search_field);

@@ -116,6 +116,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Residenza"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+            android:textColor="#2196F3"
+            android:textColorHint="#2196F3"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
         <Spinner
             android:id="@+id/spinnerNazioni"
             android:layout_width="match_parent"
