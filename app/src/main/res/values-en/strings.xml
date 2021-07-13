@@ -36,6 +36,11 @@
     <string name="Notifiche">Notify</string>
     <string name="InformativaPrivacy">Information e privacy</string>
 
+
+    <string name="rimuovi_partecipante">Remove participant</string>
+
+
+
     <string name="mapbox_access_token">MAPBOX_ACCESS_TOKEN</string>
 
 

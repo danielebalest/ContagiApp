@@ -1,14 +1,21 @@
 package com.example.contagiapp.eventi;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,17 +25,24 @@ import android.widget.Toast;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
+import com.example.contagiapp.data.amici.FriendsFragment;
+import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
 import com.example.contagiapp.utente.Utente;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProfiloEventoAdminFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -36,6 +50,9 @@ public class ProfiloEventoAdminFragment extends Fragment {
     private final static String storageDirectory = "eventi";
     public Evento evento;
     RecyclerView rvPartecipantiProfiloEventoAdmin;
+
+
+    ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
 
     public ProfiloEventoAdminFragment() {
         // Required empty public constructor
@@ -134,39 +151,156 @@ public class ProfiloEventoAdminFragment extends Fragment {
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    public void onSuccess(final DocumentSnapshot documentSnapshot) {
                         Evento evento = documentSnapshot.toObject(Evento.class);
 
-                        ArrayList<String> listaPartecipanti = evento.getPartecipanti();
+                        final ArrayList<String> listaPartecipanti = evento.getPartecipanti();
                         Log.d("listaPartecipanti", String.valueOf(listaPartecipanti));
 
                         //recuperare dalle mail l'oggetto utente
                         final ArrayList<Utente> listaUtenti = new ArrayList<Utente>();
 
+
+
                         for(int i=0; i < listaPartecipanti.size(); i++){
                             db.collection("Utenti")
-                                    .whereEqualTo("mail", listaPartecipanti)
+                                    .whereEqualTo("mail", listaPartecipanti.get(i))
+                                    //.whereEqualTo("mail", "aaa@gmail.com")
                                     .get()
-                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                    Log.d("prova",document.getId() + " => " + document.getData());
+                                                    Utente utente = document.toObject(Utente.class);
+                                                    Log.d("utente", String.valueOf(utente));
+                                                    listaUtenti.add(utente);
+
+                                                }
+                                                Log.d("listaUtenti", String.valueOf(listaUtenti));
+                                                //devo lavorare qui altrimenti perdo la visibilità della lista Utenti
+
+                                                UserAdapter adapter = new UserAdapter(listaUtenti);
+                                                rvPartecipantiProfiloEventoAdmin.setAdapter(adapter);
+                                                rvPartecipantiProfiloEventoAdmin.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+                                               rvPartecipantiProfiloEventoAdmin.addOnItemTouchListener(new ProfiloEventoAdminFragment.RecyclerTouchListener(getActivity(), rvPartecipantiProfiloEventoAdmin, new ProfiloEventoAdminFragment.RecyclerTouchListener.ClickListener() {
+                                                    @Override
+                                                    public void onClick(View view, int position) {
+                                                        String idUtenteSelezionato = listaPartecipanti.get(position);
+                                                        Log.i("listaPartecipanti: ", idUtenteSelezionato);
+
+                                                        ProfiloPartecipanteFragment fragment = new ProfiloPartecipanteFragment();
+
+                                                        Bundle bundle = new Bundle();
+                                                        bundle.putString("mailPartecipante", idUtenteSelezionato);
+
+                                                        fragment.setArguments(bundle);
+
+                                                        //richiamo il fragment
+
+                                                        FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                                                        fr.replace(R.id.container,fragment);
+                                                        fr.addToBackStack(null); //serve per tornare al fragment precedente
+                                                        fr.commit();
+                                                    }
+
+                                                    @Override
+                                                    public void onLongClick(View view, int position) {
+
+                                                    }
+
+                                                }));
+
+
+                                            } else {
+                                                Log.d("prova", "Error getting documents: ", task.getException());
+                                            }
                                         }
                                     });
+                        }
+
 
                         }
-                        Log.d("listaUtenti2", String.valueOf(listaUtenti));
+
 
                         //recyclerView
                         //UserAdapter adapter = new UserAdapter(listaPartecipanti);
 
 
-                    }
+
                 });
 
     }
 
-    //toDo: devo fare RW per visualizzare
 
 
+
+    private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+        private GestureDetector gestureDetector;
+        private ProfiloEventoAdminFragment.RecyclerTouchListener.ClickListener clickListener;
+
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ProfiloEventoAdminFragment.RecyclerTouchListener.ClickListener clickListener) {
+            this.clickListener = clickListener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                public void onLongPress(MotionEvent e) {
+                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                    if (child != null && clickListener != null) {
+                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+
+            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+                clickListener.onClick(child, rv.getChildAdapterPosition(child));
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
+
+        public interface ClickListener {
+            void onClick(View view, int position);
+
+            void onLongClick(View view, int position);
+        }
+    }
+
+    private String getMailUtenteLoggato(){
+        Gson gson = new Gson();
+        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String json = prefs.getString("utente", "no");
+        String mailUtenteLoggato;
+        //TODO capire il funzionamento
+        if(!json.equals("no")) {
+            Utente utente = gson.fromJson(json, Utente.class);
+            mailUtenteLoggato = utente.getMail();
+            Log.d("mailutenteLoggato", mailUtenteLoggato);
+        } else {
+            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
+            mailUtenteLoggato = prefs1.getString("mail", "no");
+            Log.d("mail", mailUtenteLoggato);
+        }
+        return mailUtenteLoggato;
+    }
 }

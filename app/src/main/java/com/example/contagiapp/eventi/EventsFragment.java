@@ -56,7 +56,7 @@ public class EventsFragment extends Fragment {
     RecyclerView rvEventiCreati;
     ArrayList<Evento> listaEventi = new ArrayList<Evento>();
     ArrayList<Evento> listaEventiCreati = new ArrayList<Evento>();
-    ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
+    ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli eventi
     ArrayList<String> listaIDEventoUtenteLoggato = new ArrayList<String>();
 
 
@@ -72,6 +72,7 @@ public class EventsFragment extends Fragment {
 
         rvEventi = view.findViewById(R.id.rvEventi);
         rvEventiCreati = view.findViewById(R.id.rvEventiCreati);
+
 
         caricaEventiCreati();
         caricaEventi();
@@ -100,6 +101,7 @@ public class EventsFragment extends Fragment {
     }
 
     private void caricaEventiCreati(){
+        listaEventiCreati.clear();
         db.collection("Eventi")
                 .whereEqualTo("admin", getMailUtenteLoggato())
                 .get()
@@ -107,18 +109,39 @@ public class EventsFragment extends Fragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+
                             String idEvento = documentSnapshot.getId();
+
                             listaIDEventoUtenteLoggato.add(idEvento);
 
+                            String id = documentSnapshot.getId();
+                            if(!idList.contains(id)){
+                                idList.add(id);
+                            }
+
+
+
+
                             Evento evento = documentSnapshot.toObject(Evento.class);
-                            listaEventiCreati.add(evento);
+
+
+
+                            if(! listaEventiCreati.contains(evento.getIdEvento())){
+                                listaEventiCreati.add(evento);
+                            }
+
+
+
+
                         }
                         Log.d("listaIDEventoUtenteLog", String.valueOf(listaIDEventoUtenteLoggato));
+                        Log.d("listaEventiCreati", String.valueOf(listaEventiCreati));
 
                         EventAdapter adapter = new EventAdapter(listaEventiCreati);
                         rvEventiCreati.setAdapter(adapter);
                         rvEventiCreati.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        Log.d("listaEventiCreati1", String.valueOf(listaEventiCreati));
+                        Log.i("idList: ", String.valueOf(idList));
+
                         rvEventiCreati.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
                             @Override
                             public void onClick(View view, int position) {
@@ -135,6 +158,7 @@ public class EventsFragment extends Fragment {
                                 bundle.putString("idEvento", idEventoSelezionato);
 
                                 fragment.setArguments(bundle);
+
 
 
                                 //richiamo il fragment
@@ -161,25 +185,24 @@ public class EventsFragment extends Fragment {
 
         //ToDo: devo escludere gli eventi a cui l'utente è admin 
 
-
-
-
-        listaEventi = new ArrayList<Evento>();
+        listaEventi.clear();
         db.collection("Eventi")
-                //.whereNotIn(FieldPath.documentId(), listaEventiCreati) //ToDo: recuperare listaEventiCreati che appare sempre vuota
+                .whereNotEqualTo("admin", getMailUtenteLoggato())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
                             Evento evento = documentSnapshot.toObject(Evento.class);
-
+                            Log.d("idList", String.valueOf(idList));
+                            Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
                             listaEventi.add(evento);
+
 
                             String id = documentSnapshot.getId();
                             idList.add(id);
-
                         }
+
                         EventAdapter adapter = new EventAdapter(listaEventi);
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -191,7 +214,6 @@ public class EventsFragment extends Fragment {
                                 Log.i("idList: ", idEventoSelezionato);
                                 Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
 
-
                                 ProfiloEventoFragment fragment = new ProfiloEventoFragment();
 
                                 Bundle bundle = new Bundle();
@@ -199,15 +221,12 @@ public class EventsFragment extends Fragment {
 
                                 fragment.setArguments(bundle);
 
-
-
                                 //richiamo il fragment
 
                                 FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
                                 fr.replace(R.id.container,fragment);
                                 fr.addToBackStack(null); //serve per tornare al fragment precedente
                                 fr.commit();
-
                             }
 
                             @Override
