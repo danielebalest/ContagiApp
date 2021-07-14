@@ -70,7 +70,8 @@ public class NotifyFragment extends Fragment {
         String mailUtenteLoggato = getMailUtenteLoggato();
         //Otteniamo la lista della mail degli amici
         db.collection("Utenti")
-                .document(mailUtenteLoggato).get()
+                .document(mailUtenteLoggato)
+                .get()
                 .addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
@@ -279,6 +280,7 @@ public class NotifyFragment extends Fragment {
 
 
         db.collection("Eventi")
+                .whereArrayContains("partecipanti", getMailUtenteLoggato())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -299,54 +301,5 @@ public class NotifyFragment extends Fragment {
                 }); //toDo onFailure
     }
 
-    //per il click
-    /*
-    private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-        private GestureDetector gestureDetector;
-        private NotifyFragment.RecyclerTouchListener.ClickListener clickListener;
 
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final NotifyFragment.RecyclerTouchListener.ClickListener clickListener) {
-            this.clickListener = clickListener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-
-                public void onLongPress(MotionEvent e) {
-                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
-                    }
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildAdapterPosition(child));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-        }
-
-        public interface ClickListener {
-            void onClick(View view, int position);
-
-            void onLongClick(View view, int position);
-        }
-    }
-     */
 }

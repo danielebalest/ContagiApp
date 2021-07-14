@@ -150,7 +150,7 @@ public class ProfiloEventoAdminFragment extends Fragment {
     }
 
 
-    private void caricaPartecipanti(String idEvento){
+    private void caricaPartecipanti(final String idEvento){
         db.collection("Eventi")
                 .document(idEvento)
                 .get()
@@ -165,22 +165,23 @@ public class ProfiloEventoAdminFragment extends Fragment {
                         //recuperare dalle mail l'oggetto utente
                         final ArrayList<Utente> listaUtenti = new ArrayList<Utente>();
 
+                        if (!listaPartecipanti.isEmpty()) {
 
-
-                        for(int i=0; i < listaPartecipanti.size(); i++){
                             db.collection("Utenti")
-                                    .whereEqualTo("mail", listaPartecipanti.get(i))
-                                    //.whereEqualTo("mail", "aaa@gmail.com")
+                                    .whereIn("mail", listaPartecipanti)
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.isSuccessful()) {
+                                                final ArrayList<String> idList = new ArrayList<String>();
+
                                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                                    Log.d("prova",document.getId() + " => " + document.getData());
+                                                    Log.d("prova", document.getId() + " => " + document.getData());
                                                     Utente utente = document.toObject(Utente.class);
-                                                    Log.d("utente", String.valueOf(utente));
+                                                    Log.d("utenteNome", String.valueOf(utente.getNome()));
                                                     listaUtenti.add(utente);
+                                                    idList.add(utente.getMail());
 
                                                 }
                                                 Log.d("listaUtenti", String.valueOf(listaUtenti));
@@ -191,60 +192,46 @@ public class ProfiloEventoAdminFragment extends Fragment {
                                                 rvPartecipantiProfiloEventoAdmin.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-                                               rvPartecipantiProfiloEventoAdmin.addOnItemTouchListener(new ProfiloEventoAdminFragment.RecyclerTouchListener(getActivity(), rvPartecipantiProfiloEventoAdmin, new ProfiloEventoAdminFragment.RecyclerTouchListener.ClickListener() {
+                                                rvPartecipantiProfiloEventoAdmin.addOnItemTouchListener(new ProfiloEventoAdminFragment.RecyclerTouchListener(getActivity(), rvPartecipantiProfiloEventoAdmin, new ProfiloEventoAdminFragment.RecyclerTouchListener.ClickListener() {
                                                     @Override
                                                     public void onClick(View view, int position) {
-                                                        String idUtenteSelezionato = listaPartecipanti.get(position);
-                                                        Log.i("listaPartecipanti: ", idUtenteSelezionato);
+                                                        String idUtenteSelezionato = idList.get(position);
+                                                        Log.i("idList ", idUtenteSelezionato);
 
                                                         ProfiloPartecipanteFragment fragment = new ProfiloPartecipanteFragment();
 
-
                                                         Bundle bundle = new Bundle();
                                                         bundle.putString("mailPartecipante", idUtenteSelezionato);
+                                                        bundle.putString("idEvento", idEvento);
 
                                                         fragment.setArguments(bundle);
 
                                                         //richiamo il fragment
 
                                                         showFragment(fragment);
-
-
                                                     }
 
                                                     @Override
                                                     public void onLongClick(View view, int position) {
-
                                                     }
 
                                                 }));
 
-
                                             } else {
-                                                Log.d("prova", "Error getting documents: ", task.getException());
+                                                Log.d("ERROR", "Error getting documents: ", task.getException());
                                             }
                                         }
                                     });
                         }
-
-
-                        }
-
-
-                        //recyclerView
-                        //UserAdapter adapter = new UserAdapter(listaPartecipanti);
-
-
+                    }
 
                 });
 
     }
 
     private void showFragment(Fragment fragment) {
-
         FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
         fr.replace(R.id.container,fragment);
-
 
         fr.addToBackStack(null); //serve per tornare al fragment precedente
         fr.commit();

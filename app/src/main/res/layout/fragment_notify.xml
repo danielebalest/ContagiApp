@@ -6,7 +6,6 @@
     android:orientation="vertical"
     tools:context=".notifiche.NotifyFragment">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRichieste"
         android:layout_width="match_parent"

@@ -1,11 +1,14 @@
 package com.example.contagiapp.eventi;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.contagiapp.R;
+import com.example.contagiapp.gruppi.GroupFragment;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,6 +28,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class ProfiloPartecipanteFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -62,13 +68,75 @@ public class ProfiloPartecipanteFragment extends Fragment {
 
         Bundle bundle = getArguments();
         final String mailPartecipante = bundle.getString("mailPartecipante");
+        final String idEvento = bundle.getString("idEvento");
+
 
         caricaImgDaStorage(storageRef, storageDirectory, mailPartecipante, imgPartecipante);
         caricaPartecipante(mailPartecipante);
 
+        btnRimuoviPartecipanteEvento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                builder1.setMessage("Sicuro di rimuovere la prenotazione?");
+                builder1.setPositiveButton("Sì", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+
+                        rimuoviPartecipante(idEvento, mailPartecipante);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("idEvento", idEvento);
+                        ProfiloEventoAdminFragment fragment = new ProfiloEventoAdminFragment();
+                        fragment.setArguments(bundle);
+
+                        //richiamo il fragment
+                        FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                        fr.replace(R.id.container,fragment);
+                        fr.addToBackStack(null); //serve per tornare al fragment precedente
+                        fr.commit();
+
+                    }
+                });
+
+                builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+
+
+            }
+        });
 
         return view;
+    }
+
+    private void rimuoviPartecipante(final String idEvento, final String mailPartecipante){
+        db.collection("Eventi")
+                .document(idEvento)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Evento evento = documentSnapshot.toObject(Evento.class);
+
+                        ArrayList<String> partecipanti = evento.getPartecipanti();
+                        partecipanti.remove(mailPartecipante);
+
+                        //aggiorno la lista partecipanti
+                        db.collection("Eventi")
+                                .document(idEvento)
+                                .update("partecipanti", partecipanti);
+                    }
+                });
+
     }
 
     private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){

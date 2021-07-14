@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +26,8 @@ import android.widget.Toast;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
+import com.example.contagiapp.eventi.ProfiloEventoAdminFragment;
+import com.example.contagiapp.eventi.ProfiloPartecipanteFragment;
 import com.example.contagiapp.gruppi.CreaGruppoActivity;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,6 +38,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
@@ -138,6 +142,7 @@ public class FriendsFragment extends Fragment {
         startActivity(addFriendsIntent);
     }
 
+
     public void getFriends(ArrayList<String> listaAmici, final RecyclerView recyclerView){
         /*
         metodo che svolge le seguenti operazioni:
@@ -146,10 +151,69 @@ public class FriendsFragment extends Fragment {
          3) passa la lista all'adapter del recycler View che poi permetterà la visualizzazione della lista di CardView degli amici sull'app
          */
         final ArrayList<Utente> amici = new ArrayList<Utente>();
-        for(int i=0; i < listaAmici.size(); i++){
+
+
+        //for(int i=0; i < listaAmici.size(); i++){
             db.collection("Utenti")
-                    .document(listaAmici.get(i))
+                    .whereIn("mail", listaAmici)
+                    //.document(listaAmici.get(i))
                     .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Utente user = new Utente();
+                                    user.setNome(document.getString("nome"));
+                                    user.setCognome(document.getString("cognome"));
+                                    user.setMail(document.getString("mail"));
+                                    user.setDataNascita(document.getString("dataNascita"));
+                                    Log.d("dataNascita", String.valueOf(user.getDataNascita()));
+                                    Log.d("Nome utente", String.valueOf(user.getNome()));
+
+
+                                    amici.add(user);
+                                    Log.d("amiciSize", String.valueOf(amici.size()));
+
+
+                                    String id = user.getMail();
+                                    idList.add(id);
+                                }
+                                UserAdapter adapter = new UserAdapter(amici);
+                                recyclerView.setAdapter(adapter);
+                                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+                                recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new RecyclerTouchListener.ClickListener() {
+                                    @Override
+                                    public void onClick(View view, int position) {
+                                        String idUtenteSelezionato = idList.get(position);
+                                        Log.i("idList: ", idUtenteSelezionato);
+
+                                        Intent profiloIntent = new Intent(getActivity(), ProfiloUtentiActivity.class);
+                                        profiloIntent.putExtra("id", idUtenteSelezionato);
+                                        profiloIntent.putExtra( "amico", "si");
+                                        profiloIntent.putExtra("mailLoggato", getMailUtenteLoggato());
+                                        startActivity(profiloIntent);
+                                    }
+
+                                    @Override
+                                    public void onLongClick(View view, int position) {
+
+                                    }
+                                }));
+
+                            }
+
+                        }
+
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("error", "errore");
+            }
+            });
+
+                    /*
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -198,7 +262,8 @@ public class FriendsFragment extends Fragment {
                     Log.d("error", "errore");
                 }
             });
-        }
+            */
+        //}
 
     }
 

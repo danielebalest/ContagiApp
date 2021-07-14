@@ -2,6 +2,8 @@ package com.example.contagiapp.data.amici;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.contagiapp.R;
+import com.example.contagiapp.eventi.ProfiloEventoAdminFragment;
+import com.example.contagiapp.eventi.ProfiloPartecipanteFragment;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,6 +52,17 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
     ImageView imageViewProfiloUtente;
     MaterialButton btnRichiesta;
 
+
+
+    private void showFragment(Fragment fragment) {
+
+        FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+        fr.replace(R.id.container,fragment);
+
+        fr.addToBackStack(null); //serve per tornare al fragment precedente
+        fr.commit();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
