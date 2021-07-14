@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -59,11 +60,14 @@ public class ProfiloEventoAdminFragment extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profilo_evento_admin, container, false);
+
+        Log.d("doveSiamo", "ProfiloEventoAdminFragment");
 
         Bundle bundle = getArguments();
         final String idEvento = bundle.getString("idEvento");
@@ -79,7 +83,6 @@ public class ProfiloEventoAdminFragment extends Fragment {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-
                 //recupero l'immagine dallo storage
                 Log.d("eventi/idEvento","eventi/" + idEvento);
 
@@ -87,7 +90,6 @@ public class ProfiloEventoAdminFragment extends Fragment {
 
             }
         });
-
 
         return view;
     }
@@ -107,6 +109,8 @@ public class ProfiloEventoAdminFragment extends Fragment {
             }
         });
     }
+
+
 
     private void caricaEvento(String idEvento, final View view){
         db.collection("Eventi")
@@ -144,6 +148,7 @@ public class ProfiloEventoAdminFragment extends Fragment {
             }
         });
     }
+
 
     private void caricaPartecipanti(String idEvento){
         db.collection("Eventi")
@@ -194,6 +199,7 @@ public class ProfiloEventoAdminFragment extends Fragment {
 
                                                         ProfiloPartecipanteFragment fragment = new ProfiloPartecipanteFragment();
 
+
                                                         Bundle bundle = new Bundle();
                                                         bundle.putString("mailPartecipante", idUtenteSelezionato);
 
@@ -201,10 +207,9 @@ public class ProfiloEventoAdminFragment extends Fragment {
 
                                                         //richiamo il fragment
 
-                                                        FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
-                                                        fr.replace(R.id.container,fragment);
-                                                        fr.addToBackStack(null); //serve per tornare al fragment precedente
-                                                        fr.commit();
+                                                        showFragment(fragment);
+
+
                                                     }
 
                                                     @Override
@@ -235,8 +240,16 @@ public class ProfiloEventoAdminFragment extends Fragment {
 
     }
 
+    private void showFragment(Fragment fragment) {
+
+        FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+        fr.replace(R.id.container,fragment);
 
 
+        fr.addToBackStack(null); //serve per tornare al fragment precedente
+        fr.commit();
+        fr.show(new ProfiloEventoAdminFragment());
+    }
 
     private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
         private GestureDetector gestureDetector;

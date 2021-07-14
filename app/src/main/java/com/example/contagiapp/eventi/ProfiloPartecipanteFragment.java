@@ -3,6 +3,7 @@ package com.example.contagiapp.eventi;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -50,6 +51,8 @@ public class ProfiloPartecipanteFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profilo_partecipante, container, false);
 
+        Log.d("doveSiamo", "ProfiloPartecipanteFragment");
+
         btnRimuoviPartecipanteEvento = view.findViewById(R.id.btnRimuoviPartecipante);
         tvNomeCognome = view.findViewById(R.id.tvNomeCognomePartecipante);
         tvNascita = view.findViewById(R.id.tvNascita);
@@ -61,6 +64,9 @@ public class ProfiloPartecipanteFragment extends Fragment {
         final String mailPartecipante = bundle.getString("mailPartecipante");
 
         caricaImgDaStorage(storageRef, storageDirectory, mailPartecipante, imgPartecipante);
+        caricaPartecipante(mailPartecipante);
+
+
 
         return view;
     }
@@ -90,11 +96,14 @@ public class ProfiloPartecipanteFragment extends Fragment {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Utente utente = documentSnapshot.toObject(Utente.class);
 
-                        tvNomeCognome.setText(utente.getNome());
+                        tvNomeCognome.setText(utente.getNome() + " " + utente.getCognome());
                         tvNascita.setText(utente.getDataNascita());
                         tvCitta.setText(utente.getCitta());
                     }
                 });
 
     }
+
+
+
 }

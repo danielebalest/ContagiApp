@@ -115,7 +115,7 @@ public class EventsFragment extends Fragment {
                             listaIDEventoUtenteLoggato.add(idEvento);
 
                             String id = documentSnapshot.getId();
-                            if(!idList.contains(id)){
+                            if(!listaIDEventoUtenteLoggato.contains(id)){
                                 idList.add(id);
                             }
 
@@ -140,15 +140,15 @@ public class EventsFragment extends Fragment {
                         EventAdapter adapter = new EventAdapter(listaEventiCreati);
                         rvEventiCreati.setAdapter(adapter);
                         rvEventiCreati.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        Log.i("idList: ", String.valueOf(idList));
+
 
                         rvEventiCreati.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
                             @Override
                             public void onClick(View view, int position) {
-                            //ToDo: devo andare in un'altra activity o fragment che mi fa vedere la lista dei prenotati
 
-                                String idEventoSelezionato = idList.get(position);
-                                Log.i("idList: ", idEventoSelezionato);
+
+                                String idEventoSelezionato = listaIDEventoUtenteLoggato.get(position);
+                                Log.i("idEventoSelezionato", idEventoSelezionato);
                                 Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
 
 
