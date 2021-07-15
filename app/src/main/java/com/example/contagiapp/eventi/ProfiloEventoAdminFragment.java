@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +34,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -51,6 +53,7 @@ public class ProfiloEventoAdminFragment extends Fragment {
     private final static String storageDirectory = "eventi";
     public Evento evento;
     RecyclerView rvPartecipantiProfiloEventoAdmin;
+    private MaterialButton btnEliminaEvento;
 
 
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
@@ -75,6 +78,7 @@ public class ProfiloEventoAdminFragment extends Fragment {
         caricaEvento(idEvento, view);
         caricaPartecipanti(idEvento);
 
+
         final ImageView img = view.findViewById(R.id.imgProfiloEventoAdmin);
         rvPartecipantiProfiloEventoAdmin = view.findViewById(R.id.rvPartecipantiProfiloEventoAdmin);
 
@@ -88,6 +92,17 @@ public class ProfiloEventoAdminFragment extends Fragment {
 
                 caricaImgDaStorage(storageRef, storageDirectory, idEvento, img );
 
+            }
+        });
+
+
+        btnEliminaEvento = view.findViewById(R.id.btnEliminaEvento);
+        btnEliminaEvento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eliminaEvento(idEvento);
+
+                showFragment(new EventsFragment());
             }
         });
 
@@ -109,8 +124,6 @@ public class ProfiloEventoAdminFragment extends Fragment {
             }
         });
     }
-
-
 
     private void caricaEvento(String idEvento, final View view){
         db.collection("Eventi")
@@ -286,21 +299,12 @@ public class ProfiloEventoAdminFragment extends Fragment {
         }
     }
 
-    private String getMailUtenteLoggato(){
-        Gson gson = new Gson();
-        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
-        String json = prefs.getString("utente", "no");
-        String mailUtenteLoggato;
-        //TODO capire il funzionamento
-        if(!json.equals("no")) {
-            Utente utente = gson.fromJson(json, Utente.class);
-            mailUtenteLoggato = utente.getMail();
-            Log.d("mailutenteLoggato", mailUtenteLoggato);
-        } else {
-            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
-            mailUtenteLoggato = prefs1.getString("mail", "no");
-            Log.d("mail", mailUtenteLoggato);
-        }
-        return mailUtenteLoggato;
+    private void eliminaEvento(String idEvento){
+        db.collection("Eventi")
+                .document(idEvento)
+                .delete();
     }
+
+
+
 }
