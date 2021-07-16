@@ -92,6 +92,10 @@ public class Evento {
         this.partecipanti = partecipanti;
     }
 
+    public void aggiornaNroPartecipanti(ArrayList<String> partecipanti) {
+        this.numPartecipanti = partecipanti.size();
+    }
+
     public void addPartecipantiGruppo(ArrayList<String> partecipantiGruppo){
         getPartecipanti().addAll(partecipantiGruppo);
     }

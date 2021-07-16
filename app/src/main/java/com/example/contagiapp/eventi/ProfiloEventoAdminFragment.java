@@ -1,14 +1,19 @@
 package com.example.contagiapp.eventi;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.contagiapp.HomeFragment;
 import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
 import com.example.contagiapp.data.amici.FriendsFragment;
@@ -39,12 +45,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ProfiloEventoAdminFragment extends Fragment {
@@ -303,8 +311,71 @@ public class ProfiloEventoAdminFragment extends Fragment {
         db.collection("Eventi")
                 .document(idEvento)
                 .delete();
+
+        //toDo: devo avvisare gli utenti che l'evento è stato cancellato
+        //forse è meglio non cancellare l'evento ma segnarlo come eliminato
+        //dopodichè nella main activity metto controllo sullo stato degli eventi a cui partecipa un utente e se lo stato è cancellato applicare notifica
+
+        notificaEventoEliminato();
+
+        //notificheFCM();
+
+
     }
 
 
+
+    private void notificaEventoEliminato(){
+        createNotificationChannel();
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), "CHANNEL_ID")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Evento cancellato")
+                .setContentText("L'admin ha cancellato l' evento" )
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+
+        // notificationId is a unique int for each notification that you must define
+        int notificationId = 1234;
+        notificationManager.notify(notificationId, builder.build());
+
+
+
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "channelName";
+            String description = "channel_description" ;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    /*private void notificheFCM(){
+        FirebaseMessaging.getInstance().subscribeToTopic("weather")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "msg";
+                        if (!task.isSuccessful()) {
+                            msg = "msg_subscribe_failed";
+                        }
+                        Log.d("ProfiloEventoAdmin", msg);
+                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+     */
 
 }

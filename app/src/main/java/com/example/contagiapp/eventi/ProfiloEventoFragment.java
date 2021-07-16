@@ -41,9 +41,12 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
+
 
 public class ProfiloEventoFragment extends Fragment {
 
+    private static final String TAG = "ProfiloEventoFragment";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private final static String storageDirectory = "eventi";
@@ -85,21 +88,50 @@ public class ProfiloEventoFragment extends Fragment {
                     Toast.makeText(getContext(),"Non ci sono più posto disponibili",Toast.LENGTH_SHORT).show();
                 }
                 else {
-                        ArrayList<String> appoggio= evento.getPartecipanti();
-                        for(int i=0; i<appoggio.size();i++){
-                            partecipanti.add(appoggio.get(i));
+                    //otteniamo lo stato dell'utente per controllarlo
 
+                    db.collection("Utenti")
+                            .document(getMailUtenteLoggato())
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    Utente utente = documentSnapshot.toObject(Utente.class);
+                                    String stato = utente.getStato();
+
+                                    if(stato == "giallo" && stato == "verde"){
+                                        //OK può prenotarsi
+
+                                        ArrayList<String> appoggio= evento.getPartecipanti();
+                                        for(int i=0; i<appoggio.size();i++){
+                                            partecipanti.add(appoggio.get(i));
+
+                                        }
+
+                                        partecipanti.add(getMailUtenteLoggato());
+                                        assert evento != null;
+                                        evento.setPartecipanti(partecipanti);
+                                        int postiDisp = evento.getNumeroPostiDisponibili() -1;
+                                        db.collection("Eventi").document(idEvento).update("numeroPostiDisponibili", postiDisp);
+                                        db.collection("Eventi").document(idEvento).update("partecipanti", partecipanti);
+                                        Toast.makeText(getContext(), "Iscrizione aggiunta!", Toast.LENGTH_LONG).show();
+
+                                    }else{
+                                        //non può prenotarsi
+                                        Toasty.warning(getActivity(), "Non puoi prenotarti all'evento").show();
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "Error");
                         }
-                        partecipanti.add(getMailUtenteLoggato());
-                        assert evento != null;
-                        evento.setPartecipanti(partecipanti);
-                        int postiDisp = evento.getNumeroPostiDisponibili() -1;
-                        db.collection("Eventi").document(idEvento).update("numeroPostiDisponibili", postiDisp);
-                        db.collection("Eventi").document(idEvento).update("partecipanti", partecipanti);
-                        Toast.makeText(getContext(), "Iscrizione aggiunta!", Toast.LENGTH_LONG).show();
+                    });
+
             }
         }
         });
+
 
 
         btnPartecipaComeGruppo.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +152,6 @@ public class ProfiloEventoFragment extends Fragment {
                 fr.addToBackStack(null); //serve per tornare al fragment precedente
                 fr.commit();
 
-
             }
         });
 
@@ -132,17 +163,12 @@ public class ProfiloEventoFragment extends Fragment {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-
                 //recupero l'immagine dallo storage
                 Log.d("eventi/idEvento","eventi/" + idEvento);
 
                 caricaImgDaStorage(storageRef, storageDirectory, idEvento, img );
-
             }
         });
-
-
-
         return view;
     }
 

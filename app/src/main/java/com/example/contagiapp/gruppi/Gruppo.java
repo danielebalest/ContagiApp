@@ -15,8 +15,6 @@ public class Gruppo {
     public Gruppo() {
     }
 
-
-
     public String getIdGruppo() {
         return idGruppo;
     }
@@ -87,6 +85,8 @@ public class Gruppo {
     public void aggiornaNroPartecipanti(ArrayList<String> partecipanti) {
         this.nroPartecipanti = partecipanti.size();
     }
+
+
 
     public String getStatoGruppo() {
         return statoGruppo;

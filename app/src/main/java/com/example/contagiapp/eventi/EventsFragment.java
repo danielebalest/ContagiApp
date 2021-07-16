@@ -119,19 +119,12 @@ public class EventsFragment extends Fragment {
                                 idList.add(id);
                             }
 
-
-
-
                             Evento evento = documentSnapshot.toObject(Evento.class);
-
-
+                            evento.aggiornaNroPartecipanti(evento.getPartecipanti());
 
                             if(! listaEventiCreati.contains(evento.getIdEvento())){
                                 listaEventiCreati.add(evento);
                             }
-
-
-
 
                         }
                         Log.d("listaIDEventoUtenteLog", String.valueOf(listaIDEventoUtenteLoggato));
@@ -194,6 +187,8 @@ public class EventsFragment extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
                             Evento evento = documentSnapshot.toObject(Evento.class);
+                            evento.aggiornaNroPartecipanti(evento.getPartecipanti());
+
                             Log.d("idList", String.valueOf(idList));
                             Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
                             listaEventi.add(evento);
