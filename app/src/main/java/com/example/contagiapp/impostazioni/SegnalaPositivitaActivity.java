@@ -22,17 +22,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
 import com.example.contagiapp.gruppi.AddImgGruppoActivity;
 import com.example.contagiapp.registrazione.RegistrationActivity;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -55,6 +58,7 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
     DatePickerDialog datePickerDialog;
     private static final String TAG = "SegnalaPositivita";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    Utente utente = new Utente();
 
     Uri uri;
 
@@ -135,7 +139,21 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
                         Log.d("data1", editTextData.getText().toString());
                         aggiornaDataPositivita(editTextData.getText().toString());
 
-                        Intent i = new Intent(SegnalaPositivitaActivity.this, SettingActivity.class);
+                        SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        Gson gson = new Gson();
+                        String json = prefs.getString("utente", "no");
+
+                        if(!json.equals("no")) {
+                            utente = gson.fromJson(json, Utente.class);
+                            utente.setStato("rosso");
+                            utente.setDataPositivita(editTextData.getText().toString());
+                            json = gson.toJson(utente);
+                            editor.putString("utente", json);
+                            editor.commit ();
+                        }
+
+                        Intent i = new Intent(SegnalaPositivitaActivity.this, MainActivity.class);
                         startActivity(i);
                     }else
                         Toasty.warning(SegnalaPositivitaActivity.this, "Inserisci data e/o certificato", Toast.LENGTH_SHORT).show();

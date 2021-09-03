@@ -24,6 +24,19 @@ public class Utente {
     private ArrayList<String> amici;
     private ArrayList<String> richiesteRicevute;
     private ArrayList<String> invitiRicevuti;
+    private String dataNegativita;
+    private String dataPositivita;
+
+    public Utente() {
+    }
+
+    public String getDataNegativita() {
+        return dataNegativita;
+    }
+
+    public void setDataNegativita(String dataNegativita) {
+        this.dataNegativita = dataNegativita;
+    }
 
     public String getDataPositivita() {
         return dataPositivita;
@@ -31,11 +44,6 @@ public class Utente {
 
     public void setDataPositivita(String dataPositivita) {
         this.dataPositivita = dataPositivita;
-    }
-
-    private String dataPositivita;
-
-    public Utente() {
     }
 
     public ArrayList<String> getInvitiRicevuti() {

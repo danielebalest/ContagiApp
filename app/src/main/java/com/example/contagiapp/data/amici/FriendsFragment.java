@@ -71,7 +71,7 @@ public class FriendsFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view;
+        final View view;
         view = inflater.inflate(R.layout.fragment_friends, container, false);
 
         /*
@@ -126,7 +126,11 @@ public class FriendsFragment extends Fragment {
                             tvListaMail.setText("Non hai ancora nessun amico");
                         }
                         Log.d("lista", String.valueOf(listaMail));
-                        getFriends(listaMail, recyclerView);
+
+                        if(listaMail.isEmpty()) {
+                            TextView am = view.findViewById(R.id.tvTuoiAmici);
+                            am.setText("Non hai ancora nessun amico");
+                        } else getFriends(listaMail);
                     }
                 });
         return view;
@@ -143,7 +147,7 @@ public class FriendsFragment extends Fragment {
     }
 
 
-    public void getFriends(ArrayList<String> listaAmici, final RecyclerView recyclerView){
+    public void getFriends(ArrayList<String> listaAmici){
         /*
         metodo che svolge le seguenti operazioni:
          1)date in input le mail degli amici ottiene, per ciascuno, i seguenti dati dal database: nome, cognome, mail
@@ -155,8 +159,7 @@ public class FriendsFragment extends Fragment {
 
         //for(int i=0; i < listaAmici.size(); i++){
             db.collection("Utenti")
-                    .whereIn("mail", listaAmici)
-                    //.document(listaAmici.get(i))
+                    .whereIn("mail",listaAmici)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -212,59 +215,6 @@ public class FriendsFragment extends Fragment {
                 Log.d("error", "errore");
             }
             });
-
-                    /*
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Utente user = new Utente();
-                            user.setNome(documentSnapshot.getString("nome"));
-                            user.setCognome(documentSnapshot.getString("cognome"));
-                            user.setMail(documentSnapshot.getString("mail"));
-                            user.setDataNascita(documentSnapshot.getString("dataNascita"));
-                            Log.d("dataNascita", String.valueOf(user.getDataNascita()));
-                            Log.d("Nome utente", String.valueOf(user.getNome()));
-
-
-                            amici.add(user);
-                            Log.d("amiciSize", String.valueOf(amici.size()));
-                            UserAdapter adapter = new UserAdapter(amici);
-
-                            String id = user.getMail();
-                            idList.add(id);
-
-                            recyclerView.setAdapter(adapter);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-                            recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new RecyclerTouchListener.ClickListener() {
-                                @Override
-                                public void onClick(View view, int position) {
-                                    String idUtenteSelezionato = idList.get(position);
-                                    Log.i("idList: ", idUtenteSelezionato);
-
-                                    Intent profiloIntent = new Intent(getActivity(), ProfiloUtentiActivity.class);
-                                    profiloIntent.putExtra("id", idUtenteSelezionato);
-                                    profiloIntent.putExtra( "amico", "si");
-                                    profiloIntent.putExtra("mailLoggato", getMailUtenteLoggato());
-                                    startActivity(profiloIntent);
-                                }
-
-                                @Override
-                                public void onLongClick(View view, int position) {
-
-                                }
-
-                            }));
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("error", "errore");
-                }
-            });
-            */
-        //}
-
     }
 
     private String getMailUtenteLoggato(){

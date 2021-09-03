@@ -17,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCanceledListener;
@@ -48,7 +49,8 @@ public class SegnalaNegativita extends AppCompatActivity {
     private MaterialButton completaSegnalazione;
     DatePickerDialog datePickerDialog;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    Utente utente = new Utente();
+    private static final String TAG = "SegnalaNegativita";
 
     Uri uri;
 
@@ -136,7 +138,21 @@ public class SegnalaNegativita extends AppCompatActivity {
                     Log.d("data1", editTextDataNegativita.getText().toString());
                     aggiornaDataNegativita(editTextDataNegativita.getText().toString());
 
-                    Intent i = new Intent(SegnalaNegativita.this, SettingActivity.class);
+                    SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    Gson gson = new Gson();
+                    String json = prefs.getString("utente", "no");
+
+                    if(!json.equals("no")) {
+                        utente = gson.fromJson(json, Utente.class);
+                        utente.setStato("verde");
+                        utente.setDataNegativita(editTextDataNegativita.getText().toString());
+                        json = gson.toJson(utente);
+                        editor.putString("utente", json);
+                        editor.commit();
+                    }
+
+                    Intent i = new Intent(SegnalaNegativita.this, MainActivity.class);
                     startActivity(i);
                 }else
                     Toasty.warning(SegnalaNegativita.this, "Inserisci data e/o certificato", Toast.LENGTH_SHORT).show();

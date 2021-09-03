@@ -106,6 +106,7 @@ public class ProfiloActivity extends AppCompatActivity {
                             utente.setProvince(documentSnapshot.getString("province"));
                             utente.setCitta(documentSnapshot.getString("citta"));
                             utente.setTelefono(documentSnapshot.getString("telefono"));
+                            utente.setStato(documentSnapshot.getString("stato"));
 
                             riempiListView(arrayListProfilo);
                         }
@@ -159,6 +160,13 @@ public class ProfiloActivity extends AppCompatActivity {
 
 
     private void riempiListView(ArrayList<String> arrayListProfilo){
+        String stato = null;
+        if(utente.getStato().equals("rosso")) stato="POSITIVO";
+        if(utente.getStato().equals("verde")) stato="NEGATIVO";
+        if(utente.getStato().equals("arancione")) stato="contatto con un POSITIVO";
+        if(utente.getStato().equals("giallo")) stato="INCERTO";
+
+        arrayListProfilo.add("Stato: "+stato);
         arrayListProfilo.add("Nome: "+utente.getNome());
         arrayListProfilo.add("Cognome: "+utente.getCognome());
         arrayListProfilo.add("Mail: "+utente.getMail());

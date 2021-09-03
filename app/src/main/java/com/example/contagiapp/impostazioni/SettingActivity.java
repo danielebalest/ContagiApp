@@ -28,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -55,42 +56,37 @@ public class SettingActivity extends AppCompatActivity {
                 String id = documentSnapshot.getId();
 
                 String dataPositività = utente.getDataPositivita();
+                String stato = utente.getStato();
 
-                if(dataPositività != null){
-                    try {
-                        Date dataPositività1=new SimpleDateFormat("dd/MM/yyyy").parse(dataPositività);
-                        Log.d("date1", String.valueOf(dataPositività1));
+                btnSegnalaPositivita.setClickable(false);
+                btnSegnalaPositivita.setVisibility(View.INVISIBLE);
+                btnSegnalaNegativita.setClickable(false);
+                btnSegnalaNegativita.setVisibility(View.INVISIBLE);
 
+                switch(stato) {
+                    case "verde":
+                        btnSegnalaPositivita.setClickable(true);
+                        btnSegnalaPositivita.setVisibility(View.VISIBLE);
+                        break;
+                    case "rosso":
+                        if(dataPositività != null){
+                            try {
+                                Date dataPositività1=new SimpleDateFormat("dd/MM/yyyy").parse(dataPositività);
+                                Date dataAttuale = new Date(System.currentTimeMillis());
 
-                        Date dataAttuale = new Date(System.currentTimeMillis());
-                        Log.d("date", String.valueOf(dataAttuale));
+                                long g = TimeUnit.MILLISECONDS.toDays(dataAttuale.getTime() - dataPositività1.getTime());
 
-                        //dataPositività1.getMonth();
-                        //dataAttuale.getMonth();
-
-                        if(dataPositività1.getYear() == dataAttuale.getYear()) {
-                            if(dataPositività1.getMonth() == dataAttuale.getMonth()) {
-                                if(Math.abs(dataPositività1.getDay() - dataAttuale.getDay()) < 14) {
-                                    btnSegnalaNegativita.setClickable(false);
-                                    btnSegnalaNegativita.setVisibility(View.INVISIBLE);
+                                if(g > 14) {
+                                    btnSegnalaNegativita.setClickable(true);
+                                    btnSegnalaNegativita.setVisibility(View.VISIBLE);
                                 }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
+
                         }
-
-                        /*int differenzaDiData = Math.abs(dataPositività1.getDate() - dataAttuale.getDate()); //todo: da sistemare se i mesi sono diversi
-                        Log.d("differenzaDiData", String.valueOf(differenzaDiData));
-
-                        if(differenzaDiData < 10){
-                            btnSegnalaNegativita.setClickable(false);
-                            btnSegnalaNegativita.setVisibility(View.INVISIBLE);
-                        }*/
-
-
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                        break;
                 }
-
             }
         });
 
