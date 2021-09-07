@@ -99,7 +99,7 @@ public class ProfiloEventoFragment extends Fragment {
                                     Utente utente = documentSnapshot.toObject(Utente.class);
                                     String stato = utente.getStato();
 
-                                    if(stato == "giallo" && stato == "verde"){
+                                    if(stato.equals("giallo") || stato.equals("verde")){
                                         //OK può prenotarsi
 
                                         ArrayList<String> appoggio= evento.getPartecipanti();

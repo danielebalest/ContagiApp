@@ -19,7 +19,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,8 +44,9 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class EventsFragment extends Fragment {
+public class EventsFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
 
     public EventsFragment() {
         // Required empty public constructor
@@ -53,29 +56,30 @@ public class EventsFragment extends Fragment {
     private FloatingActionButton new_event;
     TextInputEditText editText;
     RecyclerView rvEventi;
-    RecyclerView rvEventiCreati;
     ArrayList<Evento> listaEventi = new ArrayList<Evento>();
     ArrayList<Evento> listaEventiCreati = new ArrayList<Evento>();
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli eventi
     ArrayList<String> listaIDEventoUtenteLoggato = new ArrayList<String>();
+    private boolean switchiscritto = false;
+    private boolean switchcreato = false;
 
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_events, container, false);
-
-
+        final Switch iscritto = view.findViewById(R.id.switch1);
+        final Switch creati = view.findViewById(R.id.switch2);
         rvEventi = view.findViewById(R.id.rvEventi);
-        rvEventiCreati = view.findViewById(R.id.rvEventiCreati);
 
-
-        caricaEventiCreati();
         caricaEventi();
+
+        iscritto.setOnCheckedChangeListener(this);
+        creati.setOnCheckedChangeListener(this);
 
         new_event = view.findViewById(R.id.floating_action_button);
         new_event.setOnClickListener(new View.OnClickListener() {
@@ -131,11 +135,11 @@ public class EventsFragment extends Fragment {
                         Log.d("listaEventiCreati", String.valueOf(listaEventiCreati));
 
                         EventAdapter adapter = new EventAdapter(listaEventiCreati);
-                        rvEventiCreati.setAdapter(adapter);
-                        rvEventiCreati.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        rvEventi.setAdapter(adapter);
+                        rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-                        rvEventiCreati.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
+                        rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
                             @Override
                             public void onClick(View view, int position) {
 
@@ -174,28 +178,88 @@ public class EventsFragment extends Fragment {
 
     }
 
-    private void caricaEventi(){
-
-        //ToDo: devo escludere gli eventi a cui l'utente è admin 
+    private void caricaEventiIscritto(){
 
         listaEventi.clear();
         db.collection("Eventi")
-                .whereNotEqualTo("admin", getMailUtenteLoggato())
+                .whereArrayContains("partecipanti", getMailUtenteLoggato())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
                             Evento evento = documentSnapshot.toObject(Evento.class);
-                            evento.aggiornaNroPartecipanti(evento.getPartecipanti());
+                            if(!evento.getAdmin().equals(getMailUtenteLoggato())) {
+                                evento.aggiornaNroPartecipanti(evento.getPartecipanti());
 
-                            Log.d("idList", String.valueOf(idList));
-                            Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
-                            listaEventi.add(evento);
+                                Log.d("idList", String.valueOf(idList));
+                                Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
+                                listaEventi.add(evento);
 
 
-                            String id = documentSnapshot.getId();
-                            idList.add(id);
+                                String id = documentSnapshot.getId();
+                                idList.add(id);
+                            }
+                        }
+
+                        EventAdapter adapter = new EventAdapter(listaEventi);
+                        rvEventi.setAdapter(adapter);
+                        rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
+                            @Override
+                            public void onClick(View view, int position) {
+
+                                String idEventoSelezionato = idList.get(position);
+                                Log.i("idList: ", idEventoSelezionato);
+                                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
+
+                                ProfiloPartecipanteFragment fragment = new ProfiloPartecipanteFragment();
+
+                                Bundle bundle = new Bundle();
+                                bundle.putString("idEvento", idEventoSelezionato);
+                                bundle.putString("mailPartecipante", getMailUtenteLoggato());
+
+                                fragment.setArguments(bundle);
+
+                                //richiamo il fragment
+
+                                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                                fr.replace(R.id.container,fragment);
+                                fr.addToBackStack(null); //serve per tornare al fragment precedente
+                                fr.commit();
+                            }
+
+                            @Override
+                            public void onLongClick(View view, int position) {
+
+                            }
+
+                        }));
+                    }
+                }); //toDo onFailure
+    }
+
+    private void caricaEventi(){
+        listaEventi.clear();
+        db.collection("Eventi")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            Evento evento = documentSnapshot.toObject(Evento.class);
+
+                            if(!evento.getAdmin().equals(getMailUtenteLoggato()) && !evento.getPartecipanti().contains(getMailUtenteLoggato())) {
+                                evento.aggiornaNroPartecipanti(evento.getPartecipanti());
+
+                                Log.d("idList", String.valueOf(idList));
+                                Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
+                                listaEventi.add(evento);
+
+
+                                String id = documentSnapshot.getId();
+                                idList.add(id);
+                            }
                         }
 
                         EventAdapter adapter = new EventAdapter(listaEventi);
@@ -234,6 +298,7 @@ public class EventsFragment extends Fragment {
                 }); //toDo onFailure
     }
 
+
     private String getMailUtenteLoggato(){
         Utente utente;
         Gson gson = new Gson();
@@ -250,6 +315,39 @@ public class EventsFragment extends Fragment {
             Log.d("mail", mailUtenteLoggato);
         }
         return mailUtenteLoggato;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+        switch (buttonView.getId()) {
+            case R.id.switch1:
+                switchiscritto = isChecked;
+
+                if(isChecked) {
+                    if (switchcreato) {
+                        Toast.makeText(getContext(), "Impossibile effettuare questa operazione", Toast.LENGTH_LONG).show();
+                        buttonView.setChecked(false);
+                        switchiscritto = !switchiscritto;
+                    } else caricaEventiIscritto();
+                }
+
+                if(!isChecked && !switchcreato) caricaEventi();
+                break;
+            case R.id.switch2:
+                switchcreato = isChecked;
+
+                if(isChecked) {
+                    if(switchiscritto) {
+                        Toast.makeText(getContext(),"Impossibile effettuare questa operazione",Toast.LENGTH_LONG).show();
+                        buttonView.setChecked(false);
+                        switchcreato = !switchcreato;
+                    } else caricaEventiCreati();
+                }
+
+                if(!isChecked && !switchiscritto) caricaEventi();
+                break;
+        }
     }
 
     //per il click

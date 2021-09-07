@@ -31,11 +31,23 @@
         android:layout_below="@+id/search_field"
         android:layout_marginBottom="60dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvEventiCreati"
+        <Switch
+            android:id="@+id/switch1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/item_event"/>
+            android:text="Iscritto"
+            android:textSize="23dp"
+            android:textStyle="bold"
+            tools:checked="false" />
+
+        <Switch
+            android:id="@+id/switch2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Creati"
+            android:textSize="23dp"
+            android:textStyle="bold"
+            tools:checked="false" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvEventi"
@@ -43,27 +55,25 @@
             android:layout_height="wrap_content"
             tools:listitem="@layout/item_event"/>
 
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="0dp">
 
+            <!-- Main content -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floating_action_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="16dp"
+                app:srcCompat="@drawable/ic_baseline_add_24" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </LinearLayout>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp"
-        android:layout_marginBottom="60dp">
-
-        <!-- Main content -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floating_action_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_marginBottom="16dp"
-            app:srcCompat="@drawable/ic_baseline_add_24" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </RelativeLayout >
