@@ -26,8 +26,9 @@ import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
 import com.example.contagiapp.eventi.EventAdapter;
 import com.example.contagiapp.eventi.Evento;
-import com.example.contagiapp.eventi.EventsFragment;
+import com.example.contagiapp.eventi.ProfiloEventoAdminFragment;
 import com.example.contagiapp.eventi.ProfiloEventoFragment;
+import com.example.contagiapp.eventi.ProfiloPartecipanteFragment;
 import com.example.contagiapp.gruppi.Gruppo;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,10 +37,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
@@ -280,26 +285,136 @@ public class NotifyFragment extends Fragment {
 
 
         db.collection("Eventi")
-                .whereArrayContains("partecipanti", getMailUtenteLoggato())
+                //.whereArrayContains("partecipanti", getMailUtenteLoggato())
+                .orderBy("data", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
                         for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
                             Evento evento = documentSnapshot.toObject(Evento.class);
-                            listaEventi.add(evento);
 
-                            String id = documentSnapshot.getId();
-                            idList.add(id);
+                            try {
+                                Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
+                                Date dataAttuale = new Date(System.currentTimeMillis());
 
+                                if(dataEvento.compareTo(dataAttuale) >= 0
+                                        && (evento.getPartecipanti().contains(getMailUtenteLoggato()) ||
+                                        evento.getAdmin().equals(getMailUtenteLoggato()))) {
+
+                                    listaEventi.add(evento);
+
+                                    String id = documentSnapshot.getId();
+                                    idList.add(id);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
+
                         EventPartecipanteAdapter adapter = new EventPartecipanteAdapter(listaEventi);
 
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+                        rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
+                            @Override
+                            public void onClick(View view, int position) {
+                                Evento evento = listaEventi.get(position);
+                                if(evento.getAdmin().equals(getMailUtenteLoggato())) {
+                                    ProfiloEventoAdminFragment fragment = new ProfiloEventoAdminFragment();
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("idEvento", idList.get(position));
+
+                                    fragment.setArguments(bundle);
+
+                                    //richiamo il fragment
+
+                                    FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                                    fr.replace(R.id.container,fragment);
+                                    fr.addToBackStack(null); //serve per tornare al fragment precedente
+                                    fr.commit();
+                                }
+
+                                if(evento.getPartecipanti().contains(getMailUtenteLoggato())) {
+                                    ProfiloPartecipanteFragment fragment = new ProfiloPartecipanteFragment();
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("idEvento", idList.get(position));
+                                    bundle.putString("mailPartecipante", getMailUtenteLoggato());
+
+                                    fragment.setArguments(bundle);
+
+                                    //richiamo il fragment
+
+                                    FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                                    fr.replace(R.id.container,fragment);
+                                    fr.addToBackStack(null); //serve per tornare al fragment precedente
+                                    fr.commit();
+                                }
+                            }
+                            @Override
+                            public void onLongClick(View view, int position) {
+
+                            }
+
+                        }));
                     }
                 }); //toDo onFailure
     }
 
 
+}
+
+//TODO vedere se la partecipazione all'evento la vede solo chi si è iscritto all'evento come gruppo o tutto il gruppo
+//per il click
+class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+    private GestureDetector gestureDetector;
+    private RecyclerTouchListener.ClickListener clickListener;
+
+    public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final RecyclerTouchListener.ClickListener clickListener) {
+        this.clickListener = (ClickListener) clickListener;
+        gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+
+            public void onLongPress(MotionEvent e) {
+                View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                if (child != null && clickListener != null) {
+                    clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+        View child = rv.findChildViewUnder(e.getX(), e.getY());
+
+        if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+            clickListener.onClick(child, rv.getChildAdapterPosition(child));
+        }
+        return false;
+    }
+
+    @Override
+    public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+    }
+
+    public interface ClickListener {
+        void onClick(View view, int position);
+
+        void onLongClick(View view, int position);
+    }
 }
