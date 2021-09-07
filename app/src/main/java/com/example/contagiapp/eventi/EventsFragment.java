@@ -43,8 +43,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class EventsFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
 
@@ -126,8 +130,16 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                             Evento evento = documentSnapshot.toObject(Evento.class);
                             evento.aggiornaNroPartecipanti(evento.getPartecipanti());
 
-                            if(! listaEventiCreati.contains(evento.getIdEvento())){
-                                listaEventiCreati.add(evento);
+
+                            try {
+                                Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
+                                Date dataAttuale = new Date(System.currentTimeMillis());
+
+                                if(dataEvento.compareTo(dataAttuale) >= 0 && ! listaEventiCreati.contains(evento.getIdEvento())){
+                                    listaEventiCreati.add(evento);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
 
                         }
@@ -189,16 +201,24 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
                             Evento evento = documentSnapshot.toObject(Evento.class);
-                            if(!evento.getAdmin().equals(getMailUtenteLoggato())) {
-                                evento.aggiornaNroPartecipanti(evento.getPartecipanti());
 
-                                Log.d("idList", String.valueOf(idList));
-                                Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
-                                listaEventi.add(evento);
+                            try {
+                                Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
+                                Date dataAttuale = new Date(System.currentTimeMillis());
+
+                                if(dataEvento.compareTo(dataAttuale) >= 0 && !evento.getAdmin().equals(getMailUtenteLoggato())) {
+                                    evento.aggiornaNroPartecipanti(evento.getPartecipanti());
+
+                                    Log.d("idList", String.valueOf(idList));
+                                    Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
+                                    listaEventi.add(evento);
 
 
-                                String id = documentSnapshot.getId();
-                                idList.add(id);
+                                    String id = documentSnapshot.getId();
+                                    idList.add(id);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
                         }
 
@@ -241,6 +261,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
     private void caricaEventi(){
         listaEventi.clear();
+
         db.collection("Eventi")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -249,16 +270,26 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                         for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
                             Evento evento = documentSnapshot.toObject(Evento.class);
 
-                            if(!evento.getAdmin().equals(getMailUtenteLoggato()) && !evento.getPartecipanti().contains(getMailUtenteLoggato())) {
-                                evento.aggiornaNroPartecipanti(evento.getPartecipanti());
+                            try {
+                                Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
+                                Date dataAttuale = new Date(System.currentTimeMillis());
 
-                                Log.d("idList", String.valueOf(idList));
-                                Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
-                                listaEventi.add(evento);
+                                if(dataEvento.compareTo(dataAttuale) >= 0
+                                    && !evento.getAdmin().equals(getMailUtenteLoggato())
+                                        && !evento.getPartecipanti().contains(getMailUtenteLoggato())) {
+
+                                    evento.aggiornaNroPartecipanti(evento.getPartecipanti());
+
+                                    Log.d("idList", String.valueOf(idList));
+                                    Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
+                                    listaEventi.add(evento);
 
 
-                                String id = documentSnapshot.getId();
-                                idList.add(id);
+                                    String id = documentSnapshot.getId();
+                                    idList.add(id);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
                         }
 
