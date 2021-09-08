@@ -20,35 +20,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.contagiapp.R;
-import com.example.contagiapp.data.amici.AddFriendsActivity;
-import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
-import com.example.contagiapp.notifiche.EventPartecipanteAdapter;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class EventsFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
 
@@ -233,11 +222,11 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                                 Log.i("idList: ", idEventoSelezionato);
                                 Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
 
-                                ProfiloPartecipanteFragment fragment = new ProfiloPartecipanteFragment();
+                                EliminazionePartecipazioneEvento fragment = new EliminazionePartecipazioneEvento();
 
                                 Bundle bundle = new Bundle();
                                 bundle.putString("idEvento", idEventoSelezionato);
-                                bundle.putString("mailPartecipante", getMailUtenteLoggato());
+                                bundle.putBoolean("partenza", false);
 
                                 fragment.setArguments(bundle);
 

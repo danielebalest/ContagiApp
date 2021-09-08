@@ -1,7 +1,6 @@
 package com.example.contagiapp.notifiche;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -17,18 +16,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.contagiapp.R;
-import com.example.contagiapp.UserAdapter;
-import com.example.contagiapp.data.amici.FriendsFragment;
-import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
-import com.example.contagiapp.eventi.EventAdapter;
+import com.example.contagiapp.eventi.EliminazionePartecipazioneEvento;
 import com.example.contagiapp.eventi.Evento;
 import com.example.contagiapp.eventi.ProfiloEventoAdminFragment;
-import com.example.contagiapp.eventi.ProfiloEventoFragment;
-import com.example.contagiapp.eventi.ProfiloPartecipanteFragment;
 import com.example.contagiapp.gruppi.Gruppo;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -340,11 +333,11 @@ public class NotifyFragment extends Fragment {
                                 }
 
                                 if(evento.getPartecipanti().contains(getMailUtenteLoggato())) {
-                                    ProfiloPartecipanteFragment fragment = new ProfiloPartecipanteFragment();
+                                    EliminazionePartecipazioneEvento fragment = new EliminazionePartecipazioneEvento();
 
                                     Bundle bundle = new Bundle();
                                     bundle.putString("idEvento", idList.get(position));
-                                    bundle.putString("mailPartecipante", getMailUtenteLoggato());
+                                    bundle.putBoolean("partenza", true);
 
                                     fragment.setArguments(bundle);
 
