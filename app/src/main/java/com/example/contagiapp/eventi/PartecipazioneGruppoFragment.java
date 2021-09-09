@@ -54,6 +54,7 @@ public class PartecipazioneGruppoFragment extends Fragment {
     ArrayList<String> listaGruppi = new ArrayList<String>();
     String idEvento;
     ArrayList<String> listaPartecipantiEvento;
+    int numPostiDisponibili;
 
     public PartecipazioneGruppoFragment() {
         // Required empty public constructor
@@ -76,7 +77,6 @@ public class PartecipazioneGruppoFragment extends Fragment {
         idEvento = bundle.getString("idEvento");
         Log.d("bundle", String.valueOf(idEvento));
 
-        caricaGruppi();
 
         db.collection("Eventi")
                 .document(idEvento)
@@ -86,17 +86,48 @@ public class PartecipazioneGruppoFragment extends Fragment {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Evento evento = documentSnapshot.toObject(Evento.class);
 
+                        numPostiDisponibili = evento.getNumeroMaxPartecipanti() - evento.getPartecipanti().size();
+
                         if(documentSnapshot.exists()){
+                            listaGruppi = evento.getGruppiPartecipanti();
                             listaPartecipantiEvento = evento.getPartecipanti();
                             Log.d("listaPartecipantiEvento", String.valueOf(listaPartecipantiEvento));
                         }
 
                     }
                 });
+
+        caricaGruppi();
         // Inflate the layout for this fragment
         return view;
     }
 
+    private void tornareIndietro(int i) {
+
+        Fragment fragment = null;
+
+        switch (i) {
+            case 1:
+                fragment = new EliminazionePartecipazioneEvento();
+                break;
+            case 2:
+                fragment = new ProfiloEventoFragment();
+                break;
+        }
+
+        Bundle bundle = new Bundle();
+        bundle.putString("idEvento", idEvento);
+        bundle.putBoolean("partenza", false);
+
+        fragment.setArguments(bundle);
+
+        //richiamo il fragment
+
+        FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+        fr.replace(R.id.container,fragment);
+        fr.addToBackStack(null); //serve per tornare al fragment precedente
+        fr.commit();
+    }
 
 
     private void caricaGruppi() {
@@ -105,93 +136,97 @@ public class PartecipazioneGruppoFragment extends Fragment {
         String mailAdmin = getMailUtenteLoggato();
 
 
-        db.collection("Gruppo").whereEqualTo("admin", mailAdmin)
+        db.collection("Gruppo")
+                .whereEqualTo("admin", mailAdmin)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
-                            String id = documentSnapshot.getId();
 
-                            gruppo.aggiornaNroPartecipanti(gruppo.getPartecipanti());
-                            listaIdGruppiCreati.add(id);
+                            if(gruppo.getNroPartecipanti() <= numPostiDisponibili) {
+                                String id = documentSnapshot.getId();
 
-                            listaGruppiCreati.add(gruppo);
+                                listaIdGruppiCreati.add(id);
+                                listaGruppiCreati.add(gruppo);
+                            }
                         }
 
-                        /*
+
                         if(listaGruppiCreati.isEmpty()){
-                            tvTuoiGruppi.setText("Non hai ancora nessun gruppo. Crea subito uno");
+                            Toast.makeText(getContext(),"Non hai ancora nessun gruppo. Crea subito uno",Toast.LENGTH_LONG).show();
                         }
-*/
+
+                        if(listaIdGruppiCreati.size()!=0) {
+                            GruppoAdapter adapter = new GruppoAdapter(listaGruppiCreati);
+                            rvGruppiCreati.setAdapter(adapter);
+                            rvGruppiCreati.setLayoutManager(new LinearLayoutManager(getActivity()));
+                            rvGruppiCreati.addOnItemTouchListener(new PartecipazioneGruppoFragment.RecyclerTouchListener(getActivity(), rvGruppiCreati, new PartecipazioneGruppoFragment.RecyclerTouchListener.ClickListener() {
+                                @Override
+                                public void onClick(View view, int position) {
+                                    Log.i("lista1: ", String.valueOf(listaIdGruppiCreati));
+                                    final String idGruppoSelezionato = listaIdGruppiCreati.get(position);
+                                    Log.i("idList: ", idGruppoSelezionato);
 
 
-                        GruppoAdapter adapter = new GruppoAdapter(listaGruppiCreati);
-                        rvGruppiCreati.setAdapter(adapter);
-                        rvGruppiCreati.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        rvGruppiCreati.addOnItemTouchListener(new PartecipazioneGruppoFragment.RecyclerTouchListener(getActivity(), rvGruppiCreati, new PartecipazioneGruppoFragment.RecyclerTouchListener.ClickListener() {
-                            @Override
-                            public void onClick(View view, int position) {
-                                Log.i("lista1: ", String.valueOf(listaIdGruppiCreati));
-                                final String idGruppoSelezionato = listaIdGruppiCreati.get(position);
-                                Log.i("idList: ", idGruppoSelezionato);
+                                    if(!listaGruppi.contains(idGruppoSelezionato)){
+                                        listaGruppi.add(idGruppoSelezionato);
+                                        Toasty.success(getActivity(), "Prenotazione effettuata", Toast.LENGTH_SHORT).show();
 
+                                        db.collection("Gruppo")
+                                                .document(idGruppoSelezionato)
+                                                .get()
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                        //recupero tutti i partecipanti al gruppo
+                                                        //aggiungo questi alla lista dei partecipanti all'evento (metterndoci i controlli se quell'email già esiste)
 
-                                if(!listaGruppi.contains(idGruppoSelezionato)){
-                                    listaGruppi.add(idGruppoSelezionato);
-                                    Toasty.success(getActivity(), "Prenotazione effettuata", Toast.LENGTH_SHORT).show();
+                                                        if(documentSnapshot.exists()){
+                                                            Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
+                                                            final ArrayList<String> listaPartecipantiGruppo = gruppo.getPartecipanti();
+                                                            Log.d("listaPartecipantiGruppo", String.valueOf(listaPartecipantiGruppo));
 
-                                    db.collection("Gruppo")
-                                            .document(idGruppoSelezionato)
-                                            .get()
-                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                    //recupero tutti i partecipanti al gruppo
-                                                    //aggiungo questi alla lista dei partecipanti all'evento (metterndoci i controlli se quell'email già esiste)
+                                                            //aggiunta alla lista dei partecipanti all'evento i partecipanti del gruppo
 
-                                                    if(documentSnapshot.exists()){
-                                                        Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
-                                                        final ArrayList<String> listaPartecipantiGruppo = gruppo.getPartecipanti();
-                                                        Log.d("listaPartecipantiGruppo", String.valueOf(listaPartecipantiGruppo));
+                                                            for(int i = 0; i < listaPartecipantiGruppo.size(); i++) {
+                                                                boolean cond = true;
+                                                                for(int j = 0; j < listaPartecipantiEvento.size(); j++) {
+                                                                    if(listaPartecipantiGruppo.get(i).equals(listaPartecipantiEvento.get(j))) {
+                                                                        cond = false;
+                                                                    }
+                                                                }
 
-                                                        //aggiunta alla lista dei partecipanti all'evento i partecipanti del gruppo
-
-                                                        if (! listaPartecipantiEvento.contains(listaPartecipantiGruppo)) {
-                                                            listaPartecipantiEvento.addAll(listaPartecipantiGruppo);
-                                                            Log.d("listaPartecipantiEvent", String.valueOf(listaPartecipantiEvento));
+                                                                if(cond) {
+                                                                    listaPartecipantiEvento.add(listaPartecipantiGruppo.get(i));
+                                                                }
+                                                            }
 
                                                             db.collection("Eventi")
                                                                     .document(idEvento)
                                                                     .update("partecipanti", listaPartecipantiEvento);
+                                                            tornareIndietro(1);
                                                         }
-
-                                                        //devo aggiungere su firebase alla lista dei partecipanti la nuova lista
-
-
                                                     }
-                                                }
-                                            });
+                                                });
 
+                                        db.collection("Eventi")
+                                                .document(idEvento)
+                                                .update("gruppiPartecipanti", listaGruppi);
+                                    }else Toasty.warning(getActivity(), "Questo tuo gruppo è già prenotato all'evento", Toast.LENGTH_SHORT).show();
+                                }
 
-                                }else
-                                    Toasty.warning(getActivity(), "Sei già prenotato", Toast.LENGTH_SHORT).show();
+                                @Override
+                                public void onLongClick(View view, int position) {
 
+                                }
 
-                                db.collection("Eventi")
-                                        .document(idEvento)
-                                        .update("gruppiPartecipanti", listaGruppi);
-
-
-                            }
-
-                            @Override
-                            public void onLongClick(View view, int position) {
-
-                            }
-
-                        }));
+                            }));
+                        } else {
+                            tornareIndietro(2);
+                            Toast.makeText(getContext().getApplicationContext(), "I gruppi da te creati eccedono il numero massimo di partecipanti dell'evento", Toast.LENGTH_LONG).show();
+                        }
 
 
                     }

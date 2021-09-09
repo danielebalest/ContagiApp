@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.contagiapp.R;
 import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
+import com.example.contagiapp.gruppi.Gruppo;
 import com.example.contagiapp.gruppi.ProfiloGruppoAdminFragment;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,6 +54,8 @@ public class ProfiloEventoFragment extends Fragment {
     private Button btnPartecipa;
     private Button btnPartecipaComeGruppo;
     public Evento evento;
+    ArrayList<String> gruppiEvento = new ArrayList<>();
+
 
     public ProfiloEventoFragment() {
         // Required empty public constructor
@@ -70,6 +73,8 @@ public class ProfiloEventoFragment extends Fragment {
         final String idEvento = bundle.getString("idEvento");
         Log.d("idEvento", String.valueOf(idEvento));
 
+        controlloGruppi(idEvento);
+
         caricaEvento(idEvento, view);
         btnPartecipa= view.findViewById(R.id.partecipa_evento);
         btnPartecipaComeGruppo = view.findViewById(R.id.partecipa_evento_gruppo);
@@ -84,7 +89,7 @@ public class ProfiloEventoFragment extends Fragment {
 
                 }else if(evento.getPartecipanti().contains(mailutente)) {
                     Toast.makeText(getContext(), "Ti sei già iscritto a questo evento", Toast.LENGTH_LONG).show();
-                }else if(evento.getNumeroPostiDisponibili()==0){
+                }else if((evento.getNumeroMaxPartecipanti() - evento.getPartecipanti().size()) == 0){
                     Toast.makeText(getContext(),"Non ci sono più posto disponibili",Toast.LENGTH_SHORT).show();
                 }
                 else {
@@ -111,8 +116,7 @@ public class ProfiloEventoFragment extends Fragment {
                                         partecipanti.add(getMailUtenteLoggato());
                                         assert evento != null;
                                         evento.setPartecipanti(partecipanti);
-                                        int postiDisp = evento.getNumeroPostiDisponibili() -1;
-                                        db.collection("Eventi").document(idEvento).update("numeroPostiDisponibili", postiDisp);
+
                                         db.collection("Eventi").document(idEvento).update("partecipanti", partecipanti);
                                         Toast.makeText(getContext(), "Iscrizione aggiunta!", Toast.LENGTH_LONG).show();
 
@@ -221,6 +225,9 @@ public class ProfiloEventoFragment extends Fragment {
                     String orario = evento.getOrario();
                     String indirizzo = evento.getIndirizzo();
                     String citta = evento.getCitta();
+                    int numMax = evento.getNumeroMaxPartecipanti();
+                    int numPartecipanti = evento.getPartecipanti().size();
+                    int numDisponibili = numMax - numPartecipanti;
 
                     TextView tvNomeEvento = view.findViewById(R.id.tvNomeEvento2);
                     TextView tvDescrEvento = view.findViewById(R.id.tvDescrEvento2);
@@ -228,18 +235,73 @@ public class ProfiloEventoFragment extends Fragment {
                     TextView tvOrarioEvento = view.findViewById(R.id.tvOrarioEvento);
                     TextView tvIndirizzoEvento = view.findViewById(R.id.tvIndirizzoEvento);
                     TextView tvCittaEvento = view.findViewById(R.id.tvCittaEvento);
+                    TextView numMaxPartecipanti = view.findViewById(R.id.num_partecipanti_max);
+                    TextView numDispono = view.findViewById(R.id.posti_disponibili);
+                    TextView numParteci = view.findViewById(R.id.num_partecipanti);
 
-                    tvNomeEvento.setText(nome);
+
+                    tvNomeEvento.setText("Nome evento: "+nome);
                     tvDescrEvento.setText(descrizione);
                     tvDataEvento.setText(data);
                     tvOrarioEvento.setText(orario);
-                    tvIndirizzoEvento.setText(indirizzo);
-                    tvCittaEvento.setText(citta);
+                    tvIndirizzoEvento.setText("Indirizzo: "+indirizzo);
+                    tvCittaEvento.setText("Città: "+citta);
+                    numMaxPartecipanti.setText("Numero massimo di partecipanti:   "+numMax);
+                    numDispono.setText("Numero posti disponibili:   "+numDisponibili);
+                    numParteci.setText("Numero di iscritti all'evento:   "+numPartecipanti);
 
                 } else {
                     Toast.makeText(getContext(), "Documents does not exist", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void controlloGruppi(final String idEvento) {
+        final ArrayList<Boolean> cond = new ArrayList<>();
+
+        db.collection("Eventi")
+                .document(idEvento)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Evento evento1 = documentSnapshot.toObject(Evento.class);
+                gruppiEvento = evento1.getGruppiPartecipanti();
+                final ArrayList<String> partecipanti = evento1.getPartecipanti();
+
+                //Log.d("ANY_TAG", String.valueOf(gruppiEvento));
+
+                for(int i = 0; i < gruppiEvento.size(); i++) {
+                    String idGruppo = gruppiEvento.get(i);
+
+                    db.collection("Gruppo")
+                            .document(idGruppo)
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            //Log.d("ANY_TAG", "entered gruppo");
+                            Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
+
+                            ArrayList<String> membri = gruppo.getPartecipanti();
+
+                            for(int j = 0; j < membri.size(); j++) {
+                                String membro = membri.get(j);
+                                if(partecipanti.contains(membro)) {
+                                    cond.add(true);
+                                } else cond.add(false);
+                            }
+                        }
+                    });
+
+                    if(!cond.contains(true)) {
+                        gruppiEvento.remove(idGruppo);
+                    }
+                }
+            }
+        });
+
+        db.collection("Eventi").document(idEvento).update("gruppiPartecipanti", gruppiEvento);//TODO vedere perchè non salva i dati degli arraylist dopo questa query
     }
 }

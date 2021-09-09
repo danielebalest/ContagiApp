@@ -148,6 +148,9 @@ public class ProfiloEventoAdminFragment extends Fragment {
                     String orario = evento.getOrario();
                     String indirizzo = evento.getIndirizzo();
                     String citta = evento.getCitta();
+                    int numMax = evento.getNumeroMaxPartecipanti();
+                    int numPartecipanti = evento.getPartecipanti().size();
+                    int numDisponibili = numMax - numPartecipanti;
 
                     TextView tvNomeEvento = view.findViewById(R.id.tvNomeEventoAdmin);
                     TextView tvDescrEvento = view.findViewById(R.id.tvDescrEventoAdmin);
@@ -155,13 +158,19 @@ public class ProfiloEventoAdminFragment extends Fragment {
                     TextView tvOrarioEvento = view.findViewById(R.id.tvOrarioEventoAdmin);
                     TextView tvIndirizzoEvento = view.findViewById(R.id.tvIndirizzoEventoAdmin);
                     TextView tvCittaEvento = view.findViewById(R.id.tvCittaEventoAdmin);
+                    TextView numMaxPartecipanti = view.findViewById(R.id.num_partecipanti_max);
+                    TextView numDispono = view.findViewById(R.id.posti_disponibili);
+                    TextView numParteci = view.findViewById(R.id.num_partecipanti);
 
-                    tvNomeEvento.setText(nome);
+                    tvNomeEvento.setText("Nome evento: "+nome);
                     tvDescrEvento.setText(descrizione);
                     tvDataEvento.setText(data);
                     tvOrarioEvento.setText(orario);
-                    tvIndirizzoEvento.setText(indirizzo);
-                    tvCittaEvento.setText(citta);
+                    tvIndirizzoEvento.setText("Indirizzo: "+indirizzo);
+                    tvCittaEvento.setText("Città: "+citta);
+                    numMaxPartecipanti.setText("Numero massimo di partecipanti:   "+numMax);
+                    numDispono.setText("Numero posti disponibili:   "+numDisponibili);
+                    numParteci.setText("Numero di iscritti all'evento:   "+numPartecipanti);
 
                 } else {
                     Toast.makeText(getContext(), "Documents does not exist", Toast.LENGTH_SHORT).show();

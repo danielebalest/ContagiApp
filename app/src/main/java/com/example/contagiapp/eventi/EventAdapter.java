@@ -71,13 +71,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
 
 
 
-        evento.setNumeroPostiDisponibili(evento.getNumeroMaxPartecipanti(), evento.getNumPartecipanti());
+        //evento.setNumeroPostiDisponibili(evento.getNumeroMaxPartecipanti(), evento.getNumPartecipanti());
         textViewNomeEvento.setText(evento.getNome());
-        textViewNumPartecipanti.setText(evento.getNumPartecipanti() + " partecipanti"); //todo: inserire R.string.participants
-        textViewPostiDisponibili.setText(evento.getNumeroPostiDisponibili() + " disponibili"); //todo: inserire R.string.available
+        textViewNumPartecipanti.setText(evento.getPartecipanti().size() + " partecipanti"); //todo: inserire R.string.participants
+        textViewPostiDisponibili.setText(evento.getNumeroMaxPartecipanti() - evento.getPartecipanti().size() + " posti disponibili"); //todo: inserire R.string.available
         textViewDataEvento.setText(evento.getData());
         textViewOrarioEvento.setText(evento.getOrario());
-        textViewCittaEvento.setText(evento.getCitta());
+        textViewCittaEvento.setText("Città: "+evento.getCitta());
 
 
         //recupero l'immagine dallo storage
@@ -100,7 +100,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
 
 
 
-        if(evento.getNumeroPostiDisponibili() == 0){
+        if((evento.getNumeroMaxPartecipanti() - evento.getPartecipanti().size()) == 0){
             textViewPostiDisponibili.setTextColor(Color.RED);
         }
 

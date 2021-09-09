@@ -117,7 +117,6 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                             }
 
                             Evento evento = documentSnapshot.toObject(Evento.class);
-                            evento.aggiornaNroPartecipanti(evento.getPartecipanti());
 
 
                             try {
@@ -196,8 +195,6 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                                 Date dataAttuale = new Date(System.currentTimeMillis());
 
                                 if(dataEvento.compareTo(dataAttuale) >= 0 && !evento.getAdmin().equals(getMailUtenteLoggato())) {
-                                    evento.aggiornaNroPartecipanti(evento.getPartecipanti());
-
                                     Log.d("idList", String.valueOf(idList));
                                     Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
                                     listaEventi.add(evento);
@@ -266,8 +263,6 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                                 if(dataEvento.compareTo(dataAttuale) >= 0
                                     && !evento.getAdmin().equals(getMailUtenteLoggato())
                                         && !evento.getPartecipanti().contains(getMailUtenteLoggato())) {
-
-                                    evento.aggiornaNroPartecipanti(evento.getPartecipanti());
 
                                     Log.d("idList", String.valueOf(idList));
                                     Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));

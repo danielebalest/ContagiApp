@@ -12,7 +12,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".eventi.ProfiloEventoFragment"
+    tools:context=".eventi.ProfiloEventoAdminFragment"
     >
 
     <!-- TODO: Update blank fragment layout -->
@@ -112,6 +112,45 @@
 
     </LinearLayout>
 
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_account_circle_24_gray">
+            </ImageView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/num_partecipanti_max"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Num partecipanti max" />
+
+                <TextView
+                    android:id="@+id/num_partecipanti"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Num partecipanti" />
+
+                <TextView
+                    android:id="@+id/posti_disponibili"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Num posti disponibili" />
+
+            </LinearLayout>
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPartecipantiProfiloEventoAdmin"
         android:layout_width="match_parent"

@@ -13,9 +13,15 @@ public class Evento {
     private String admin;
     private ArrayList<String> partecipanti;
     private int numeroMaxPartecipanti;
-    private int numPartecipanti;
-    private int numeroPostiDisponibili = numeroMaxPartecipanti - numPartecipanti;
+    private ArrayList<String> gruppiPartecipanti;
 
+    public ArrayList<String> getGruppiPartecipanti() {
+        return gruppiPartecipanti;
+    }
+
+    public void setGruppiPartecipanti(ArrayList<String> gruppiPartecipanti) {
+        this.gruppiPartecipanti = gruppiPartecipanti;
+    }
 
     public Evento(){
     }
@@ -92,14 +98,6 @@ public class Evento {
         this.partecipanti = partecipanti;
     }
 
-    public void aggiornaNroPartecipanti(ArrayList<String> partecipanti) {
-        this.numPartecipanti = partecipanti.size();
-    }
-
-    public void addPartecipantiGruppo(ArrayList<String> partecipantiGruppo){
-        getPartecipanti().addAll(partecipantiGruppo);
-    }
-
     public int getNumeroMaxPartecipanti() {
         return numeroMaxPartecipanti;
     }
@@ -107,21 +105,4 @@ public class Evento {
     public void setNumeroMaxPartecipanti(int numeroMaxPartecipanti) {
         this.numeroMaxPartecipanti = numeroMaxPartecipanti;
     }
-
-    public int getNumPartecipanti() {
-        return numPartecipanti;
-    }
-
-    public void setNumPartecipanti(int numPartecipanti) {
-        this.numPartecipanti = numPartecipanti;
-    }
-
-    public int getNumeroPostiDisponibili() {
-        return numeroPostiDisponibili;
-    }
-
-    public void setNumeroPostiDisponibili(int numeroMaxPartecipanti, int numParticipanti) {
-        this.numeroPostiDisponibili = numeroMaxPartecipanti - numParticipanti ;
-    }
-
 }
