@@ -302,6 +302,6 @@ public class ProfiloEventoFragment extends Fragment {
             }
         });
 
-        db.collection("Eventi").document(idEvento).update("gruppiPartecipanti", gruppiEvento);//TODO vedere perchè non salva i dati degli arraylist dopo questa query
+        db.collection("Eventi").document(idEvento).update("gruppiPartecipanti", gruppiEvento);
     }
 }
