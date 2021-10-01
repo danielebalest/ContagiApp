@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".HomeFragment"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
     android:padding="20dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
-        <HorizontalScrollView
-            android:id="@+id/eventiCreatiRecenti"
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
-            android:layout_height="128dp">
+            android:layout_height="wrap_content"
+            android:text="Il tuo stato"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            android:padding="10dp"
+        />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical" />
-        </HorizontalScrollView>
+
+    <LinearLayout
+        android:id="@+id/statusCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle"
+        android:layout_margin="20dp"
+        android:orientation="horizontal" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,17 +80,4 @@
                 android:textSize="16sp" />
         </LinearLayout>
 
-        <HorizontalScrollView
-            android:id="@+id/eventiVicinanze"
-            android:layout_width="match_parent"
-            android:layout_height="91dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical" />
-        </HorizontalScrollView>
-
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

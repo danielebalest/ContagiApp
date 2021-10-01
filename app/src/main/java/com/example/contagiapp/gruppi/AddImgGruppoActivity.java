@@ -65,8 +65,6 @@ public class AddImgGruppoActivity extends AppCompatActivity {
     }
 
 
-
-
     public void invitaAmici(View view) {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
@@ -95,7 +93,8 @@ public class AddImgGruppoActivity extends AppCompatActivity {
             gruppo.setDescrizione(descrGruppo);
             gruppo.setPartecipanti(listaMailPartecipanti);
             gruppo.setStatoGruppo(null);
-            gruppoCollection.add(gruppo).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            gruppoCollection.add(gruppo)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
                     documentId = documentReference.getId();

@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.contagiapp.Database;
 import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
 import com.example.contagiapp.eventi.Evento;
@@ -67,6 +68,22 @@ public class ProfiloGruppoFragment extends Fragment {
         Log.d("idGruppo", String.valueOf(idGruppo));
 
         caricaGruppo(idGruppo, view);
+
+        //QUA
+        Database db = new Database();
+        db.getStatoGruppo(new Database.StatoGruppo() {
+            @Override
+            public String setIdGruppo() {
+                return idGruppo;
+            }
+
+            @Override
+            public void getStato(String stato) {
+                Log.d("stato", stato);
+            }
+        });
+
+
 
         MaterialButton btnAbbandonaGruppo = view.findViewById(R.id.btnAbbandonaGruppo);
         btnAbbandonaGruppo.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +144,21 @@ public class ProfiloGruppoFragment extends Fragment {
                             fr.addToBackStack(null); //serve per tornare al fragment precedente
                             fr.commit();
                         }
+                    }
+                });
+    }
+
+
+    String stato = null;
+    private void getStatoGruppo(String idGruppo){
+        db.collection("Utenti")
+                .document(idGruppo)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Gruppo g = documentSnapshot.toObject(Gruppo.class);
+                        stato = g.getStatoGruppo();
                     }
                 });
     }
