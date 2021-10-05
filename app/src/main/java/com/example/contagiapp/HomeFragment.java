@@ -7,6 +7,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -51,8 +52,11 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        new_event = view.findViewById(R.id.createEvents);
-        status = view.findViewById(R.id.statusCircle);
+        new_event = view.findViewById(R.id.createEvent);
+        status = view.findViewById(R.id.statusCircle2);
+
+
+
 
         new_event.setOnClickListener(new View.OnClickListener() {
             @Override

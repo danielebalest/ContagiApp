@@ -30,8 +30,6 @@
         android:id="@+id/textViewNomeCognome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/layout_bg"
-        android:backgroundTint="#F10A0A"
         android:gravity="center"
         android:textColor="@color/black"
         android:layout_margin="10dp"
@@ -51,7 +49,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/layout_bg"
-        android:backgroundTint="#03A9F4"
         android:layout_margin="5dp"
         android:orientation="vertical">
 
@@ -62,8 +59,8 @@
             android:gravity="center"
             android:text="  Data di nascita: "
             android:textColor="@color/black"
-            android:textSize="25dp"
-            android:textStyle="bold" />
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/textViewDataNascita"
@@ -71,8 +68,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/black"
-            android:textSize="25dp"
-            android:textStyle="bold" />
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -80,17 +77,15 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="@drawable/layout_bg"
-        android:backgroundTint="#03A9F4"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="  Età: "
             android:textColor="@color/black"
-            android:textSize="25dp"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             android:textStyle="bold" />
 
         <TextView
@@ -98,19 +93,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="25dp"
-            android:textStyle="bold"></TextView>
+            android:textAppearance="?attr/textAppearanceHeadline6">
+        </TextView>
 
 
         <TextView
-            android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="  Genere: "
             android:textColor="@color/black"
-            android:textSize="25dp"
-            android:textStyle="bold" />
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/textViewGenere"
@@ -118,8 +112,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/black"
-            android:textSize="25dp"
-            android:textStyle="bold" />
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            />
 
         <TextView
             android:id="@+id/textView19"
@@ -136,7 +130,6 @@
         android:layout_width="match_parent"
         android:background="@drawable/layout_bg"
         android:layout_margin="5dp"
-        android:backgroundTint="#03A9F4"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -146,9 +139,8 @@
             android:layout_height="wrap_content"
             android:text="  Residenza: "
             android:textColor="@color/black"
-            android:textSize="25dp"
-            android:gravity="center"
-            android:textStyle="bold" />
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/textViewNazione"
@@ -156,17 +148,19 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/black"
-            android:textSize="25dp"
-            android:textStyle="bold" />
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            />
 
         <TextView
             android:id="@+id/textViewCitta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="25dp"
             android:gravity="center"
-            android:textStyle="bold"></TextView>
+            android:textAppearance="?attr/textAppearanceHeadline6">
+        </TextView>
+
+
     </LinearLayout>
 
 </LinearLayout>

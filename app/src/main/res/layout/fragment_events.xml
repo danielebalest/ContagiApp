@@ -8,7 +8,6 @@
     android:layout_marginTop="20dp"
     tools:context=".eventi.EventsFragment">
 
-
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/search_field"
         android:layout_width="match_parent"
@@ -21,8 +20,7 @@
         android:background="@drawable/search_layout"
         android:drawableLeft="@drawable/ic_baseline_search_24"
         android:singleLine="true"
-        android:imeOptions="actionSearch"
-        />
+        android:imeOptions="actionSearch" />
 
     <LinearLayout
         android:layout_width = "match_parent"
@@ -36,8 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Iscritto"
-            android:textSize="23dp"
-            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:padding="15dp"
             tools:checked="false" />
 
         <Switch
@@ -45,8 +43,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Creati"
-            android:textSize="23dp"
-            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:padding="15dp"
             tools:checked="false" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -74,6 +72,4 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </LinearLayout>
-
-
 </RelativeLayout >
