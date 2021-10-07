@@ -173,6 +173,7 @@ public class ProfiloEventoFragment extends Fragment {
                 caricaImgDaStorage(storageRef, storageDirectory, idEvento, img );
             }
         });
+
         return view;
     }
 
@@ -304,4 +305,6 @@ public class ProfiloEventoFragment extends Fragment {
 
         db.collection("Eventi").document(idEvento).update("gruppiPartecipanti", gruppiEvento);
     }
+
+    //TODO come chiudere l'attività schiacciando il tasto indietro
 }

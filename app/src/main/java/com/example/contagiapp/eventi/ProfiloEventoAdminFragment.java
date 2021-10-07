@@ -1,24 +1,12 @@
 package com.example.contagiapp.eventi;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -30,11 +18,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.contagiapp.HomeFragment;
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.contagiapp.R;
 import com.example.contagiapp.UserAdapter;
-import com.example.contagiapp.data.amici.FriendsFragment;
-import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -45,15 +38,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class ProfiloEventoAdminFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -80,12 +69,22 @@ public class ProfiloEventoAdminFragment extends Fragment {
 
         Log.d("doveSiamo", "ProfiloEventoAdminFragment");
 
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
         final String idEvento = bundle.getString("idEvento");
 
         caricaEvento(idEvento, view);
         caricaPartecipanti(idEvento);
 
+        Button modificaEvento = view.findViewById(R.id.btnModificaEvento);
+        modificaEvento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NewEventsActivity.class);
+                intent.putExtra("scelta", true);
+                intent.putExtra("idEvento", idEvento);
+                startActivity(intent);
+            }
+        });
 
         final ImageView img = view.findViewById(R.id.imgProfiloEventoAdmin);
         rvPartecipantiProfiloEventoAdmin = view.findViewById(R.id.rvPartecipantiProfiloEventoAdmin);
@@ -116,6 +115,23 @@ public class ProfiloEventoAdminFragment extends Fragment {
 
         return view;
     }
+
+    /*@Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            //Back buttons was pressed, do whatever logic you want
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        EventsFragment events = new EventsFragment();
+        showFragment(events);
+    }*/
 
     private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
         storageRef.child(directory + "/" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {

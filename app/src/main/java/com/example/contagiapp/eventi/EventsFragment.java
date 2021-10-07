@@ -53,8 +53,8 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
     ArrayList<Evento> listaEventiCreati = new ArrayList<Evento>();
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli eventi
     ArrayList<String> listaIDEventoUtenteLoggato = new ArrayList<String>();
-    private boolean switchIscritto = false;
-    private boolean switchCreato = false;
+    private boolean switchiscritto = false;
+    private boolean switchcreato = false;
 
 
 
@@ -337,30 +337,30 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
         switch (buttonView.getId()) {
             case R.id.switch1:
-                switchIscritto = isChecked;
+                switchiscritto = isChecked;
 
                 if(isChecked) {
-                    if (switchCreato) {
+                    if (switchcreato) {
                         Toast.makeText(getContext(), "Impossibile effettuare questa operazione", Toast.LENGTH_LONG).show();
                         buttonView.setChecked(false);
-                        switchIscritto = !switchIscritto;
+                        switchiscritto = !switchiscritto;
                     } else caricaEventiIscritto();
                 }
 
-                if(!isChecked && !switchCreato) caricaEventi();
+                if(!isChecked && !switchcreato) caricaEventi();
                 break;
             case R.id.switch2:
-                switchCreato = isChecked;
+                switchcreato = isChecked;
 
                 if(isChecked) {
-                    if(switchIscritto) {
+                    if(switchiscritto) {
                         Toast.makeText(getContext(),"Impossibile effettuare questa operazione",Toast.LENGTH_LONG).show();
                         buttonView.setChecked(false);
-                        switchCreato = !switchCreato;
+                        switchcreato = !switchcreato;
                     } else caricaEventiCreati();
                 }
 
-                if(!isChecked && !switchIscritto) caricaEventi();
+                if(!isChecked && !switchiscritto) caricaEventi();
                 break;
         }
     }

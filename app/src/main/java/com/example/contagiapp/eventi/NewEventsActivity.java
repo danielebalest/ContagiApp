@@ -26,6 +26,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.gruppi.AddImgGruppoActivity;
@@ -43,6 +46,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -50,15 +54,21 @@ import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 
 import es.dmoral.toasty.Toasty;
 
 
-public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class NewEventsActivity extends AppCompatActivity {
 
     MapView mapView;
     EditText editTextLuogo;
@@ -72,25 +82,96 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
     private DatePickerDialog.OnDateSetListener dataDellEvento;
     private TimePickerDialog.OnTimeSetListener orarioDellEvento;
 
+    private String idEvento;
+    private boolean cond;
+    private Evento evento = new Evento();
+
+    private EditText nome;
+    private EditText descrizione;
+    private EditText numeroMaxP;
+    private TextView data;
+    private TextClock orario;
+    private EditText citta;
+    private EditText indirizzo;
+
     public static final int PICK_IMAGE = 1;
     private Uri imageUri;
+    private final static String storageDirectory = "eventi";
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference eventiCollection = db.collection("Eventi");
     String documentId = null;
-    private int anno = 0, mese = 0, giorno = 0, ora=0, minuti=0, oraapp=0, minapp=0;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_new_events);
 
+        nome = findViewById(R.id.editTextNomeEvento);
+        descrizione = findViewById(R.id.editTextDescrEvento);
+        numeroMaxP = findViewById(R.id.editTextNumMaxPartecipanti);
+        data = findViewById(R.id.dataEvento);
+        orario= findViewById(R.id.orarioEvento);
+        citta = findViewById(R.id.editTextCitta);
+        indirizzo = findViewById(R.id.editTextIndirizzo);
+
+        Bundle bundle = getIntent().getExtras();
+        cond = bundle.getBoolean("scelta");
+        if(cond) {
+            idEvento = bundle.getString("idEvento");
+            final ImageView img = findViewById(R.id.imgProfiloEvento);
+
+            db.collection("Eventi")
+                    .document(idEvento)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            evento = documentSnapshot.toObject(Evento.class);
+
+                            nome.setText(evento.getNome());
+                            descrizione.setText(evento.getDescrizione());
+                            numeroMaxP.setText(Integer.toString(evento.getNumeroMaxPartecipanti()));
+                            citta.setText(evento.getCitta());
+                            indirizzo.setText(evento.getIndirizzo());
+                            data.setText(evento.getData());
+                            orario.setText(evento.getOrario());
+
+                            creaEvento.setText("Modifica Evento");
+
+                            //recupero l'immagine dallo storage
+                            //TODO caricare l'immgaine precedente
+                            /*Log.d("eventi/idEvento","eventi/"+idEvento);
+                            storageRef.child("eventi/"+idEvento).getDownloadUrl()
+                                    .addOnSuccessListener( new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            String sUrl = uri.toString(); //otteniamo il token del'immagine
+                                            Log.d("OnSuccess", "");
+                                            Log.d("sUrl", sUrl);
+                                            Picasso.get().load(sUrl).into(img);
+                                        }})
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d("OnFailure Exception", String.valueOf(e));
+                                        }
+                                    });*/
+                        }
+                    });
+        }
+
+//TODO controllare se la modifica evento funziona e se la chiamata di
+// questa pagina funziona senza problemi sia da "profiloEventoAdminFragment"
+// che da "EventsFragment" e perchè torna indietro in ProfiloEventoFragment anzichè EventsFragment
+// aggiustare i controlli per data e orario e capire perchè quando apro il calendario anzichè 12 mi esce 1
+
         editTextLuogo = findViewById(R.id.editTextIndirizzo);
 
 
-        mapView = findViewById(R.id.map_view);
+        /*mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+        mapView.getMapAsync(this);*/
 
 
         // collegamento button registrati con la mainActivity
@@ -111,8 +192,18 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
-                int hour = cal.get(Calendar.HOUR);
-                int minute = cal.get(Calendar.MINUTE);
+
+                int hour;
+                int minute;
+                if(cond) {
+                    String ora = evento.getOrario();
+                    hour = Integer.parseInt(ora.substring(0,2));
+                    minute = Integer.parseInt(ora.substring(3,5));
+                } else {
+                    hour = cal.get(Calendar.HOUR);
+                    minute = cal.get(Calendar.MINUTE);
+                }
+
                 TimePickerDialog dialog;
                 dialog = new TimePickerDialog(NewEventsActivity.this, android.R.style.Theme_Material_InputMethod, orarioDellEvento,hour,minute,true);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));
@@ -125,9 +216,20 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
+                int year;
+                int month;
+                int day;
+
+                if(cond) {
+                    String data = evento.getData();
+                    day = Integer.parseInt(data.substring(0,2));
+                    month = Integer.parseInt(data.substring(3,5));
+                    year = Integer.parseInt(data.substring(6,10)) - 1;
+                } else {
+                    year = cal.get(Calendar.YEAR);
+                    month = cal.get(Calendar.MONTH);
+                    day = cal.get(Calendar.DAY_OF_MONTH);
+                }
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         NewEventsActivity.this,
@@ -188,18 +290,9 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
 
     private void addEventToDb(){
 
-
-        EditText nome = findViewById(R.id.editTextNomeEvento);
-        EditText descrizione = findViewById(R.id.editTextDescrEvento);
-        EditText numeroMaxP = findViewById(R.id.editTextNumMaxPartecipanti);
-        TextView data = findViewById(R.id.dataEvento);
-        TextClock orario= findViewById(R.id.orarioEvento);
-        EditText citta = findViewById(R.id.editTextCitta);
-        EditText indirizzo = findViewById(R.id.editTextIndirizzo);
-
         if(controlloEditText(nome.getText().toString(), numeroMaxP.getText().toString(), descrizione.getText().toString(), citta.getText().toString(), indirizzo.getText().toString())){
-            final Evento evento = new Evento();
-            evento.setAdmin(getMailUtenteLoggato());
+            String mail = getMailUtenteLoggato();
+            evento.setAdmin(mail);
             evento.setNome(nome.getText().toString());
             evento.setDescrizione(descrizione.getText().toString());
             evento.setNumeroMaxPartecipanti(Integer.parseInt(numeroMaxP.getText().toString()));
@@ -217,16 +310,67 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
             Log.d("getOrario", String.valueOf(evento.getOrario()));
 
 
-            if(dataOraValide(evento, evento.getData(), evento.getOrario())){
-                db.collection("Eventi").add(evento)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            if(dataOraValide(evento)){
+
+                final Intent parentIntent = NavUtils.getParentActivityIntent(this);
+
+                db.collection("Eventi").add(evento).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        documentId = documentReference.getId();
+                        evento.setIdEvento(documentId);
+                        db.collection("Eventi").document(documentId).update("idEvento", documentId);
+                        uploadImage();
+
+                        if(cond) {
+                            db.collection("Eventi").document(idEvento).delete();
+                            //db.collection("Eventi").document(idEvento).update(evento);
+
+                            Toast.makeText(NewEventsActivity.this, "Evento modificato", Toast.LENGTH_SHORT).show();
+
+                            /*ProfiloEventoAdminFragment eventoAdmin = new ProfiloEventoAdminFragment();
+
+                            Bundle bun = new Bundle();
+                            bun.putString("idEvento", documentId);
+
+                            eventoAdmin.setArguments(bun);
+                            FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+                            fr.replace(R.id.new_event,eventoAdmin);
+                            fr.addToBackStack(null); //serve per tornare al fragment precedente
+                            fr.commit();*/
+
+//TODO il problema è quando si va da questa activity a profiloEventoAdminFragment
+                            finish();
+                        } else {
+                            Toast.makeText(NewEventsActivity.this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+
+
+                        /*parentIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        parentIntent.putExtra("idEvento", documentId);
+                        startActivity(parentIntent);
+                        finish();*/
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+                        /*.addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                             @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                                documentId = documentReference.getId();
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                Log.d(TAG, "DocumentSnapshot written with ID: " + task.getResult().getId());
+                                documentId = task.getResult().getId();
                                 evento.setIdEvento(documentId);
                                 db.collection("Eventi").document(documentId).update("idEvento", documentId);
                                 uploadImage();
+
+                                if(cond) {
+                                    db.collection("Eventi").document(idEvento).delete();
+                                    //db.collection("Eventi").document(idEvento).update(evento);
+                                }
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -234,156 +378,41 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
                             public void onFailure(@NonNull Exception e) {
                                 Log.w(TAG, "Error adding document", e);
                             }
-                        });
-
-                Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
-
-                finish();
+                        });*/
             }else {
-                finish();
-                startActivity(getIntent());
+                Toast.makeText(NewEventsActivity.this, "Dati inseriti non corretti", Toast.LENGTH_LONG).show();
             }
         }
 
 
     }
 
+    private Boolean dataOraValide(Evento evento){
 
-    private void openMainActivity() {
-        Map<String, Object> evento = new HashMap<>();
+        boolean validita = false;
 
-        TextView nome = (TextView) findViewById(R.id.editTextNomeEvento);
-        evento.put("nome", nome.getText().toString());
+        try {
+            Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
+            Date dataAttuale = new Date(System.currentTimeMillis());
 
-        TextView numeroP = (TextView) findViewById(R.id.editTextNumMaxPartecipanti);
-        evento.put("num_partecipanti", numeroP.getText().toString());
+            Calendar cal = Calendar.getInstance();
+            String orario = evento.getOrario();
+            int minapp = Integer.valueOf(orario.substring(3,5));
+            int oraapp = Integer.valueOf(orario.substring(0,2));
 
-        TextView data = (TextView) findViewById(R.id.dataEvento);
-        String appoggio= data.getText().toString();
+            if(dataEvento.compareTo(dataAttuale) >= 0) {
+                if(dataEvento.compareTo(dataAttuale) == 0) {
+                    if(oraapp > (cal.get(Calendar.HOUR_OF_DAY) + 1) &&
+                            minapp <= cal.get(Calendar.MINUTE)) {
+                        validita = true;
+                    } else Toast.makeText(this, "L'evento deve essere almeno tra un'ora da adesso", Toast.LENGTH_LONG).show();
+                } else validita = true;
+            } else Toast.makeText(this, "Data inserita non valida", Toast.LENGTH_LONG).show();
 
-        TextClock orario= (TextClock) findViewById(R.id.orarioEvento);
-        String appoggio1=orario.getText().toString();
-
-        TextView descrizione = (TextView) findViewById(R.id.editTextDescrEvento);
-        evento.put("descrizione", descrizione.getText().toString());
-
-        Spinner nazione = (Spinner) findViewById(R.id.spinnerNazioni);
-        evento.put("nazione", nazione.getSelectedItem().toString());
-
-        TextView citta = (TextView) findViewById(R.id.editTextCitta);
-        evento.put("citta", citta.getText().toString());
-
-        TextView luogo = (TextView) findViewById(R.id.editTextCitta);
-
-        controllodata(evento,appoggio,appoggio1);
-
-        //Tornare indietro
-        this.finish();
-    }
-
-    void controllodata(Map<String, Object> evento, String appoggio, String appoggio1){
-        Calendar cal = Calendar.getInstance();
-        boolean condevento=false;
-        boolean condorario2= true;
-        int l = appoggio.length();
-        int l1= appoggio1.length();
-        System.out.println("la lunghezza è stocazzooooo "+ l1);
-        System.out.println("l'orario scelto è "+ appoggio1);
-        switch (l) {
-            case 9:
-                anno = Integer.valueOf(appoggio.substring(l - 4, l));
-                mese = Integer.valueOf(appoggio.substring(l - 7, l - 5));
-                giorno = Integer.valueOf(appoggio.charAt(0)) - 48;
-                break;
-            case 10:
-                anno = Integer.valueOf(appoggio.substring(l - 4, l));
-                mese = Integer.valueOf(appoggio.substring(l - 7, l - 5));
-                giorno = Integer.valueOf(appoggio.substring(l - 10, l - 8));
-                break;
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        minapp = Integer.valueOf(appoggio1.substring(3,5));
-        oraapp = Integer.valueOf(appoggio1.substring(0,2));
 
-        System.out.println("orario scelto "+ oraapp);
-        System.out.println("minuti scelti "+ minapp);
-        if (anno >= cal.get(Calendar.YEAR)) {
-            if ((mese-1) >= cal.get(Calendar.MONTH)) {
-                if (giorno >= cal.get(Calendar.DAY_OF_MONTH))
-                    if(oraapp>= (cal.get(Calendar.HOUR_OF_DAY)+1)) {
-                        evento.put("data", appoggio);
-                        evento.put("orario evento", appoggio1);
-                        condorario2=false;
-                    }
-            }else condevento= true;
-        }else condevento= true;
-
-        if(condevento){
-            Toast.makeText(this, "data non valida",Toast.LENGTH_SHORT).show();
-            finish();
-            startActivity(getIntent());
-        }else if(condorario2) {
-            Toast.makeText(this, "orario non valido",Toast.LENGTH_SHORT).show();
-            finish();
-            startActivity(getIntent());
-        }else{
-            db.collection("Eventi").add(evento);
-            Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
-            finish();
-            //provaaaaaaaa
-        }
-    }
-
-    private Boolean dataOraValide(Evento evento, String data, String orario){
-        Boolean validita= false;
-        Calendar cal = Calendar.getInstance();
-        boolean condevento2=false;
-        boolean condorario3= true;
-        int l = data.length();
-        int l1= orario.length();
-        switch (l) {
-            case 9:
-                anno = Integer.valueOf(data.substring(l - 4, l));
-                mese = Integer.valueOf(data.substring(l - 7, l - 5));
-                giorno = Integer.valueOf(data.charAt(0)) - 48;
-                break;
-            case 10:
-                anno = Integer.valueOf(data.substring(l - 4, l));
-                mese = Integer.valueOf(data.substring(l - 7, l - 5));
-                giorno = Integer.valueOf(data.substring(l - 10, l - 8));
-                break;
-        }
-        minapp = Integer.valueOf(orario.substring(3,5));
-        oraapp = Integer.valueOf(orario.substring(0,2));
-
-        if (anno >= cal.get(Calendar.YEAR)) {
-            if ((mese) >= cal.get(Calendar.MONTH)) {
-                if (giorno >= cal.get(Calendar.DAY_OF_MONTH)) {
-                    if (giorno == cal.get(Calendar.DAY_OF_MONTH)) {
-                        if (oraapp >= (cal.get(Calendar.HOUR_OF_DAY))+1) {
-                            System.out.println("arrivo qui");
-                            evento.setData(data);
-                            evento.setOrario(orario);
-                          //  evento.setPartecipanti(getMailUtenteLoggato().charAt());
-                            condorario3 = false;
-                            condevento2=true;
-                        }
-                    } else {condevento2 = true; condorario3= false;}
-                } else {condevento2 = true; condorario3= false;}
-            } else {condevento2 = true; condorario3= false;}
-        } else {condevento2 = true; condorario3= false;}
-
-        if(!condevento2){
-            Toast.makeText(this, "data non valida",Toast.LENGTH_SHORT).show();
-            validita = false;
-        }else if(condorario3) {
-            Toast.makeText(this, "orario non valido",Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, "l'evento deve essere tra minimo un'ora!",Toast.LENGTH_SHORT).show();
-            validita = false;
-        }else{
-            validita = true;
-            evento.setData(data);
-            evento.setOrario(orario);
-        }
         return validita;
     }
 
@@ -406,38 +435,6 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mapView.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
     public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
         mapView.onSaveInstanceState(outState);
@@ -449,11 +446,9 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
         mapView.onLowMemory();
     }
 
-
     public void addImgEvent(View view) {
         openImage();
     }
-
 
     private void openImage(){
         Intent intent = new Intent();
@@ -581,4 +576,4 @@ public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCa
             });
         }
     }
-};
+}
