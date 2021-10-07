@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,9 +18,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.contagiapp.eventi.EventsFragment;
 import com.example.contagiapp.eventi.NewEventsActivity;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,23 +30,23 @@ import com.google.gson.Gson;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.example.contagiapp.R.color.cardview_shadow_end_color;
 import static com.example.contagiapp.R.color.quantum_yellow;
 
 public class HomeFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private Button new_event;
     private LinearLayout status;
+    private MaterialButton btnSearchEvents;
+    private  MaterialButton btnCreateEvents;
 
     ColorStateList red = ColorStateList.valueOf(Color.parseColor("#FF0000"));
     ColorStateList yellow = ColorStateList.valueOf(Color.parseColor("#FFF8F405"));
-    ColorStateList orange = ColorStateList.valueOf(Color.parseColor("#FFFF6D3F"));
     ColorStateList green = ColorStateList.valueOf(Color.parseColor("#FF43A047"));
 
     public HomeFragment() {
         // Required empty public constructor
     }
-
 
 
     @Override
@@ -52,17 +55,29 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        new_event = view.findViewById(R.id.createEvent);
+        btnCreateEvents = view.findViewById(R.id.btnCreateEvent);
+        btnSearchEvents = view.findViewById(R.id.btnSearchEvent);
         status = view.findViewById(R.id.statusCircle2);
 
 
-
-
-        new_event.setOnClickListener(new View.OnClickListener() {
+        btnCreateEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NewEventsActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        btnSearchEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //richiamo il fragment
+                Fragment fragment = new EventsFragment();
+                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                fr.replace(R.id.container,fragment);
+                fr.addToBackStack(null); //serve per tornare al fragment precedente
+                fr.commit();
             }
         });
 
@@ -91,17 +106,8 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-
-
-
-
-
-
         return view;
     }
-
-
-
 
     private String getMailUtenteLoggato(){
         Utente utente;
