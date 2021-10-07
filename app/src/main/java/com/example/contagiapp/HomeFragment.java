@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.contagiapp.eventi.EventsFragment;
 import com.example.contagiapp.eventi.NewEventsActivity;
@@ -39,6 +40,7 @@ public class HomeFragment extends Fragment {
     private LinearLayout status;
     private MaterialButton btnSearchEvents;
     private  MaterialButton btnCreateEvents;
+    private TextView tvStatusDescr;
 
     ColorStateList red = ColorStateList.valueOf(Color.parseColor("#FF0000"));
     ColorStateList yellow = ColorStateList.valueOf(Color.parseColor("#FFF8F405"));
@@ -58,6 +60,7 @@ public class HomeFragment extends Fragment {
         btnCreateEvents = view.findViewById(R.id.btnCreateEvent);
         btnSearchEvents = view.findViewById(R.id.btnSearchEvent);
         status = view.findViewById(R.id.statusCircle2);
+        tvStatusDescr = view.findViewById(R.id.tvStatusDescription);
 
 
         btnCreateEvents.setOnClickListener(new View.OnClickListener() {
@@ -91,12 +94,15 @@ public class HomeFragment extends Fragment {
                         String stato = utente.getStato();
                         switch (stato){
                             case "rosso" : status.setBackgroundTintList(red);
+                            tvStatusDescr.setText(getString(R.string.DescrStatoRosso));
                             break;
 
                             case "verde" : status.setBackgroundTintList(green);
+                            tvStatusDescr.setText(getString(R.string.DescrStatoVerde));
                             break;
 
                             case "giallo" : status.setBackgroundTintList(yellow);
+                            tvStatusDescr.setText(getString(R.string.DescrStatoGiallo));
                             break;
 
                             default:

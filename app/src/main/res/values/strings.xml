@@ -77,4 +77,10 @@
     <string name="mapbox_access_token">MAPBOX_ACCESS_TOKEN</string>
 
 
+    //Descrizione stati
+    <string name="DescrStatoGiallo">Lo stato giallo</string>
+    <string name="DescrStatoVerde">Lo stato verde indica che l\'utente è negativo al tampone effettuato</string>
+    <string name="DescrStatoRosso">Lo stato </string>
+
+
 </resources>
