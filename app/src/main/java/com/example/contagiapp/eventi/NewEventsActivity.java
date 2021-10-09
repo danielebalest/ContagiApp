@@ -118,6 +118,7 @@ public class NewEventsActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         cond = bundle.getBoolean("scelta");
         if(cond) {
+
             idEvento = bundle.getString("idEvento");
             final ImageView img = findViewById(R.id.imgProfiloEvento);
 
