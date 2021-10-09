@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,6 +52,7 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
     TextView textViewAge;
     ImageView imageViewProfiloUtente;
     MaterialButton btnRichiesta;
+    //TextView stato;
 
 
 
@@ -77,6 +79,7 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
         textViewGenere = findViewById(R.id.textViewGenere);
         imageViewProfiloUtente = findViewById(R.id.imageViewProfiloUtente);
         btnRichiesta = findViewById(R.id.btnRichiesta);
+        //stato = findViewById(R.id.stato);
 
         final Bundle extras = getIntent().getExtras();
         if(extras.getString("id") != null) {
@@ -100,6 +103,7 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                 String dataNascita = user.getDataNascita();
                                 String genere = user.getGenere();
                                 int age = user.getAge();
+                                //String statoDb = user.getStato();
 
                                 textViewNomeCognome.setText(nome + " " + cognome);
                                 textViewCitta.setText(citta);
@@ -107,6 +111,24 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                 textViewNazione.setText(nazione);
                                 textViewDataNascita.setText(dataNascita);
                                 textViewGenere.setText(genere);
+
+                                /*switch (statoDb) {
+                                    case "rosso":
+
+                                }
+
+                                if(statoDb.equals("rosso")) {
+                                    stato.setTextColor(Color.RED);
+                                    stato.setText("Positivo");
+                                }
+                                if(statoDb.equals("giallo")) {
+                                    stato.setTextColor(Color.YELLOW);
+                                }
+                                if(statoDb.equals("verde")) stato.setTextColor(Color.GREEN);
+                                if(statoDb.equals("arancione")) stato.setTextColor(Color.rgb(255, 165, 0));*/
+
+
+
                                 caricaImgDaStorage(storageRef, storageDirectory, idUtenteSelezionato, imageViewProfiloUtente);
 
                                 if(user.getRichiesteRicevute().contains(extras.getString("mailUtenteLoggato"))) {

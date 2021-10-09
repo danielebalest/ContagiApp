@@ -145,7 +145,9 @@ public class PartecipazioneGruppoFragment extends Fragment {
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
 
-                            if(gruppo.getNroPartecipanti() <= numPostiDisponibili) {
+                            String statoGruppo = gruppo.getStatoGruppo();
+                            if(gruppo.getNroPartecipanti() <= numPostiDisponibili &&
+                                    (statoGruppo.equals("verde") || statoGruppo.equals("giallo"))) {
                                 String id = documentSnapshot.getId();
 
                                 listaIdGruppiCreati.add(id);

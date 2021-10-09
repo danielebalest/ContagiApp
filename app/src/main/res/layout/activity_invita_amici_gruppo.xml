@@ -1,50 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical"
     android:padding="20dp"
     tools:context=".gruppi.InvitaAmiciGruppoActivity">
 
-    <TextView
-        android:id="@+id/tvInvitaAmici"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:text="Invita i tuoi amici al gruppo"
-        android:textSize="20dp"
-        android:gravity="center"/>
-
-    <LinearLayout
-        android:layout_width = "match_parent"
-        android:layout_height = "450dp"
-        android:orientation = "horizontal"
-        android:layout_marginTop="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        <TextView
+            android:id="@+id/tvInvitaAmici"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="Invita i tuoi amici al gruppo"
+            android:textSize="20dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvInvitaAmici"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/user_row"
-            android:focusable="true"/>
-    </LinearLayout>
+            android:focusable="true"
+            tools:listitem="@layout/add_user_row" >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rvInvitaAmici">
+        </androidx.recyclerview.widget.RecyclerView>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnTermina"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="termina"
-            android:layout_alignParentBottom="true"
             android:layout_marginBottom="50dp"
+            android:text="termina"
             app:cornerRadius="20dp"
-            />
+            android:layout_gravity="bottom"/>
 
         <androidx.core.widget.ContentLoadingProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -52,7 +45,6 @@
             android:layout_height="28dp"
             android:indeterminate="false"
             android:progress="100"
-            android:layout_alignParentBottom="true" />
-    </RelativeLayout>
-
-</LinearLayout>
+            android:layout_gravity="bottom"/>
+        </LinearLayout>
+    </ScrollView>
