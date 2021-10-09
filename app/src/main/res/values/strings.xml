@@ -81,6 +81,7 @@
     <string name="DescrStatoGiallo">Lo stato giallo</string>
     <string name="DescrStatoVerde">Lo stato verde indica che l\'utente è negativo al tampone effettuato</string>
     <string name="DescrStatoRosso">Lo stato </string>
+    <string name="bo">ew</string>
 
 
 </resources>

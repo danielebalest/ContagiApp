@@ -46,9 +46,9 @@
 
 
     //Descrizione stati
-    <string name="DescrStatoGiallo">Lo stato giallo</string>
-    <string name="DescrStatoVerde">Lo stato verde indica che l\'utente è negativo al tampone effettuato</string>
-    <string name="DescrStatoRosso">Lo stato </string>
-
+    <string name="DescrStatoGiallo">Lo stato giallo indica che l\'utente è </string>
+    <string name="DescrStatoVerde">Lo stato verde indica che l\'utente è negativo al Covid19 visti i risultati del tampone effettuato</string>
+    <string name="DescrStatoRosso">Lo stato indica che l\'utente è positivo al Covid19</string>
+    <string name="bo">5y4htrtw</string>
 
 </resources>
