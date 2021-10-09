@@ -157,16 +157,14 @@ public class MainActivity extends AppCompatActivity {
                     });
         }
 
-        for(int i = 0; i < menu.size(); i++) {
-            Drawable draw = menu.getItem(i).getIcon();
-            draw.mutate();
+        Drawable draw = menu.getItem(0).getIcon();
+        draw.mutate();
 
-            draw.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
-            if(stato.equals("rosso")) draw.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            if(stato.equals("verde")) draw.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
-            if(stato.equals("arancione")) draw.setColorFilter(Color.rgb(255, 165, 0), PorterDuff.Mode.SRC_IN);
-            if(stato.equals("giallo")) draw.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
-        }
+        draw.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
+        if(stato.equals("rosso")) draw.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+        if(stato.equals("verde")) draw.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+        if(stato.equals("arancione")) draw.setColorFilter(Color.rgb(255, 165, 0), PorterDuff.Mode.SRC_IN);
+        if(stato.equals("giallo")) draw.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
 
         return super.onCreateOptionsMenu(menu);
     }
