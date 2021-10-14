@@ -86,6 +86,12 @@ public class SettingActivity extends AppCompatActivity {
 
                         }
                         break;
+                    default:
+                        btnSegnalaPositivita.setClickable(true);
+                        btnSegnalaPositivita.setVisibility(View.VISIBLE);
+                        btnSegnalaNegativita.setClickable(true);
+                        btnSegnalaNegativita.setVisibility(View.VISIBLE);
+                        break;
                 }
             }
         });

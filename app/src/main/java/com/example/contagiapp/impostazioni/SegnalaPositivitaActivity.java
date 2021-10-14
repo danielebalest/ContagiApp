@@ -37,6 +37,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -153,7 +154,8 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
                             editor.commit ();
                         }
 
-                        Intent i = new Intent(SegnalaPositivitaActivity.this, MainActivity.class);
+                        Intent i = new Intent(SegnalaPositivitaActivity.this, EventsPartecipatoPositivo.class);
+                        i.putExtra("dataRosso", editTextData.getText().toString());
                         startActivity(i);
                     }else
                         Toasty.warning(SegnalaPositivitaActivity.this, "Inserisci data e/o certificato", Toast.LENGTH_SHORT).show();

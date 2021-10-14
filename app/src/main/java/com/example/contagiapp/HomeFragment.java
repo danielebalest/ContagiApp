@@ -29,6 +29,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import es.dmoral.toasty.Toasty;
 
 import static com.example.contagiapp.R.color.cardview_shadow_end_color;
@@ -92,7 +96,12 @@ public class HomeFragment extends Fragment {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Utente utente = documentSnapshot.toObject(Utente.class);
                         String stato = utente.getStato();
-                        switch (stato){
+                        String dataStato = utente.getDataPositivita();
+
+                        setStato(stato, dataStato);
+
+
+                        switch (stato){//TODO vedere se dopo tot giorni ogni stato può cambiare es. da rosso a giallo etc...
                             case "rosso" : status.setBackgroundTintList(red);
                             tvStatusDescr.setText(getString(R.string.DescrStatoRosso));
                             break;
@@ -104,6 +113,20 @@ public class HomeFragment extends Fragment {
                             case "giallo" : status.setBackgroundTintList(yellow);
                             tvStatusDescr.setText(getString(R.string.DescrStatoGiallo));
                             break;
+
+                            case "arancione" :
+                                try {
+                                    Date dataPositivita = new SimpleDateFormat("dd/MM/yyyy").parse(dataStato);
+                                    Date dataAttuale = new Date(System.currentTimeMillis());
+
+                                    if(dataPositivita.compareTo(dataAttuale) <= 10) {//TODO controllare questo if
+                                        db.collection("Utenti").document(getMailUtenteLoggato()).update("stato", "giallo", "dataPositivita", dataAttuale);
+                                        status.setBackgroundTintList(yellow);
+                                    } else status.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 165, 0)));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
 
                             default:
                                 //toDo: inserire errore per lo stato
@@ -131,6 +154,24 @@ public class HomeFragment extends Fragment {
             Log.d("mail", mailUtenteLoggato);
         }
         return mailUtenteLoggato;
+    }
+
+    private void setStato(String stato, String dataPos) {
+        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("utente", "no");
+        Utente utente;
+
+        if(!json.equals("no")) {
+            utente = gson.fromJson(json, Utente.class);
+            utente.setStato(stato);
+            utente.setDataPositivita(dataPos);
+
+            SharedPreferences.Editor editor = prefs.edit();
+            String json1 = gson.toJson(utente);
+            editor.putString("utente", json1);
+            editor.apply();
+        }
     }
 
 }

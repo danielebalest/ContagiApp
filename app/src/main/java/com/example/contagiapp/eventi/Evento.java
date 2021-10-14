@@ -14,6 +14,24 @@ public class Evento {
     private ArrayList<String> partecipanti;
     private int numeroMaxPartecipanti;
     private ArrayList<String> gruppiPartecipanti;
+    private boolean statoRosso;
+    private String dataRosso;
+
+    public boolean getStatoRosso() {
+        return statoRosso;
+    }
+
+    public void setStatoRosso(boolean statoRosso) {
+        this.statoRosso = statoRosso;
+    }
+
+    public String getDataRosso() {
+        return dataRosso;
+    }
+
+    public void setDataRosso(String dataRosso) {
+        this.dataRosso = dataRosso;
+    }
 
     public ArrayList<String> getGruppiPartecipanti() {
         return gruppiPartecipanti;

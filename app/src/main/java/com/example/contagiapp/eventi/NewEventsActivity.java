@@ -301,6 +301,7 @@ public class NewEventsActivity extends AppCompatActivity {
             evento.setOrario(orario.getText().toString());
             evento.setCitta(citta.getText().toString());
             evento.setIndirizzo(indirizzo.getText().toString());
+            evento.setStatoRosso(false);
 
             ArrayList<String> partecipanti = new ArrayList<String>(); //inizializzo un array vuoto
             evento.setPartecipanti(partecipanti);
