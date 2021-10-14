@@ -110,6 +110,7 @@ public class EventiPartecipatoAdapter extends RecyclerView.Adapter<EventiParteci
                 //se non hanno partecipato non succede niente
 
                 btnAccetta.setText("Partecipato");
+                btnRifiuta.setText("no");
                 btnAccetta.setClickable(false);
                 btnRifiuta.setClickable(true);
                 cond.set(position, true);
@@ -120,9 +121,9 @@ public class EventiPartecipatoAdapter extends RecyclerView.Adapter<EventiParteci
         btnRifiuta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO vedere se funziona (cancellare item dalla lista, vedere se scompare)
                 db.collection("Eventi").document(idEvento).update("statoRosso", false, "dataRosso", null);
                 btnRifiuta.setText("No partecipato");
+                btnAccetta.setText("si");
                 btnAccetta.setClickable(true);
                 btnRifiuta.setClickable(false);
                 cond.set(position, true);

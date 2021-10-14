@@ -98,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:text="accetta"
+                    android:text="si"
                     app:cornerRadius="20dp"
                     android:backgroundTint="#2E6C01">
 
@@ -110,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:text="rifiuta"
+                    android:text="no"
                     app:cornerRadius="20dp"
                     android:backgroundTint="#870F0F">
 

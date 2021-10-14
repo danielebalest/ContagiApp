@@ -12,9 +12,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.contagiapp.HomeFragment;
 import com.example.contagiapp.R;
 import com.example.contagiapp.eventi.Evento;
 import com.example.contagiapp.notifiche.RichiesteAdapter;
@@ -68,7 +70,8 @@ public class EventsPartecipatoPositivo extends AppCompatActivity {
                                     dataRosso = intent.getStringExtra("dataRosso");
                                     Date dataRosso2 = new SimpleDateFormat("dd/MM/yyyy").parse(dataRosso);
 
-                                    if(dataRosso2.getTime() - dataEvento.getTime() >= 10) {//TODO controllare questo if
+                                    //864000000 millisecondi = 10 giorni
+                                    if(dataRosso2.getTime() - dataEvento.getTime() <= 864000000) {
                                         eventi.add(ev);
                                     }
                                 } catch (ParseException e) {
@@ -104,7 +107,11 @@ public class EventsPartecipatoPositivo extends AppCompatActivity {
                     if(adapter.getCond().contains(false)) {
                         Toast.makeText(EventsPartecipatoPositivo.this, "Completare la segnalazione degli eventi", Toast.LENGTH_LONG).show();
                     } else {
-                        finish();
+                        HomeFragment home = new HomeFragment();
+                        FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+                        fr.replace(R.id.container,home);
+                        fr.addToBackStack(null); //serve per tornare al fragment precedente
+                        fr.commit();
                     }
                 } else finish();
             }

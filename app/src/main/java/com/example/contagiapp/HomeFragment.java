@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.contagiapp.eventi.EventsFragment;
 import com.example.contagiapp.eventi.NewEventsActivity;
@@ -88,53 +89,66 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        db.collection("Utenti")
-                .document(getMailUtenteLoggato())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Utente utente = documentSnapshot.toObject(Utente.class);
-                        String stato = utente.getStato();
-                        String dataStato = utente.getDataPositivita();
+        boolean caricato;
+        do {
+            try {
+                caricato = false;
+                db.collection("Utenti")
+                        .document(getMailUtenteLoggato())
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                Utente utente = documentSnapshot.toObject(Utente.class);
+                                String stato = utente.getStato();
+                                String dataStato = utente.getDataPositivita();
 
-                        setStato(stato, dataStato);
+                                //setStato(stato, dataStato);
 
 
-                        switch (stato){//TODO vedere se dopo tot giorni ogni stato può cambiare es. da rosso a giallo etc...
-                            case "rosso" : status.setBackgroundTintList(red);
-                            tvStatusDescr.setText(getString(R.string.DescrStatoRosso));
-                            break;
+                                switch (stato){//TODO vedere se dopo tot giorni ogni stato può cambiare es. da rosso a giallo etc...
+                                    case "rosso" : status.setBackgroundTintList(red);
+                                        tvStatusDescr.setText(getString(R.string.DescrStatoRosso));
+                                        break;
 
-                            case "verde" : status.setBackgroundTintList(green);
-                            tvStatusDescr.setText(getString(R.string.DescrStatoVerde));
-                            break;
+                                    case "verde" : status.setBackgroundTintList(green);
+                                        tvStatusDescr.setText(getString(R.string.DescrStatoVerde));
+                                        break;
 
-                            case "giallo" : status.setBackgroundTintList(yellow);
-                            tvStatusDescr.setText(getString(R.string.DescrStatoGiallo));
-                            break;
+                                    case "giallo" : status.setBackgroundTintList(yellow);
+                                        tvStatusDescr.setText(getString(R.string.DescrStatoGiallo));
+                                        break;
 
-                            case "arancione" :
-                                try {
-                                    Date dataPositivita = new SimpleDateFormat("dd/MM/yyyy").parse(dataStato);
-                                    Date dataAttuale = new Date(System.currentTimeMillis());
+                                    case "arancione" :
+                                        try {
+                                            Date dataPositivita = new SimpleDateFormat("dd/MM/yyyy").parse(dataStato);
+                                            Date dataAttuale = new Date(System.currentTimeMillis());
 
-                                    if(dataPositivita.compareTo(dataAttuale) <= 10) {//TODO controllare questo if
-                                        db.collection("Utenti").document(getMailUtenteLoggato()).update("stato", "giallo", "dataPositivita", dataAttuale);
-                                        status.setBackgroundTintList(yellow);
-                                    } else status.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 165, 0)));
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
+                                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                            String stringDataAttuale = sdf.format(dataAttuale);
+
+                                            //864000000 millisecondi = 10 giorni
+                                            if(dataAttuale.getTime() - dataPositivita.getTime() >= 864000000) {
+                                                db.collection("Utenti").document(getMailUtenteLoggato()).update("stato", "giallo", "dataPositivita", stringDataAttuale);
+                                                status.setBackgroundTintList(yellow);
+                                                setStato("giallo", stringDataAttuale);
+                                            } else status.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 165, 0)));
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                        break;
+
+                                    default:
+                                        //toDo: inserire errore per lo stato
                                 }
-                                break;
 
-                            default:
-                                //toDo: inserire errore per lo stato
-                        }
+                            }
+                        });
 
-                    }
-                });
-
+            } catch (NullPointerException e) {
+                caricato = true;
+            }
+        }while(caricato);
         return view;
     }
 
@@ -172,7 +186,10 @@ public class HomeFragment extends Fragment {
             editor.putString("utente", json1);
             editor.apply();
         }
-    }
 
+        Toasty.success(getContext(), "Stato aggiornato", Toast.LENGTH_LONG).show();
+        Intent i = new Intent(getActivity(),MainActivity.class);
+        startActivity(i);
+    }
 }
 
