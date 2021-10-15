@@ -86,8 +86,6 @@ public class Gruppo {
         this.nroPartecipanti = partecipanti.size();
     }
 
-
-
     public String getStatoGruppo() {
         return statoGruppo;
     }
@@ -95,4 +93,6 @@ public class Gruppo {
     public void setStatoGruppo(String statoGruppo) {
         this.statoGruppo = statoGruppo;
     }
+
+
 }

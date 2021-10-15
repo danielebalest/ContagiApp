@@ -4,25 +4,25 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +32,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.example.contagiapp.BuildConfig;
+import com.example.contagiapp.Cities;
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
-import com.example.contagiapp.eventi.NewEventsActivity;
+import com.example.contagiapp.Regions;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -57,18 +58,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class RegistrationActivity extends AppCompatActivity {
 
     private DatePickerDialog.OnDateSetListener dataDiNascita;
     private static final String TAG = "RegistrationActivity";
@@ -96,6 +94,11 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     private TextInputEditText psw1;
     private TextInputEditText psw2;
 
+    private AutoCompleteTextView autoCompleteRegion;
+    private AutoCompleteTextView autoCompleteCity;
+    private TextInputLayout layoutTvRegion;
+    private TextInputLayout layoutTvCity;
+
     //per la foto
     static final int REQUEST_IMAGE_CAPTURE = 0;
     private ImageView immagine;
@@ -105,6 +108,12 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
     private ArrayList<String> friends = new ArrayList<String>();
     private ArrayList<String> richieste = new ArrayList<String>();
     private ArrayList<String> inviti = new ArrayList<String>();
+
+    String regioneSelezionata = null;
+    String cittaSelezionata = null;
+    ArrayAdapter<String> adapterCitta= null;
+
+
 
     //per importare immagini
     private static final int PICK_IMAGE = 1;
@@ -118,12 +127,9 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         storage= FirebaseStorage.getInstance();
         storageReference= storage.getReferenceFromUrl("gs://contagiapp-c5306.appspot.com/");
 
-        //Spinner per nazioni
-        Spinner spinnerNazioni = findViewById(R.id.spinnerNazioni);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.nazioni, android.R.layout.simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spinnerNazioni.setAdapter(adapter);
-        spinnerNazioni.setOnItemSelectedListener(this);
+
+
+
 
         nome = (TextInputEditText) findViewById(R.id.editTextName);
         cognome = (TextInputEditText) findViewById(R.id.editTextSurname);
@@ -141,13 +147,72 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         psw1Layout = (TextInputLayout) findViewById(R.id.textInputPasswordLayout);
         psw2Layout = (TextInputLayout) findViewById(R.id.textInputRepeatPasswordLayout);
 
+        autoCompleteRegion = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextRegione);
+        autoCompleteCity = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextCitta);
+        layoutTvRegion = findViewById(R.id.textInputRegioneLayout);
+        layoutTvCity = findViewById(R.id.textInputCittaLayout);
+
+        ArrayAdapter<String> adapterRegione = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, Regions.all_regions);
+
+        controlli_AutoCompleteText(regioneSelezionata, cittaSelezionata, autoCompleteRegion, autoCompleteCity);
+
+        autoCompleteRegion.setAdapter(adapterRegione);
+        autoCompleteRegion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("Regione selezionata", autoCompleteRegion.getText().toString());
+                regioneSelezionata = autoCompleteRegion.getText().toString();
+                adapterCitta = new ArrayAdapter<String>(RegistrationActivity.this,
+                        android.R.layout.simple_dropdown_item_1line,
+                        Cities.map.get(autoCompleteRegion.getText().toString()));
+
+                autoCompleteCity.setAdapter(adapterCitta);
+
+                autoCompleteCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d("Citta selezionata", autoCompleteCity.getText().toString());
+                        cittaSelezionata = autoCompleteCity.getText().toString();
+                    }
+                });
+
+        }
+
+        });
+
+
+
+        autoCompleteRegion.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                autoCompleteCity.setText(null);
+                adapterCitta = null;
+                autoCompleteCity.setEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+
+
         // collegamento button registrati con la mainActivity
         Button signUpButton = (Button) findViewById(R.id.modificaDati);
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                switch (controlli_TextInput(nome, nomeLayout, cognome, cognomeLayout, mail, mailLayout, data, dataLayout, phone, phoneLayout, psw1, psw1Layout, psw2, psw2Layout)){
+
+                switch (controlli_TextInput(nome, nomeLayout, cognome, cognomeLayout, mail, mailLayout, data, dataLayout, phone, phoneLayout, psw1, psw1Layout, psw2, psw2Layout, autoCompleteRegion, autoCompleteCity)){
 
                     case 1:
                         nomeLayout.setError("Inserisci nome");
@@ -161,6 +226,17 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                         dataLayout.setError("Inserisci data di nascita");
                         Toast.makeText(RegistrationActivity.this, "Inserisci data di nascita", Toast.LENGTH_SHORT).show();
                         break;
+
+                    case 8:
+                        layoutTvRegion.setError("Inserisci regione");
+                        Toast.makeText(RegistrationActivity.this, "Inserisci regione", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 9:
+                        layoutTvCity.setError("Inserisci citta");
+                        Toast.makeText(RegistrationActivity.this, "Inserisci citta", Toast.LENGTH_SHORT).show();
+                        break;
+
                     case 4:
                         mailLayout.setError("Inserisci mail");
                         Toast.makeText(RegistrationActivity.this, "Inserisci mail", Toast.LENGTH_SHORT).show();
@@ -236,6 +312,19 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 openImage();
             }
         });
+
+
+
+
+
+
+
+
+
+
+
+        //toDo: recuperare il valore dell'autotextREGIONE e in base a quello metterci i controlli
+
     }
 
     private void openImage(){
@@ -256,6 +345,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         }
 
     }
+
+
 
     private  void uploadImageToStorage(String documentId){
         final ProgressDialog pd = new ProgressDialog(this);
@@ -292,7 +383,9 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
 
     }
 
-
+    public void clearAdapter (){
+        adapterCitta.clear();
+    }
 
     private void dispatchTakePictureIntent(@NotNull Intent takePictureIntent) {
         // Create the File where the photo should go
@@ -376,9 +469,17 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         }
     }
 
+    private void controlli_AutoCompleteText(String regione, String citta, AutoCompleteTextView tvRegione, AutoCompleteTextView tvCitta){
+        Log.d("regione", String.valueOf(regione));
+        if(regione == null){
+            tvCitta.setEnabled(false);
+            tvCitta.setText(null);
+        }else tvCitta.setEnabled(true);
+    }
+
     private int controlli_TextInput(TextInputEditText name, TextInputLayout nomeLayout, TextInputEditText surname, TextInputLayout cognomeLayout, TextInputEditText mail, TextInputLayout mailLayout,
                                     TextInputEditText birth, TextInputLayout dataLayout, TextInputEditText phone, TextInputLayout phoneLayout, TextInputEditText psw1, TextInputLayout psw1Layout,
-                                    TextInputEditText psw2, TextInputLayout psw2Layout){
+                                    TextInputEditText psw2, TextInputLayout psw2Layout, AutoCompleteTextView regione, AutoCompleteTextView citta){
 
         if(isEmpty(name)){
             return 1;
@@ -392,6 +493,13 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
             return 3;
         }else dataLayout.setError(null);
 
+        if(regioneSelezionata == null){
+            return 8;
+        }else layoutTvRegion.setError(null);
+
+        if(cittaSelezionata == null){
+            return 9;
+        }else layoutTvCity.setError(null);
         if(isEmpty(mail)){
             return 4;
         }else mailLayout.setError(null);
@@ -407,6 +515,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         if(isEmpty(psw2)){
             return 7;
         }else psw2Layout.setError(null);
+
+
 
         return 0;
     }
@@ -446,21 +556,20 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
         TextView date = (TextView) findViewById(R.id.editTextDataNascita);
         final String appoggio = date.getText().toString();
 
-        Spinner nazione = (Spinner) findViewById(R.id.spinnerNazioni);
-        user.put("nazione", nazione.getSelectedItem().toString());
-        utente.setNazione(nazione.getSelectedItem().toString());
 
-        Spinner regione = (Spinner) findViewById(R.id.spinnerRegione);
-        user.put("regione", regione.getSelectedItem().toString());
-        utente.setRegione(regione.getSelectedItem().toString());
 
-        Spinner provincia = (Spinner) findViewById(R.id.spinnerProvince);
-        user.put("province", provincia.getSelectedItem().toString());
-        utente.setProvince(provincia.getSelectedItem().toString());
 
-        Spinner citta = (Spinner) findViewById(R.id.spinnerCitta);
-        user.put("citta", citta.getSelectedItem().toString());
-        utente.setCitta(citta.getSelectedItem().toString());
+        Log.d("regioneSelezionata2", regioneSelezionata);
+        Log.d("cittaSelezionata2", cittaSelezionata);
+
+        user.put("regione", regioneSelezionata);
+        utente.setRegione(regioneSelezionata);
+        user.put("citta", cittaSelezionata);
+        utente.setCitta(cittaSelezionata);
+
+
+
+
 
         EditText telefono = (EditText) findViewById(R.id.editTextPhone);
         user.put("telefono", telefono.getText().toString());
@@ -488,18 +597,8 @@ public class RegistrationActivity extends AppCompatActivity implements AdapterVi
                 });
     }
 
-    //Spinner per nazioni
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String text = parent.getItemAtPosition(position).toString();
-        //Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
-    }
 
-    //per spinner
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
 
-    }
 
     private void controlli(boolean cond, Map<String, Object> user1, String email, String psw1, String psw2,String appoggio) {
         Calendar cal = Calendar.getInstance();

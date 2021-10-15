@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Tiene lo schermo acceso
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        /*
         final BluetoothManager bluetoothManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
 
@@ -74,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             Toast.makeText(this,"schifoso il signore",Toast.LENGTH_SHORT).show();
         }
+
+         */
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
 
@@ -223,6 +227,9 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
             };
+
+
+
 
 
 }

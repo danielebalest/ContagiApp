@@ -218,6 +218,27 @@ public class Utente {
 
    // public void setPropic(ImageView propic){ this.propic= propic;  }
 
+    public int statoToNumber(){
+        int numberStato = 0;
+        switch (getStato()){
+            case "rosso":
+                numberStato = 4;
+                break;
+            case "arancione":
+                numberStato = 3;
+                break;
+            case "giallo":
+                numberStato = 2;
+                break;
+            case "verde":
+                numberStato = 1;
+                break;
+            default:
+                numberStato = 0;
+                break;
+        }
+        return numberStato;
+    }
 
 
 }

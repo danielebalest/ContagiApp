@@ -105,37 +105,54 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <Spinner
-            android:id="@+id/spinnerNazioni"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
 
-            android:backgroundTint="@color/colorPrimary"
-            android:entries="@array/nazioni"
-            android:focusableInTouchMode="true"
-            android:popupBackground="@color/gray" />
-
-        <Spinner
-            android:id="@+id/spinnerRegione"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputRegioneLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:entries="@array/regioniItaliane"
-            android:focusableInTouchMode="true" />
+            android:hint="Regione"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
+            >
 
-        <Spinner
-            android:id="@+id/spinnerProvince"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:entries="@array/ProvincePuglia" />
 
-        <Spinner
-            android:id="@+id/spinnerCitta"
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextRegione"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:inputType="textAutoComplete|textAutoCorrect"
+                android:textColor="@color/black" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputCittaLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:entries="@array/Citta" />
+            android:hint="Città"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
+            >
+
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextCitta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:imeOptions="actionSearch"
+                android:inputType="textAutoComplete|textAutoCorrect"
+                android:textColor="@color/black" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputEmailLayout"

@@ -7,6 +7,8 @@
     android:layout_marginBottom="60dp"
     tools:context=".gruppi.ProfiloGruppoAdminFragment">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,7 +40,59 @@
             android:textColor="@color/black"
             android:padding="20dp"></TextView>
 
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardElevation="1dp"
+            android:layout_margin="20dp"
+            app:cardCornerRadius="15dp"
+            android:checkable="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
+                <LinearLayout
+                    android:id="@+id/statusCircle2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/small_circle"
+                    android:layout_margin="20dp"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Title, secondary and supporting text -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Il tuo stato"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        />
+                    <TextView
+                        android:id="@+id/tvStatusDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:text="Descrizione"
+                        android:textColor="?android:attr/textColorSecondary"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,9 +139,8 @@
             android:id="@+id/rvPartecipantiProfiloGruppoAdmin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/item_partecipanti"></androidx.recyclerview.widget.RecyclerView>
-
-
+            tools:listitem="@layout/item_partecipanti">
+        </androidx.recyclerview.widget.RecyclerView>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEliminaGruppo"

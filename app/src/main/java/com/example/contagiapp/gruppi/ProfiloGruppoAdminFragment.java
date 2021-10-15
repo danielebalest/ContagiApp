@@ -34,6 +34,8 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import es.dmoral.toasty.Toasty;
 
@@ -43,6 +45,7 @@ public class ProfiloGruppoAdminFragment extends Fragment {
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private final static String storageDirectory = "imgGruppi";
     private ArrayList<Utente> listaPartecipanti = new ArrayList<Utente>();
+    private String statusGruppo = "a";
 
     public ProfiloGruppoAdminFragment() {
         // Required empty public constructor
@@ -162,6 +165,7 @@ public class ProfiloGruppoAdminFragment extends Fragment {
     }
 
     private void caricaGruppo(final String idGruppo, final View view){
+
         db.collection("Gruppo")
                 .document(idGruppo)
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -172,6 +176,7 @@ public class ProfiloGruppoAdminFragment extends Fragment {
                     Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
                     String nome = gruppo.getNomeGruppo();
                     String descrizione = gruppo.getDescrizione();
+                    String stato = gruppo.getStatoGruppo();
                     final ArrayList<String> mailPartecipanti = gruppo.getPartecipanti();
                     gruppo.aggiornaNroPartecipanti(mailPartecipanti);
                     int nroPartecipanti = gruppo.getNroPartecipanti();
@@ -187,12 +192,10 @@ public class ProfiloGruppoAdminFragment extends Fragment {
                     tvDescGruppo.setText(descrizione);
                     tvNroPartecipanti.setText("Partecipanti" + "(" + String.valueOf(nroPartecipanti) + ")");
 
-
-
-
                     final RecyclerView rvPartecipanti = view.findViewById(R.id.rvPartecipantiProfiloGruppoAdmin);
                     Log.d("mailPartecipanti.size()", String.valueOf(mailPartecipanti.size()));
-                    for(int i=0; i < mailPartecipanti.size(); i++){
+                    for(int i = 0; i < mailPartecipanti.size(); i++){
+
                         db.collection("Utenti")
                                 .document(mailPartecipanti.get(i))
                                 .get()
@@ -204,9 +207,19 @@ public class ProfiloGruppoAdminFragment extends Fragment {
                                         user.setCognome(documentSnapshot.getString("cognome"));
                                         user.setMail(documentSnapshot.getString("mail"));
                                         user.setDataNascita(documentSnapshot.getString("dataNascita"));
+                                        user.setStato(documentSnapshot.getString("stato"));
                                         Log.d("dataNascita", String.valueOf(user.getDataNascita()));
 
                                         listaPartecipanti.add(user);
+
+                                        //int nuovoStato = calcolaNuovoStatoGruppo2(listaPartecipanti);
+                                        //Log.d("nuovoStato", String.valueOf(nuovoStato));
+
+                                        //aggiornaStatoGruppo(idGruppo, nuovoStato,db);
+
+                                        //Log.d("statoListaPartecipanti", String.valueOf(listaPartecipanti.get(0).getStato()));
+                                        Log.d("statusGruppo", String.valueOf(statusGruppo));
+
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -216,6 +229,8 @@ public class ProfiloGruppoAdminFragment extends Fragment {
                         });
                     }
                     Log.d("listaPartecipanti", String.valueOf(listaPartecipanti));
+
+                    //Log.d("statoListaPartecipanti", String.valueOf(listaPartecipanti.get(0)));
                     UserAdapter adapter = new UserAdapter(listaPartecipanti);
                     rvPartecipanti.setAdapter(adapter);
                     rvPartecipanti.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -230,6 +245,57 @@ public class ProfiloGruppoAdminFragment extends Fragment {
             }
         });
 
+    }
+
+    private void aggiornaStatoGruppo (String idGruppo, String nuovoStatoGruppo,  FirebaseFirestore db){
+        db.collection("Gruppo")
+                .document(idGruppo)
+                .update("statoGruppo", nuovoStatoGruppo);
+    }
+
+    private int calcolaNuovoStatoGruppo2(ArrayList<Utente> listaPartecipanti){
+        int nuovoStato = 0;
+        ArrayList <Integer> listaStati = new ArrayList<Integer> ();
+
+        for(int i = 0; i < listaPartecipanti.size(); i ++){
+            listaStati.add(listaPartecipanti.get(i).statoToNumber());
+        }
+
+
+        nuovoStato = Collections.max(listaStati);
+
+        return nuovoStato;
+    }
+
+    private String calcolaNuovoStatoGruppo (Utente user, String statusGruppo){
+        if(!statusGruppo.equals("rosso")) {
+            if(user.getStato().equals("rosso")) {
+                statusGruppo = "rosso";
+            }else{
+                if(!statusGruppo.equals("arancione")) {
+                    if(user.getStato().equals("arancione")) {
+                        statusGruppo = "arancione";
+                    }else{
+
+                        if(!statusGruppo.equals("giallo")) {
+                            if(user.getStato().equals("giallo")) {
+                                statusGruppo = "giallo";
+                            }else{
+
+                                if(!statusGruppo.equals("verde")) {
+                                    if(user.getStato().equals("verde")) {
+                                        statusGruppo = "verde";
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+            }
+        }
+        return statusGruppo;
     }
 
     private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
