@@ -108,6 +108,7 @@ public class EventoRossoAdapter extends RecyclerView.Adapter<EventoRossoAdapter.
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                     String stringDataAttuale = sdf.format(dataAttuale);
 
+
                     db.collection("Utenti").document(mailUtenteLoggato)
                             .update("stato", "arancione", "dataPositivita", stringDataAttuale);
 
