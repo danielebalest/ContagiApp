@@ -23,6 +23,8 @@ import com.example.contagiapp.eventi.EliminazionePartecipazioneEvento;
 import com.example.contagiapp.eventi.Evento;
 import com.example.contagiapp.eventi.ProfiloEventoAdminFragment;
 import com.example.contagiapp.gruppi.Gruppo;
+import com.example.contagiapp.impostazioni.EventiPartecipatoAdapter;
+import com.example.contagiapp.impostazioni.EventsPartecipatoPositivo;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,13 +33,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -46,9 +52,13 @@ import java.util.Date;
 public class NotifyFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
-    RecyclerView rvEventiACuiPartecipo;
-    ArrayList<Evento> listaEventi = new ArrayList<Evento>();
+    private ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
+    private RecyclerView rvEventiACuiPartecipo;
+    private RecyclerView rvEventiRossi;
+    private ArrayList<Evento> listaEventi = new ArrayList<Evento>();
+    private Evento ev;
+    private Utente utente;
+    //private List<Evento> eventi = new ArrayList<>();
 
     public NotifyFragment() {
         // Required empty public constructor
@@ -61,6 +71,7 @@ public class NotifyFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_notify, container, false);
 
+        rvEventiRossi = view.findViewById(R.id.rvEventiRossi);
         final RecyclerView recyclerViewRichieste =  view.findViewById(R.id.rvRichieste);
         final RecyclerView recyclerViewInviti =  view.findViewById(R.id.rvInviti);
         rvEventiACuiPartecipo = view.findViewById(R.id.rvEventiACuiPartecipo);
@@ -81,14 +92,53 @@ public class NotifyFragment extends Fragment {
                         Log.d("listaInviti", String.valueOf(listaInviti));
                         getRichieste(listaMailRichieste, recyclerViewRichieste);
                         getInviti(listaInviti, recyclerViewInviti);
+
+                        utente = document.toObject(Utente.class);
                     }
                 });
 
         caricaEventi(rvEventiACuiPartecipo);
+        caricaEventiRossi(rvEventiRossi);
 
         return view;
     }
 
+    public void caricaEventiRossi(final RecyclerView rvEventi) {
+
+        final ArrayList<Evento> eventi = new ArrayList<>();
+
+        db.collection("Eventi")
+                .whereArrayContains("partecipanti", getMailUtenteLoggato())
+                .whereEqualTo("statoRosso",true)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for(QueryDocumentSnapshot document : task.getResult()) {
+                                ev = document.toObject(Evento.class);
+
+                                try {
+                                    Date dataRosso = new SimpleDateFormat("dd/MM/yyyy").parse(ev.getDataRosso());
+                                    Date dataAttuale = new Date(System.currentTimeMillis());
+
+                                    //864000000 millisecondi = 10 giorni
+                                    if(dataAttuale.getTime() - dataRosso.getTime() <= 864000000) {
+                                        eventi.add(ev);
+                                    }
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            EventoRossoAdapter adapter = new EventoRossoAdapter(getContext(), eventi, getMailUtenteLoggato(), utente);
+
+                            rvEventi.setAdapter(adapter);
+                            rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        }
+                    }
+                });
+    }
 
     public void getRichieste(ArrayList<String> listaRichieste, final RecyclerView recyclerView){
         /*
