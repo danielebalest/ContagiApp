@@ -46,6 +46,7 @@ public class HomeFragment extends Fragment {
     private MaterialButton btnSearchEvents;
     private  MaterialButton btnCreateEvents;
     private TextView tvStatusDescr;
+    private String statoUtente;
 
     ColorStateList red = ColorStateList.valueOf(Color.parseColor("#FF0000"));
     ColorStateList yellow = ColorStateList.valueOf(Color.parseColor("#FFF8F405"));
@@ -103,10 +104,10 @@ public class HomeFragment extends Fragment {
                                 String stato = utente.getStato();
                                 String dataStato = utente.getDataPositivita();
 
-                                //setStato(stato, dataStato);
+                                if(!statoUtente.equals(stato)) setStato(stato, dataStato);
 
 
-                                switch (stato){//TODO vedere se dopo tot giorni ogni stato può cambiare es. da rosso a giallo etc...
+                                switch (stato){//TODO modificare i messaggi in tvStatusDEscr
                                     case "rosso" : status.setBackgroundTintList(red);
                                         tvStatusDescr.setText(getString(R.string.DescrStatoRosso));
                                         break;
@@ -162,10 +163,21 @@ public class HomeFragment extends Fragment {
             utente = gson.fromJson(json, Utente.class);
             mailUtenteLoggato = utente.getMail();
             Log.d("mailutenteLoggato", mailUtenteLoggato);
+            statoUtente = utente.getStato();
         } else {
             SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
             mailUtenteLoggato = prefs1.getString("mail", "no");
             Log.d("mail", mailUtenteLoggato);
+
+            db.collection("Utenti")
+                    .document(mailUtenteLoggato)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    statoUtente = documentSnapshot.getString("stato");
+                }
+            });
         }
         return mailUtenteLoggato;
     }
