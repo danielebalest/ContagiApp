@@ -101,6 +101,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private AutoCompleteTextView autoCompleteProvincia;
     private AutoCompleteTextView autoCompleteCity;
     private TextInputLayout layoutTvRegion;
+    private TextInputLayout layoutTvProvince;
     private TextInputLayout layoutTvCity;
 
     //per la foto
@@ -153,6 +154,7 @@ public class RegistrationActivity extends AppCompatActivity {
         autoCompleteProvincia = findViewById(R.id.autoCompleteTextProvincia);
         autoCompleteCity = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextCitta);
         layoutTvRegion = findViewById(R.id.textInputRegioneLayout);
+        layoutTvProvince = findViewById(R.id.textInputProvinciaLayout);
         layoutTvCity = findViewById(R.id.textInputCittaLayout);
 
         ArrayAdapter<String> adapterRegione = new ArrayAdapter<String>(this,
@@ -180,6 +182,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 autoCompleteProvincia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d("Provincia selezionata", autoCompleteProvincia.getText().toString());
+                        provinciaSelezionata = autoCompleteRegion.getText().toString();
                         autoCompleteCity.setEnabled(true);
                         adapterCitta = new ArrayAdapter<String>(RegistrationActivity.this,
                                 android.R.layout.simple_dropdown_item_1line,
@@ -275,29 +279,34 @@ public class RegistrationActivity extends AppCompatActivity {
                         Toast.makeText(RegistrationActivity.this, "Inserisci data di nascita", Toast.LENGTH_SHORT).show();
                         break;
 
-                    case 8:
+                    case 4:
                         layoutTvRegion.setError("Inserisci regione");
                         Toast.makeText(RegistrationActivity.this, "Inserisci regione", Toast.LENGTH_SHORT).show();
                         break;
 
-                    case 9:
+                    case 5:
+                        layoutTvProvince.setError("Inserisci provincia");
+                        Toast.makeText(RegistrationActivity.this, "Inserisci provincia", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 6:
                         layoutTvCity.setError("Inserisci citta");
                         Toast.makeText(RegistrationActivity.this, "Inserisci citta", Toast.LENGTH_SHORT).show();
                         break;
 
-                    case 4:
+                    case 7:
                         mailLayout.setError("Inserisci mail");
                         Toast.makeText(RegistrationActivity.this, "Inserisci mail", Toast.LENGTH_SHORT).show();
                         break;
-                    case 5:
+                    case 8:
                         phoneLayout.setError("Inserisci cellulare");
                         Toast.makeText(RegistrationActivity.this, "Inserisci cellulare", Toast.LENGTH_SHORT).show();
                         break;
-                    case 6:
+                    case 9:
                         psw1Layout.setError("Inserisci password");
                         Toast.makeText(RegistrationActivity.this, "Inserisci Password", Toast.LENGTH_SHORT).show();
                         break;
-                    case 7:
+                    case 10:
                         psw2Layout.setError("Inserisci password");
                         Toast.makeText(RegistrationActivity.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
                         break;
@@ -541,26 +550,30 @@ public class RegistrationActivity extends AppCompatActivity {
         } else dataLayout.setError(null);
 
         if (regioneSelezionata == null) {
-            return 8;
+            return 4;
         } else layoutTvRegion.setError(null);
 
+        if (provinciaSelezionata == null) {
+            return 5;
+        } else layoutTvCity.setError(null);
+
         if (cittaSelezionata == null) {
-            return 9;
+            return 6;
         } else layoutTvCity.setError(null);
         if (isEmpty(mail)) {
-            return 4;
+            return 7;
         } else mailLayout.setError(null);
 
         if (isEmpty(phone)) {
-            return 5;
+            return 8;
         } else phoneLayout.setError(null);
 
         if (isEmpty(psw1)) {
-            return 6;
+            return 9;
         } else psw1Layout.setError(null);
 
         if (isEmpty(psw2)) {
-            return 7;
+            return 10;
         } else psw2Layout.setError(null);
 
 
