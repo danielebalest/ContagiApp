@@ -32,10 +32,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.example.contagiapp.BuildConfig;
-import com.example.contagiapp.Cities;
+import dizionarioPerCitta.Cities;
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
-import com.example.contagiapp.Regions;
+
+import dizionarioPerCitta.Province;
+import dizionarioPerCitta.Regions;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -59,6 +61,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,6 +98,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private TextInputEditText psw2;
 
     private AutoCompleteTextView autoCompleteRegion;
+    private AutoCompleteTextView autoCompleteProvincia;
     private AutoCompleteTextView autoCompleteCity;
     private TextInputLayout layoutTvRegion;
     private TextInputLayout layoutTvCity;
@@ -110,9 +114,10 @@ public class RegistrationActivity extends AppCompatActivity {
     private ArrayList<String> inviti = new ArrayList<String>();
 
     String regioneSelezionata = null;
+    String provinciaSelezionata = null;
     String cittaSelezionata = null;
-    ArrayAdapter<String> adapterCitta= null;
-
+    ArrayAdapter<String> adapterProvincia = null;
+    ArrayAdapter<String> adapterCitta = null;
 
 
     //per importare immagini
@@ -123,12 +128,9 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-        immagine= findViewById(R.id.propic);
-        storage= FirebaseStorage.getInstance();
-        storageReference= storage.getReferenceFromUrl("gs://contagiapp-c5306.appspot.com/");
-
-
-
+        immagine = findViewById(R.id.propic);
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReferenceFromUrl("gs://contagiapp-c5306.appspot.com/");
 
 
         nome = (TextInputEditText) findViewById(R.id.editTextName);
@@ -136,7 +138,7 @@ public class RegistrationActivity extends AppCompatActivity {
         phone = (TextInputEditText) findViewById(R.id.editTextPhone);
         data = (TextInputEditText) findViewById(R.id.editTextDataNascita);
         mail = (TextInputEditText) findViewById(R.id.editTextTextEmailAddress);
-        psw1 = (TextInputEditText) findViewById(R.id.editTextTextPassword) ;
+        psw1 = (TextInputEditText) findViewById(R.id.editTextTextPassword);
         psw2 = (TextInputEditText) findViewById(R.id.editTextRepeatPassword);
 
         nomeLayout = (TextInputLayout) findViewById(R.id.textInputNameLayout);
@@ -148,6 +150,7 @@ public class RegistrationActivity extends AppCompatActivity {
         psw2Layout = (TextInputLayout) findViewById(R.id.textInputRepeatPasswordLayout);
 
         autoCompleteRegion = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextRegione);
+        autoCompleteProvincia = findViewById(R.id.autoCompleteTextProvincia);
         autoCompleteCity = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextCitta);
         layoutTvRegion = findViewById(R.id.textInputRegioneLayout);
         layoutTvCity = findViewById(R.id.textInputCittaLayout);
@@ -155,45 +158,89 @@ public class RegistrationActivity extends AppCompatActivity {
         ArrayAdapter<String> adapterRegione = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, Regions.all_regions);
 
-        controlli_AutoCompleteText(regioneSelezionata, cittaSelezionata, autoCompleteRegion, autoCompleteCity);
+        //controlli_AutoCompleteText(regioneSelezionata, cittaSelezionata, autoCompleteRegion, autoCompleteCity);
+
 
         autoCompleteRegion.setAdapter(adapterRegione);
+        autoCompleteProvincia.setEnabled(false);
+        autoCompleteCity.setEnabled(false);
+
+        //controlli_AutoCompleteText(regioneSelezionata, provinciaSelezionata, cittaSelezionata, autoCompleteRegion, autoCompleteProvincia, autoCompleteCity);
         autoCompleteRegion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("Regione selezionata", autoCompleteRegion.getText().toString());
                 regioneSelezionata = autoCompleteRegion.getText().toString();
-                adapterCitta = new ArrayAdapter<String>(RegistrationActivity.this,
+                autoCompleteProvincia.setEnabled(true);
+                adapterProvincia = new ArrayAdapter<String>(RegistrationActivity.this,
                         android.R.layout.simple_dropdown_item_1line,
-                        Cities.map.get(autoCompleteRegion.getText().toString()));
+                        Province.map.get(autoCompleteRegion.getText().toString()));
+                autoCompleteProvincia.setAdapter(adapterProvincia);
 
-                autoCompleteCity.setAdapter(adapterCitta);
-
-                autoCompleteCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                autoCompleteProvincia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Log.d("Citta selezionata", autoCompleteCity.getText().toString());
-                        cittaSelezionata = autoCompleteCity.getText().toString();
+                        autoCompleteCity.setEnabled(true);
+                        adapterCitta = new ArrayAdapter<String>(RegistrationActivity.this,
+                                android.R.layout.simple_dropdown_item_1line,
+                                Cities.mapPerProvincia.get(autoCompleteProvincia.getText().toString()));
+
+                        autoCompleteCity.setAdapter(adapterCitta);
+
+                        autoCompleteCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.d("Citta selezionata", autoCompleteCity.getText().toString());
+                                cittaSelezionata = autoCompleteCity.getText().toString();
+                            }
+                        });
                     }
                 });
 
-        }
+
+            }
 
         });
 
 
-
-        autoCompleteRegion.addTextChangedListener(new TextWatcher() {
+        autoCompleteProvincia.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                Log.d("provincia", String.valueOf(provinciaSelezionata));
+                autoCompleteCity.setEnabled(false);
+                autoCompleteCity.setText(null);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                autoCompleteCity.setText(null);
-                adapterCitta = null;
+                Log.d("provincia", String.valueOf(provinciaSelezionata));
                 autoCompleteCity.setEnabled(false);
+                autoCompleteCity.setText(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        autoCompleteRegion.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d("regione", String.valueOf(regioneSelezionata));
+                autoCompleteProvincia.setEnabled(false);
+                autoCompleteProvincia.setText(null);
+                autoCompleteCity.setEnabled(false);
+                autoCompleteCity.setText(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("regione", String.valueOf(regioneSelezionata));
+                autoCompleteProvincia.setEnabled(false);
+                autoCompleteProvincia.setText(null);
+                autoCompleteCity.setEnabled(false);
+                autoCompleteCity.setText(null);
             }
 
             @Override
@@ -205,6 +252,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
 
+
         // collegamento button registrati con la mainActivity
         Button signUpButton = (Button) findViewById(R.id.modificaDati);
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -212,7 +260,7 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                switch (controlli_TextInput(nome, nomeLayout, cognome, cognomeLayout, mail, mailLayout, data, dataLayout, phone, phoneLayout, psw1, psw1Layout, psw2, psw2Layout, autoCompleteRegion, autoCompleteCity)){
+                switch (controlli_TextInput(nome, nomeLayout, cognome, cognomeLayout, mail, mailLayout, data, dataLayout, phone, phoneLayout, psw1, psw1Layout, psw2, psw2Layout, autoCompleteRegion, autoCompleteCity)) {
 
                     case 1:
                         nomeLayout.setError("Inserisci nome");
@@ -287,9 +335,9 @@ public class RegistrationActivity extends AppCompatActivity {
                 month++;
                 String date = null;
                 Log.d(TAG, "onDateSet: date: " + dayOfMonth + "/" + month + "/" + year);
-                if(month<=9) {
-                     date = dayOfMonth + "/0" + month + "/" + year;
-                }else
+                if (month <= 9) {
+                    date = dayOfMonth + "/0" + month + "/" + year;
+                } else
                     date = dayOfMonth + "/" + month + "/" + year;
 
                 data.setText(date);
@@ -314,15 +362,6 @@ public class RegistrationActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
-
-
-
-
         //toDo: recuperare il valore dell'autotextREGIONE e in base a quello metterci i controlli
 
     }
@@ -338,17 +377,16 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == PICK_IMAGE && resultCode == RESULT_OK){
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
             imageUri = data.getData();
-            ImageView imageView= findViewById(R.id.propic);
+            ImageView imageView = findViewById(R.id.propic);
             Picasso.get().load(imageUri).into(imageView); //mette l'immagine nell'ImageView di questa activity
         }
 
     }
 
 
-
-    private  void uploadImageToStorage(String documentId){
+    private void uploadImageToStorage(String documentId) {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Caricamento");
         pd.show();
@@ -356,7 +394,7 @@ public class RegistrationActivity extends AppCompatActivity {
         Log.d("imageUri", String.valueOf(imageUri));
         Log.d("documentID", String.valueOf(documentId));
 
-        if((imageUri != null) && (documentId != null)){
+        if ((imageUri != null) && (documentId != null)) {
             final StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("imgUtenti").child(documentId);
 
             fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -383,7 +421,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    public void clearAdapter (){
+    public void clearAdapter() {
         adapterCitta.clear();
     }
 
@@ -403,10 +441,11 @@ public class RegistrationActivity extends AppCompatActivity {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
+
     @NotNull
     private File createImageFile() throws IOException {
         // Create an image file name
-       // String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        // String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         imageFileName = "PROPIC";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -434,13 +473,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void uploadImage(String mail) {
 
-        if(filePath != null)
-        {
+        if (filePath != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            StorageReference ref = storageReference.child("files/"+mail+".jpg");
+            StorageReference ref = storageReference.child("files/" + mail + ".jpg");
 
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -454,68 +492,76 @@ public class RegistrationActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(RegistrationActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrationActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                                     .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
                             progressDialog.dismiss();
                         }
                     });
         }
     }
 
-    private void controlli_AutoCompleteText(String regione, String citta, AutoCompleteTextView tvRegione, AutoCompleteTextView tvCitta){
+    private void controlli_AutoCompleteText(String regione, String provincia, String citta, AutoCompleteTextView autoCompleteTextViewRegione, AutoCompleteTextView autoCompleteTextViewProvincia, AutoCompleteTextView autoCompleteTextViewCitta) {
         Log.d("regione", String.valueOf(regione));
-        if(regione == null){
-            tvCitta.setEnabled(false);
-            tvCitta.setText(null);
-        }else tvCitta.setEnabled(true);
+        if (!Arrays.asList(Regions.all_regions).contains(regione)) {
+            autoCompleteTextViewRegione.setError("errore");
+            autoCompleteTextViewProvincia.setEnabled(false);
+            autoCompleteTextViewCitta.setEnabled(false);
+            autoCompleteTextViewProvincia.setText(null);
+            autoCompleteTextViewCitta.setText(null);
+        }
+        if (regione == null) {
+            autoCompleteTextViewProvincia.setEnabled(false);
+            autoCompleteTextViewCitta.setEnabled(false);
+            autoCompleteTextViewProvincia.setText(null);
+            autoCompleteTextViewCitta.setText(null);
+        } else autoCompleteTextViewCitta.setEnabled(true);
     }
 
     private int controlli_TextInput(TextInputEditText name, TextInputLayout nomeLayout, TextInputEditText surname, TextInputLayout cognomeLayout, TextInputEditText mail, TextInputLayout mailLayout,
                                     TextInputEditText birth, TextInputLayout dataLayout, TextInputEditText phone, TextInputLayout phoneLayout, TextInputEditText psw1, TextInputLayout psw1Layout,
-                                    TextInputEditText psw2, TextInputLayout psw2Layout, AutoCompleteTextView regione, AutoCompleteTextView citta){
+                                    TextInputEditText psw2, TextInputLayout psw2Layout, AutoCompleteTextView regione, AutoCompleteTextView citta) {
 
-        if(isEmpty(name)){
+        if (isEmpty(name)) {
             return 1;
-        }else nomeLayout.setError(null);
+        } else nomeLayout.setError(null);
 
-        if(isEmpty(surname)){
+        if (isEmpty(surname)) {
             return 2;
-        }else cognomeLayout.setError(null);
+        } else cognomeLayout.setError(null);
 
-        if(isEmpty(birth)){
+        if (isEmpty(birth)) {
             return 3;
-        }else dataLayout.setError(null);
+        } else dataLayout.setError(null);
 
-        if(regioneSelezionata == null){
+        if (regioneSelezionata == null) {
             return 8;
-        }else layoutTvRegion.setError(null);
+        } else layoutTvRegion.setError(null);
 
-        if(cittaSelezionata == null){
+        if (cittaSelezionata == null) {
             return 9;
-        }else layoutTvCity.setError(null);
-        if(isEmpty(mail)){
+        } else layoutTvCity.setError(null);
+        if (isEmpty(mail)) {
             return 4;
-        }else mailLayout.setError(null);
+        } else mailLayout.setError(null);
 
-        if(isEmpty(phone)){
+        if (isEmpty(phone)) {
             return 5;
-        }else phoneLayout.setError(null);
+        } else phoneLayout.setError(null);
 
-        if(isEmpty(psw1)){
+        if (isEmpty(psw1)) {
             return 6;
-        }else psw1Layout.setError(null);
+        } else psw1Layout.setError(null);
 
-        if(isEmpty(psw2)){
+        if (isEmpty(psw2)) {
             return 7;
-        }else psw2Layout.setError(null);
-
+        } else psw2Layout.setError(null);
 
 
         return 0;
@@ -525,7 +571,7 @@ public class RegistrationActivity extends AppCompatActivity {
         return etText.getText().toString().length() <= 0;
     }
 
-    public void openMainActivity(){
+    public void openMainActivity() {
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);
         finish();
@@ -557,18 +603,15 @@ public class RegistrationActivity extends AppCompatActivity {
         final String appoggio = date.getText().toString();
 
 
-
-
         Log.d("regioneSelezionata2", regioneSelezionata);
         Log.d("cittaSelezionata2", cittaSelezionata);
 
         user.put("regione", regioneSelezionata);
         utente.setRegione(regioneSelezionata);
+        user.put("provincia", provinciaSelezionata);
+        utente.setProvince(provinciaSelezionata);
         user.put("citta", cittaSelezionata);
         utente.setCitta(cittaSelezionata);
-
-
-
 
 
         EditText telefono = (EditText) findViewById(R.id.editTextPhone);
@@ -585,9 +628,6 @@ public class RegistrationActivity extends AppCompatActivity {
         final String email = mail.getText().toString();
 
 
-
-
-
         db.collection("Utenti").whereEqualTo("mail", email).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -598,13 +638,11 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 
-
-
-    private void controlli(boolean cond, Map<String, Object> user1, String email, String psw1, String psw2,String appoggio) {
+    private void controlli(boolean cond, Map<String, Object> user1, String email, String psw1, String psw2, String appoggio) {
         Calendar cal = Calendar.getInstance();
         int l = appoggio.length();
-        boolean conddata= false;
-        boolean condemail= false;
+        boolean conddata = false;
+        boolean condemail = false;
         switch (l) {
             case 9:
                 anno = Integer.valueOf(appoggio.substring(l - 4, l));
@@ -619,30 +657,30 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
         if (anno == (cal.get(Calendar.YEAR) - 14)) {
-            if(mese == cal.get(Calendar.MONTH)) {
+            if (mese == cal.get(Calendar.MONTH)) {
                 if (giorno > cal.get(Calendar.DAY_OF_MONTH)) conddata = true;
-            } else if(mese > cal.get(Calendar.DAY_OF_MONTH)) conddata = true;
-        } else if(anno > (cal.get(Calendar.YEAR) - 14)) conddata = true;
+            } else if (mese > cal.get(Calendar.DAY_OF_MONTH)) conddata = true;
+        } else if (anno > (cal.get(Calendar.YEAR) - 14)) conddata = true;
 
 
-        if(!email.isEmpty()){
+        if (!email.isEmpty()) {
             Pattern p = Pattern.compile(".+@.+\\.[a-z]+", Pattern.CASE_INSENSITIVE);
             Matcher m = p.matcher(email);
             boolean matchFound = m.matches();
 
-            String  expressionPlus="^[\\w\\-]([\\.\\w])+[\\w]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+            String expressionPlus = "^[\\w\\-]([\\.\\w])+[\\w]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
             Pattern pPlus = Pattern.compile(expressionPlus, Pattern.CASE_INSENSITIVE);
             Matcher mPlus = pPlus.matcher(email);
             boolean matchFoundPlus = mPlus.matches();
-            condemail=(matchFound && matchFoundPlus);
+            condemail = (matchFound && matchFoundPlus);
         }
 
 
-        if(!condemail) {
+        if (!condemail) {
             Toast.makeText(this, "formato email non valido", Toast.LENGTH_SHORT).show();
             mailLayout.setError("Formato email non valido");
         } else {
-            if(conddata && condemail) {
+            if (conddata && condemail) {
                 Toast.makeText(this, "Bisogna avere almeno 14 anni per iscriversi", Toast.LENGTH_SHORT).show();
                 dataLayout.setError("Bisogna avere almeno 14 anni per iscriversi");
             } else {
@@ -684,7 +722,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         String json = gson.toJson(utente);
                         editor.putString("utente", json);
-                        editor.apply ();
+                        editor.apply();
 
 
                         openMainActivity();
@@ -697,6 +735,4 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }

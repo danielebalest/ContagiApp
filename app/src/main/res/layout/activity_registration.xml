@@ -131,6 +131,29 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputProvinciaLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Provincia"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
+            >
+
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextProvincia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:inputType="textAutoComplete|textAutoCorrect"
+                android:textColor="@color/black" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputCittaLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
@@ -152,6 +175,8 @@
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -223,7 +248,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/scattafoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -232,7 +257,7 @@
             android:background="@color/red"
             android:text="scatta foto profilo"
             app:cornerRadius="20dp"
-            app:icon="@drawable/ic_baseline_add_24"></Button>
+            app:icon="@drawable/ic_baseline_add_24"></com.google.android.material.button.MaterialButton>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddImgUser"
