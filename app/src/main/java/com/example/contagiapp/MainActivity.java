@@ -36,10 +36,15 @@ import com.example.contagiapp.impostazioni.SettingActivity;
 import com.example.contagiapp.notifiche.NotifyFragment;
 import com.example.contagiapp.utente.ProfiloActivity;
 import com.example.contagiapp.utente.Utente;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -53,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_CODE = 0;
     private static final int REQUEST_ENABLE_BT = 1;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     String stato;
 
     @Override
@@ -137,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
 
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
+        /*SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = prefs.getString("utente", "no");
         Utente utente;
@@ -148,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo", MODE_PRIVATE);
             String username = prefs1.getString("mail", "no");
-            Log.d("username", String.valueOf(username));
+            //Log.d("username", username);
 
             db.collection("Utenti")
                     .document(username)
@@ -157,9 +162,14 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             stato = documentSnapshot.getString("stato");
+                            Log.d("stato", stato);
                         }
                     });
-        }
+        }*/
+
+        stato = "blu";
+
+        getStato();
 
         Drawable draw = menu.getItem(0).getIcon();
         draw.mutate();
@@ -171,6 +181,35 @@ public class MainActivity extends AppCompatActivity {
         if(stato.equals("giallo")) draw.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void getStato(){
+        Utente utente;
+
+        Gson gson = new Gson();
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String json = prefs.getString("utente", "no");
+        String mailUtenteLoggato;
+        if(!json.equals("no")) {
+            utente = gson.fromJson(json, Utente.class);
+            mailUtenteLoggato = utente.getMail();
+            Log.d("mailutenteLoggato", mailUtenteLoggato);
+            stato = utente.getStato();
+        } else {
+            SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
+            mailUtenteLoggato = prefs1.getString("mail", "no");
+            Log.d("mail", mailUtenteLoggato);
+
+            db.collection("Utenti")
+                    .document(mailUtenteLoggato)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            stato = documentSnapshot.getString("stato");
+                        }
+                    });
+        }
     }
 
     @Override

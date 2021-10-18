@@ -159,6 +159,9 @@ public class LoginActivity extends AppCompatActivity {
                                         String json = gson.toJson(utente);
                                         editor.putString("utente", json);
                                         editor.commit ();
+                                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(mainIntent);
+                                        finish();
                                     }
                                 } else {
                                     Log.d(TAG, "Error getting documents: ", task.getException());
@@ -170,10 +173,10 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString("mail", username);
                         editor.commit ();
+                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(mainIntent);
+                        finish();
                     }
-                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(mainIntent);
-                    finish();
                 }
             }
         });

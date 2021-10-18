@@ -94,6 +94,7 @@ public class HomeFragment extends Fragment {
         do {
             try {
                 caricato = false;
+                String mail = getMailUtenteLoggato();
                 db.collection("Utenti")
                         .document(getMailUtenteLoggato())
                         .get()
