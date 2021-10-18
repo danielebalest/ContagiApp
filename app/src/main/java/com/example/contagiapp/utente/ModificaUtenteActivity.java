@@ -7,10 +7,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -25,6 +28,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.contagiapp.R;
+import com.example.contagiapp.registrazione.RegistrationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -44,6 +48,10 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import dizionarioPerCitta.Cities;
+import dizionarioPerCitta.Province;
+import dizionarioPerCitta.Regions;
 
 public class ModificaUtenteActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private TextView dataNascita;
@@ -69,6 +77,21 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
     private TextInputEditText data;
     private TextInputEditText psw1;
     private TextInputEditText psw2;
+
+    private AutoCompleteTextView autoCompleteRegion;
+    private AutoCompleteTextView autoCompleteProvincia;
+    private AutoCompleteTextView autoCompleteCity;
+    private TextInputLayout layoutTvRegion;
+    private TextInputLayout layoutTvProvince;
+    private TextInputLayout layoutTvCity;
+
+
+    String regioneSelezionata = null;
+    String provinciaSelezionata = null;
+    String cittaSelezionata = null;
+    ArrayAdapter<String> adapterProvincia = null;
+    ArrayAdapter<String> adapterRegione = null;
+    ArrayAdapter<String> adapterCitta = null;
 
     private Utente utente = new Utente();
 
@@ -96,6 +119,7 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
         Spinner provincia = (Spinner) findViewById(R.id.spinnerProvince);
         Spinner citta = (Spinner) findViewById(R.id.spinnerCitta);
 
+
         nome = (TextInputEditText) findViewById(R.id.editTextName);
         cognome = (TextInputEditText) findViewById(R.id.editTextSurname);
         phone = (TextInputEditText) findViewById(R.id.editTextPhone);
@@ -111,6 +135,108 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
         dataLayout = (TextInputLayout) findViewById(R.id.textInputBirthLayout);
         psw1Layout = (TextInputLayout) findViewById(R.id.textInputPasswordLayout);
         psw2Layout = (TextInputLayout) findViewById(R.id.textInputRepeatPasswordLayout);
+
+        autoCompleteRegion = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextRegioneModActivity);
+        autoCompleteProvincia = findViewById(R.id.autoCompleteTextProvinciaModActivity);
+        autoCompleteCity = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextCittaModActivity);
+        layoutTvRegion = findViewById(R.id.textInputRegioneLayoutModActivity);
+        layoutTvProvince = findViewById(R.id.textInputProvinciaLayoutModActivity);
+        layoutTvCity = findViewById(R.id.textInputCittaLayoutModActivity);
+
+        adapterRegione = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, Regions.all_regions);
+
+
+        autoCompleteRegion.setAdapter(adapterRegione);
+        autoCompleteProvincia.setEnabled(false);
+        autoCompleteCity.setEnabled(false);
+
+
+        autoCompleteRegion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("Regione selezionata", autoCompleteRegion.getText().toString());
+                regioneSelezionata = autoCompleteRegion.getText().toString();
+                autoCompleteProvincia.setEnabled(true);
+                adapterProvincia = new ArrayAdapter<String>(ModificaUtenteActivity.this,
+                        android.R.layout.simple_dropdown_item_1line,
+                        Province.map.get(autoCompleteRegion.getText().toString()));
+                autoCompleteProvincia.setAdapter(adapterProvincia);
+
+                autoCompleteProvincia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d("Provincia selezionata", autoCompleteProvincia.getText().toString());
+                        provinciaSelezionata = autoCompleteRegion.getText().toString();
+                        autoCompleteCity.setEnabled(true);
+                        adapterCitta = new ArrayAdapter<String>(ModificaUtenteActivity.this,
+                                android.R.layout.simple_dropdown_item_1line,
+                                Cities.mapPerProvincia.get(autoCompleteProvincia.getText().toString()));
+
+                        autoCompleteCity.setAdapter(adapterCitta);
+
+                        autoCompleteCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.d("Citta selezionata", autoCompleteCity.getText().toString());
+                                cittaSelezionata = autoCompleteCity.getText().toString();
+                            }
+                        });
+                    }
+                });
+
+
+            }
+
+        });
+
+
+        autoCompleteProvincia.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d("provincia", String.valueOf(provinciaSelezionata));
+                autoCompleteCity.setEnabled(false);
+                autoCompleteCity.setText(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("provincia", String.valueOf(provinciaSelezionata));
+                autoCompleteCity.setEnabled(false);
+                autoCompleteCity.setText(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        autoCompleteRegion.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d("regione", String.valueOf(regioneSelezionata));
+                autoCompleteProvincia.setEnabled(false);
+                autoCompleteProvincia.setText(null);
+                autoCompleteCity.setEnabled(false);
+                autoCompleteCity.setText(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("regione", String.valueOf(regioneSelezionata));
+                autoCompleteProvincia.setEnabled(false);
+                autoCompleteProvincia.setText(null);
+                autoCompleteCity.setEnabled(false);
+                autoCompleteCity.setText(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
         Gson gson = new Gson();

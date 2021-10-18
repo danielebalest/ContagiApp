@@ -100,9 +100,9 @@ public class RegistrationActivity extends AppCompatActivity {
     private AutoCompleteTextView autoCompleteRegion;
     private AutoCompleteTextView autoCompleteProvincia;
     private AutoCompleteTextView autoCompleteCity;
-    private TextInputLayout layoutTvRegion;
-    private TextInputLayout layoutTvProvince;
-    private TextInputLayout layoutTvCity;
+    private TextInputLayout layoutRegion;
+    private TextInputLayout layoutProvince;
+    private TextInputLayout layoutCity;
 
     //per la foto
     static final int REQUEST_IMAGE_CAPTURE = 0;
@@ -153,27 +153,25 @@ public class RegistrationActivity extends AppCompatActivity {
         autoCompleteRegion = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextRegione);
         autoCompleteProvincia = findViewById(R.id.autoCompleteTextProvincia);
         autoCompleteCity = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextCitta);
-        layoutTvRegion = findViewById(R.id.textInputRegioneLayout);
-        layoutTvProvince = findViewById(R.id.textInputProvinciaLayout);
-        layoutTvCity = findViewById(R.id.textInputCittaLayout);
+        layoutRegion = findViewById(R.id.textInputRegioneLayout);
+        layoutProvince = findViewById(R.id.textInputProvinciaLayout);
+        layoutCity = findViewById(R.id.textInputCittaLayout);
 
         ArrayAdapter<String> adapterRegione = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, Regions.all_regions);
 
-        //controlli_AutoCompleteText(regioneSelezionata, cittaSelezionata, autoCompleteRegion, autoCompleteCity);
-
 
         autoCompleteRegion.setAdapter(adapterRegione);
-        autoCompleteProvincia.setEnabled(false);
-        autoCompleteCity.setEnabled(false);
+        layoutProvince.setEnabled(false);
+        layoutCity.setEnabled(false);
 
-        //controlli_AutoCompleteText(regioneSelezionata, provinciaSelezionata, cittaSelezionata, autoCompleteRegion, autoCompleteProvincia, autoCompleteCity);
+
         autoCompleteRegion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("Regione selezionata", autoCompleteRegion.getText().toString());
                 regioneSelezionata = autoCompleteRegion.getText().toString();
-                autoCompleteProvincia.setEnabled(true);
+                layoutProvince.setEnabled(true);
                 adapterProvincia = new ArrayAdapter<String>(RegistrationActivity.this,
                         android.R.layout.simple_dropdown_item_1line,
                         Province.map.get(autoCompleteRegion.getText().toString()));
@@ -184,7 +182,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("Provincia selezionata", autoCompleteProvincia.getText().toString());
                         provinciaSelezionata = autoCompleteRegion.getText().toString();
-                        autoCompleteCity.setEnabled(true);
+                        layoutCity.setEnabled(true);
                         adapterCitta = new ArrayAdapter<String>(RegistrationActivity.this,
                                 android.R.layout.simple_dropdown_item_1line,
                                 Cities.mapPerProvincia.get(autoCompleteProvincia.getText().toString()));
@@ -211,14 +209,14 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 Log.d("provincia", String.valueOf(provinciaSelezionata));
-                autoCompleteCity.setEnabled(false);
+                layoutCity.setEnabled(false);
                 autoCompleteCity.setText(null);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d("provincia", String.valueOf(provinciaSelezionata));
-                autoCompleteCity.setEnabled(false);
+                layoutCity.setEnabled(false);
                 autoCompleteCity.setText(null);
             }
 
@@ -232,18 +230,18 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 Log.d("regione", String.valueOf(regioneSelezionata));
-                autoCompleteProvincia.setEnabled(false);
+                layoutProvince.setEnabled(false);
                 autoCompleteProvincia.setText(null);
-                autoCompleteCity.setEnabled(false);
+                layoutCity.setEnabled(false);
                 autoCompleteCity.setText(null);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d("regione", String.valueOf(regioneSelezionata));
-                autoCompleteProvincia.setEnabled(false);
+                layoutProvince.setEnabled(false);
                 autoCompleteProvincia.setText(null);
-                autoCompleteCity.setEnabled(false);
+                layoutCity.setEnabled(false);
                 autoCompleteCity.setText(null);
             }
 
@@ -280,17 +278,17 @@ public class RegistrationActivity extends AppCompatActivity {
                         break;
 
                     case 4:
-                        layoutTvRegion.setError("Inserisci regione");
+                        layoutRegion.setError("Inserisci regione");
                         Toast.makeText(RegistrationActivity.this, "Inserisci regione", Toast.LENGTH_SHORT).show();
                         break;
 
                     case 5:
-                        layoutTvProvince.setError("Inserisci provincia");
+                        layoutProvince.setError("Inserisci provincia");
                         Toast.makeText(RegistrationActivity.this, "Inserisci provincia", Toast.LENGTH_SHORT).show();
                         break;
 
                     case 6:
-                        layoutTvCity.setError("Inserisci citta");
+                        layoutCity.setError("Inserisci citta");
                         Toast.makeText(RegistrationActivity.this, "Inserisci citta", Toast.LENGTH_SHORT).show();
                         break;
 
@@ -516,22 +514,6 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-    private void controlli_AutoCompleteText(String regione, String provincia, String citta, AutoCompleteTextView autoCompleteTextViewRegione, AutoCompleteTextView autoCompleteTextViewProvincia, AutoCompleteTextView autoCompleteTextViewCitta) {
-        Log.d("regione", String.valueOf(regione));
-        if (!Arrays.asList(Regions.all_regions).contains(regione)) {
-            autoCompleteTextViewRegione.setError("errore");
-            autoCompleteTextViewProvincia.setEnabled(false);
-            autoCompleteTextViewCitta.setEnabled(false);
-            autoCompleteTextViewProvincia.setText(null);
-            autoCompleteTextViewCitta.setText(null);
-        }
-        if (regione == null) {
-            autoCompleteTextViewProvincia.setEnabled(false);
-            autoCompleteTextViewCitta.setEnabled(false);
-            autoCompleteTextViewProvincia.setText(null);
-            autoCompleteTextViewCitta.setText(null);
-        } else autoCompleteTextViewCitta.setEnabled(true);
-    }
 
     private int controlli_TextInput(TextInputEditText name, TextInputLayout nomeLayout, TextInputEditText surname, TextInputLayout cognomeLayout, TextInputEditText mail, TextInputLayout mailLayout,
                                     TextInputEditText birth, TextInputLayout dataLayout, TextInputEditText phone, TextInputLayout phoneLayout, TextInputEditText psw1, TextInputLayout psw1Layout,
@@ -551,15 +533,15 @@ public class RegistrationActivity extends AppCompatActivity {
 
         if (regioneSelezionata == null) {
             return 4;
-        } else layoutTvRegion.setError(null);
+        } else layoutRegion.setError(null);
 
         if (provinciaSelezionata == null) {
             return 5;
-        } else layoutTvCity.setError(null);
+        } else layoutCity.setError(null);
 
         if (cittaSelezionata == null) {
             return 6;
-        } else layoutTvCity.setError(null);
+        } else layoutCity.setError(null);
         if (isEmpty(mail)) {
             return 7;
         } else mailLayout.setError(null);

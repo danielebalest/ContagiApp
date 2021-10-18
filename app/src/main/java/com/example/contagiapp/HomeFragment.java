@@ -101,6 +101,7 @@ public class HomeFragment extends Fragment {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 Utente utente = documentSnapshot.toObject(Utente.class);
+                                Log.d("getMailUtenteLoggato", getMailUtenteLoggato());
                                 String stato = utente.getStato();
                                 String dataStato = utente.getDataPositivita();
 
