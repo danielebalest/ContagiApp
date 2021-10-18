@@ -603,7 +603,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         user.put("regione", regioneSelezionata);
         utente.setRegione(regioneSelezionata);
-        user.put("provincia", provinciaSelezionata);
+        user.put("province", provinciaSelezionata);
         utente.setProvince(provinciaSelezionata);
         user.put("citta", cittaSelezionata);
         utente.setCitta(cittaSelezionata);

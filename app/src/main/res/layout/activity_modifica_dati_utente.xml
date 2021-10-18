@@ -196,39 +196,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Spinner
-            android:id="@+id/spinnerNazioni"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:entries="@array/nazioni"
-            android:popupBackground="@color/gray"
-            android:backgroundTint="@color/colorPrimary"
-            android:focusableInTouchMode="true"
-            />
 
-        <Spinner
-            android:id="@+id/spinnerRegione"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:entries="@array/regioniItaliane"
-            android:focusableInTouchMode="true"/>
-
-        <Spinner
-            android:id="@+id/spinnerProvince"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:entries="@array/ProvincePuglia"
-            />
-
-        <Spinner
-            android:id="@+id/spinnerCitta"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:entries="@array/Citta"
-            />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputEmailLayout"

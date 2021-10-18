@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,7 +18,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +26,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.contagiapp.R;
-import com.example.contagiapp.registrazione.RegistrationActivity;
+//import com.example.contagiapp.registrazione.RegistrationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -108,18 +106,6 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modifica_dati_utente);
 
-        //Spinner per nazioni
-        Spinner spinnerNazioni = findViewById(R.id.spinnerNazioni);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.nazioni, android.R.layout.simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spinnerNazioni.setAdapter(adapter);
-        spinnerNazioni.setOnItemSelectedListener(this);
-
-        Spinner regione = (Spinner) findViewById(R.id.spinnerRegione);
-        Spinner provincia = (Spinner) findViewById(R.id.spinnerProvince);
-        Spinner citta = (Spinner) findViewById(R.id.spinnerCitta);
-
-
         nome = (TextInputEditText) findViewById(R.id.editTextName);
         cognome = (TextInputEditText) findViewById(R.id.editTextSurname);
         phone = (TextInputEditText) findViewById(R.id.editTextPhone);
@@ -144,7 +130,7 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
         layoutTvCity = findViewById(R.id.textInputCittaLayoutModActivity);
 
         adapterRegione = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, Regions.all_regions);
+                android.R.layout.simple_list_item_1, Regions.all_regions);
 
 
         autoCompleteRegion.setAdapter(adapterRegione);
@@ -167,7 +153,7 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("Provincia selezionata", autoCompleteProvincia.getText().toString());
-                        provinciaSelezionata = autoCompleteRegion.getText().toString();
+                        provinciaSelezionata = autoCompleteProvincia.getText().toString();
                         autoCompleteCity.setEnabled(true);
                         adapterCitta = new ArrayAdapter<String>(ModificaUtenteActivity.this,
                                 android.R.layout.simple_dropdown_item_1line,
@@ -262,6 +248,9 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
 
         nome.setText(utente.getNome());
         cognome.setText(utente.getCognome());
+        autoCompleteRegion.setText(utente.getRegione());
+        autoCompleteProvincia.setText(utente.getProvince());
+        autoCompleteCity.setText(utente.getCitta());
         phone.setText(utente.getTelefono());
         data.setText(utente.getDataNascita());
         mail.setText(utente.getMail());
@@ -280,67 +269,6 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
             radioF.setChecked(true);
         }
 
-        int num = 0;
-        switch(utente.getNazione()) {
-            case "Italia":
-                num = 0;
-                break;
-            case "Francia":
-                num = 1;
-                break;
-            case "Spagna":
-                num = 2;
-                break;
-            case "Germania":
-                num = 3;
-                break;
-        }
-        spinnerNazioni.setSelection(num);
-
-        switch(utente.getRegione()) {
-            case "Puglia":
-                num = 0;
-                break;
-            case "Basilicata":
-                num = 1;
-                break;
-            case "Campagnia":
-                num = 2;
-                break;
-        }
-        regione.setSelection(num);
-
-        switch (utente.getProvince()) {
-            case "BA":
-                num = 0;
-                break;
-            case "BAT":
-                num = 1;
-                break;
-            case "FG":
-                num = 2;
-                break;
-            case "LE":
-                num = 3;
-                break;
-            case "BR":
-                num = 4;
-                break;
-            case "TA":
-                num = 5;
-                break;
-        }
-        provincia.setSelection(num);
-
-        switch(utente.getCitta()) {
-            case "Bari":
-                num = 0;
-                break;
-            case "Molfetta":
-                num = 1;
-                break;
-        }
-        citta.setSelection(num);
 
         // collegamento button registrati con la mainActivity
         modifica = (Button) findViewById(R.id.modificaDati);
@@ -385,6 +313,7 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
                 //addToDb();
             }
         });
+
 
         //Date Picker
         dataNascita = (TextView) findViewById(R.id.editTextDataNascita);
@@ -492,21 +421,16 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
         TextView date = (TextView) findViewById(R.id.editTextDataNascita);
         final String appoggio = date.getText().toString();
 
-        Spinner nazione = (Spinner) findViewById(R.id.spinnerNazioni);
-        user.put("nazione", nazione.getSelectedItem().toString());
-        utente.setNazione(nazione.getSelectedItem().toString());
 
-        Spinner regione = (Spinner) findViewById(R.id.spinnerRegione);
-        user.put("regione", regione.getSelectedItem().toString());
-        utente.setRegione(regione.getSelectedItem().toString());
+        user.put("regione", regioneSelezionata);
+        utente.setRegione(regioneSelezionata);
 
-        Spinner provincia = (Spinner) findViewById(R.id.spinnerProvince);
-        user.put("province", provincia.getSelectedItem().toString());
-        utente.setProvince(provincia.getSelectedItem().toString());
 
-        Spinner citta = (Spinner) findViewById(R.id.spinnerCitta);
-        user.put("citta", citta.getSelectedItem().toString());
-        utente.setCitta(citta.getSelectedItem().toString());
+        user.put("province", provinciaSelezionata);
+        utente.setProvince(provinciaSelezionata);
+
+        user.put("citta", cittaSelezionata);
+        utente.setCitta(cittaSelezionata);
 
         EditText telefono = (EditText) findViewById(R.id.editTextPhone);
         user.put("telefono", telefono.getText().toString());
@@ -530,7 +454,7 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
                 });
     }
 
-    //Spinner per nazioni
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String text = parent.getItemAtPosition(position).toString();
