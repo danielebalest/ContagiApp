@@ -139,53 +139,15 @@ public class MainActivity extends AppCompatActivity {
 
     //per aggiungere menu sulla actionBar
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
 
-        /*SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = prefs.getString("utente", "no");
-        Utente utente;
-
-        if(!json.equals("no")) {
-            utente = gson.fromJson(json, Utente.class);
-            stato = utente.getStato();
-        } else {
-            SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo", MODE_PRIVATE);
-            String username = prefs1.getString("mail", "no");
-            //Log.d("username", username);
-
-            db.collection("Utenti")
-                    .document(username)
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            stato = documentSnapshot.getString("stato");
-                            Log.d("stato", stato);
-                        }
-                    });
-        }*/
-//TODO vedere se togliere i controlli per il colore del pulsante dell'utente
-        stato = "blu";
-
-        getStato();
-
-        Drawable draw = menu.getItem(0).getIcon();
+        final Drawable draw = menu.getItem(0).getIcon();
         draw.mutate();
 
         draw.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
-        if(stato.equals("rosso")) draw.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-        if(stato.equals("verde")) draw.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
-        if(stato.equals("arancione")) draw.setColorFilter(Color.rgb(255, 165, 0), PorterDuff.Mode.SRC_IN);
-        if(stato.equals("giallo")) draw.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
 
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    private void getStato(){
         Utente utente;
-
         Gson gson = new Gson();
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
         String json = prefs.getString("utente", "no");
@@ -195,6 +157,11 @@ public class MainActivity extends AppCompatActivity {
             mailUtenteLoggato = utente.getMail();
             Log.d("mailutenteLoggato", mailUtenteLoggato);
             stato = utente.getStato();
+
+            if(stato.equals("rosso")) draw.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+            if(stato.equals("verde")) draw.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+            if(stato.equals("arancione")) draw.setColorFilter(Color.rgb(255, 165, 0), PorterDuff.Mode.SRC_IN);
+            if(stato.equals("giallo")) draw.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
         } else {
             SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
             mailUtenteLoggato = prefs1.getString("mail", "no");
@@ -207,9 +174,16 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             stato = documentSnapshot.getString("stato");
+
+                            if(stato.equals("rosso")) draw.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                            if(stato.equals("verde")) draw.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+                            if(stato.equals("arancione")) draw.setColorFilter(Color.rgb(255, 165, 0), PorterDuff.Mode.SRC_IN);
+                            if(stato.equals("giallo")) draw.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
                         }
                     });
         }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

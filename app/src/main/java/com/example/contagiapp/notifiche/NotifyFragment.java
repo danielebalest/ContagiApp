@@ -60,7 +60,8 @@ public class NotifyFragment extends Fragment {
     private ArrayList<Evento> listaEventi = new ArrayList<Evento>();
     private Evento ev;
     private Utente utente;
-    private List<Evento> ev1;
+    private final List<Evento> ev1 = new ArrayList<>();
+    private boolean contro = false;
     //private List<Evento> eventi = new ArrayList<>();
 
     public NotifyFragment() {
@@ -108,13 +109,13 @@ public class NotifyFragment extends Fragment {
         return view;
     }
 
-    public void caricaEventiNoPartecipazione(RecyclerView rvEventiACuiNonPartecipo) {
+    public void caricaEventiNoPartecipazione(final RecyclerView rvEventiACuiNonPartecipo) {
         SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("eventi", Context.MODE_PRIVATE);
         String json = pref.getString("id", "no");
 
         if(!json.equals("no")) {
             Gson gson = new Gson();
-            ArrayList<String> eventi = new ArrayList<>();
+            final ArrayList<String> eventi;
             eventi = gson.fromJson(json, new TypeToken<ArrayList<String>>() {}.getType());
 
             if(eventi.size() != 0) {
@@ -128,15 +129,17 @@ public class NotifyFragment extends Fragment {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                                     ev1.add(documentSnapshot.toObject(Evento.class));
-                                    Log.d("eventi: ",documentSnapshot.toObject(Evento.class).getIdEvento());
+                                    Log.d("EVENTI:::",documentSnapshot.toObject(Evento.class).getIdEvento());
+
+                                    if(ev1.size() == eventi.size()) {
+                                        EventoNoPartecipazioneAdapter adapter = new EventoNoPartecipazioneAdapter(ev1, getActivity().getApplicationContext());
+
+                                        rvEventiACuiNonPartecipo.setAdapter(adapter);
+                                        rvEventiACuiNonPartecipo.setLayoutManager(new LinearLayoutManager(getActivity()));
+                                    }
                                 }
                             });
                 }
-
-                EventoNoPartecipazioneAdapter adapter = new EventoNoPartecipazioneAdapter(ev1, getActivity().getApplicationContext());
-
-                rvEventiACuiNonPartecipo.setAdapter(adapter);
-                rvEventiACuiNonPartecipo.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
         }
     }
