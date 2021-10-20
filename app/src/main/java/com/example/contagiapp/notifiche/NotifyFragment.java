@@ -36,7 +36,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -58,6 +60,7 @@ public class NotifyFragment extends Fragment {
     private ArrayList<Evento> listaEventi = new ArrayList<Evento>();
     private Evento ev;
     private Utente utente;
+    private List<Evento> ev1;
     //private List<Evento> eventi = new ArrayList<>();
 
     public NotifyFragment() {
@@ -71,6 +74,7 @@ public class NotifyFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_notify, container, false);
 
+        RecyclerView rvNoEventiPartecipazione = view.findViewById(R.id.rvNoPartecipazioneEvento);
         rvEventiRossi = view.findViewById(R.id.rvEventiRossi);
         final RecyclerView recyclerViewRichieste =  view.findViewById(R.id.rvRichieste);
         final RecyclerView recyclerViewInviti =  view.findViewById(R.id.rvInviti);
@@ -99,8 +103,42 @@ public class NotifyFragment extends Fragment {
 
         caricaEventi(rvEventiACuiPartecipo);
         caricaEventiRossi(rvEventiRossi);
+        caricaEventiNoPartecipazione(rvNoEventiPartecipazione);
 
         return view;
+    }
+
+    public void caricaEventiNoPartecipazione(RecyclerView rvEventiACuiNonPartecipo) {
+        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("eventi", Context.MODE_PRIVATE);
+        String json = pref.getString("id", "no");
+
+        if(!json.equals("no")) {
+            Gson gson = new Gson();
+            ArrayList<String> eventi = new ArrayList<>();
+            eventi = gson.fromJson(json, new TypeToken<ArrayList<String>>() {}.getType());
+
+            if(eventi.size() != 0) {
+                for(int i = 0; i < eventi.size(); i++) {
+                    String id = eventi.get(i);
+
+                    db.collection("Eventi")
+                            .document(id)
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    ev1.add(documentSnapshot.toObject(Evento.class));
+                                    Log.d("eventi: ",documentSnapshot.toObject(Evento.class).getIdEvento());
+                                }
+                            });
+                }
+
+                EventoNoPartecipazioneAdapter adapter = new EventoNoPartecipazioneAdapter(ev1, getActivity().getApplicationContext());
+
+                rvEventiACuiNonPartecipo.setAdapter(adapter);
+                rvEventiACuiNonPartecipo.setLayoutManager(new LinearLayoutManager(getActivity()));
+            }
+        }
     }
 
     public void caricaEventiRossi(final RecyclerView rvEventi) {

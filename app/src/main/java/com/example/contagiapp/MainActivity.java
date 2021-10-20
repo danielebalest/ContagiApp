@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }*/
-
+//TODO vedere se togliere i controlli per il colore del pulsante dell'utente
         stato = "blu";
 
         getStato();

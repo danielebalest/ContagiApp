@@ -7,6 +7,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,24 +16,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.contagiapp.eventi.Evento;
 import com.example.contagiapp.eventi.EventsFragment;
 import com.example.contagiapp.eventi.NewEventsActivity;
 import com.example.contagiapp.utente.Utente;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
@@ -94,7 +104,7 @@ public class HomeFragment extends Fragment {
         do {
             try {
                 caricato = false;
-                String mail = getMailUtenteLoggato();
+
                 db.collection("Utenti")
                         .document(getMailUtenteLoggato())
                         .get()
@@ -107,7 +117,7 @@ public class HomeFragment extends Fragment {
                                 String dataStato = utente.getDataPositivita();
 
                                 if(!statoUtente.equals(stato)) setStato(stato, dataStato);
-
+                                if(stato.equals("rosso") || stato.equals("arancione")) eliminaPartecipazioneEventi();
 
                                 switch (stato){//TODO modificare i messaggi in tvStatusDEscr
                                     case "rosso" : status.setBackgroundTintList(red);
@@ -204,6 +214,48 @@ public class HomeFragment extends Fragment {
         Toasty.success(getContext(), "Stato aggiornato", Toast.LENGTH_LONG).show();
         Intent i = new Intent(getActivity(),MainActivity.class);
         startActivity(i);
+    }
+
+    private void eliminaPartecipazioneEventi() {
+        ArrayList<String> finalEventi = new ArrayList<>();
+
+        SharedPreferences pref = getActivity().getSharedPreferences("eventi", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = pref.getString("id", "no");
+
+        if(!json.equals("no")) {
+            finalEventi = gson.fromJson(json, new TypeToken<ArrayList<String>>() {}.getType());
+        }
+
+        final ArrayList<String> eventi = finalEventi;
+
+        db.collection("Eventi")
+                .whereArrayContains("partecipanti", getMailUtenteLoggato())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for(DocumentSnapshot documentSnapshot : task.getResult()) {
+                        Evento ev = documentSnapshot.toObject(Evento.class);
+                        ArrayList<String> partecipanti;
+                        partecipanti = ev.getPartecipanti();
+                        partecipanti.remove(getMailUtenteLoggato());
+                        Log.d("evento da rimuovere", ev.getIdEvento());
+
+                        db.collection("Eventi").document(ev.getIdEvento()).update("partecipanti", partecipanti);
+                        eventi.add(ev.getIdEvento());
+                    }
+
+                    SharedPreferences preferences = getActivity().getSharedPreferences("eventi", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    Gson gson1 = new Gson();
+                    String json1 = gson1.toJson(eventi);
+                    editor.putString("id", json1);
+                    editor.commit();
+                }
+            }
+        });
     }
 }
 

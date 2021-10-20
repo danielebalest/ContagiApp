@@ -1,6 +1,7 @@
 package com.example.contagiapp.notifiche;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,55 +21,53 @@ import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
-public class EventoRossoAdapter extends RecyclerView.Adapter<EventoRossoAdapter.ViewHolder> {
+public class EventoNoPartecipazioneAdapter extends RecyclerView.Adapter<EventoNoPartecipazioneAdapter.ViewHolder> {
+    private List<Evento> ev;
     private Context context;
-    private List<Evento> eventi;
-    private String mailUtenteLoggato;
-    private Utente utente;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
-    public EventoRossoAdapter(Context context, List<Evento> eventi, String mailUtenteLoggato, Utente utente) {
+    public EventoNoPartecipazioneAdapter(List<Evento> ev, Context context) {
+        this.ev = ev;
         this.context = context;
-        this.eventi = eventi;
-        this.mailUtenteLoggato = mailUtenteLoggato;
-        this.utente = utente;
     }
 
     @NonNull
     @Override
-    public EventoRossoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public EventoNoPartecipazioneAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View eventsView = inflater.inflate(R.layout.item_partecipato_evento, parent, false);
+        View eventsView = inflater.inflate(R.layout.item_annulla_partecipazione_evento, parent, false);
 
-        EventoRossoAdapter.ViewHolder viewHolder = new EventoRossoAdapter.ViewHolder(eventsView);
+        EventoNoPartecipazioneAdapter.ViewHolder viewHolder = new EventoNoPartecipazioneAdapter.ViewHolder(eventsView);
         return viewHolder;
     }
 
-
     @Override
-    public void onBindViewHolder(@NonNull EventoRossoAdapter.ViewHolder holder, final int position) {
-
-        final Evento event = eventi.get(position);
+    public void onBindViewHolder(@NonNull EventoNoPartecipazioneAdapter.ViewHolder holder, final int position) {
+        final Evento event = ev.get(position);
         TextView textViewNome = holder.nomeTextView;
         TextView textViewCitta = holder.cittaTextView;
         TextView textViewData = holder.dataTextView;
         final ImageView imageViewEvent = holder.imgEvento;
         final MaterialButton btnAccetta = holder.btnAccetta;
-        final MaterialButton btnRifiuta = holder.btnRifiuta;
         final String idEvento = event.getIdEvento();
 
         textViewNome.setText(event.getNome());
@@ -98,47 +97,28 @@ public class EventoRossoAdapter extends RecyclerView.Adapter<EventoRossoAdapter.
             @Override
             public void onClick(View v) {
 
-                btnAccetta.setText("Partecipato");
-                btnRifiuta.setText("no");
+                ArrayList<String> eventi = new ArrayList<>();
+                SharedPreferences pref = context.getSharedPreferences("eventi", Context.MODE_PRIVATE);
+                Gson gson = new Gson();
+                String json = pref.getString("id", "no");
+                eventi = gson.fromJson(json, new TypeToken<ArrayList<String>>() {}.getType());
+
+                eventi.remove(event.getIdEvento());
+
+                SharedPreferences.Editor editor = pref.edit();
+                json = gson.toJson(eventi);
+                editor.putString("id", json);
+                editor.commit();
+
                 btnAccetta.setClickable(false);
-                btnRifiuta.setClickable(true);
-
-                if(utente.getStato().equals("verde") || utente.getStato().equals("giallo")) {
-                    Date dataAttuale = new Date(System.currentTimeMillis());
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                    String stringDataAttuale = sdf.format(dataAttuale);
-
-
-                    db.collection("Utenti").document(mailUtenteLoggato)
-                            .update("stato", "arancione", "dataPositivita", stringDataAttuale);
-
-                    Toasty.success(context, "Hai partecipato ad un evento con una persona risultata positiva\nTi consigliamo di far un tampone", Toast.LENGTH_LONG).show();
-                }
-
-                List<String> partecipanti = event.getPartecipanti();
-                partecipanti.remove(mailUtenteLoggato);
-                db.collection("Eventi").document(event.getIdEvento()).update("partecipanti", partecipanti);
-            }
-        });
-
-        btnRifiuta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnRifiuta.setText("No partecipato");
-                btnAccetta.setText("si");
-                btnAccetta.setClickable(true);
-                btnRifiuta.setClickable(false);
-
-                List<String> partecipanti = event.getPartecipanti();
-                partecipanti.remove(mailUtenteLoggato);
-                db.collection("Eventi").document(event.getIdEvento()).update("partecipanti", partecipanti);
+                btnAccetta.setVisibility(View.GONE);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return eventi.size();
+        return ev.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -147,7 +127,6 @@ public class EventoRossoAdapter extends RecyclerView.Adapter<EventoRossoAdapter.
         public TextView dataTextView;
         public ImageView imgEvento;
         public MaterialButton btnAccetta;
-        public MaterialButton btnRifiuta;
         EventiPartecipatoAdapter.OnEventListener onEventListener;
 
         public ViewHolder(@NonNull View itemView) {
@@ -158,7 +137,6 @@ public class EventoRossoAdapter extends RecyclerView.Adapter<EventoRossoAdapter.
             imgEvento = itemView.findViewById(R.id.imgEventoRichiesta);
             dataTextView = itemView.findViewById(R.id.tvDataEventoRichiesta);
             btnAccetta = itemView.findViewById(R.id.btnAccetta);
-            btnRifiuta = itemView.findViewById(R.id.btnRifiuta);
         }
 
         @Override
@@ -169,6 +147,4 @@ public class EventoRossoAdapter extends RecyclerView.Adapter<EventoRossoAdapter.
     public interface OnEventListener{
         void onItemClick(int position);
     }
-
-
 }
