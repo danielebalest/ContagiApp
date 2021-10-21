@@ -120,8 +120,26 @@ public class HomeFragment extends Fragment {
                                 if(stato.equals("rosso") || stato.equals("arancione")) eliminaPartecipazioneEventi();
 
                                 switch (stato){//TODO modificare i messaggi in tvStatusDEscr
-                                    case "rosso" : status.setBackgroundTintList(red);
-                                        tvStatusDescr.setText(getString(R.string.DescrStatoRosso));
+                                    case "rosso" :
+                                        try {
+                                            Date dataPositivita = new SimpleDateFormat("dd/MM/yyyy").parse(dataStato);
+                                            Date dataAttuale = new Date(System.currentTimeMillis());
+
+                                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                            String stringDataAttuale = sdf.format(dataAttuale);
+
+                                            //864000000 millisecondi = 10 giorni
+                                            if(dataAttuale.getTime() - dataPositivita.getTime() >= 864000000) {
+                                                db.collection("Utenti").document(getMailUtenteLoggato()).update("stato", "arancione", "dataPositivita", stringDataAttuale);
+                                                status.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 165, 0)));
+                                                setStato("arancione", stringDataAttuale);
+                                            } else {
+                                                status.setBackgroundTintList(red);
+                                                tvStatusDescr.setText(getString(R.string.DescrStatoRosso));
+                                            }
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
                                         break;
 
                                     case "verde" : status.setBackgroundTintList(green);
