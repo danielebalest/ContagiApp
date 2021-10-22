@@ -4,11 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
@@ -33,6 +38,7 @@ import com.example.contagiapp.data.amici.FriendsFragment;
 import com.example.contagiapp.eventi.EventsFragment;
 import com.example.contagiapp.gruppi.GroupFragment;
 import com.example.contagiapp.impostazioni.SettingActivity;
+import com.example.contagiapp.notifiche.Notifiche;
 import com.example.contagiapp.notifiche.NotifyFragment;
 import com.example.contagiapp.utente.ProfiloActivity;
 import com.example.contagiapp.utente.Utente;
@@ -53,6 +59,9 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         checkMyPermission();
         checkMyBL();
+        //createNotificationChannel();
+
+        new Notifiche(this);
 
         // Tiene lo schermo acceso
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -98,6 +110,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "NOTIFICA";//getString(R.string.channel_name);
+            String description = "CIAOOCISDVOD";//getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }*/
 
     //per bluetooth
     private void checkMyBL(){
