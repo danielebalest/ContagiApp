@@ -262,7 +262,7 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                switch (controlli_TextInput(nome, nomeLayout, cognome, cognomeLayout, mail, mailLayout, data, dataLayout, phone, phoneLayout, psw1, psw1Layout, psw2, psw2Layout, autoCompleteRegion, autoCompleteCity)) {
+                switch (controlli_TextInput(nome, nomeLayout, cognome, cognomeLayout, mail, mailLayout, data, dataLayout, phone, phoneLayout, psw1, psw1Layout, psw2, psw2Layout, layoutRegion, layoutProvince, layoutCity)) {
 
                     case 1:
                         nomeLayout.setError("Inserisci nome");
@@ -517,7 +517,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private int controlli_TextInput(TextInputEditText name, TextInputLayout nomeLayout, TextInputEditText surname, TextInputLayout cognomeLayout, TextInputEditText mail, TextInputLayout mailLayout,
                                     TextInputEditText birth, TextInputLayout dataLayout, TextInputEditText phone, TextInputLayout phoneLayout, TextInputEditText psw1, TextInputLayout psw1Layout,
-                                    TextInputEditText psw2, TextInputLayout psw2Layout, AutoCompleteTextView regione, AutoCompleteTextView citta) {
+                                    TextInputEditText psw2, TextInputLayout psw2Layout, TextInputLayout regioneLayout, TextInputLayout provinciaLayout, TextInputLayout cittaLayout) {
 
         if (isEmpty(name)) {
             return 1;
@@ -533,15 +533,15 @@ public class RegistrationActivity extends AppCompatActivity {
 
         if (regioneSelezionata == null) {
             return 4;
-        } else layoutRegion.setError(null);
+        } else regioneLayout.setError(null);
 
         if (provinciaSelezionata == null) {
             return 5;
-        } else layoutCity.setError(null);
+        } else provinciaLayout.setError(null);
 
         if (cittaSelezionata == null) {
             return 6;
-        } else layoutCity.setError(null);
+        } else cittaLayout.setError(null);
         if (isEmpty(mail)) {
             return 7;
         } else mailLayout.setError(null);

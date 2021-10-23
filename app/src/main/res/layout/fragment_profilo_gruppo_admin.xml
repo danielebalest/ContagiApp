@@ -56,7 +56,7 @@
                 android:padding="16dp">
 
                 <LinearLayout
-                    android:id="@+id/statusCircle2"
+                    android:id="@+id/statusCircle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/small_circle"

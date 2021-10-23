@@ -3,6 +3,8 @@ package com.example.contagiapp.gruppi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,16 +29,23 @@ import com.example.contagiapp.UserAdapter;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 
 import es.dmoral.toasty.Toasty;
 
@@ -45,7 +55,16 @@ public class ProfiloGruppoAdminFragment extends Fragment {
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private final static String storageDirectory = "imgGruppi";
     private ArrayList<Utente> listaPartecipanti = new ArrayList<Utente>();
-    private String statusGruppo = "a";
+    LinearLayout status;
+    int nStato = 0;
+
+    ColorStateList red = ColorStateList.valueOf(Color.parseColor("#FF0000"));
+    ColorStateList orange = ColorStateList.valueOf(Color.parseColor("#F4511E"));
+    ColorStateList yellow = ColorStateList.valueOf(Color.parseColor("#FFF8F405"));
+    ColorStateList green = ColorStateList.valueOf(Color.parseColor("#FF43A047"));
+
+
+
 
     public ProfiloGruppoAdminFragment() {
         // Required empty public constructor
@@ -64,11 +83,14 @@ public class ProfiloGruppoAdminFragment extends Fragment {
         final String idGruppo = bundle.getString("idGruppo");
         Log.d("idGruppo", String.valueOf(idGruppo));
 
+
         caricaGruppo(idGruppo, view);
+        Log.d("listaPartecipONCREATE", String.valueOf(listaPartecipanti));
 
         MaterialButton btnInvita = view.findViewById(R.id.btnAdminInvitaAmici);
         MaterialButton btnEliminaGruppo = view.findViewById(R.id.btnEliminaGruppo);
         MaterialButton btnModificaGruppo = view.findViewById(R.id.btnModificaGruppo);
+        status = view.findViewById(R.id.statusCircle);
 
         btnInvita.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +163,8 @@ public class ProfiloGruppoAdminFragment extends Fragment {
         return view;
     }
 
+
+
     private void eliminaGruppo(String idGruppo){
         db.collection("Gruppo")
                 .document(idGruppo)
@@ -194,47 +218,58 @@ public class ProfiloGruppoAdminFragment extends Fragment {
 
                     final RecyclerView rvPartecipanti = view.findViewById(R.id.rvPartecipantiProfiloGruppoAdmin);
                     Log.d("mailPartecipanti.size()", String.valueOf(mailPartecipanti.size()));
-                    for(int i = 0; i < mailPartecipanti.size(); i++){
 
-                        db.collection("Utenti")
-                                .document(mailPartecipanti.get(i))
-                                .get()
-                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        Utente user = new Utente();
-                                        user.setNome(documentSnapshot.getString("nome"));
-                                        user.setCognome(documentSnapshot.getString("cognome"));
-                                        user.setMail(documentSnapshot.getString("mail"));
-                                        user.setDataNascita(documentSnapshot.getString("dataNascita"));
-                                        user.setStato(documentSnapshot.getString("stato"));
-                                        Log.d("dataNascita", String.valueOf(user.getDataNascita()));
 
-                                        listaPartecipanti.add(user);
+                    //ciclo l'elenco dei partecipanti per poter ottenere
 
-                                        //int nuovoStato = calcolaNuovoStatoGruppo2(listaPartecipanti);
-                                        //Log.d("nuovoStato", String.valueOf(nuovoStato));
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                for(int i = 0; i < mailPartecipanti.size(); i++){
 
-                                        //aggiornaStatoGruppo(idGruppo, nuovoStato,db);
 
-                                        //Log.d("statoListaPartecipanti", String.valueOf(listaPartecipanti.get(0).getStato()));
-                                        Log.d("statusGruppo", String.valueOf(statusGruppo));
+                                    Task<DocumentSnapshot> task =   db.collection("Utenti")
+                                            .document(mailPartecipanti.get(i))
+                                            .get()
+                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                    Utente user = new Utente();
+                                                    user.setNome(documentSnapshot.getString("nome"));
+                                                    user.setCognome(documentSnapshot.getString("cognome"));
+                                                    user.setMail(documentSnapshot.getString("mail"));
+                                                    user.setDataNascita(documentSnapshot.getString("dataNascita"));
+                                                    user.setStato(documentSnapshot.getString("stato"));
+                                                    Log.d("dataNascita", String.valueOf(user.getDataNascita()));
 
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toasty.error(getActivity(), "Error", Toast.LENGTH_SHORT);
+                                                    listaPartecipanti.add(user); //toDo: questa lista globale deve essere accessibile anche fuori dal metodo a riga 70 (per intederci)
+                                                    Log.d("listaPartecipantiFOR", String.valueOf(listaPartecipanti)); //qui è visibile, ma è nel for
+                                                }
+                                            });
+
+
+
+                                }
+                                Thread.sleep(2000);
+                                Log.d("dopoSleep", String.valueOf(listaPartecipanti));
+                                //todo: richiamare il metodo per lo stato del gruppo
+                                nStato = calcolaNuovoStatoGruppo(listaPartecipanti);
+                                Log.d("nStato", String.valueOf(nStato));
+                                impostaStatoGruppo(nStato, idGruppo, db);
+
+                                } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        });
-                    }
-                    Log.d("listaPartecipanti", String.valueOf(listaPartecipanti));
+                        }
 
-                    //Log.d("statoListaPartecipanti", String.valueOf(listaPartecipanti.get(0)));
+                    }).start();
+
+
+
                     UserAdapter adapter = new UserAdapter(listaPartecipanti);
                     rvPartecipanti.setAdapter(adapter);
                     rvPartecipanti.setLayoutManager(new LinearLayoutManager(getActivity()));
-
 
                     ImageView imageViewProfiloGruppo = view.findViewById(R.id.imgProfiloGruppoAdmin);
                     caricaImgDaStorage(storageRef, storageDirectory, idGruppo, imageViewProfiloGruppo);
@@ -247,13 +282,38 @@ public class ProfiloGruppoAdminFragment extends Fragment {
 
     }
 
+    private void impostaStatoGruppo(int nStato, String idGruppo, FirebaseFirestore db) {
+        switch (nStato){
+            case 1:
+                status.setBackgroundTintList(green);
+                aggiornaStatoGruppo(idGruppo, "verde", db);
+                break;
+            case 2:
+                status.setBackgroundTintList(yellow);
+                aggiornaStatoGruppo(idGruppo, "giallo", db);
+                break;
+            case 3:
+                status.setBackgroundTintList(orange);
+                aggiornaStatoGruppo(idGruppo, "arancione", db);
+                break;
+            case 4:
+                status.setBackgroundTintList(red);
+                aggiornaStatoGruppo(idGruppo, "red", db);
+                break;
+            default:
+                break;
+        }
+    }
+
     private void aggiornaStatoGruppo (String idGruppo, String nuovoStatoGruppo,  FirebaseFirestore db){
         db.collection("Gruppo")
                 .document(idGruppo)
                 .update("statoGruppo", nuovoStatoGruppo);
     }
 
-    private int calcolaNuovoStatoGruppo2(ArrayList<Utente> listaPartecipanti){
+
+
+    private int calcolaNuovoStatoGruppo(ArrayList<Utente> listaPartecipanti){
         int nuovoStato = 0;
         ArrayList <Integer> listaStati = new ArrayList<Integer> ();
 
@@ -267,36 +327,6 @@ public class ProfiloGruppoAdminFragment extends Fragment {
         return nuovoStato;
     }
 
-    private String calcolaNuovoStatoGruppo (Utente user, String statusGruppo){
-        if(!statusGruppo.equals("rosso")) {
-            if(user.getStato().equals("rosso")) {
-                statusGruppo = "rosso";
-            }else{
-                if(!statusGruppo.equals("arancione")) {
-                    if(user.getStato().equals("arancione")) {
-                        statusGruppo = "arancione";
-                    }else{
-
-                        if(!statusGruppo.equals("giallo")) {
-                            if(user.getStato().equals("giallo")) {
-                                statusGruppo = "giallo";
-                            }else{
-
-                                if(!statusGruppo.equals("verde")) {
-                                    if(user.getStato().equals("verde")) {
-                                        statusGruppo = "verde";
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                }
-
-            }
-        }
-        return statusGruppo;
-    }
 
     private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
         storageRef.child(directory + "/" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {

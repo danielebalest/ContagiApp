@@ -27,9 +27,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.contagiapp.R;
 //import com.example.contagiapp.registrazione.RegistrationActivity;
+import com.example.contagiapp.registrazione.RegistrationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -79,9 +81,9 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
     private AutoCompleteTextView autoCompleteRegion;
     private AutoCompleteTextView autoCompleteProvincia;
     private AutoCompleteTextView autoCompleteCity;
-    private TextInputLayout layoutTvRegion;
-    private TextInputLayout layoutTvProvince;
-    private TextInputLayout layoutTvCity;
+    private TextInputLayout layoutRegion;
+    private TextInputLayout layoutProvince;
+    private TextInputLayout layoutCity;
 
 
     String regioneSelezionata = null;
@@ -125,9 +127,9 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
         autoCompleteRegion = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextRegioneModActivity);
         autoCompleteProvincia = findViewById(R.id.autoCompleteTextProvinciaModActivity);
         autoCompleteCity = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextCittaModActivity);
-        layoutTvRegion = findViewById(R.id.textInputRegioneLayoutModActivity);
-        layoutTvProvince = findViewById(R.id.textInputProvinciaLayoutModActivity);
-        layoutTvCity = findViewById(R.id.textInputCittaLayoutModActivity);
+        layoutRegion = findViewById(R.id.textInputRegioneLayoutModActivity);
+        layoutProvince = findViewById(R.id.textInputProvinciaLayoutModActivity);
+        layoutCity = findViewById(R.id.textInputCittaLayoutModActivity);
 
         adapterRegione = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, Regions.all_regions);
@@ -275,7 +277,8 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
         modifica.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (controlli_TextInput(nome, nomeLayout, cognome, cognomeLayout, mail, mailLayout, data, dataLayout, phone, phoneLayout, psw1, psw1Layout, psw2, psw2Layout)){
+                switch (controlli_TextInput(nome, nomeLayout, cognome, cognomeLayout, mail, mailLayout, data, dataLayout, phone, phoneLayout, psw1, psw1Layout, psw2, psw2Layout,
+                        layoutRegion, autoCompleteRegion, layoutProvince, autoCompleteProvincia, layoutCity, autoCompleteCity)) {
 
                     case 1:
                         nomeLayout.setError("Inserisci nome");
@@ -289,19 +292,35 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
                         dataLayout.setError("Inserisci data di nascita");
                         Toast.makeText(ModificaUtenteActivity.this, "Inserisci data di nascita", Toast.LENGTH_SHORT).show();
                         break;
+
                     case 4:
+                        layoutRegion.setError("Inserisci regione");
+                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci regione", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 5:
+                        layoutProvince.setError("Inserisci provincia");
+                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci provincia", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 6:
+                        layoutCity.setError("Inserisci citta");
+                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci citta", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 7:
                         mailLayout.setError("Inserisci mail");
                         Toast.makeText(ModificaUtenteActivity.this, "Inserisci mail", Toast.LENGTH_SHORT).show();
                         break;
-                    case 5:
+                    case 8:
                         phoneLayout.setError("Inserisci cellulare");
                         Toast.makeText(ModificaUtenteActivity.this, "Inserisci cellulare", Toast.LENGTH_SHORT).show();
                         break;
-                    case 6:
+                    case 9:
                         psw1Layout.setError("Inserisci password");
                         Toast.makeText(ModificaUtenteActivity.this, "Inserisci Password", Toast.LENGTH_SHORT).show();
                         break;
-                    case 7:
+                    case 10:
                         psw2Layout.setError("Inserisci password");
                         Toast.makeText(ModificaUtenteActivity.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
                         break;
@@ -353,35 +372,50 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
 
     private int controlli_TextInput(TextInputEditText name, TextInputLayout nomeLayout, TextInputEditText surname, TextInputLayout cognomeLayout, TextInputEditText mail, TextInputLayout mailLayout,
                                     TextInputEditText birth, TextInputLayout dataLayout, TextInputEditText phone, TextInputLayout phoneLayout, TextInputEditText psw1, TextInputLayout psw1Layout,
-                                    TextInputEditText psw2, TextInputLayout psw2Layout){
+                                    TextInputEditText psw2, TextInputLayout psw2Layout,
+                                    TextInputLayout regioneLayout, AutoCompleteTextView tvRegione,
+                                    TextInputLayout provinciaLayout, AutoCompleteTextView tvProvincia,
+                                    TextInputLayout cittaLayout,  AutoCompleteTextView tvCitta) {
 
-        if(isEmpty(name) == true){
+        if (isEmpty(name)) {
             return 1;
-        }else nomeLayout.setError(null);
+        } else nomeLayout.setError(null);
 
-        if(isEmpty(surname) == true){
+        if (isEmpty(surname)) {
             return 2;
-        }else cognomeLayout.setError(null);
+        } else cognomeLayout.setError(null);
 
-        if(isEmpty(birth) == true){
+        if (isEmpty(birth)) {
             return 3;
-        }else dataLayout.setError(null);
+        } else dataLayout.setError(null);
 
-        if(isEmpty(mail)  == true){
+        if (tvRegione.getText().toString() == null) {
             return 4;
-        }else mailLayout.setError(null);
+        } else regioneLayout.setError(null);
 
-        if(isEmpty(phone) == true){
+        if (tvProvincia.getText().toString() == null) {
             return 5;
-        }else phoneLayout.setError(null);
+        } else provinciaLayout.setError(null);
 
-        if(isEmpty(psw1)  == true){
+        if (tvCitta.getText().toString() == null) {
             return 6;
-        }else psw1Layout.setError(null);
-
-        if(isEmpty(psw2)  == true){
+        } else cittaLayout.setError(null);
+        if (isEmpty(mail)) {
             return 7;
-        }else psw2Layout.setError(null);
+        } else mailLayout.setError(null);
+
+        if (isEmpty(phone)) {
+            return 8;
+        } else phoneLayout.setError(null);
+
+        if (isEmpty(psw1)) {
+            return 9;
+        } else psw1Layout.setError(null);
+
+        if (isEmpty(psw2)) {
+            return 10;
+        } else psw2Layout.setError(null);
+
 
         return 0;
     }
