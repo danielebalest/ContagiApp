@@ -300,6 +300,7 @@ public class ProfiloGruppoFragment extends Fragment {
 
         return nuovoStato;
     }
+
     private void impostaStatoGruppo(int nStato, String idGruppo, FirebaseFirestore db) {
         switch (nStato){
             case 1:

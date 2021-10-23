@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Adapter;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -68,6 +69,11 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
         final Switch iscritto = view.findViewById(R.id.switch1);
         final Switch creati = view.findViewById(R.id.switch2);
         rvEventi = view.findViewById(R.id.rvEventi);
+
+        Log.d("listaEventiOnCreate", String.valueOf(listaEventi));
+        EventAdapter adapterVuoto = new EventAdapter(listaEventi);
+        rvEventi.setAdapter(adapterVuoto);
+
 
         caricaEventi();
 
@@ -249,36 +255,51 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
     private void caricaEventi(){
         listaEventi.clear();
 
-        db.collection("Eventi")
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            Evento evento = documentSnapshot.toObject(Evento.class);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    db.collection("Eventi")
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                                        Evento evento = documentSnapshot.toObject(Evento.class);
 
-                            try {
-                                Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
-                                Date dataAttuale = new Date(System.currentTimeMillis());
+                                        try {
+                                            Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
+                                            Date dataAttuale = new Date(System.currentTimeMillis());
 
-                                if(dataEvento.compareTo(dataAttuale) >= 0
-                                    && !evento.getAdmin().equals(getMailUtenteLoggato())
-                                        && !evento.getPartecipanti().contains(getMailUtenteLoggato())) {
+                                            if(dataEvento.compareTo(dataAttuale) >= 0
+                                                    && !evento.getAdmin().equals(getMailUtenteLoggato())
+                                                    && !evento.getPartecipanti().contains(getMailUtenteLoggato())) {
 
-                                    Log.d("idList", String.valueOf(idList));
-                                    Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
-                                    listaEventi.add(evento);
+                                                Log.d("idList", String.valueOf(idList));
+                                                Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
+                                                listaEventi.add(evento);
 
+                                                String id = documentSnapshot.getId();
+                                                idList.add(id);
+                                            }
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
 
-                                    String id = documentSnapshot.getId();
-                                    idList.add(id);
                                 }
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        }
 
+                            }); //toDo onFailure
+
+                        Thread.sleep(2000);
+                        Log.d("listaEventiDopoSleep", String.valueOf(listaEventi));
                         EventAdapter adapter = new EventAdapter(listaEventi);
+
+                        Log.d("adapter", String.valueOf(adapter));
+                        //rvEventi.setAdapter(adapter);
+
+
+                        /*
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
                         rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
@@ -310,9 +331,22 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                             }
 
                         }));
+                         */
+
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                }); //toDo onFailure
+                }
+            });
+
+        thread.start();
+
+
+
     }
+
+
 
 
     private String getMailUtenteLoggato(){
