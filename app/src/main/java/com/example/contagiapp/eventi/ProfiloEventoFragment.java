@@ -225,6 +225,8 @@ public class ProfiloEventoFragment extends Fragment {
                     String data = evento.getData();
                     String orario = evento.getOrario();
                     String indirizzo = evento.getIndirizzo();
+                    String regione = evento.getRegione();
+                    String provincia = evento.getProvincia();
                     String citta = evento.getCitta();
                     int numMax = evento.getNumeroMaxPartecipanti();
                     int numPartecipanti = evento.getPartecipanti().size();
@@ -234,8 +236,10 @@ public class ProfiloEventoFragment extends Fragment {
                     TextView tvDescrEvento = view.findViewById(R.id.tvDescrEvento2);
                     TextView tvDataEvento = view.findViewById(R.id.tvDataEvento);
                     TextView tvOrarioEvento = view.findViewById(R.id.tvOrarioEvento);
-                    TextView tvIndirizzoEvento = view.findViewById(R.id.tvIndirizzoEvento);
+                    TextView tvRegioneEvento = view.findViewById(R.id.tvRegioneEvento);
+                    TextView tvProvinciaEvento = view.findViewById(R.id.tvProvinciaEvento);
                     TextView tvCittaEvento = view.findViewById(R.id.tvCittaEvento);
+                    TextView tvIndirizzoEvento = view.findViewById(R.id.tvIndirizzoEvento);
                     TextView numMaxPartecipanti = view.findViewById(R.id.num_partecipanti_max);
                     TextView numDispono = view.findViewById(R.id.posti_disponibili);
                     TextView numParteci = view.findViewById(R.id.num_partecipanti);
@@ -245,8 +249,10 @@ public class ProfiloEventoFragment extends Fragment {
                     tvDescrEvento.setText(descrizione);
                     tvDataEvento.setText(data);
                     tvOrarioEvento.setText(orario);
+                    tvRegioneEvento.setText("Regione: " + regione);
+                    tvProvinciaEvento.setText("Provincia: " + provincia);
+                    tvCittaEvento.setText("Città: " +citta);
                     tvIndirizzoEvento.setText("Indirizzo: "+indirizzo);
-                    tvCittaEvento.setText("Città: "+citta);
                     numMaxPartecipanti.setText("Numero massimo di partecipanti:   "+numMax);
                     numDispono.setText("Numero posti disponibili:   "+numDisponibili);
                     numParteci.setText("Numero di iscritti all'evento:   "+numPartecipanti);

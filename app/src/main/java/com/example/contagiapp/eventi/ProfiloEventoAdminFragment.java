@@ -60,7 +60,6 @@ public class ProfiloEventoAdminFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -116,22 +115,6 @@ public class ProfiloEventoAdminFragment extends Fragment {
         return view;
     }
 
-    /*@Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (keyCode == KeyEvent.KEYCODE_BACK)
-        {
-            //Back buttons was pressed, do whatever logic you want
-        }
-
-        return false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        EventsFragment events = new EventsFragment();
-        showFragment(events);
-    }*/
 
     private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
         storageRef.child(directory + "/" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
@@ -162,8 +145,10 @@ public class ProfiloEventoAdminFragment extends Fragment {
                     String descrizione = evento.getDescrizione();
                     String data = evento.getData();
                     String orario = evento.getOrario();
-                    String indirizzo = evento.getIndirizzo();
+                    String regione = evento.getRegione();
+                    String provincia = evento.getProvincia();
                     String citta = evento.getCitta();
+                    String indirizzo = evento.getIndirizzo();
                     int numMax = evento.getNumeroMaxPartecipanti();
                     int numPartecipanti = evento.getPartecipanti().size();
                     int numDisponibili = numMax - numPartecipanti;
@@ -173,19 +158,23 @@ public class ProfiloEventoAdminFragment extends Fragment {
                     TextView tvDataEvento = view.findViewById(R.id.tvDataEventoAdmin);
                     TextView tvOrarioEvento = view.findViewById(R.id.tvOrarioEventoAdmin);
                     TextView tvIndirizzoEvento = view.findViewById(R.id.tvIndirizzoEventoAdmin);
+                    TextView tvRegioneEvento = view.findViewById(R.id.tvRegioneEventoAdmin);
+                    TextView tvProvinciaEvento = view.findViewById(R.id.tvProvinciaEventoAdmin);
                     TextView tvCittaEvento = view.findViewById(R.id.tvCittaEventoAdmin);
                     TextView numMaxPartecipanti = view.findViewById(R.id.num_partecipanti_max);
-                    TextView numDispono = view.findViewById(R.id.posti_disponibili);
+                    TextView numDispon = view.findViewById(R.id.posti_disponibili);
                     TextView numParteci = view.findViewById(R.id.num_partecipanti);
 
                     tvNomeEvento.setText("Nome evento: "+nome);
                     tvDescrEvento.setText(descrizione);
                     tvDataEvento.setText(data);
                     tvOrarioEvento.setText(orario);
+                    tvRegioneEvento.setText("Regione: " + regione);
+                    tvProvinciaEvento.setText("Provincia: " + provincia);
+                    tvCittaEvento.setText("Città: " +citta);
                     tvIndirizzoEvento.setText("Indirizzo: "+indirizzo);
-                    tvCittaEvento.setText("Città: "+citta);
                     numMaxPartecipanti.setText("Numero massimo di partecipanti:   "+numMax);
-                    numDispono.setText("Numero posti disponibili:   "+numDisponibili);
+                    numDispon.setText("Numero posti disponibili:   "+numDisponibili);
                     numParteci.setText("Numero di iscritti all'evento:   "+numPartecipanti);
 
                 } else {

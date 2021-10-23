@@ -96,6 +96,18 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tvRegioneEventoAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Regione" />
+
+            <TextView
+                android:id="@+id/tvProvinciaEventoAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Provincia" />
+
+            <TextView
                 android:id="@+id/tvCittaEventoAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -150,6 +162,7 @@
 
             </LinearLayout>
     </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPartecipantiProfiloEventoAdmin"
         android:layout_width="match_parent"

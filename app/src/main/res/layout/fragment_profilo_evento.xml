@@ -97,6 +97,18 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvRegioneEvento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Regione" />
+
+                <TextView
+                    android:id="@+id/tvProvinciaEvento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Provincia" />
+
+                <TextView
                     android:id="@+id/tvCittaEvento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
