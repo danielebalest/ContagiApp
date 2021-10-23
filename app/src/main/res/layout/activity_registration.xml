@@ -103,8 +103,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputRegioneLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -127,7 +125,6 @@
 
 
         </com.google.android.material.textfield.TextInputLayout>
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputProvinciaLayout"

@@ -124,6 +124,77 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputRegioneEventoLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Regione"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
+            >
+
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextRegioneEvento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:inputType="textAutoComplete|textAutoCorrect"
+                android:textColor="@color/black" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputProvinciaEventoLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Provincia"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
+
+
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextProvinciaEvento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:inputType="textAutoComplete|textAutoCorrect"
+                android:textColor="@color/black" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputCittaLayoutEvento"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Città"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
+            >
+
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextCittaEvento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:imeOptions="actionSearch"
+                android:inputType="textAutoComplete|textAutoCorrect"
+                android:textColor="@color/black" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputCitta"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"

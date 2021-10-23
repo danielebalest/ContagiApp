@@ -181,7 +181,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("Provincia selezionata", autoCompleteProvincia.getText().toString());
-                        provinciaSelezionata = autoCompleteRegion.getText().toString();
+                        provinciaSelezionata = autoCompleteProvincia.getText().toString();
                         layoutCity.setEnabled(true);
                         adapterCitta = new ArrayAdapter<String>(RegistrationActivity.this,
                                 android.R.layout.simple_dropdown_item_1line,

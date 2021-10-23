@@ -11,8 +11,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -27,22 +32,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.example.contagiapp.R;
-import com.example.contagiapp.gruppi.AddImgGruppoActivity;
-import com.example.contagiapp.gruppi.CreaGruppoActivity;
 import com.example.contagiapp.utente.Utente;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -53,25 +50,21 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
-
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
-
+import dizionarioPerCitta.Cities;
+import dizionarioPerCitta.Province;
+import dizionarioPerCitta.Regions;
 import es.dmoral.toasty.Toasty;
 
 
 public class NewEventsActivity extends AppCompatActivity {
 
     MapView mapView;
-    EditText editTextLuogo;
+    EditText editTextIndirizzo;
 
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private static final String TAG = "NewEventsFragment";
@@ -94,6 +87,19 @@ public class NewEventsActivity extends AppCompatActivity {
     private EditText citta;
     private EditText indirizzo;
 
+    private AutoCompleteTextView autoCompleteRegion;
+    private AutoCompleteTextView autoCompleteProvincia;
+    private AutoCompleteTextView autoCompleteCity;
+    private TextInputLayout layoutRegion;
+    private TextInputLayout layoutProvince;
+    private TextInputLayout layoutCity;
+
+    String regioneSelezionata = null;
+    String provinciaSelezionata = null;
+    String cittaSelezionata = null;
+    ArrayAdapter<String> adapterProvincia = null;
+    ArrayAdapter<String> adapterCitta = null;
+
     public static final int PICK_IMAGE = 1;
     private Uri imageUri;
     private final static String storageDirectory = "eventi";
@@ -114,6 +120,14 @@ public class NewEventsActivity extends AppCompatActivity {
         orario= findViewById(R.id.orarioEvento);
         citta = findViewById(R.id.editTextCitta);
         indirizzo = findViewById(R.id.editTextIndirizzo);
+
+        autoCompleteRegion = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextRegioneEvento);
+        autoCompleteProvincia = findViewById(R.id.autoCompleteTextProvinciaEvento);
+        autoCompleteCity = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextCittaEvento);
+        layoutRegion = findViewById(R.id.textInputRegioneEventoLayout);
+        layoutProvince = findViewById(R.id.textInputProvinciaEventoLayout);
+        layoutCity = findViewById(R.id.textInputCittaLayoutEvento);
+
 
         Bundle bundle = getIntent().getExtras();
         cond = bundle.getBoolean("scelta");
@@ -167,7 +181,101 @@ public class NewEventsActivity extends AppCompatActivity {
 // che da "EventsFragment" e perchè torna indietro in ProfiloEventoFragment anzichè EventsFragment
 // aggiustare i controlli per data e orario e capire perchè quando apro il calendario anzichè 12 mi esce 1
 
-        editTextLuogo = findViewById(R.id.editTextIndirizzo);
+        ArrayAdapter<String> adapterRegione = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, Regions.all_regions);
+
+
+        autoCompleteRegion.setAdapter(adapterRegione);
+        layoutProvince.setEnabled(false);
+        layoutCity.setEnabled(false);
+
+
+        autoCompleteRegion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("Regione selezionata", autoCompleteRegion.getText().toString());
+                regioneSelezionata = autoCompleteRegion.getText().toString();
+                layoutProvince.setEnabled(true);
+                adapterProvincia = new ArrayAdapter<String>(NewEventsActivity.this,
+                        android.R.layout.simple_dropdown_item_1line,
+                        Province.map.get(autoCompleteRegion.getText().toString()));
+                autoCompleteProvincia.setAdapter(adapterProvincia);
+
+                autoCompleteProvincia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d("Provincia selezionata", autoCompleteProvincia.getText().toString());
+                        provinciaSelezionata = autoCompleteProvincia.getText().toString();
+                        layoutCity.setEnabled(true);
+                        adapterCitta = new ArrayAdapter<String>(NewEventsActivity.this,
+                                android.R.layout.simple_dropdown_item_1line,
+                                Cities.mapPerProvincia.get(autoCompleteProvincia.getText().toString()));
+
+                        autoCompleteCity.setAdapter(adapterCitta);
+
+                        autoCompleteCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.d("Citta selezionata", autoCompleteCity.getText().toString());
+                                cittaSelezionata = autoCompleteCity.getText().toString();
+                            }
+                        });
+                    }
+                });
+
+
+            }
+
+        });
+
+
+        autoCompleteProvincia.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d("provincia", String.valueOf(provinciaSelezionata));
+                layoutCity.setEnabled(false);
+                autoCompleteCity.setText(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("provincia", String.valueOf(provinciaSelezionata));
+                layoutCity.setEnabled(false);
+                autoCompleteCity.setText(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        autoCompleteRegion.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d("regione", String.valueOf(regioneSelezionata));
+                layoutProvince.setEnabled(false);
+                autoCompleteProvincia.setText(null);
+                layoutCity.setEnabled(false);
+                autoCompleteCity.setText(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("regione", String.valueOf(regioneSelezionata));
+                layoutProvince.setEnabled(false);
+                autoCompleteProvincia.setText(null);
+                layoutCity.setEnabled(false);
+                autoCompleteCity.setText(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        editTextIndirizzo = findViewById(R.id.editTextIndirizzo);
 
 
         /*mapView = findViewById(R.id.map_view);
@@ -291,7 +399,7 @@ public class NewEventsActivity extends AppCompatActivity {
 
     private void addEventToDb(){
 
-        if(controlloEditText(nome.getText().toString(), numeroMaxP.getText().toString(), descrizione.getText().toString(), citta.getText().toString(), indirizzo.getText().toString())){
+        if(controlloEditText(nome.getText().toString(), numeroMaxP.getText().toString(), descrizione.getText().toString(), cittaSelezionata, indirizzo.getText().toString())){
             String mail = getMailUtenteLoggato();
             evento.setAdmin(mail);
             evento.setNome(nome.getText().toString());
@@ -299,7 +407,9 @@ public class NewEventsActivity extends AppCompatActivity {
             evento.setNumeroMaxPartecipanti(Integer.parseInt(numeroMaxP.getText().toString()));
             evento.setData(data.getText().toString()); //da vedere controllo
             evento.setOrario(orario.getText().toString());
-            evento.setCitta(citta.getText().toString());
+            evento.setRegione(regioneSelezionata);
+            evento.setProvincia(provinciaSelezionata);
+            evento.setCitta(cittaSelezionata);
             evento.setIndirizzo(indirizzo.getText().toString());
             evento.setStatoRosso(false);
 
@@ -477,7 +587,7 @@ public class NewEventsActivity extends AppCompatActivity {
         TextInputLayout textInputLayoutNome = findViewById(R.id.textInputNomeEventoLayout);
         TextInputLayout textInputLayoutNumMaxPartecipanti = findViewById(R.id.textInputNumMaxPartecipantiLayout);
         TextInputLayout textInputLayoutDescrEvento = findViewById(R.id.textInputDescrEvento);
-        TextInputLayout textInputLayoutCitta = findViewById(R.id.textInputCitta);
+        TextInputLayout textInputLayoutCitta = findViewById(R.id.textInputCittaLayoutEvento);
         TextInputLayout textInputLayoutIndirizzo = findViewById(R.id.textInputIndirizzo);
 
         if ((!nomeEvento.isEmpty()) && (!numMaxPartecipanti.isEmpty()) && (!descrEvento.isEmpty()) && (!citta.isEmpty()) && (!indirizzo.isEmpty())) { //se sono tutti validi

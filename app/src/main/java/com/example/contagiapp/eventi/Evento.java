@@ -6,6 +6,8 @@ public class Evento {
     private String idEvento;
     private String nome;
     private String descrizione;
+    private String regione;
+    private String provincia;
     private String citta;
     private String indirizzo;
     private String data;
@@ -66,6 +68,22 @@ public class Evento {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public String getRegione() {
+        return regione;
+    }
+
+    public void setRegione(String regione) {
+        this.regione = regione;
+    }
+
+    public String getProvincia() {
+        return provincia;
+    }
+
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
     }
 
     public String getCitta() {
