@@ -118,7 +118,6 @@ public class NewEventsActivity extends AppCompatActivity {
         numeroMaxP = findViewById(R.id.editTextNumMaxPartecipanti);
         data = findViewById(R.id.dataEvento);
         orario= findViewById(R.id.orarioEvento);
-        citta = findViewById(R.id.editTextCitta);
         indirizzo = findViewById(R.id.editTextIndirizzo);
 
         autoCompleteRegion = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextRegioneEvento);
