@@ -48,7 +48,31 @@
     //Descrizione stati
     <string name="DescrStatoGiallo">Lo stato giallo indica che l\'utente è </string>
     <string name="DescrStatoVerde">Lo stato verde indica che l\'utente è negativo al Covid19 visti i risultati del tampone effettuato</string>
+    <string name="DescrStatoArancione"></string>
     <string name="DescrStatoRosso">Lo stato indica che l\'utente è positivo al Covid19</string>
-    <string name="bo">5y4htrtw</string>
+
+    //GroupFragment
+    <string name="your_groups">Your groups</string>
+
+    //addFriends
+    <string name="select_user">Select user</string>
+
+    //addImgGruppo
+    <string name="add_cover_img">Add a cover image</string>
+    <string name="cover_img">cover image</string>
+    <string name="descr_add_cover_img">Give people an idea of what your group is about with a photo.</string>
+    <string name="upload_cover_img">Upload cover image</string>
+    <string name="next">Next</string>
+
+
+
+
+
+
+
+
+
+
+
 
 </resources>

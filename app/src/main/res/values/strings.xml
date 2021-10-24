@@ -80,8 +80,28 @@
     //Descrizione stati
     <string name="DescrStatoGiallo">Lo stato giallo</string>
     <string name="DescrStatoVerde">Lo stato verde indica che l\'utente è negativo al tampone effettuato</string>
-    <string name="DescrStatoRosso">Lo stato </string>
-    <string name="bo">ew</string>
+    <string name="DescrStatoArancione">Lo stato </string>
+    <string name="DescrStatoRosso">ew</string>
+
+    //GroupFragment
+    <string name="your_groups">I tuoi gruppi</string>
+
+    //addFriends
+    <string name="select_user">Seleziona utente</string>
+
+    //addImgGruppo
+    <string name="add_cover_img">Aggiungi un\'immagine di copertina</string>
+    <string name="cover_img">immagine di copertina</string>
+    <string name="descr_add_cover_img">Dai un\'idea alle persone di cosa tratta il tuo gruppo con una foto.</string>
+    <string name="upload_cover_img">Carica immagine di copertina</string>
+    <string name="next">Avanti</string>
+
+
+
+
+
+
+
 
 
 </resources>
