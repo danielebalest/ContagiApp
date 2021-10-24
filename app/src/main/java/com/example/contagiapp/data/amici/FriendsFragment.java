@@ -62,6 +62,7 @@ public class FriendsFragment extends Fragment {
     ListView listView;
     TextInputEditText editText;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String mailUtenteLoggato;
     private FloatingActionButton aggiungi_amici;
     private RecyclerView recyclerView;
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
@@ -92,7 +93,7 @@ public class FriendsFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), AddFriendsActivity.class);
                     intent.putExtra("aggiungere", "no");
                     intent.putExtra("cerca", editText.getText().toString());
-                    intent.putExtra("mail", getMailUtenteLoggato());
+                    intent.putExtra("mail", mailUtenteLoggato);
                     startActivity(intent);
                     return true;
                 }
@@ -114,6 +115,7 @@ public class FriendsFragment extends Fragment {
 
 
         String mailUtenteLoggato = getMailUtenteLoggato();
+
         //Otteniamo la lista della mail degli amici
         db.collection("Utenti")
                 .document(mailUtenteLoggato).get()
@@ -142,7 +144,7 @@ public class FriendsFragment extends Fragment {
         Intent addFriendsIntent = new Intent(getActivity(), AddFriendsActivity.class);
         addFriendsIntent.putExtra("aggiungere", "si");
         addFriendsIntent.putExtra("listaMailAmici", listaMail);
-        addFriendsIntent.putExtra("mailUtenteLoggato", getMailUtenteLoggato());
+        addFriendsIntent.putExtra("mailUtenteLoggato", mailUtenteLoggato);
         startActivity(addFriendsIntent);
     }
 
@@ -195,7 +197,7 @@ public class FriendsFragment extends Fragment {
                                         Intent profiloIntent = new Intent(getActivity(), ProfiloUtentiActivity.class);
                                         profiloIntent.putExtra("id", idUtenteSelezionato);
                                         profiloIntent.putExtra( "amico", "si");
-                                        profiloIntent.putExtra("mailLoggato", getMailUtenteLoggato());
+                                        profiloIntent.putExtra("mailLoggato", mailUtenteLoggato);
                                         startActivity(profiloIntent);
                                     }
 

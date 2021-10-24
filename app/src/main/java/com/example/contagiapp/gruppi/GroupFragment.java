@@ -55,6 +55,8 @@ public class GroupFragment extends Fragment {
     private Utente utente;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FloatingActionButton crea_gruppo;
+    String mailUtenteLoggato;
+
     TextInputEditText editTextSearch;
 
     ArrayList<Gruppo> listaGruppiCreati;
@@ -121,7 +123,7 @@ public class GroupFragment extends Fragment {
     private void caricaGruppi() {
         listaGruppiCreati = new ArrayList<Gruppo>();
         listaGruppiPartecipante = new ArrayList<Gruppo>();
-        String mailAdmin = getMailUtenteLoggato();
+        String mailAdmin = mailUtenteLoggato;
 
 
         db.collection("Gruppo").whereEqualTo("admin", mailAdmin)
@@ -189,7 +191,7 @@ public class GroupFragment extends Fragment {
             }
         }); //toDo onFailure
 
-        db.collection("Gruppo").whereArrayContains("partecipanti", getMailUtenteLoggato())
+        db.collection("Gruppo").whereArrayContains("partecipanti", mailUtenteLoggato)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override

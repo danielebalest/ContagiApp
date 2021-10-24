@@ -55,6 +55,7 @@ public class NotifyFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti
+    String mailUtenteLoggato;
     private RecyclerView rvEventiACuiPartecipo;
     private RecyclerView rvEventiRossi;
     private ArrayList<Evento> listaEventi = new ArrayList<Evento>();
@@ -74,6 +75,7 @@ public class NotifyFragment extends Fragment {
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_notify, container, false);
+        mailUtenteLoggato = getMailUtenteLoggato();
 
         RecyclerView rvNoEventiPartecipazione = view.findViewById(R.id.rvNoPartecipazioneEvento);
         rvEventiRossi = view.findViewById(R.id.rvEventiRossi);
@@ -81,7 +83,6 @@ public class NotifyFragment extends Fragment {
         final RecyclerView recyclerViewInviti =  view.findViewById(R.id.rvInviti);
         rvEventiACuiPartecipo = view.findViewById(R.id.rvEventiACuiPartecipo);
 
-        String mailUtenteLoggato = getMailUtenteLoggato();
         //Otteniamo la lista della mail degli amici
         db.collection("Utenti")
                 .document(mailUtenteLoggato)
@@ -149,7 +150,7 @@ public class NotifyFragment extends Fragment {
         final ArrayList<Evento> eventi = new ArrayList<>();
 
         db.collection("Eventi")
-                .whereArrayContains("partecipanti", getMailUtenteLoggato())
+                .whereArrayContains("partecipanti", mailUtenteLoggato)
                 .whereEqualTo("statoRosso",true)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -172,7 +173,7 @@ public class NotifyFragment extends Fragment {
                                 }
                             }
 
-                            EventoRossoAdapter adapter = new EventoRossoAdapter(getContext(), eventi, getMailUtenteLoggato(), utente);
+                            EventoRossoAdapter adapter = new EventoRossoAdapter(getContext(), eventi, mailUtenteLoggato, utente);
 
                             rvEventi.setAdapter(adapter);
                             rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -212,7 +213,7 @@ public class NotifyFragment extends Fragment {
                             utenti.add(user);
                             Log.d("richiesteSize", String.valueOf(utenti.size()));
 
-                            db.collection("Utenti").document(getMailUtenteLoggato())
+                            db.collection("Utenti").document(mailUtenteLoggato)
                                     .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -224,14 +225,14 @@ public class NotifyFragment extends Fragment {
                             //
                             //apro il documento dell'utente loggato
                             //nell'adapter vengono aggiornati gli amici al click del bottone Accetta
-                            db.collection("Utenti").document(getMailUtenteLoggato())
+                            db.collection("Utenti").document(mailUtenteLoggato)
                                     .get()
                                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                         @Override
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                                             if (documentSnapshot.exists()){
                                                 final Utente utenteLoggato = documentSnapshot.toObject(Utente.class);
-                                                RichiesteAdapter adapter = new RichiesteAdapter(utenti, getMailUtenteLoggato(), utenteLoggato);
+                                                RichiesteAdapter adapter = new RichiesteAdapter(utenti, mailUtenteLoggato, utenteLoggato);
                                                 recyclerView.setAdapter(adapter);
                                                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -241,7 +242,7 @@ public class NotifyFragment extends Fragment {
                                         }
                                     });
 
-                            //RichiesteAdapter adapter = new RichiesteAdapter(utenti, getMailUtenteLoggato(), utenteLoggato);
+                            //RichiesteAdapter adapter = new RichiesteAdapter(utenti, mailUtenteLoggato, utenteLoggato);
 
                             String id = user.getMail();
                             idList.add(id);
@@ -311,7 +312,7 @@ public class NotifyFragment extends Fragment {
 
 
 
-                            db.collection("Utenti").document(getMailUtenteLoggato())
+                            db.collection("Utenti").document(mailUtenteLoggato)
                                     .get()
                                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                         @Override
@@ -319,7 +320,7 @@ public class NotifyFragment extends Fragment {
                                             if (documentSnapshot.exists()){
                                                 final Utente utenteLoggato = documentSnapshot.toObject(Utente.class);
                                                 utenteLoggato.setInvitiRicevuti(listaInviti);
-                                                InvitiAdapter adapter = new InvitiAdapter(gruppi, getMailUtenteLoggato(), utenteLoggato);
+                                                InvitiAdapter adapter = new InvitiAdapter(gruppi, mailUtenteLoggato, utenteLoggato);
                                                 recyclerView.setAdapter(adapter);
                                                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -369,7 +370,7 @@ public class NotifyFragment extends Fragment {
 
 
         db.collection("Eventi")
-                //.whereArrayContains("partecipanti", getMailUtenteLoggato())
+                //.whereArrayContains("partecipanti", mailUtenteLoggato)
                 .orderBy("data", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -384,8 +385,8 @@ public class NotifyFragment extends Fragment {
                                 Date dataAttuale = new Date(System.currentTimeMillis());
 
                                 if(dataEvento.compareTo(dataAttuale) >= 0
-                                        && (evento.getPartecipanti().contains(getMailUtenteLoggato()) ||
-                                        evento.getAdmin().equals(getMailUtenteLoggato()))) {
+                                        && (evento.getPartecipanti().contains(mailUtenteLoggato) ||
+                                        evento.getAdmin().equals(mailUtenteLoggato))) {
 
                                     listaEventi.add(evento);
 
@@ -407,7 +408,7 @@ public class NotifyFragment extends Fragment {
                             @Override
                             public void onClick(View view, int position) {
                                 Evento evento = listaEventi.get(position);
-                                if(evento.getAdmin().equals(getMailUtenteLoggato())) {
+                                if(evento.getAdmin().equals(mailUtenteLoggato)) {
                                     ProfiloEventoAdminFragment fragment = new ProfiloEventoAdminFragment();
 
                                     Bundle bundle = new Bundle();
@@ -423,7 +424,7 @@ public class NotifyFragment extends Fragment {
                                     fr.commit();
                                 }
 
-                                if(evento.getPartecipanti().contains(getMailUtenteLoggato())) {
+                                if(evento.getPartecipanti().contains(mailUtenteLoggato)) {
                                     EliminazionePartecipazioneEvento fragment = new EliminazionePartecipazioneEvento();
 
                                     Bundle bundle = new Bundle();

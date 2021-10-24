@@ -28,10 +28,12 @@ import android.widget.Toast;
 import com.example.contagiapp.R;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
@@ -48,10 +50,12 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FloatingActionButton new_event;
+    String mailUtenteLoggato;
     TextInputEditText editText;
     RecyclerView rvEventi;
     ArrayList<Evento> listaEventi = new ArrayList<Evento>();
     ArrayList<Evento> listaEventiCreati = new ArrayList<Evento>();
+    ArrayList<Evento> listaEventiIscritto = new ArrayList<Evento>();
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli eventi
     ArrayList<String> listaIDEventoUtenteLoggato = new ArrayList<String>();
     private boolean switchiscritto = false;
@@ -63,9 +67,19 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
+
+
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_events, container, false);
+        mailUtenteLoggato = getMailUtenteLoggato();
+
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+
+        db.setFirestoreSettings(settings);
+
         final Switch iscritto = view.findViewById(R.id.switch1);
         final Switch creati = view.findViewById(R.id.switch2);
         rvEventi = view.findViewById(R.id.rvEventi);
@@ -105,9 +119,10 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
     }
 
     private void caricaEventiCreati(){
+        idList.clear();
         listaEventiCreati.clear();
         db.collection("Eventi")
-                .whereEqualTo("admin", getMailUtenteLoggato())
+                .whereEqualTo("admin", mailUtenteLoggato)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -180,16 +195,17 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
                         }));
 
+
                     }
                 });
 
     }
 
     private void caricaEventiIscritto(){
-
-        listaEventi.clear();
+        listaEventiIscritto.clear();
+        idList.clear();
         db.collection("Eventi")
-                .whereArrayContains("partecipanti", getMailUtenteLoggato())
+                .whereArrayContains("partecipanti", mailUtenteLoggato)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -201,10 +217,10 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                                 Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
                                 Date dataAttuale = new Date(System.currentTimeMillis());
 
-                                if(dataEvento.compareTo(dataAttuale) >= 0 && !evento.getAdmin().equals(getMailUtenteLoggato())) {
+                                if(dataEvento.compareTo(dataAttuale) >= 0 && !evento.getAdmin().equals(mailUtenteLoggato)) {
                                     Log.d("idList", String.valueOf(idList));
                                     Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
-                                    listaEventi.add(evento);
+                                    listaEventiIscritto.add(evento);
 
 
                                     String id = documentSnapshot.getId();
@@ -215,7 +231,9 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                             }
                         }
 
-                        EventAdapter adapter = new EventAdapter(listaEventi);
+                        Log.d("listaEventiIscritto", String.valueOf(listaEventiIscritto));
+
+                        EventAdapter adapter = new EventAdapter(listaEventiIscritto);
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
                         rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
@@ -252,54 +270,42 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                 }); //toDo onFailure
     }
 
+
+
     private void caricaEventi(){
         listaEventi.clear();
+        idList.clear();
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    db.collection("Eventi")
-                            .get()
-                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                @Override
-                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                                        Evento evento = documentSnapshot.toObject(Evento.class);
+        db.collection("Eventi")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            Evento evento = documentSnapshot.toObject(Evento.class);
 
-                                        try {
-                                            Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
-                                            Date dataAttuale = new Date(System.currentTimeMillis());
+                            try {
+                                Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
+                                Date dataAttuale = new Date(System.currentTimeMillis());
 
-                                            if(dataEvento.compareTo(dataAttuale) >= 0
-                                                    && !evento.getAdmin().equals(getMailUtenteLoggato())
-                                                    && !evento.getPartecipanti().contains(getMailUtenteLoggato())) {
+                                if(dataEvento.compareTo(dataAttuale) >= 0
+                                        && !evento.getAdmin().equals(mailUtenteLoggato)
+                                        && !evento.getPartecipanti().contains(mailUtenteLoggato)) {
 
-                                                Log.d("idList", String.valueOf(idList));
-                                                Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
-                                                listaEventi.add(evento);
+                                    Log.d("idList", String.valueOf(idList));
+                                    Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
+                                    listaEventi.add(evento);
 
-                                                String id = documentSnapshot.getId();
-                                                idList.add(id);
-                                            }
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-
+                                    String id = documentSnapshot.getId();
+                                    idList.add(id);
                                 }
-
-                            }); //toDo onFailure
-
-                        Thread.sleep(2000);
-                        Log.d("listaEventiDopoSleep", String.valueOf(listaEventi));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        Log.d("listaEventiOutFor", String.valueOf(listaEventi));
                         EventAdapter adapter = new EventAdapter(listaEventi);
 
-                        Log.d("adapter", String.valueOf(adapter));
-                        //rvEventi.setAdapter(adapter);
-
-
-                        /*
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
                         rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
@@ -331,21 +337,14 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                             }
 
                         }));
-                         */
 
 
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
-                }
-            });
 
-        thread.start();
-
+                }); //toDo onFailure
 
 
     }
-
 
 
 

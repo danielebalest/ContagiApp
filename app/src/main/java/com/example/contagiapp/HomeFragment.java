@@ -33,6 +33,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -57,6 +58,7 @@ public class HomeFragment extends Fragment {
     private  MaterialButton btnCreateEvents;
     private TextView tvStatusDescr;
     private String statoUtente;
+    private String mailUtenteLoggato;
 
     ColorStateList red = ColorStateList.valueOf(Color.parseColor("#FF0000"));
     ColorStateList yellow = ColorStateList.valueOf(Color.parseColor("#FFF8F405"));
@@ -70,13 +72,24 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
+
+        mailUtenteLoggato = getMailUtenteLoggato();
+
         View view;
         view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+
+        db.setFirestoreSettings(settings);
+
         btnCreateEvents = view.findViewById(R.id.btnCreateEvent);
         btnSearchEvents = view.findViewById(R.id.btnSearchEvent);
         status = view.findViewById(R.id.statusCircle2);
-        tvStatusDescr = view.findViewById(R.id.tvStatusDescription);
+        tvStatusDescr = view.findViewById(R.id.tvStatusDescriptionHome);
 
 
         btnCreateEvents.setOnClickListener(new View.OnClickListener() {
@@ -106,13 +119,13 @@ public class HomeFragment extends Fragment {
                 caricato = false;
 
                 db.collection("Utenti")
-                        .document(getMailUtenteLoggato())
+                        .document(mailUtenteLoggato)
                         .get()
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 Utente utente = documentSnapshot.toObject(Utente.class);
-                                Log.d("getMailUtenteLoggato", getMailUtenteLoggato());
+                                //Log.d("getMailUtenteLoggato", getMailUtenteLoggato());
                                 String stato = utente.getStato();
                                 String dataStato = utente.getDataPositivita();
 
@@ -130,7 +143,7 @@ public class HomeFragment extends Fragment {
 
                                             //864000000 millisecondi = 10 giorni
                                             if(dataAttuale.getTime() - dataPositivita.getTime() >= 864000000) {
-                                                db.collection("Utenti").document(getMailUtenteLoggato()).update("stato", "arancione", "dataPositivita", stringDataAttuale);
+                                                db.collection("Utenti").document(mailUtenteLoggato).update("stato", "arancione", "dataPositivita", stringDataAttuale);
                                                 status.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 165, 0)));
                                                 setStato("arancione", stringDataAttuale);
                                             } else {
@@ -147,7 +160,8 @@ public class HomeFragment extends Fragment {
                                         break;
 
                                     case "giallo" : status.setBackgroundTintList(yellow);
-                                        tvStatusDescr.setText(getString(R.string.DescrStatoGiallo));
+                                        //tvStatusDescr.setText(getActivity().getString(R.string.DescrStatoGiallo));
+                                        tvStatusDescr.setText("fevefvefv");
                                         break;
 
                                     case "arancione" :
@@ -160,7 +174,7 @@ public class HomeFragment extends Fragment {
 
                                             //864000000 millisecondi = 10 giorni
                                             if(dataAttuale.getTime() - dataPositivita.getTime() >= 864000000) {
-                                                db.collection("Utenti").document(getMailUtenteLoggato()).update("stato", "giallo", "dataPositivita", stringDataAttuale);
+                                                db.collection("Utenti").document(mailUtenteLoggato).update("stato", "giallo", "dataPositivita", stringDataAttuale);
                                                 status.setBackgroundTintList(yellow);
                                                 setStato("giallo", stringDataAttuale);
                                             } else status.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 165, 0)));
@@ -186,6 +200,7 @@ public class HomeFragment extends Fragment {
     private String getMailUtenteLoggato(){
         Utente utente;
         Gson gson = new Gson();
+
         SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
         String json = prefs.getString("utente", "no");
         String mailUtenteLoggato;
@@ -248,7 +263,7 @@ public class HomeFragment extends Fragment {
         final ArrayList<String> eventi = finalEventi;
 
         db.collection("Eventi")
-                .whereArrayContains("partecipanti", getMailUtenteLoggato())
+                .whereArrayContains("partecipanti", mailUtenteLoggato)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -258,7 +273,7 @@ public class HomeFragment extends Fragment {
                         Evento ev = documentSnapshot.toObject(Evento.class);
                         ArrayList<String> partecipanti;
                         partecipanti = ev.getPartecipanti();
-                        partecipanti.remove(getMailUtenteLoggato());
+                        partecipanti.remove(mailUtenteLoggato);
                         Log.d("evento da rimuovere", ev.getIdEvento());
 
                         db.collection("Eventi").document(ev.getIdEvento()).update("partecipanti", partecipanti);
