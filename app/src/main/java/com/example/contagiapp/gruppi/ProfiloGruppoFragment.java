@@ -239,6 +239,7 @@ public class ProfiloGruppoFragment extends Fragment {
 
 
                                 }
+
                                 Thread.sleep(2000);
                                 Log.d("dopoSleep", String.valueOf(listaPartecipanti));
                                 //todo: richiamare il metodo per lo stato del gruppo

@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.contagiapp.R;
 import com.example.contagiapp.utente.Utente;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -57,7 +58,6 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
     ArrayList<Evento> listaEventiCreati = new ArrayList<Evento>();
     ArrayList<Evento> listaEventiIscritto = new ArrayList<Evento>();
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli eventi
-    ArrayList<String> listaIDEventoUtenteLoggato = new ArrayList<String>();
     private boolean switchiscritto = false;
     private boolean switchcreato = false;
 
@@ -91,6 +91,44 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
         caricaEventi();
 
+        rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+                String idEventoSelezionato = idList.get(position);
+                Log.i("idList: ", idEventoSelezionato);
+                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
+
+                ProfiloEventoFragment fragment = new ProfiloEventoFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("idEvento", idEventoSelezionato);
+
+                fragment.setArguments(bundle);
+
+                //richiamo il fragment
+                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+                fr.replace(R.id.container,fragment);
+                fr.addToBackStack(null); //serve per tornare al fragment precedente
+                fr.commit();
+
+                iscritto.setChecked(false);
+                creati.setChecked(false);
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+
+        }));
+
+
+
+
+
+
         iscritto.setOnCheckedChangeListener(this);
         creati.setOnCheckedChangeListener(this);
 
@@ -121,6 +159,9 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
     private void caricaEventiCreati(){
         idList.clear();
         listaEventiCreati.clear();
+
+        Log.d("sonocaricaEventiCreati", "caricaEventiCreati");
+
         db.collection("Eventi")
                 .whereEqualTo("admin", mailUtenteLoggato)
                 .get()
@@ -130,13 +171,11 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                         for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
 
                             String idEvento = documentSnapshot.getId();
+                            Log.d("idEventoCreato", idEvento);
 
-                            listaIDEventoUtenteLoggato.add(idEvento);
 
-                            String id = documentSnapshot.getId();
-                            if(!listaIDEventoUtenteLoggato.contains(id)){
-                                idList.add(id);
-                            }
+                            idList.add(idEvento);
+                            Log.d("idListCreatiOutOfIF", String.valueOf(idList));
 
                             Evento evento = documentSnapshot.toObject(Evento.class);
 
@@ -153,128 +192,26 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                             }
 
                         }
-                        Log.d("listaIDEventoUtenteLog", String.valueOf(listaIDEventoUtenteLoggato));
-                        Log.d("listaEventiCreati", String.valueOf(listaEventiCreati));
+
+                        Log.d("listaEventiCreatiOUTFor", String.valueOf(listaEventiCreati));
 
                         EventAdapter adapter = new EventAdapter(listaEventiCreati);
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-
-                        rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
-                            @Override
-                            public void onClick(View view, int position) {
-
-
-                                String idEventoSelezionato = listaIDEventoUtenteLoggato.get(position);
-                                Log.i("idEventoSelezionato", idEventoSelezionato);
-                                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
-
-
-                                ProfiloEventoAdminFragment fragment = new ProfiloEventoAdminFragment();
-
-                                Bundle bundle = new Bundle();
-                                bundle.putString("idEvento", idEventoSelezionato);
-
-                                fragment.setArguments(bundle);
-
-
-
-                                //richiamo il fragment
-
-                                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
-                                fr.replace(R.id.container,fragment);
-                                fr.addToBackStack(null); //serve per tornare al fragment precedente
-                                fr.commit();
-                            }
-
-                            @Override
-                            public void onLongClick(View view, int position) {
-
-                            }
-
-                        }));
-
 
                     }
                 });
 
     }
 
-    private void caricaEventiIscritto(){
-        listaEventiIscritto.clear();
-        idList.clear();
-        db.collection("Eventi")
-                .whereArrayContains("partecipanti", mailUtenteLoggato)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            Evento evento = documentSnapshot.toObject(Evento.class);
-
-                            try {
-                                Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
-                                Date dataAttuale = new Date(System.currentTimeMillis());
-
-                                if(dataEvento.compareTo(dataAttuale) >= 0 && !evento.getAdmin().equals(mailUtenteLoggato)) {
-                                    Log.d("idList", String.valueOf(idList));
-                                    Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
-                                    listaEventiIscritto.add(evento);
-
-
-                                    String id = documentSnapshot.getId();
-                                    idList.add(id);
-                                }
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        Log.d("listaEventiIscritto", String.valueOf(listaEventiIscritto));
-
-                        EventAdapter adapter = new EventAdapter(listaEventiIscritto);
-                        rvEventi.setAdapter(adapter);
-                        rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
-                            @Override
-                            public void onClick(View view, int position) {
-
-                                String idEventoSelezionato = idList.get(position);
-                                Log.i("idList: ", idEventoSelezionato);
-                                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
-
-                                EliminazionePartecipazioneEvento fragment = new EliminazionePartecipazioneEvento();
-
-                                Bundle bundle = new Bundle();
-                                bundle.putString("idEvento", idEventoSelezionato);
-                                bundle.putBoolean("partenza", false);
-
-                                fragment.setArguments(bundle);
-
-                                //richiamo il fragment
-
-                                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
-                                fr.replace(R.id.container,fragment);
-                                fr.addToBackStack(null); //serve per tornare al fragment precedente
-                                fr.commit();
-                            }
-
-                            @Override
-                            public void onLongClick(View view, int position) {
-
-                            }
-
-                        }));
-                    }
-                }); //toDo onFailure
-    }
 
 
 
     private void caricaEventi(){
         listaEventi.clear();
         idList.clear();
+
+        Log.d("caricaEventi", "sonoCaricaEventi");
 
         db.collection("Eventi")
                 .get()
@@ -293,9 +230,8 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                                         && !evento.getPartecipanti().contains(mailUtenteLoggato)) {
 
                                     Log.d("idList", String.valueOf(idList));
-                                    Log.d("listaIDEventoLoggato", String.valueOf(listaIDEventoUtenteLoggato));
-                                    listaEventi.add(evento);
 
+                                    listaEventi.add(evento);
                                     String id = documentSnapshot.getId();
                                     idList.add(id);
                                 }
@@ -308,6 +244,57 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+
+                    }
+
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("document", "Error document", e);
+            }
+        });
+
+    }
+
+    private void caricaEventiIscritto2(){
+        listaEventiIscritto.clear();
+        idList.clear();
+
+        
+        db.collection("Eventi")
+                .whereArrayContains("partecipanti", mailUtenteLoggato)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            Evento evento = documentSnapshot.toObject(Evento.class);
+
+                            try {
+                                Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
+                                Date dataAttuale = new Date(System.currentTimeMillis());
+
+                                if(dataEvento.compareTo(dataAttuale) >= 0 && !evento.getAdmin().equals(mailUtenteLoggato)) {
+
+                                    Log.d("idListIscritto", String.valueOf(idList));
+                                    listaEventiIscritto.add(evento);
+                                    Log.d("listaEventiIscritto", String.valueOf(listaEventiIscritto));
+                                    String id = documentSnapshot.getId();
+                                    idList.add(id);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        Log.d("listaEventiIscritOutFor", String.valueOf(listaEventiIscritto));
+                        EventAdapter adapter = new EventAdapter(listaEventiIscritto);
+
+                        rvEventi.setAdapter(adapter);
+                        rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
+                       /*
                         rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
                             @Override
                             public void onClick(View view, int position) {
@@ -337,13 +324,20 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                             }
 
                         }));
+                        */
 
 
                     }
 
-                }); //toDo onFailure
 
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("document", "Error document", e);
+            }
+        });
 
+        Log.d("listaEventiIscrOutAll", String.valueOf(listaEventiIscritto));
     }
 
 
@@ -378,7 +372,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                         Toast.makeText(getContext(), "Impossibile effettuare questa operazione", Toast.LENGTH_LONG).show();
                         buttonView.setChecked(false);
                         switchiscritto = !switchiscritto;
-                    } else caricaEventiIscritto();
+                    } else caricaEventiIscritto2();
                 }
 
                 if(!isChecked && !switchcreato) caricaEventi();
