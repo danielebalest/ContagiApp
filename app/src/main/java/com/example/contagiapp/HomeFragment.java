@@ -96,6 +96,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NewEventsActivity.class);
+                intent.putExtra("scelta", false);
                 startActivity(intent);
             }
         });

@@ -61,6 +61,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
     private boolean switchiscritto = false;
     private boolean switchcreato = false;
 
+    private int ruolo;
 
 
     @Override
@@ -99,9 +100,28 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                 Log.i("idList: ", idEventoSelezionato);
                 Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
 
-                ProfiloEventoFragment fragment = new ProfiloEventoFragment();
+                Fragment fragment;
 
                 Bundle bundle = new Bundle();
+
+                switch (ruolo){
+                    case 0:
+                        fragment = new ProfiloEventoFragment();
+                        break;
+                    case 1:
+                        //fragment = new ProfiloPartecipanteFragment();
+                        fragment = new EliminazionePartecipazioneEvento();
+                        bundle.putBoolean("partenza", false);
+                        break;
+                    case 2:
+                        fragment = new ProfiloEventoAdminFragment();
+                        break;
+                    default:
+                        Log.e("ERROR", "SWITCH");
+                        fragment = new ProfiloEventoFragment();
+                }
+
+
                 bundle.putString("idEvento", idEventoSelezionato);
 
                 fragment.setArguments(bundle);
@@ -123,11 +143,6 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
             }
 
         }));
-
-
-
-
-
 
         iscritto.setOnCheckedChangeListener(this);
         creati.setOnCheckedChangeListener(this);
@@ -199,13 +214,11 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+                        ruolo = 2;
                     }
                 });
 
     }
-
-
-
 
     private void caricaEventi(){
         listaEventi.clear();
@@ -244,6 +257,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        ruolo = 0;
 
 
 
@@ -258,7 +272,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
     }
 
-    private void caricaEventiIscritto2(){
+    private void caricaEventiIscritto(){
         listaEventiIscritto.clear();
         idList.clear();
 
@@ -294,37 +308,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
-                       /*
-                        rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {
-                            @Override
-                            public void onClick(View view, int position) {
 
-                                String idEventoSelezionato = idList.get(position);
-                                Log.i("idList: ", idEventoSelezionato);
-                                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
-
-                                ProfiloEventoFragment fragment = new ProfiloEventoFragment();
-
-                                Bundle bundle = new Bundle();
-                                bundle.putString("idEvento", idEventoSelezionato);
-
-                                fragment.setArguments(bundle);
-
-                                //richiamo il fragment
-
-                                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
-                                fr.replace(R.id.container,fragment);
-                                fr.addToBackStack(null); //serve per tornare al fragment precedente
-                                fr.commit();
-                            }
-
-                            @Override
-                            public void onLongClick(View view, int position) {
-
-                            }
-
-                        }));
-                        */
 
 
                     }
@@ -338,6 +322,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
         });
 
         Log.d("listaEventiIscrOutAll", String.valueOf(listaEventiIscritto));
+        ruolo = 1;
     }
 
 
@@ -372,7 +357,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                         Toast.makeText(getContext(), "Impossibile effettuare questa operazione", Toast.LENGTH_LONG).show();
                         buttonView.setChecked(false);
                         switchiscritto = !switchiscritto;
-                    } else caricaEventiIscritto2();
+                    } else caricaEventiIscritto();
                 }
 
                 if(!isChecked && !switchcreato) caricaEventi();

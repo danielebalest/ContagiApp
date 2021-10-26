@@ -84,7 +84,6 @@ public class NewEventsActivity extends AppCompatActivity {
     private EditText numeroMaxP;
     private TextView data;
     private TextClock orario;
-    private EditText citta;
     private EditText indirizzo;
 
     private AutoCompleteTextView autoCompleteRegion;
@@ -146,7 +145,9 @@ public class NewEventsActivity extends AppCompatActivity {
                             nome.setText(evento.getNome());
                             descrizione.setText(evento.getDescrizione());
                             numeroMaxP.setText(Integer.toString(evento.getNumeroMaxPartecipanti()));
-                            citta.setText(evento.getCitta());
+                            autoCompleteRegion.setText(evento.getRegione());
+                            autoCompleteProvincia.setText(evento.getProvincia());
+                            autoCompleteCity.setText(evento.getCitta());
                             indirizzo.setText(evento.getIndirizzo());
                             data.setText(evento.getData());
                             orario.setText(evento.getOrario());
