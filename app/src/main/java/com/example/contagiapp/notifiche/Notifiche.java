@@ -1,7 +1,9 @@
 package com.example.contagiapp.notifiche;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -16,6 +18,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
 import com.example.contagiapp.eventi.Evento;
+import com.example.contagiapp.eventi.ProfiloEventoFragment;
 import com.example.contagiapp.gruppi.Gruppo;
 import com.example.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -176,11 +179,24 @@ public class Notifiche {
 
                             //86400000 millisecondi = 1 giorno
                             if((dataAttuale.getTime() - dataEvento.getTime()) <= 86400000) {
+
+                                Intent notifyIntent = new Intent(mainActivity, Smistamento.class);
+                                notifyIntent.putExtra("id", evento.getIdEvento());
+
+                                // Set the Activity to start in a new, empty task
+                                //notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                                // Create the PendingIntent
+                                PendingIntent notifyPendingIntent = PendingIntent.getActivity(
+                                        mainActivity, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                                );
+
                                 Notification newMessageNotification1 =
                                         new NotificationCompat.Builder(mainActivity, "CHANNEL_ID")
                                                 .setSmallIcon(R.drawable.ic_event_black_24dp)
                                                 .setSubText("Ti ricordiamo l'evento "+evento.getNome())
                                                 .setLargeIcon(bitMap)
+                                                .setContentIntent(notifyPendingIntent)
                                                 /*.setStyle(new NotificationCompat.BigPictureStyle()
                                                         .bigPicture(bitMap)
                                                         .bigLargeIcon(null))*/
