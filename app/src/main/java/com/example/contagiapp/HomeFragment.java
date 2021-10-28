@@ -161,11 +161,12 @@ public class HomeFragment extends Fragment {
                                         break;
 
                                     case "giallo" : status.setBackgroundTintList(yellow);
-                                        //tvStatusDescr.setText(getActivity().getString(R.string.DescrStatoGiallo));
-                                        tvStatusDescr.setText("fevefvefv");
+                                        tvStatusDescr.setText(getString(R.string.DescrStatoGiallo));
+
                                         break;
 
                                     case "arancione" :
+                                        tvStatusDescr.setText(getString(R.string.DescrStatoArancione));
                                         try {
                                             Date dataPositivita = new SimpleDateFormat("dd/MM/yyyy").parse(dataStato);
                                             Date dataAttuale = new Date(System.currentTimeMillis());

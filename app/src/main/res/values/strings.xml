@@ -74,14 +74,16 @@
 
 
 
-    <string name="mapbox_access_token">MAPBOX_ACCESS_TOKEN</string>
-
 
     //Descrizione stati
-    <string name="DescrStatoGiallo">Lo stato giallo</string>
+    <string name="DescrStatoGiallo">Lo stato giallo indica che non c\'è stato alcun contatto con persone positive</string>
     <string name="DescrStatoVerde">Lo stato verde indica che l\'utente è negativo al tampone effettuato</string>
-    <string name="DescrStatoArancione">Lo stato </string>
-    <string name="DescrStatoRosso">ew</string>
+    <string name="DescrStatoArancione">Lo stato arancione indica che si sono verificati contatti con persone positive</string>
+    <string name="DescrStatoRosso">Lo stato rosso indica si è positivi al COVID-19</string>
+
+
+    //HomeFragment
+
 
     //GroupFragment
     <string name="your_groups">I tuoi gruppi</string>
@@ -97,11 +99,10 @@
     <string name="next">Avanti</string>
 
 
-
-
-
-
-
-
+    //Shared message
+    <string name="subMessage1">Iscriviti subito all\'evento di ContagiApp\n \'\'</string>
+    <string name="subMessage2">\'\' \n che si terrà in:\n</string>
+    <string name="separator">", "</string>
+    <string name="subMessage3">\n\nEffettua subito la prenotazione sull\'app."</string>
 
 </resources>

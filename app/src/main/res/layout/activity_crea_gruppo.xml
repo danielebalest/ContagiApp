@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".gruppi.CreaGruppoActivity"
@@ -64,13 +65,14 @@
             app:cornerRadius="20dp"
             android:onClick="addImgGruoup"/>
 
-        <androidx.core.widget.ContentLoadingProgressBar
+        <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="28dp"
             android:indeterminate="false"
             android:progress="33"
             android:layout_alignParentBottom="true" />
+
     </RelativeLayout>
 
 

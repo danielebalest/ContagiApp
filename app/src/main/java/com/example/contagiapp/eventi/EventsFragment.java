@@ -109,7 +109,6 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                         fragment = new ProfiloEventoFragment();
                         break;
                     case 1:
-                        //fragment = new ProfiloPartecipanteFragment();
                         fragment = new EliminazionePartecipazioneEvento();
                         bundle.putBoolean("partenza", false);
                         break;

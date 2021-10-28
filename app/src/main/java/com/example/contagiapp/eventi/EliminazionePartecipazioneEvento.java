@@ -1,7 +1,9 @@
 package com.example.contagiapp.eventi;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +43,7 @@ public class EliminazionePartecipazioneEvento extends Fragment {
     private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private final static String storageDirectory = "eventi";
     private Button btnElimina;
+    private ImageButton btnShare;
     public Evento evento;
 
     public EliminazionePartecipazioneEvento() {
@@ -81,6 +85,30 @@ public class EliminazionePartecipazioneEvento extends Fragment {
                 fr.commit();
             }
         });
+
+        btnShare = view.findViewById(R.id.btnShareIscritto);
+        btnShare.setBackgroundColor(Color.TRANSPARENT);
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                Log.d("nomeEvento", String.valueOf(evento.getNome()));
+
+                String body = getString(R.string.subMessage1)  + evento.getNome().toUpperCase() + getString(R.string.subMessage2) + evento.getIndirizzo()
+                        + getString(R.string.separator) + evento.getCitta() + getString(R.string.separator) + evento.getProvincia() + getString(R.string.separator)
+                        + evento.getRegione()
+                        +  getString(R.string.subMessage3);
+
+                myIntent.putExtra(Intent.EXTRA_TEXT,body);
+                startActivity(Intent.createChooser(myIntent, "Share Using"));
+            }
+        });
+
+
+
+
+
 
         final ImageView img = view.findViewById(R.id.imgProfiloEvento);
 
@@ -146,8 +174,10 @@ public class EliminazionePartecipazioneEvento extends Fragment {
                     String descrizione = evento.getDescrizione();
                     String data = evento.getData();
                     String orario = evento.getOrario();
-                    String indirizzo = evento.getIndirizzo();
+                    String regione = evento.getRegione();
+                    String provincia = evento.getProvincia();
                     String citta = evento.getCitta();
+                    String indirizzo = evento.getIndirizzo();
                     int numMax = evento.getNumeroMaxPartecipanti();
                     int numPartecipanti = evento.getPartecipanti().size();
                     int numDisponibili = numMax - numPartecipanti;
@@ -155,21 +185,25 @@ public class EliminazionePartecipazioneEvento extends Fragment {
                     TextView tvNomeEvento = view.findViewById(R.id.tvNomeEvento2);
                     TextView tvDescrEvento = view.findViewById(R.id.tvDescrEvento2);
                     TextView tvDataEvento = view.findViewById(R.id.tvDataEvento);
-                    TextView tvOrarioEvento = view.findViewById(R.id.tvOrarioEvento);
-                    TextView tvIndirizzoEvento = view.findViewById(R.id.tvIndirizzoEvento);
-                    TextView tvCittaEvento = view.findViewById(R.id.tvCittaEvento);
+                    TextView tvOrarioEvento = view.findViewById(R  .id.tvOrarioEvento);
+                    TextView tvRegioneEvento = view.findViewById(R.id.tvRegioneEventoIscritto);
+                    TextView tvProvinciaEvento = view.findViewById(R.id.tvProvinciaEventoIscritto);
+                    TextView tvCittaEvento = view.findViewById(R.id.tvCittaEventoIscritto);
+                    TextView tvIndirizzoEvento = view.findViewById(R.id.tvIndirizzoEventoIscritto);
                     TextView numMaxPartecipanti = view.findViewById(R.id.num_partecipanti_max);
-                    TextView numDispono = view.findViewById(R.id.posti_disponibili);
+                    TextView numDispon = view.findViewById(R.id.posti_disponibili);
                     TextView numParteci = view.findViewById(R.id.num_partecipanti);
 
-                    tvNomeEvento.setText("Nome evento: "+nome);
+                    tvNomeEvento.setText(nome);
                     tvDescrEvento.setText(descrizione);
                     tvDataEvento.setText(data);
                     tvOrarioEvento.setText(orario);
+                    tvRegioneEvento.setText("Regione: " + regione);
+                    tvProvinciaEvento.setText("Provincia: " + provincia);
+                    tvCittaEvento.setText("Città: " +citta);
                     tvIndirizzoEvento.setText("Indirizzo: "+indirizzo);
-                    tvCittaEvento.setText("Città: "+citta);
-                    numMaxPartecipanti.setText("Numero massimo di partecipanti:  "+numMax);
-                    numDispono.setText("Numero posti disponibili:   "+numDisponibili);
+                    numMaxPartecipanti.setText("Numero massimo di partecipanti:   "+numMax);
+                    numDispon.setText("Numero posti disponibili:   "+numDisponibili);
                     numParteci.setText("Numero di iscritti all'evento:   "+numPartecipanti);
 
                 } else {

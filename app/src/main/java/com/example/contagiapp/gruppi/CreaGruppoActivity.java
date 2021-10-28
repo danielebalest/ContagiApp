@@ -4,20 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.telecom.Call;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
-
 import com.example.contagiapp.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import es.dmoral.toasty.Toasty;
+import androidx.core.widget.ContentLoadingProgressBar;
 
 public class CreaGruppoActivity extends AppCompatActivity {
-
-
 
     TextInputEditText editTextNomeGruppo;
     TextInputEditText editTextDescrGruppo;
@@ -26,6 +21,7 @@ public class CreaGruppoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crea_gruppo);
+
     }
 
     public void addImgGruoup(View view) {

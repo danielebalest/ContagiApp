@@ -3,6 +3,7 @@ package com.example.contagiapp.eventi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +55,7 @@ public class ProfiloEventoFragment extends Fragment {
     private final static String storageDirectory = "eventi";
     private Button btnPartecipa;
     private Button btnPartecipaComeGruppo;
+    private ImageButton btnShare;
     public Evento evento;
     ArrayList<String> gruppiEvento = new ArrayList<>();
 
@@ -159,8 +162,28 @@ public class ProfiloEventoFragment extends Fragment {
             }
         });
 
-        final ImageView img = view.findViewById(R.id.imgProfiloEvento);
+        btnShare = view.findViewById(R.id.btnShare);
+        btnShare.setBackgroundColor(Color.TRANSPARENT);
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                Log.d("nomeEvento", String.valueOf(evento.getNome()));
 
+                String body = getString(R.string.subMessage1)  + evento.getNome().toUpperCase() + getString(R.string.subMessage2) + evento.getIndirizzo()
+                        + getString(R.string.separator) + evento.getCitta() + getString(R.string.separator) + evento.getProvincia() + getString(R.string.separator)
+                        + evento.getRegione()
+                        +  getString(R.string.subMessage3);
+
+                myIntent.putExtra(Intent.EXTRA_TEXT,body);
+                startActivity(Intent.createChooser(myIntent, "Share Using"));
+            }
+        });
+
+
+
+        final ImageView img = view.findViewById(R.id.imgProfiloEvento);
 
         db.collection("Eventi").document(idEvento)
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -173,6 +196,9 @@ public class ProfiloEventoFragment extends Fragment {
                 caricaImgDaStorage(storageRef, storageDirectory, idEvento, img );
             }
         });
+
+
+
 
         return view;
     }
