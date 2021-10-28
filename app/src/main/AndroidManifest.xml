@@ -44,6 +44,7 @@
         <activity
             android:name=".impostazioni.SettingActivity"
             android:label="@string/settings" />
+        <activity android:name=".notifiche.Smistamento" />
         <activity
             android:name=".registrazione.RegistrationActivity"
             android:parentActivityName=".WelcomeActivity" />

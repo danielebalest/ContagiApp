@@ -111,7 +111,7 @@ public class NotifyFragment extends Fragment {
     }
 
     public void caricaEventiNoPartecipazione(final RecyclerView rvEventiACuiNonPartecipo) {
-        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("eventi", Context.MODE_PRIVATE);
+        final SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("eventi", Context.MODE_PRIVATE);
         String json = pref.getString("id", "no");
 
         if(!json.equals("no")) {
@@ -123,14 +123,25 @@ public class NotifyFragment extends Fragment {
                 for(int i = 0; i < eventi.size(); i++) {
                     String id = eventi.get(i);
 
+                    final int finalI = i;
                     db.collection("Eventi")
                             .document(id)
                             .get()
                             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    ev1.add(documentSnapshot.toObject(Evento.class));
-                                    Log.d("EVENTI:::",documentSnapshot.toObject(Evento.class).getIdEvento());
+                                    try {
+                                        ev1.add(documentSnapshot.toObject(Evento.class));
+                                        Log.d("EVENTI:::",documentSnapshot.toObject(Evento.class).getIdEvento());
+                                    } catch (NullPointerException e) {
+                                        eventi.remove(finalI);
+
+                                        SharedPreferences.Editor editor = pref.edit();
+                                        Gson gson1 = new Gson();
+                                        String json1 = gson1.toJson(eventi);
+                                        editor.putString("id", json1);
+                                        editor.commit();
+                                    }
 
                                     if(ev1.size() == eventi.size()) {
                                         EventoNoPartecipazioneAdapter adapter = new EventoNoPartecipazioneAdapter(ev1, getActivity().getApplicationContext());
