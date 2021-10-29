@@ -29,11 +29,11 @@
         android:id="@+id/tvTuoiGruppi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:text="I tuoi gruppi"
-        android:textSize="20dp"
+        android:layout_below="@+id/search_field_group"
         android:gravity="center"
-        android:layout_below="@+id/search_field_group"/>
+        android:padding="20dp"
+        android:text="@string/your_groups"
+        android:textSize="20dp" />
 
     <LinearLayout
         android:layout_width = "match_parent"

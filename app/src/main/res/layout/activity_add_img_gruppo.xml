@@ -65,11 +65,11 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/next"
-            android:onClick="invitaAmici"
             android:layout_alignParentBottom="true"
-            app:cornerRadius="20dp"
-            android:layout_marginBottom="50dp" />
+            android:layout_marginBottom="50dp"
+            android:onClick="invitaAmici"
+            android:text="@string/next"
+            app:cornerRadius="20dp" />
 
         <androidx.core.widget.ContentLoadingProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"

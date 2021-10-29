@@ -38,30 +38,31 @@
 
             <TextView
                 android:id="@+id/tvNameUser"
-                android:paddingRight="5dp"
-                android:paddingLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text= "Nome"
+                android:layout_gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="5dp"
                 android:textColor="@color/black"
-                android:layout_gravity="center"/>
+                tools:text="@string/name" />
+
             <TextView
                 android:id="@+id/tvSurnameUser"
-                android:paddingRight="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text= "Cognome"
+                android:layout_gravity="center"
+                android:paddingRight="5dp"
                 android:textColor="@color/black"
-                android:layout_gravity="center"/>
+                tools:text="@string/surname" />
 
             <TextView
                 android:id="@+id/tvAgeUser"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingRight="5dp"
                 android:layout_gravity="center"
                 android:gravity="end"
-                tools:text="anni"/>
+                android:paddingRight="5dp"
+                tools:text="@string/years" />
 
 
         </LinearLayout>

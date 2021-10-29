@@ -22,11 +22,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:textColor="@color/black"
-                android:textSize="18dp"
                 android:gravity="center"
-                android:text="Il tuo stato è rosso/arancione\nNon puoi più partecipare a questo evento"/>
+                android:paddingTop="15dp"
+                android:text="@string/red_state_participation"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="5dp"
                         android:textColor="@color/black"
-                        tools:text="Nome" />
+                        tools:text="@string/event_name" />
 
                     <TextView
                         android:id="@+id/tvCittaEventoRichiesta"
@@ -73,7 +73,7 @@
                         android:layout_gravity="center"
                         android:paddingRight="5dp"
                         android:textColor="@color/black"
-                        tools:text="Città" />
+                        tools:text="@string/city" />
                 </LinearLayout>
 
                 <TextView

@@ -22,24 +22,24 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Promemoria"
-                    android:layout_marginLeft="10dp"
-                    android:textStyle="bold"
-                    android:textSize="21dp"
-                    android:textColor="@color/black"
-                    android:padding="2dp"
-                    />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Parteciperai al seguente evento"
-                    android:layout_marginLeft="10dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black"
-                    android:padding="2dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:padding="2dp"
+                android:text="@string/reminder"
+                android:textColor="@color/black"
+                android:textSize="21dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:padding="2dp"
+                android:text="@string/you_will_participate_event"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
 
 
             <LinearLayout
@@ -90,11 +90,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:textStyle="bold"
-                        android:textSize="18dp"
-                        android:textColor="@color/black"
                         android:padding="2dp"
-                        tools:text= "Nome Evento" />
+                        android:textColor="@color/black"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        tools:text="@string/event_name" />
 
                     <ImageView
                         android:id="@+id/imgItemEvent"

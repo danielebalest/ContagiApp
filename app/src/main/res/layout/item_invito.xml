@@ -52,23 +52,23 @@
 
                 <TextView
                     android:id="@+id/tvNomeGruppoInvito"
-                    android:paddingRight="5dp"
-                    android:paddingLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text= "Nome"
+                    android:layout_gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="5dp"
                     android:textColor="@color/black"
-                    android:layout_gravity="center"/>
+                    tools:text="@string/group_name" />
 
 
                 <TextView
                     android:id="@+id/tvNumPartecipantiGruppoInvito"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
                     android:layout_gravity="center"
                     android:gravity="end"
-                    tools:text="partecipanti"/>
+                    android:paddingRight="5dp"
+                    tools:text="@string/participants" />
 
             </LinearLayout>
 
@@ -83,9 +83,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:text="accetta"
-                    app:cornerRadius="20dp"
-                    android:backgroundTint="#2E6C01">
+                    android:backgroundTint="#2E6C01"
+                    android:text="@string/accept"
+                    app:cornerRadius="20dp">
 
                 </com.google.android.material.button.MaterialButton>
 
@@ -95,9 +95,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:text="rifiuta"
-                    app:cornerRadius="20dp"
-                    android:backgroundTint="#870F0F">
+                    android:backgroundTint="#870F0F"
+                    android:text="@string/delete"
+                    app:cornerRadius="20dp">
 
                 </com.google.android.material.button.MaterialButton>
 

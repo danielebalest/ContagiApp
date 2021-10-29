@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:hint="Nome"
+            android:hint="@string/name"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
 
@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:labelFor="@id/editTextSurname"/>
+                android:labelFor="@id/editTextSurname" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Cognome"
+            android:hint="@string/surname"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
             >
@@ -109,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Regione"
+            android:hint="@string/region"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
             >
@@ -119,8 +119,8 @@
                 android:id="@+id/autoCompleteTextRegione"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
                 android:inputType="textAutoComplete|textAutoCorrect"
+                android:padding="12dp"
                 android:textColor="@color/black" />
 
 
@@ -132,7 +132,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Provincia"
+            android:hint="@string/province"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
             >
@@ -142,8 +142,8 @@
                 android:id="@+id/autoCompleteTextProvincia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
                 android:inputType="textAutoComplete|textAutoCorrect"
+                android:padding="12dp"
                 android:textColor="@color/black" />
 
 
@@ -155,7 +155,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Città"
+            android:hint="@string/city"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
             >
@@ -165,9 +165,9 @@
                 android:id="@+id/autoCompleteTextCitta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
                 android:imeOptions="actionSearch"
                 android:inputType="textAutoComplete|textAutoCorrect"
+                android:padding="12dp"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -251,7 +251,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:background="@color/red"
-            android:text="scatta foto profilo"
+            android:text="@string/take_profile_picture"
             app:cornerRadius="20dp"
             app:icon="@drawable/ic_baseline_add_24"></com.google.android.material.button.MaterialButton>
 
@@ -261,9 +261,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            app:icon="@drawable/ic_baseline_add_24"
+            android:text="@string/upload_profile_picture"
             app:cornerRadius="20dp"
-            android:text="Carica immagine di profilo"/>
+            app:icon="@drawable/ic_baseline_add_24" />
 
         <ImageView
             android:id="@+id/propic"

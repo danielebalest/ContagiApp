@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:hint="Nome gruppo"
+        android:hint="@string/group_name"
         app:endIconMode="clear_text"
         app:errorEnabled="true">
 
@@ -25,10 +25,8 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:labelFor="@id/editTextSurname"
-            android:lines="1"
-            />
+            android:lines="1" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -37,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:hint="Descrizione"
+        android:hint="@string/description"
         app:endIconMode="clear_text"
         app:errorEnabled="true">
 
@@ -47,8 +45,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:labelFor="@id/editTextSurname"
-            android:lines="1"
-            />
+            android:lines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -59,11 +56,11 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Avanti"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="50dp"
-            app:cornerRadius="20dp"
-            android:onClick="addImgGruoup"/>
+            android:onClick="addImgGruoup"
+            android:text="@string/next"
+            app:cornerRadius="20dp" />
 
         <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"

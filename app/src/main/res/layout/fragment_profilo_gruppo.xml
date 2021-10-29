@@ -18,24 +18,25 @@
             android:layout_height="wrap_content"
             android:maxHeight="250dp"
             android:adjustViewBounds="true"/>
+
         <TextView
             android:id="@+id/tvNomeProfiloGruppo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Titolo Gruppo"
-            android:textSize="30dp"
-            android:textStyle="bold"
+            android:padding="20dp"
+            android:text="@string/group_name"
             android:textColor="@color/black"
-            android:padding="20dp"/>
+            android:textSize="30dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvDescrProfiloGruppo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="descrizione"
-            android:textColor="@color/black"
             android:background="@color/gray"
-            android:padding="20dp"></TextView>
+            android:padding="20dp"
+            android:text="@string/description"
+            android:textColor="@color/black"></TextView>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -71,18 +72,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Il tuo stato"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        />
+                        android:text="@string/your_state"
+                        android:textAppearance="?attr/textAppearanceHeadline6" />
+
                     <TextView
                         android:id="@+id/tvStatusDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:text="@string/description"
                         android:textAppearance="?attr/textAppearanceBody2"
-                        android:text="Descrizione"
-                        android:textColor="?android:attr/textColorSecondary"
-                        />
+                        android:textColor="?android:attr/textColorSecondary" />
 
                 </LinearLayout>
 
@@ -134,14 +134,13 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAbbandonaGruppo"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#800000"
+            android:layout_gravity="center"
             android:layout_margin="20dp"
-            app:cornerRadius="20dp"
-            android:text="abbandona il gruppo">
-        </com.google.android.material.button.MaterialButton>
+            android:backgroundTint="#800000"
+            android:text="@string/exit_group"
+            app:cornerRadius="20dp"></com.google.android.material.button.MaterialButton>
 
     </LinearLayout>
 

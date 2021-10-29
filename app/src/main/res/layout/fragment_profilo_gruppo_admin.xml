@@ -20,25 +20,26 @@
             android:layout_height="wrap_content"
             android:maxHeight="250dp"
             android:adjustViewBounds="true"/>
+
         <TextView
             android:id="@+id/tvNomeProfiloGruppoAdmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Titolo Gruppo"
-            android:textSize="30dp"
-            android:textStyle="bold"
+            android:padding="20dp"
+            android:text="@string/group_name"
             android:textColor="@color/black"
-            android:padding="20dp"/>
+            android:textSize="30dp"
+            android:textStyle="bold" />
 
 
         <TextView
             android:id="@+id/tvDescrProfiloGruppoAdmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="descrizione"
             android:background="@color/gray"
-            android:textColor="@color/black"
-            android:padding="20dp"></TextView>
+            android:padding="20dp"
+            android:text="@string/description"
+            android:textColor="@color/black"></TextView>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -74,18 +75,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Stato gruppo"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        />
+                        android:text="@string/group_state"
+                        android:textAppearance="?attr/textAppearanceHeadline6" />
+
                     <TextView
                         android:id="@+id/tvStatusDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:text="@string/description"
                         android:textAppearance="?attr/textAppearanceBody2"
-                        android:text="Descrizione"
-                        android:textColor="?android:attr/textColorSecondary"
-                        />
+                        android:textColor="?android:attr/textColorSecondary" />
 
                 </LinearLayout>
 
@@ -103,22 +103,21 @@
                 android:id="@+id/btnAdminInvitaAmici"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Invita amici"
-                app:icon="@drawable/ic_baseline_add_24"
-                android:layout_weight="1"
                 android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:text="@string/invite_friends"
                 app:cornerRadius="20dp"
-                ></com.google.android.material.button.MaterialButton>
+                app:icon="@drawable/ic_baseline_add_24"></com.google.android.material.button.MaterialButton>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnModificaGruppo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:icon="@drawable/ic_pencil_24dp"
                 android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:text="@string/modify_group"
                 app:cornerRadius="20dp"
-                android:text="Modifica gruppo"/>
+                app:icon="@drawable/ic_pencil_24dp" />
 
 
         </LinearLayout>
@@ -144,14 +143,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEliminaGruppo"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#800000"
+            android:layout_gravity="center"
             android:layout_margin="20dp"
+            android:backgroundTint="#800000"
+            android:text="@string/delete_group"
             app:cornerRadius="20dp"
-            app:icon="@drawable/ic_baseline_delete_24"
-            android:text="Elimina il gruppo"/>
+            app:icon="@drawable/ic_baseline_delete_24" />
 
 
     </LinearLayout>

@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:hint="Nome gruppo"
+            android:hint="@string/group_name"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
 
@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:hint="Descrizione"
+            android:hint="@string/description"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
 
@@ -67,12 +67,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:paddingTop="20dp"
             android:paddingLeft="20dp"
-            android:text="Partecipanti:"/>
+            android:paddingTop="20dp"
+            android:text="@string/participants"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
 
@@ -87,8 +87,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="20dp"
-            app:cornerRadius="20dp"
-            android:text="Salva modifiche"/>
+            android:text="@string/save"
+            app:cornerRadius="20dp" />
 
     </LinearLayout>
 

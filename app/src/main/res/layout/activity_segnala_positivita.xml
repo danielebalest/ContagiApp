@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="Data Positività"
+        android:hint="@string/date_of_positivity"
         app:endIconMode="clear_text"
         app:errorEnabled="true">
 
@@ -37,23 +37,23 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddImgPositivita"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_weight="1"
             android:layout_margin="10dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:cornerRadius="15dp"
-            android:text="Inserisci immagine"/>
+            android:layout_weight="1"
+            android:text="@string/upload_image"
+            app:cornerRadius="15dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddPdfPositivita"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_weight="1"
             android:layout_margin="10dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:cornerRadius="15dp"
-            android:text="Inserisci Pdf"/>
+            android:layout_weight="1"
+            android:text="@string/upload_pdf"
+            app:cornerRadius="15dp" />
 
     </LinearLayout>
 
@@ -68,8 +68,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            app:cornerRadius="20dp"
-            android:text="Completa Segnalazione" />
+            android:text="@string/report"
+            app:cornerRadius="20dp" />
 
     </RelativeLayout>
 

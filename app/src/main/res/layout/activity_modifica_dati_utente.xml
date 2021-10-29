@@ -21,20 +21,20 @@
             android:layout_marginTop="32dp"
             android:fontFamily="@font/muli_semi_bold"
             android:gravity="center"
-            android:text="Modifica dati"
+            android:text="@string/modify_data"
             android:textAllCaps="true"
             android:textColor="@android:color/holo_blue_dark"
             android:textSize="40sp"></TextView>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputNameLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:hint="Nome"
+            android:hint="@string/name"
             app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextName"
@@ -48,20 +48,20 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputSurnameLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Cognome"
+            android:hint="@string/surname"
             app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:errorEnabled="true">
             >
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextSurname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                />
+                android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -69,7 +69,7 @@
             android:id="@+id/textView11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Genere"
+            android:text="@string/gender"
             android:textAppearance="@style/TextAppearance.AppCompat.Display4"
             android:textColor="#2196F3"
             android:textColorHint="#2196F3"
@@ -119,7 +119,7 @@
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Residenza"
+            android:text="@string/residency"
             android:textAppearance="@style/TextAppearance.AppCompat.Display4"
             android:textColor="#2196F3"
             android:textColorHint="#2196F3"
@@ -132,7 +132,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Regione"
+            android:hint="@string/region"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
 
@@ -141,8 +141,8 @@
                 android:id="@+id/autoCompleteTextRegioneModActivity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
                 android:inputType="textAutoComplete|textAutoCorrect"
+                android:padding="12dp"
                 android:textColor="@color/black" />
 
 
@@ -155,7 +155,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Provincia"
+            android:hint="@string/province"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
             >
@@ -165,8 +165,8 @@
                 android:id="@+id/autoCompleteTextProvinciaModActivity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
                 android:inputType="textAutoComplete|textAutoCorrect"
+                android:padding="12dp"
                 android:textColor="@color/black" />
 
 
@@ -178,7 +178,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Città"
+            android:hint="@string/city"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
             >
@@ -188,9 +188,9 @@
                 android:id="@+id/autoCompleteTextCittaModActivity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
                 android:imeOptions="actionSearch"
                 android:inputType="textAutoComplete|textAutoCorrect"
+                android:padding="12dp"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -271,9 +271,9 @@
             android:layout_gravity="center"
             android:layout_marginTop="32dp"
             android:backgroundTint="#1E88E5"
-            android:text="Salva modifiche"
-            app:cornerRadius="20dp"
-            android:textColor="#FFFFFF" />
+            android:text="@string/save"
+            android:textColor="#FFFFFF"
+            app:cornerRadius="20dp" />
 
     </LinearLayout>
 </ScrollView>

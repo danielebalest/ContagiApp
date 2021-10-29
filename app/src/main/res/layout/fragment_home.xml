@@ -51,7 +51,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Il tuo stato"
+                        android:text="@string/your_state"
                         android:textAppearance="?attr/textAppearanceHeadline6" />
                     <TextView
                         android:id="@+id/tvStatusDescriptionHome"
@@ -104,17 +104,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Dove vuoi andare?"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        />
+                        android:text="@string/where_do_you_want_to_go"
+                        android:textAppearance="?attr/textAppearanceHeadline6" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Cerca gli eventi disponibili oppure creane uno"
+                        android:text="@string/search_for_available_events"
                         android:textAppearance="?attr/textAppearanceBody2"
-                        android:textColor="?android:attr/textColorSecondary"
-                        />
+                        android:textColor="?android:attr/textColorSecondary" />
 
                 </LinearLayout>
 
@@ -124,20 +123,21 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:orientation="horizontal">
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSearchEvent"
+                        style="?attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:text="Cerca evento"
-                        style="?attr/borderlessButtonStyle"
-                        />
+                        android:text="@string/search_event" />
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnCreateEvent"
+                        style="?attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="crea evento"
-                        style="?attr/borderlessButtonStyle" />
+                        android:text="@string/create_event" />
                 </LinearLayout>
 
 

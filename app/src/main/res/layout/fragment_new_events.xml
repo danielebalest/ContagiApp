@@ -20,15 +20,14 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:gravity="center"
-            android:text="Inserire dati dell'evento"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:fontFamily="sans-serif-black"
-            android:textSize="26sp"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="@string/create_event"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="@color/black"
+            android:textSize="26sp"
             android:textStyle="bold" />
-
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -37,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:hint="Nome evento"
+            android:hint="@string/event_name"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
 
@@ -46,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:labelFor="@id/editTextNomeEvento"/>
+                android:labelFor="@id/editTextNomeEvento" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -56,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:hint="Numero massimo di partecipanti"
+            android:hint="@string/maximum_number_of_participants"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
 
@@ -65,14 +64,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:labelFor="@id/editTextNumMaxPartecipanti"/>
+                android:labelFor="@id/editTextNumMaxPartecipanti" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Data evento:"
+            android:text="@string/event_date2dots"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -80,16 +79,16 @@
             android:id="@+id/dataEvento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Data Evento"
             android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="@string/event_date"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Orario evento:"
+            android:text="@string/event_time2dots"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -103,14 +102,13 @@
             android:textSize="20sp" />
 
 
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputDescrEvento"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:hint="Descrizione evento"
+            android:hint="@string/event_description"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
 
@@ -119,7 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
-                android:labelFor="@id/editTextDescrEvento"/>
+                android:labelFor="@id/editTextDescrEvento" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -129,7 +127,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Regione"
+            android:hint="@string/region"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
             >
@@ -139,8 +137,8 @@
                 android:id="@+id/autoCompleteTextRegioneEvento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
                 android:inputType="textAutoComplete|textAutoCorrect"
+                android:padding="12dp"
                 android:textColor="@color/black" />
 
 
@@ -153,18 +151,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Provincia"
+            android:hint="@string/province"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
-
 
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextProvinciaEvento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
                 android:inputType="textAutoComplete|textAutoCorrect"
+                android:padding="12dp"
                 android:textColor="@color/black" />
 
 
@@ -176,7 +173,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Città"
+            android:hint="@string/city"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
             >
@@ -186,13 +183,12 @@
                 android:id="@+id/autoCompleteTextCittaEvento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
                 android:imeOptions="actionSearch"
                 android:inputType="textAutoComplete|textAutoCorrect"
+                android:padding="12dp"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -201,7 +197,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Indirizzo"
+            android:hint="@string/event_address"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
 
@@ -210,17 +206,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:labelFor="@id/editTextIndirizzo"/>
+                android:labelFor="@id/editTextIndirizzo" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddImgEvento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Aggiungi immagine"
-            app:cornerRadius="20dp"
-            android:onClick="addImgEvent">
-        </com.google.android.material.button.MaterialButton>
+            android:onClick="addImgEvent"
+            android:text="@string/upload_image"
+            app:cornerRadius="20dp"></com.google.android.material.button.MaterialButton>
 
         <ImageView
             android:id="@+id/immagineEvento"
@@ -243,8 +238,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="50dp"
-            app:cornerRadius="20dp"
-            android:text="Crea" />
+            android:text="@string/create_event"
+            app:cornerRadius="20dp" />
 
     </LinearLayout>
 

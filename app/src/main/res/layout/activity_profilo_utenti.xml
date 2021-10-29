@@ -38,12 +38,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRichiesta"
-        android:layout_margin="5dp"
         android:layout_width="match_parent"
-        android:textSize="20dp"
-        android:textStyle="bold"
         android:layout_height="wrap_content"
-        android:text="Aggiungi agli amici"></com.google.android.material.button.MaterialButton>
+        android:layout_margin="5dp"
+        android:text="@string/add_to_friends"
+        android:textSize="20dp"
+        android:textStyle="bold"></com.google.android.material.button.MaterialButton>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,10 +57,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="  Data di nascita: "
-            android:textColor="@color/black"
+            android:text="@string/birth2dots"
             android:textAppearance="?attr/textAppearanceHeadline6"
-            android:textStyle="bold"/>
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textViewDataNascita"
@@ -83,9 +83,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="  Età: "
-            android:textColor="@color/black"
+            android:text="@string/age2dots"
             android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <TextView
@@ -101,10 +101,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="  Genere: "
-            android:textColor="@color/black"
+            android:text="@string/gender2dots"
             android:textAppearance="?attr/textAppearanceHeadline6"
-            android:textStyle="bold"/>
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textViewGenere"
@@ -137,10 +137,10 @@
             android:id="@+id/textView16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="  Residenza: "
-            android:textColor="@color/black"
+            android:text="@string/residency2dots"
             android:textAppearance="?attr/textAppearanceHeadline6"
-            android:textStyle="bold"/>
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textViewNazione"

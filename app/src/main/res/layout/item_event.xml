@@ -76,11 +76,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:textStyle="bold"
-                        android:textSize="18dp"
-                        android:textColor="@color/black"
                         android:padding="2dp"
-                        tools:text= "Nome Evento" />
+                        android:textColor="@color/black"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        tools:text="@string/event_name" />
 
                     <TextView
                         android:id="@+id/tvNumPartecipantiItemEvent"
@@ -88,7 +88,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:padding="2dp"
-                        android:text="Numero Partecipanti"/>
+                        android:text="@string/number_of_participants" />
                 </LinearLayout>
 
                 <TextView
@@ -96,9 +96,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="3dp"
-                    android:text="posti disponibili"
-                    android:padding="15dp"
                     android:gravity="end|bottom"
+                    android:padding="15dp"
+                    android:text="@string/available_places"
                     android:textColor="#2B8F00" />
 
 

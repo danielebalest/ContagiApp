@@ -32,7 +32,7 @@
     //bottoni in impostazioni
     <string name="SegnalaPositività">Segnala positività</string>
     <string name="SegnalaNegatività">Segnala negatività</string>
-    <string name="DarkTheme">Tema scruro</string>
+    <string name="DarkTheme">Tema scuro</string>
     <string name="Notifiche">Notifiche</string>
     <string name="InformativaPrivacy">Informativa e privacy</string>
 
@@ -83,7 +83,11 @@
 
 
     //HomeFragment
-
+    <string name="your_state">Il tuo stato</string>
+    <string name="where_do_you_want_to_go">Dove vuoi andare?</string>
+    <string name="search_for_available_events">Cerca gli eventi disponibili oppure creane uno</string>
+    <string name="search_event">Cerca evento</string>
+    <string name="create_event">Crea evento</string>
 
     //GroupFragment
     <string name="your_groups">I tuoi gruppi</string>
@@ -98,6 +102,121 @@
     <string name="upload_cover_img">Carica immagine di copertina</string>
     <string name="next">Avanti</string>
 
+    //activity_crea_gruppo
+    <string name="group_name">nome del gruppo</string>
+    <string name="description">descrizione</string>
+
+    //activity_eventi_partecipato_positivo
+    <string name="end">fine</string>
+
+    //activity_invita_amici_gruppo
+    <string name="invite_friend_to_group">invita i tuoi amici al gruppo</string>
+    <string name="stop">termina</string>
+
+    //activity_modifica_dati_utente
+    <string name="modify_data">modifica dati</string>
+    <string name="name">nome</string>
+    <string name="surname">cognome</string>
+    <string name="gender">genere</string>
+    <string name="residency">residenza</string>
+    <string name="region">regione</string>
+    <string name="province">provincia</string>
+    <string name="city">città</string>
+    <string name="save">salva modifiche</string>
+
+    //activity_profilo_utenti
+    <string name="add_to_friends">aggiungi agli amici</string>
+    <string name="birth2dots">Data di nascita:</string>
+    <string name="age2dots">Età:</string>
+    <string name="gender2dots">genere</string>
+    <string name="residency2dots">Residenza:</string>
+
+    //activity_registration
+    <string name="take_profile_picture">scatta foto profilo</string>
+    <string name="upload_profile_picture">carica foto profilo</string>
+
+    //activity_segnala_negatività
+    <string name="date_of_negativity">data negatività</string>
+    <string name="upload_image">carica immagine</string>
+    <string name="upload_pdf">carica pdf</string>
+    <string name="report">completa la segnalazione</string>
+
+    //activity_segnala_positività
+    <string name="date_of_positivity">data positività</string>
+
+
+    //fragment_events
+    <string name="participating">Eventi a cui sono iscritto</string>
+    <string name="created_by_me">Eventi creati da me</string>
+
+    //fragment_friends
+    <string name="your_friends">i tuoi amici</string>
+
+    //fragment_new_events
+    <string name="event_name">Nome dell\'evento</string>
+    <string name="maximum_number_of_participants">Numero massimo di partecipanti</string>
+    <string name="event_date2dots">Data evento:</string>
+    <string name="event_date">Data evento</string>
+    <string name="event_time2dots">Orario evento:</string>
+    <string name="event_time">Orario evento</string>
+    <string name="event_description">Descrizione evento</string>
+    <string name="event_address">Indirizzo evento</string>
+
+    //fragment_profilo_evento
+    <string name="number_of_participants">Numero di partecipanti all\'evento </string>
+    <string name="available_places">Posti disponibili </string>
+    <string name="partecipate">partecipa </string>
+    <string name="partecipate_as_a_group">partecipa come gruppo </string>
+
+    //fragment_profilo_evento_admin
+    <string name="modify_event">Modifica evento </string>
+    <string name="delete_event">Elimina evento </string>
+
+    //fragment_profilo_gruppo
+    <string name="exit_group">Abbandona gruppo </string>
+
+    //fragment_profilo_gruppo_admin
+    <string name="group_state">Stato del gruppo </string>
+    <string name="invite_friends">Invita amici </string>
+    <string name="modify_group">Modifica gruppo </string>
+    <string name="delete_group">Elimina gruppo </string>
+
+    //fragment_profilo_partecipante
+    <string name="name_and_surname">Nome Cognome </string>
+
+    //fragment_rimuovi_partecipazione
+    <string name="cancel_participation">Annulla partecipazione </string>
+
+    //item_annulla_partecipazione_evento
+    <string name="red_state_participation">Il tuo stato è rosso/arancione\nNon puoi più partecipare a questo evento</string>
+
+    //item_invito
+    <string name="invite_from_group">Hai ricevuto un invito da questo gruppo:</string>
+    <string name="accept">Accetta</string>
+    <string name="delete">Elimina</string>
+    <string name="participant">Partecipanti</string>
+
+    //item_partecipato_evento
+    <string name="did_you_participate_event">Hai partecipato a questo evento?</string>
+    <string name="date">Data</string>
+    <string name="yes">Sì</string>
+    <string name="no">No</string>
+
+    //item_promemoria_evento
+    <string name="reminder">Promemoria</string>
+    <string name="you_will_participate_event">Parteciperai a questo evento</string>
+
+    //item_richiesta
+    <string name="friend_request">Hai ricevuto una richesta d\'amicizia da:</string>
+
+    //partecipante_row
+    <string name="years">Anni</string>
+
+    //bottom_navigation
+    <string name="groups">Gruppi</string>
+    <string name="friends">Amici</string>
+    <string name="notifications">Notifiche</string>
+    <string name="events">Eventi</string>
 
     //Shared message
     <string name="subMessage1">Iscriviti subito all\'evento di ContagiApp\n \'\'</string>

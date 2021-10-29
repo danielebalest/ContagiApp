@@ -8,9 +8,8 @@
         android:icon="@drawable/ic_account_circle_black_24dp"/>
     <item
         android:id="@+id/nav_setting"
-        android:title="Impostazioni"
-        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_settings_black_24dp"
-        />
+        android:title="@string/settings"
+        app:showAsAction="ifRoom" />
 
 </menu>

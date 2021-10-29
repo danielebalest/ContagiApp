@@ -34,12 +34,12 @@
             android:id="@+id/tvNomeEventoAdmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Titolo Evento"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
             android:layout_marginRight="15dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="@string/event_name"
+            android:textColor="@color/black"
+            android:textSize="30dp"
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/btnShareAdmin"
@@ -56,8 +56,8 @@
         android:id="@+id/tvDescrEventoAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Descrizione dell'evento"
-        android:padding="20dp"/>
+        android:padding="20dp"
+        android:text="@string/event_description" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -82,13 +82,13 @@
                 android:id="@+id/tvDataEventoAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Data" />
+                android:text="@string/event_date" />
 
             <TextView
                 android:id="@+id/tvOrarioEventoAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Orario" />
+                android:text="@string/event_time" />
 
         </LinearLayout>
 
@@ -119,25 +119,25 @@
                 android:id="@+id/tvRegioneEventoAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Regione" />
+                android:text="@string/region" />
 
             <TextView
                 android:id="@+id/tvProvinciaEventoAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Provincia" />
+                android:text="@string/province" />
 
             <TextView
                 android:id="@+id/tvCittaEventoAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Città" />
+                android:text="@string/city" />
 
             <TextView
                 android:id="@+id/tvIndirizzoEventoAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Indirizzo" />
+                android:text="@string/event_address" />
 
         </LinearLayout>
 
@@ -166,19 +166,19 @@
                     android:id="@+id/num_partecipanti_max"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Num partecipanti max" />
+                    android:text="@string/maximum_number_of_participants" />
 
                 <TextView
                     android:id="@+id/num_partecipanti"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Num partecipanti" />
+                    android:text="@string/number_of_participants" />
 
                 <TextView
                     android:id="@+id/posti_disponibili"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Num posti disponibili" />
+                    android:text="@string/available_places" />
 
             </LinearLayout>
     </LinearLayout>
@@ -194,17 +194,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        app:cornerRadius="20dp"
-        android:text="modifica evento"/>
+        android:text="@string/modify_event"
+        app:cornerRadius="20dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnEliminaEvento"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        app:cornerRadius="20dp"
-        android:text="elimina evento"
-        android:backgroundTint="@color/red"/>
+        android:backgroundTint="@color/red"
+        android:text="@string/delete_event"
+        app:cornerRadius="20dp" />
 </LinearLayout>
 
 </ScrollView>

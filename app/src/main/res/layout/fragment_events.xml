@@ -34,18 +34,18 @@
             android:id="@+id/switch1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Iscritto"
-            android:textAppearance="?attr/textAppearanceHeadline6"
             android:padding="15dp"
+            android:text="@string/participating"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             tools:checked="false" />
 
         <Switch
             android:id="@+id/switch2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Creati"
-            android:textAppearance="?attr/textAppearanceHeadline6"
             android:padding="15dp"
+            android:text="@string/created_by_me"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             tools:checked="false" />
 
         <androidx.recyclerview.widget.RecyclerView
