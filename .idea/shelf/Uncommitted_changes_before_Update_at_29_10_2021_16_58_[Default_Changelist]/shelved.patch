@@ -1,0 +1,1168 @@
+Index: .idea/runConfigurations.xml
+===================================================================
+diff --git a/.idea/runConfigurations.xml b/.idea/runConfigurations.xml
+deleted file mode 100644
+--- a/.idea/runConfigurations.xml	(revision 95ad4920bec4300ba3721a2990b5bd897dcea77d)
++++ /dev/null	(revision 95ad4920bec4300ba3721a2990b5bd897dcea77d)
+@@ -1,12 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="RunConfigurationProducerService">
+-    <option name="ignoredProducers">
+-      <set>
+-        <option value="org.jetbrains.plugins.gradle.execution.test.runner.AllInPackageGradleConfigurationProducer" />
+-        <option value="org.jetbrains.plugins.gradle.execution.test.runner.TestClassGradleConfigurationProducer" />
+-        <option value="org.jetbrains.plugins.gradle.execution.test.runner.TestMethodGradleConfigurationProducer" />
+-      </set>
+-    </option>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_07_10_2021_19_59__Default_Changelist_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_07_10_2021_19_59__Default_Changelist_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_07_10_2021_19_59__Default_Changelist_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_07_10_2021_19_59__Default_Changelist_.xml	(revision 95ad4920bec4300ba3721a2990b5bd897dcea77d)
++++ /dev/null	(revision 95ad4920bec4300ba3721a2990b5bd897dcea77d)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_07_10_2021_19_59_[Default_Changelist]" date="1633629642319" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_07_10_2021_19_59_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 07/10/2021 19:59 [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_07_10_2021_19_59_[Default_Changelist]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_07_10_2021_19_59_[Default_Changelist]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_07_10_2021_19_59_[Default_Changelist]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_07_10_2021_19_59_[Default_Changelist]/shelved.patch	(revision 95ad4920bec4300ba3721a2990b5bd897dcea77d)
++++ /dev/null	(revision 95ad4920bec4300ba3721a2990b5bd897dcea77d)
+@@ -1,1030 +0,0 @@
+-Index: app/src/main/java/com/example/contagiapp/eventi/NewEventsActivity.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.contagiapp.eventi;\r\n\r\nimport android.app.DatePickerDialog;\r\nimport android.app.ProgressDialog;\r\nimport android.app.TimePickerDialog;\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.graphics.Color;\r\nimport android.graphics.drawable.ColorDrawable;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.os.PersistableBundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.DatePicker;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.Spinner;\r\nimport android.widget.TextClock;\r\nimport android.widget.TextView;\r\nimport android.widget.TimePicker;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.example.contagiapp.R;\r\nimport com.example.contagiapp.gruppi.AddImgGruppoActivity;\r\nimport com.example.contagiapp.gruppi.CreaGruppoActivity;\r\nimport com.example.contagiapp.utente.Utente;\r\nimport com.google.android.gms.maps.GoogleMap;\r\nimport com.google.android.gms.maps.MapView;\r\nimport com.google.android.gms.maps.OnMapReadyCallback;\r\nimport com.google.android.gms.tasks.OnCanceledListener;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.OnFailureListener;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.android.gms.tasks.Task;\r\n\r\nimport com.google.android.material.textfield.TextInputLayout;\r\nimport com.google.firebase.firestore.CollectionReference;\r\nimport com.google.firebase.firestore.DocumentReference;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.storage.FirebaseStorage;\r\nimport com.google.firebase.storage.StorageReference;\r\nimport com.google.firebase.storage.UploadTask;\r\nimport com.google.gson.Gson;\r\nimport com.squareup.picasso.Picasso;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Calendar;\r\nimport java.util.HashMap;\r\nimport java.util.Map;\r\n\r\nimport es.dmoral.toasty.Toasty;\r\n\r\n\r\npublic class NewEventsActivity extends AppCompatActivity implements OnMapReadyCallback {\r\n\r\n    MapView mapView;\r\n    EditText editTextLuogo;\r\n\r\n    StorageReference storageRef = FirebaseStorage.getInstance().getReference();\r\n    private static final String TAG = \"NewEventsFragment\";\r\n\r\n    private Button creaEvento;\r\n    private TextView dataEvento;\r\n    private TextClock orarioEvento;\r\n    private DatePickerDialog.OnDateSetListener dataDellEvento;\r\n    private TimePickerDialog.OnTimeSetListener orarioDellEvento;\r\n\r\n    public static final int PICK_IMAGE = 1;\r\n    private Uri imageUri;\r\n\r\n    FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n    private CollectionReference eventiCollection = db.collection(\"Eventi\");\r\n    String documentId = null;\r\n    private int anno = 0, mese = 0, giorno = 0, ora=0, minuti=0, oraapp=0, minapp=0;\r\n\r\n    @Override\r\n    protected void onCreate(final Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.fragment_new_events);\r\n\r\n        editTextLuogo = findViewById(R.id.editTextIndirizzo);\r\n\r\n\r\n        mapView = findViewById(R.id.map_view);\r\n        mapView.onCreate(savedInstanceState);\r\n        mapView.getMapAsync(this);\r\n\r\n\r\n        // collegamento button registrati con la mainActivity\r\n        creaEvento = (Button) findViewById(R.id.buttonCreaEvento);\r\n\r\n        creaEvento.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                //openMainActivity();\r\n                addEventToDb();\r\n            }\r\n        });\r\n\r\n        //Date Picker\r\n        orarioEvento=(TextClock) findViewById(R.id.orarioEvento);\r\n        orarioEvento.setOnClickListener(new View.OnClickListener() {\r\n\r\n            @Override\r\n            public void onClick(View v) {\r\n                Calendar cal = Calendar.getInstance();\r\n                int hour = cal.get(Calendar.HOUR);\r\n                int minute = cal.get(Calendar.MINUTE);\r\n                TimePickerDialog dialog;\r\n                dialog = new TimePickerDialog(NewEventsActivity.this, android.R.style.Theme_Material_InputMethod, orarioDellEvento,hour,minute,true);\r\n                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));\r\n                dialog.show();\r\n            }\r\n        });\r\n\r\n        dataEvento = (TextView) findViewById(R.id.dataEvento);\r\n        dataEvento.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Calendar cal = Calendar.getInstance();\r\n                int year = cal.get(Calendar.YEAR);\r\n                int month = cal.get(Calendar.MONTH);\r\n                int day = cal.get(Calendar.DAY_OF_MONTH);\r\n\r\n                DatePickerDialog dialog = new DatePickerDialog(\r\n                        NewEventsActivity.this,\r\n                        android.R.style.Theme_Material_InputMethod,\r\n                        dataDellEvento,\r\n                        year, month, day);\r\n                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));\r\n                dialog.show();\r\n            }\r\n        });\r\n\r\n\r\n\r\n        dataDellEvento = new DatePickerDialog.OnDateSetListener() {\r\n            @Override\r\n            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {\r\n                month++;\r\n                String date = null;\r\n                Log.d(TAG, \"onDateSet: date: \" + dayOfMonth + \"/\" + month + \"/\" + year);\r\n                if(month<=9) {\r\n                    date = dayOfMonth + \"/0\" + month + \"/\" + year;\r\n                }else\r\n                    date = dayOfMonth + \"/\" + month + \"/\" + year;\r\n\r\n                dataEvento.setText(date);\r\n            }\r\n        };\r\n        //orario visualizzato come cristo comanda\r\n\r\n        orarioDellEvento = new TimePickerDialog.OnTimeSetListener() {\r\n            @Override\r\n            public void onTimeSet(TimePicker view, int hour, int minute) {\r\n                boolean condorario= false;\r\n                boolean condminuto= false;\r\n\r\n                if(hour<=9){\r\n                    condorario=true;\r\n                }\r\n                if(minute<=9){\r\n                    condminuto=true;\r\n                }\r\n\r\n                String time=null;\r\n                Log.d(TAG,\"onTimeSet: time: \" +hour + \":\" + minute);\r\n                if(condorario && condminuto){\r\n                    time= \"0\" + hour + \":0\" + minute;\r\n                }else if (condorario){\r\n                    time= \"0\"+ hour + \":\" + minute;\r\n                }else if(condminuto){\r\n                    time= + hour + \":0\" + minute;\r\n                }else time= + hour + \":\" + minute;\r\n\r\n                orarioEvento.setText(time);\r\n            }\r\n        };\r\n    }\r\n\r\n\r\n    private void addEventToDb(){\r\n\r\n\r\n        EditText nome = findViewById(R.id.editTextNomeEvento);\r\n        EditText descrizione = findViewById(R.id.editTextDescrEvento);\r\n        EditText numeroMaxP = findViewById(R.id.editTextNumMaxPartecipanti);\r\n        TextView data = findViewById(R.id.dataEvento);\r\n        TextClock orario= findViewById(R.id.orarioEvento);\r\n        EditText citta = findViewById(R.id.editTextCitta);\r\n        EditText indirizzo = findViewById(R.id.editTextIndirizzo);\r\n\r\n        if(controlloEditText(nome.getText().toString(), numeroMaxP.getText().toString(), descrizione.getText().toString(), citta.getText().toString(), indirizzo.getText().toString())){\r\n            final Evento evento = new Evento();\r\n            evento.setAdmin(getMailUtenteLoggato());\r\n            evento.setNome(nome.getText().toString());\r\n            evento.setDescrizione(descrizione.getText().toString());\r\n            evento.setNumeroMaxPartecipanti(Integer.parseInt(numeroMaxP.getText().toString()));\r\n            evento.setData(data.getText().toString()); //da vedere controllo\r\n            evento.setOrario(orario.getText().toString());\r\n            evento.setCitta(citta.getText().toString());\r\n            evento.setIndirizzo(indirizzo.getText().toString());\r\n\r\n            ArrayList<String> partecipanti = new ArrayList<String>(); //inizializzo un array vuoto\r\n            evento.setPartecipanti(partecipanti);\r\n\r\n\r\n            Log.d(\"getIndirizzo\", String.valueOf(evento.getIndirizzo()));\r\n            Log.d(\"getData\", String.valueOf(evento.getData()));\r\n            Log.d(\"getOrario\", String.valueOf(evento.getOrario()));\r\n\r\n\r\n            if(dataOraValide(evento, evento.getData(), evento.getOrario())){\r\n                db.collection(\"Eventi\").add(evento)\r\n                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {\r\n                            @Override\r\n                            public void onSuccess(DocumentReference documentReference) {\r\n                                Log.d(TAG, \"DocumentSnapshot written with ID: \" + documentReference.getId());\r\n                                documentId = documentReference.getId();\r\n                                evento.setIdEvento(documentId);\r\n                                db.collection(\"Eventi\").document(documentId).update(\"idEvento\", documentId);\r\n                                uploadImage();\r\n                            }\r\n                        })\r\n                        .addOnFailureListener(new OnFailureListener() {\r\n                            @Override\r\n                            public void onFailure(@NonNull Exception e) {\r\n                                Log.w(TAG, \"Error adding document\", e);\r\n                            }\r\n                        });\r\n\r\n                Toast.makeText(this, \"Evento aggiunto\", Toast.LENGTH_SHORT).show();\r\n\r\n                finish();\r\n            }else {\r\n                finish();\r\n                startActivity(getIntent());\r\n            }\r\n        }\r\n\r\n\r\n    }\r\n\r\n\r\n    private void openMainActivity() {\r\n        Map<String, Object> evento = new HashMap<>();\r\n\r\n        TextView nome = (TextView) findViewById(R.id.editTextNomeEvento);\r\n        evento.put(\"nome\", nome.getText().toString());\r\n\r\n        TextView numeroP = (TextView) findViewById(R.id.editTextNumMaxPartecipanti);\r\n        evento.put(\"num_partecipanti\", numeroP.getText().toString());\r\n\r\n        TextView data = (TextView) findViewById(R.id.dataEvento);\r\n        String appoggio= data.getText().toString();\r\n\r\n        TextClock orario= (TextClock) findViewById(R.id.orarioEvento);\r\n        String appoggio1=orario.getText().toString();\r\n\r\n        TextView descrizione = (TextView) findViewById(R.id.editTextDescrEvento);\r\n        evento.put(\"descrizione\", descrizione.getText().toString());\r\n\r\n        Spinner nazione = (Spinner) findViewById(R.id.spinnerNazioni);\r\n        evento.put(\"nazione\", nazione.getSelectedItem().toString());\r\n\r\n        TextView citta = (TextView) findViewById(R.id.editTextCitta);\r\n        evento.put(\"citta\", citta.getText().toString());\r\n\r\n        TextView luogo = (TextView) findViewById(R.id.editTextCitta);\r\n\r\n        controllodata(evento,appoggio,appoggio1);\r\n\r\n        //Tornare indietro\r\n        this.finish();\r\n    }\r\n\r\n    void controllodata(Map<String, Object> evento, String appoggio, String appoggio1){\r\n        Calendar cal = Calendar.getInstance();\r\n        boolean condevento=false;\r\n        boolean condorario2= true;\r\n        int l = appoggio.length();\r\n        int l1= appoggio1.length();\r\n        System.out.println(\"la lunghezza è stocazzooooo \"+ l1);\r\n        System.out.println(\"l'orario scelto è \"+ appoggio1);\r\n        switch (l) {\r\n            case 9:\r\n                anno = Integer.valueOf(appoggio.substring(l - 4, l));\r\n                mese = Integer.valueOf(appoggio.substring(l - 7, l - 5));\r\n                giorno = Integer.valueOf(appoggio.charAt(0)) - 48;\r\n                break;\r\n            case 10:\r\n                anno = Integer.valueOf(appoggio.substring(l - 4, l));\r\n                mese = Integer.valueOf(appoggio.substring(l - 7, l - 5));\r\n                giorno = Integer.valueOf(appoggio.substring(l - 10, l - 8));\r\n                break;\r\n        }\r\n        minapp = Integer.valueOf(appoggio1.substring(3,5));\r\n        oraapp = Integer.valueOf(appoggio1.substring(0,2));\r\n\r\n        System.out.println(\"orario scelto \"+ oraapp);\r\n        System.out.println(\"minuti scelti \"+ minapp);\r\n        if (anno >= cal.get(Calendar.YEAR)) {\r\n            if ((mese-1) >= cal.get(Calendar.MONTH)) {\r\n                if (giorno >= cal.get(Calendar.DAY_OF_MONTH))\r\n                    if(oraapp>= (cal.get(Calendar.HOUR_OF_DAY)+1)) {\r\n                        evento.put(\"data\", appoggio);\r\n                        evento.put(\"orario evento\", appoggio1);\r\n                        condorario2=false;\r\n                    }\r\n            }else condevento= true;\r\n        }else condevento= true;\r\n\r\n        if(condevento){\r\n            Toast.makeText(this, \"data non valida\",Toast.LENGTH_SHORT).show();\r\n            finish();\r\n            startActivity(getIntent());\r\n        }else if(condorario2) {\r\n            Toast.makeText(this, \"orario non valido\",Toast.LENGTH_SHORT).show();\r\n            finish();\r\n            startActivity(getIntent());\r\n        }else{\r\n            db.collection(\"Eventi\").add(evento);\r\n            Toast.makeText(this, \"Evento aggiunto\", Toast.LENGTH_SHORT).show();\r\n            finish();\r\n            //provaaaaaaaa\r\n        }\r\n    }\r\n\r\n    private Boolean dataOraValide(Evento evento, String data, String orario){\r\n        Boolean validita= false;\r\n        Calendar cal = Calendar.getInstance();\r\n        boolean condevento2=false;\r\n        boolean condorario3= true;\r\n        int l = data.length();\r\n        int l1= orario.length();\r\n        switch (l) {\r\n            case 9:\r\n                anno = Integer.valueOf(data.substring(l - 4, l));\r\n                mese = Integer.valueOf(data.substring(l - 7, l - 5));\r\n                giorno = Integer.valueOf(data.charAt(0)) - 48;\r\n                break;\r\n            case 10:\r\n                anno = Integer.valueOf(data.substring(l - 4, l));\r\n                mese = Integer.valueOf(data.substring(l - 7, l - 5));\r\n                giorno = Integer.valueOf(data.substring(l - 10, l - 8));\r\n                break;\r\n        }\r\n        minapp = Integer.valueOf(orario.substring(3,5));\r\n        oraapp = Integer.valueOf(orario.substring(0,2));\r\n\r\n        if (anno >= cal.get(Calendar.YEAR)) {\r\n            if ((mese) >= cal.get(Calendar.MONTH)) {\r\n                if (giorno >= cal.get(Calendar.DAY_OF_MONTH)) {\r\n                    if (giorno == cal.get(Calendar.DAY_OF_MONTH)) {\r\n                        if (oraapp >= (cal.get(Calendar.HOUR_OF_DAY))+1) {\r\n                            System.out.println(\"arrivo qui\");\r\n                            evento.setData(data);\r\n                            evento.setOrario(orario);\r\n                          //  evento.setPartecipanti(getMailUtenteLoggato().charAt());\r\n                            condorario3 = false;\r\n                            condevento2=true;\r\n                        }\r\n                    } else {condevento2 = true; condorario3= false;}\r\n                } else {condevento2 = true; condorario3= false;}\r\n            } else {condevento2 = true; condorario3= false;}\r\n        } else {condevento2 = true; condorario3= false;}\r\n\r\n        if(!condevento2){\r\n            Toast.makeText(this, \"data non valida\",Toast.LENGTH_SHORT).show();\r\n            validita = false;\r\n        }else if(condorario3) {\r\n            Toast.makeText(this, \"orario non valido\",Toast.LENGTH_SHORT).show();\r\n            Toast.makeText(this, \"l'evento deve essere tra minimo un'ora!\",Toast.LENGTH_SHORT).show();\r\n            validita = false;\r\n        }else{\r\n            validita = true;\r\n            evento.setData(data);\r\n            evento.setOrario(orario);\r\n        }\r\n        return validita;\r\n    }\r\n\r\n    private String getMailUtenteLoggato(){\r\n        Gson gson = new Gson();\r\n        SharedPreferences prefs = getApplicationContext().getSharedPreferences(\"Login\", Context.MODE_PRIVATE);\r\n        String json = prefs.getString(\"utente\", \"no\");\r\n        String mailUtenteLoggato;\r\n        //TODO capire il funzionamento\r\n        if(!json.equals(\"no\")) {\r\n            Utente utente = gson.fromJson(json, Utente.class);\r\n            mailUtenteLoggato = utente.getMail();\r\n            Log.d(\"mailutenteLoggato\", mailUtenteLoggato);\r\n        } else {\r\n            SharedPreferences prefs1 = getApplicationContext().getSharedPreferences(\"LoginTemporaneo\",Context.MODE_PRIVATE);\r\n            mailUtenteLoggato = prefs1.getString(\"mail\", \"no\");\r\n            Log.d(\"mail\", mailUtenteLoggato);\r\n        }\r\n        return mailUtenteLoggato;\r\n    }\r\n\r\n    @Override\r\n    public void onMapReady(GoogleMap googleMap) {\r\n\r\n    }\r\n\r\n    @Override\r\n    protected void onStart() {\r\n        super.onStart();\r\n        mapView.onStart();\r\n    }\r\n\r\n    @Override\r\n    protected void onResume() {\r\n        super.onResume();\r\n    }\r\n\r\n    @Override\r\n    protected void onPause() {\r\n        super.onPause();\r\n    }\r\n\r\n    @Override\r\n    protected void onStop() {\r\n        super.onStop();\r\n    }\r\n\r\n    @Override\r\n    protected void onDestroy() {\r\n        super.onDestroy();\r\n        mapView.onDestroy();\r\n    }\r\n\r\n    @Override\r\n    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {\r\n        super.onSaveInstanceState(outState, outPersistentState);\r\n        mapView.onSaveInstanceState(outState);\r\n    }\r\n\r\n    @Override\r\n    public void onLowMemory() {\r\n        super.onLowMemory();\r\n        mapView.onLowMemory();\r\n    }\r\n\r\n\r\n    public void addImgEvent(View view) {\r\n        openImage();\r\n    }\r\n\r\n\r\n    private void openImage(){\r\n        Intent intent = new Intent();\r\n        intent.setType(\"image/*\");\r\n        intent.setAction(Intent.ACTION_GET_CONTENT);\r\n        startActivityForResult(Intent.createChooser(intent, \"Select Picture\"), PICK_IMAGE);\r\n    }\r\n\r\n    @Override\r\n    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {\r\n        super.onActivityResult(requestCode, resultCode, data);\r\n\r\n        if(requestCode == PICK_IMAGE && resultCode == RESULT_OK){\r\n            imageUri = data.getData();\r\n            ImageView imageView= findViewById(R.id.immagineEvento);\r\n            Picasso.get().load(imageUri).into(imageView); //mette l'immagine nell'ImageView di questa activity\r\n        }\r\n\r\n    }\r\n\r\n    public boolean controlloEditText(String nomeEvento, String numMaxPartecipanti, String descrEvento, String citta, String indirizzo) {\r\n        boolean isValid = false;\r\n\r\n        TextInputLayout textInputLayoutNome = findViewById(R.id.textInputNomeEventoLayout);\r\n        TextInputLayout textInputLayoutNumMaxPartecipanti = findViewById(R.id.textInputNumMaxPartecipantiLayout);\r\n        TextInputLayout textInputLayoutDescrEvento = findViewById(R.id.textInputDescrEvento);\r\n        TextInputLayout textInputLayoutCitta = findViewById(R.id.textInputCitta);\r\n        TextInputLayout textInputLayoutIndirizzo = findViewById(R.id.textInputIndirizzo);\r\n\r\n        if ((!nomeEvento.isEmpty()) && (!numMaxPartecipanti.isEmpty()) && (!descrEvento.isEmpty()) && (!citta.isEmpty()) && (!indirizzo.isEmpty())) { //se sono tutti validi\r\n            textInputLayoutNome.setErrorEnabled(false);\r\n            textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);\r\n            textInputLayoutDescrEvento.setErrorEnabled(false);\r\n            textInputLayoutCitta.setErrorEnabled(false);\r\n            textInputLayoutIndirizzo.setErrorEnabled(false);\r\n            isValid = true;\r\n\r\n        } else {\r\n            if (nomeEvento.isEmpty() && numMaxPartecipanti.isEmpty() && descrEvento.isEmpty() && citta.isEmpty() && indirizzo.isEmpty()) { //se sono tutti vuoti\r\n                Toasty.warning(NewEventsActivity.this, \"Inserisci tutti i campi\", Toast.LENGTH_SHORT).show();\r\n\r\n                textInputLayoutNome.setError(\"Inserisci nome dell'evento\");\r\n                textInputLayoutNumMaxPartecipanti.setError(\"Inserisci descrizione del gruppo\");\r\n                textInputLayoutDescrEvento.setError(\"Inserisci descrizione\");\r\n                textInputLayoutCitta.setError(\"Inserisci città\");\r\n                textInputLayoutIndirizzo.setError(\"Inserisci indirizzo\");\r\n            } else {\r\n\r\n                //se solo uno tra tutti è vuoto\r\n                if (indirizzo.isEmpty()) {\r\n                    textInputLayoutIndirizzo.setError(\"Inserisci indirizzo\");\r\n                    textInputLayoutNome.setErrorEnabled(false);\r\n                    textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);\r\n                    textInputLayoutDescrEvento.setErrorEnabled(false);\r\n                    textInputLayoutCitta.setErrorEnabled(false);\r\n                }\r\n\r\n                if (citta.isEmpty()) {\r\n                    textInputLayoutCitta.setError(\"Inserisci città\");\r\n                    textInputLayoutNome.setErrorEnabled(false);\r\n                    textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);\r\n                    textInputLayoutDescrEvento.setErrorEnabled(false);\r\n                    textInputLayoutIndirizzo.setErrorEnabled(false);\r\n                }\r\n\r\n                if (descrEvento.isEmpty()) {\r\n                    textInputLayoutDescrEvento.setError(\"Inserisci descrizione\");\r\n                    textInputLayoutNome.setErrorEnabled(false);\r\n                    textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);\r\n                    textInputLayoutCitta.setErrorEnabled(false);\r\n                    textInputLayoutIndirizzo.setErrorEnabled(false);\r\n                }\r\n\r\n                if (numMaxPartecipanti.isEmpty()) {\r\n                    textInputLayoutNumMaxPartecipanti.setError(\"Inserisci numero massimo dei partecipanti\");\r\n                    textInputLayoutNome.setErrorEnabled(false);\r\n                    textInputLayoutDescrEvento.setErrorEnabled(false);\r\n                    textInputLayoutCitta.setErrorEnabled(false);\r\n                    textInputLayoutIndirizzo.setErrorEnabled(false);\r\n                }\r\n\r\n                if (nomeEvento.isEmpty()) {\r\n                    textInputLayoutNome.setError(\"Inserisci nome del gruppo\");\r\n                    textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);\r\n                    textInputLayoutDescrEvento.setErrorEnabled(false);\r\n                    textInputLayoutCitta.setErrorEnabled(false);\r\n                    textInputLayoutIndirizzo.setErrorEnabled(false);\r\n                }\r\n\r\n            }\r\n        }\r\n        return isValid;\r\n    }\r\n\r\n    private  void uploadImage(){\r\n        final ProgressDialog pd = new ProgressDialog(this);\r\n        pd.setMessage(\"Caricamento\");\r\n        pd.show();\r\n\r\n        Log.d(\"imageUri\", String.valueOf(imageUri));\r\n        Log.d(\"documentID\", String.valueOf(documentId));\r\n\r\n        if((imageUri != null) && (documentId != null)){\r\n            final StorageReference fileRef = FirebaseStorage.getInstance().getReference().child(\"eventi\").child(documentId);\r\n\r\n            fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {\r\n                @Override\r\n                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {\r\n                    fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {\r\n                        @Override\r\n                        public void onSuccess(Uri uri) {\r\n                            String url = uri.toString();\r\n\r\n                            Log.d(\"downloadUrl\", url);\r\n                            //pd.dismiss();\r\n                            Toast.makeText(NewEventsActivity.this, \"immagine caricata\", Toast.LENGTH_SHORT).show();\r\n                        }\r\n                    }).addOnCanceledListener(new OnCanceledListener() {\r\n                        @Override\r\n                        public void onCanceled() {\r\n                            Toast.makeText(NewEventsActivity.this, \"immagine non caricata\", Toast.LENGTH_SHORT).show();\r\n                        }\r\n                    });\r\n                }\r\n            });\r\n        }\r\n    }\r\n};\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/java/com/example/contagiapp/eventi/NewEventsActivity.java	(revision f67625775b3750f658fdfd28037d778e087ad17d)
+-+++ app/src/main/java/com/example/contagiapp/eventi/NewEventsActivity.java	(date 1633629582148)
+-@@ -26,6 +26,9 @@
+- import androidx.annotation.NonNull;
+- import androidx.annotation.Nullable;
+- import androidx.appcompat.app.AppCompatActivity;
+-+import androidx.core.app.NavUtils;
+-+import androidx.fragment.app.Fragment;
+-+import androidx.fragment.app.FragmentTransaction;
+- 
+- import com.example.contagiapp.R;
+- import com.example.contagiapp.gruppi.AddImgGruppoActivity;
+-@@ -43,6 +46,7 @@
+- import com.google.android.material.textfield.TextInputLayout;
+- import com.google.firebase.firestore.CollectionReference;
+- import com.google.firebase.firestore.DocumentReference;
+-+import com.google.firebase.firestore.DocumentSnapshot;
+- import com.google.firebase.firestore.FirebaseFirestore;
+- import com.google.firebase.storage.FirebaseStorage;
+- import com.google.firebase.storage.StorageReference;
+-@@ -50,15 +54,21 @@
+- import com.google.gson.Gson;
+- import com.squareup.picasso.Picasso;
+- 
+-+import java.sql.Time;
+-+import java.text.ParseException;
+-+import java.text.SimpleDateFormat;
+- import java.util.ArrayList;
+- import java.util.Calendar;
+-+import java.util.Date;
+- import java.util.HashMap;
+- import java.util.Map;
+-+import java.util.SimpleTimeZone;
+-+import java.util.TimeZone;
+- 
+- import es.dmoral.toasty.Toasty;
+- 
+- 
+--public class NewEventsActivity extends AppCompatActivity implements OnMapReadyCallback {
+-+public class NewEventsActivity extends AppCompatActivity {
+- 
+-     MapView mapView;
+-     EditText editTextLuogo;
+-@@ -72,25 +82,96 @@
+-     private DatePickerDialog.OnDateSetListener dataDellEvento;
+-     private TimePickerDialog.OnTimeSetListener orarioDellEvento;
+- 
+-+    private String idEvento;
+-+    private boolean cond;
+-+    private Evento evento = new Evento();
+-+
+-+    private EditText nome;
+-+    private EditText descrizione;
+-+    private EditText numeroMaxP;
+-+    private TextView data;
+-+    private TextClock orario;
+-+    private EditText citta;
+-+    private EditText indirizzo;
+-+
+-     public static final int PICK_IMAGE = 1;
+-     private Uri imageUri;
+-+    private final static String storageDirectory = "eventi";
+- 
+-     FirebaseFirestore db = FirebaseFirestore.getInstance();
+-     private CollectionReference eventiCollection = db.collection("Eventi");
+-     String documentId = null;
+--    private int anno = 0, mese = 0, giorno = 0, ora=0, minuti=0, oraapp=0, minapp=0;
+- 
+-     @Override
+-     protected void onCreate(final Bundle savedInstanceState) {
+-         super.onCreate(savedInstanceState);
+-         setContentView(R.layout.fragment_new_events);
+- 
+-+        nome = findViewById(R.id.editTextNomeEvento);
+-+        descrizione = findViewById(R.id.editTextDescrEvento);
+-+        numeroMaxP = findViewById(R.id.editTextNumMaxPartecipanti);
+-+        data = findViewById(R.id.dataEvento);
+-+        orario= findViewById(R.id.orarioEvento);
+-+        citta = findViewById(R.id.editTextCitta);
+-+        indirizzo = findViewById(R.id.editTextIndirizzo);
+-+
+-+        Bundle bundle = getIntent().getExtras();
+-+        cond = bundle.getBoolean("scelta");
+-+        if(cond) {
+-+            idEvento = bundle.getString("idEvento");
+-+            final ImageView img = findViewById(R.id.imgProfiloEvento);
+-+
+-+            db.collection("Eventi")
+-+                    .document(idEvento)
+-+                    .get()
+-+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+-+                        @Override
+-+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+-+                            evento = documentSnapshot.toObject(Evento.class);
+-+
+-+                            nome.setText(evento.getNome());
+-+                            descrizione.setText(evento.getDescrizione());
+-+                            numeroMaxP.setText(Integer.toString(evento.getNumeroMaxPartecipanti()));
+-+                            citta.setText(evento.getCitta());
+-+                            indirizzo.setText(evento.getIndirizzo());
+-+                            data.setText(evento.getData());
+-+                            orario.setText(evento.getOrario());
+-+
+-+                            creaEvento.setText("Modifica Evento");
+-+
+-+                            //recupero l'immagine dallo storage
+-+                            //TODO caricare l'immgaine precedente
+-+                            /*Log.d("eventi/idEvento","eventi/"+idEvento);
+-+                            storageRef.child("eventi/"+idEvento).getDownloadUrl()
+-+                                    .addOnSuccessListener( new OnSuccessListener<Uri>() {
+-+                                        @Override
+-+                                        public void onSuccess(Uri uri) {
+-+                                            String sUrl = uri.toString(); //otteniamo il token del'immagine
+-+                                            Log.d("OnSuccess", "");
+-+                                            Log.d("sUrl", sUrl);
+-+                                            Picasso.get().load(sUrl).into(img);
+-+                                        }})
+-+                                    .addOnFailureListener(new OnFailureListener() {
+-+                                        @Override
+-+                                        public void onFailure(@NonNull Exception e) {
+-+                                            Log.d("OnFailure Exception", String.valueOf(e));
+-+                                        }
+-+                                    });*/
+-+                        }
+-+                    });
+-+        }
+-+
+-+//TODO controllare se la modifica evento funziona e se la chiamata di
+-+// questa pagina funziona senza problemi sia da "profiloEventoAdminFragment"
+-+// che da "EventsFragment" e perchè torna indietro in ProfiloEventoFragment anzichè EventsFragment
+-+// aggiustare i controlli per data e orario e capire perchè quando apro il calendario anzichè 12 mi esce 1
+-+
+-         editTextLuogo = findViewById(R.id.editTextIndirizzo);
+- 
+- 
+--        mapView = findViewById(R.id.map_view);
+-+        /*mapView = findViewById(R.id.map_view);
+-         mapView.onCreate(savedInstanceState);
+--        mapView.getMapAsync(this);
+-+        mapView.getMapAsync(this);*/
+- 
+- 
+-         // collegamento button registrati con la mainActivity
+-@@ -111,8 +192,18 @@
+-             @Override
+-             public void onClick(View v) {
+-                 Calendar cal = Calendar.getInstance();
+--                int hour = cal.get(Calendar.HOUR);
+--                int minute = cal.get(Calendar.MINUTE);
+-+
+-+                int hour;
+-+                int minute;
+-+                if(cond) {
+-+                    String ora = evento.getOrario();
+-+                    hour = Integer.parseInt(ora.substring(0,2));
+-+                    minute = Integer.parseInt(ora.substring(3,5));
+-+                } else {
+-+                    hour = cal.get(Calendar.HOUR);
+-+                    minute = cal.get(Calendar.MINUTE);
+-+                }
+-+
+-                 TimePickerDialog dialog;
+-                 dialog = new TimePickerDialog(NewEventsActivity.this, android.R.style.Theme_Material_InputMethod, orarioDellEvento,hour,minute,true);
+-                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));
+-@@ -125,9 +216,20 @@
+-             @Override
+-             public void onClick(View v) {
+-                 Calendar cal = Calendar.getInstance();
+--                int year = cal.get(Calendar.YEAR);
+--                int month = cal.get(Calendar.MONTH);
+--                int day = cal.get(Calendar.DAY_OF_MONTH);
+-+                int year;
+-+                int month;
+-+                int day;
+-+
+-+                if(cond) {
+-+                    String data = evento.getData();
+-+                    day = Integer.parseInt(data.substring(0,2));
+-+                    month = Integer.parseInt(data.substring(3,5));
+-+                    year = Integer.parseInt(data.substring(6,10)) - 1;
+-+                } else {
+-+                    year = cal.get(Calendar.YEAR);
+-+                    month = cal.get(Calendar.MONTH);
+-+                    day = cal.get(Calendar.DAY_OF_MONTH);
+-+                }
+- 
+-                 DatePickerDialog dialog = new DatePickerDialog(
+-                         NewEventsActivity.this,
+-@@ -188,18 +290,9 @@
+- 
+-     private void addEventToDb(){
+- 
+--
+--        EditText nome = findViewById(R.id.editTextNomeEvento);
+--        EditText descrizione = findViewById(R.id.editTextDescrEvento);
+--        EditText numeroMaxP = findViewById(R.id.editTextNumMaxPartecipanti);
+--        TextView data = findViewById(R.id.dataEvento);
+--        TextClock orario= findViewById(R.id.orarioEvento);
+--        EditText citta = findViewById(R.id.editTextCitta);
+--        EditText indirizzo = findViewById(R.id.editTextIndirizzo);
+--
+-         if(controlloEditText(nome.getText().toString(), numeroMaxP.getText().toString(), descrizione.getText().toString(), citta.getText().toString(), indirizzo.getText().toString())){
+--            final Evento evento = new Evento();
+--            evento.setAdmin(getMailUtenteLoggato());
+-+            String mail = getMailUtenteLoggato();
+-+            evento.setAdmin(mail);
+-             evento.setNome(nome.getText().toString());
+-             evento.setDescrizione(descrizione.getText().toString());
+-             evento.setNumeroMaxPartecipanti(Integer.parseInt(numeroMaxP.getText().toString()));
+-@@ -217,16 +310,67 @@
+-             Log.d("getOrario", String.valueOf(evento.getOrario()));
+- 
+- 
+--            if(dataOraValide(evento, evento.getData(), evento.getOrario())){
+--                db.collection("Eventi").add(evento)
+--                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+--                            @Override
+--                            public void onSuccess(DocumentReference documentReference) {
+--                                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+--                                documentId = documentReference.getId();
+-+            if(dataOraValide(evento)){
+-+
+-+                final Intent parentIntent = NavUtils.getParentActivityIntent(this);
+-+
+-+                db.collection("Eventi").add(evento).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+-+                    @Override
+-+                    public void onSuccess(DocumentReference documentReference) {
+-+                        documentId = documentReference.getId();
+-+                        evento.setIdEvento(documentId);
+-+                        db.collection("Eventi").document(documentId).update("idEvento", documentId);
+-+                        uploadImage();
+-+
+-+                        if(cond) {
+-+                            db.collection("Eventi").document(idEvento).delete();
+-+                            //db.collection("Eventi").document(idEvento).update(evento);
+-+
+-+                            Toast.makeText(NewEventsActivity.this, "Evento modificato", Toast.LENGTH_SHORT).show();
+-+
+-+                            /*ProfiloEventoAdminFragment eventoAdmin = new ProfiloEventoAdminFragment();
+-+
+-+                            Bundle bun = new Bundle();
+-+                            bun.putString("idEvento", documentId);
+-+
+-+                            eventoAdmin.setArguments(bun);
+-+                            FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+-+                            fr.replace(R.id.new_event,eventoAdmin);
+-+                            fr.addToBackStack(null); //serve per tornare al fragment precedente
+-+                            fr.commit();*/
+-+
+-+//TODO il problema è quando si va da questa activity a profiloEventoAdminFragment
+-+                            finish();
+-+                        } else {
+-+                            Toast.makeText(NewEventsActivity.this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
+-+                            finish();
+-+                        }
+-+
+-+
+-+                        /*parentIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+-+                        parentIntent.putExtra("idEvento", documentId);
+-+                        startActivity(parentIntent);
+-+                        finish();*/
+-+                    }
+-+                }).addOnFailureListener(new OnFailureListener() {
+-+                    @Override
+-+                    public void onFailure(@NonNull Exception e) {
+-+                        Log.w(TAG, "Error adding document", e);
+-+                    }
+-+                });
+-+                        /*.addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+-+                            @Override
+-+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+-+                                Log.d(TAG, "DocumentSnapshot written with ID: " + task.getResult().getId());
+-+                                documentId = task.getResult().getId();
+-                                 evento.setIdEvento(documentId);
+-                                 db.collection("Eventi").document(documentId).update("idEvento", documentId);
+-                                 uploadImage();
+-+
+-+                                if(cond) {
+-+                                    db.collection("Eventi").document(idEvento).delete();
+-+                                    //db.collection("Eventi").document(idEvento).update(evento);
+-+                                }
+-                             }
+-                         })
+-                         .addOnFailureListener(new OnFailureListener() {
+-@@ -234,156 +378,41 @@
+-                             public void onFailure(@NonNull Exception e) {
+-                                 Log.w(TAG, "Error adding document", e);
+-                             }
+--                        });
+--
+--                Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
+--
+--                finish();
+-+                        });*/
+-             }else {
+--                finish();
+--                startActivity(getIntent());
+--            }
+--        }
+--
+--
+--    }
+--
+--
+--    private void openMainActivity() {
+--        Map<String, Object> evento = new HashMap<>();
+--
+--        TextView nome = (TextView) findViewById(R.id.editTextNomeEvento);
+--        evento.put("nome", nome.getText().toString());
+--
+--        TextView numeroP = (TextView) findViewById(R.id.editTextNumMaxPartecipanti);
+--        evento.put("num_partecipanti", numeroP.getText().toString());
+--
+--        TextView data = (TextView) findViewById(R.id.dataEvento);
+--        String appoggio= data.getText().toString();
+--
+--        TextClock orario= (TextClock) findViewById(R.id.orarioEvento);
+--        String appoggio1=orario.getText().toString();
+--
+--        TextView descrizione = (TextView) findViewById(R.id.editTextDescrEvento);
+--        evento.put("descrizione", descrizione.getText().toString());
+--
+--        Spinner nazione = (Spinner) findViewById(R.id.spinnerNazioni);
+--        evento.put("nazione", nazione.getSelectedItem().toString());
+--
+--        TextView citta = (TextView) findViewById(R.id.editTextCitta);
+--        evento.put("citta", citta.getText().toString());
+--
+--        TextView luogo = (TextView) findViewById(R.id.editTextCitta);
+--
+--        controllodata(evento,appoggio,appoggio1);
+--
+--        //Tornare indietro
+--        this.finish();
+--    }
+--
+--    void controllodata(Map<String, Object> evento, String appoggio, String appoggio1){
+--        Calendar cal = Calendar.getInstance();
+--        boolean condevento=false;
+--        boolean condorario2= true;
+--        int l = appoggio.length();
+--        int l1= appoggio1.length();
+--        System.out.println("la lunghezza è stocazzooooo "+ l1);
+--        System.out.println("l'orario scelto è "+ appoggio1);
+--        switch (l) {
+--            case 9:
+--                anno = Integer.valueOf(appoggio.substring(l - 4, l));
+--                mese = Integer.valueOf(appoggio.substring(l - 7, l - 5));
+--                giorno = Integer.valueOf(appoggio.charAt(0)) - 48;
+--                break;
+--            case 10:
+--                anno = Integer.valueOf(appoggio.substring(l - 4, l));
+--                mese = Integer.valueOf(appoggio.substring(l - 7, l - 5));
+--                giorno = Integer.valueOf(appoggio.substring(l - 10, l - 8));
+--                break;
+--        }
+--        minapp = Integer.valueOf(appoggio1.substring(3,5));
+--        oraapp = Integer.valueOf(appoggio1.substring(0,2));
+--
+--        System.out.println("orario scelto "+ oraapp);
+--        System.out.println("minuti scelti "+ minapp);
+--        if (anno >= cal.get(Calendar.YEAR)) {
+--            if ((mese-1) >= cal.get(Calendar.MONTH)) {
+--                if (giorno >= cal.get(Calendar.DAY_OF_MONTH))
+--                    if(oraapp>= (cal.get(Calendar.HOUR_OF_DAY)+1)) {
+--                        evento.put("data", appoggio);
+--                        evento.put("orario evento", appoggio1);
+--                        condorario2=false;
+--                    }
+--            }else condevento= true;
+--        }else condevento= true;
+--
+--        if(condevento){
+--            Toast.makeText(this, "data non valida",Toast.LENGTH_SHORT).show();
+--            finish();
+--            startActivity(getIntent());
+--        }else if(condorario2) {
+--            Toast.makeText(this, "orario non valido",Toast.LENGTH_SHORT).show();
+--            finish();
+--            startActivity(getIntent());
+--        }else{
+--            db.collection("Eventi").add(evento);
+--            Toast.makeText(this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
+--            finish();
+--            //provaaaaaaaa
+-+                Toast.makeText(NewEventsActivity.this, "Dati inseriti non corretti", Toast.LENGTH_LONG).show();
+-+            }
+-         }
+-+
+-+
+-     }
+- 
+--    private Boolean dataOraValide(Evento evento, String data, String orario){
+--        Boolean validita= false;
+--        Calendar cal = Calendar.getInstance();
+--        boolean condevento2=false;
+--        boolean condorario3= true;
+--        int l = data.length();
+--        int l1= orario.length();
+--        switch (l) {
+--            case 9:
+--                anno = Integer.valueOf(data.substring(l - 4, l));
+--                mese = Integer.valueOf(data.substring(l - 7, l - 5));
+--                giorno = Integer.valueOf(data.charAt(0)) - 48;
+--                break;
+--            case 10:
+--                anno = Integer.valueOf(data.substring(l - 4, l));
+--                mese = Integer.valueOf(data.substring(l - 7, l - 5));
+--                giorno = Integer.valueOf(data.substring(l - 10, l - 8));
+--                break;
+--        }
+--        minapp = Integer.valueOf(orario.substring(3,5));
+--        oraapp = Integer.valueOf(orario.substring(0,2));
+-+    private Boolean dataOraValide(Evento evento){
+-+
+-+        boolean validita = false;
+-+
+-+        try {
+-+            Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
+-+            Date dataAttuale = new Date(System.currentTimeMillis());
+-+
+-+            Calendar cal = Calendar.getInstance();
+-+            String orario = evento.getOrario();
+-+            int minapp = Integer.valueOf(orario.substring(3,5));
+-+            int oraapp = Integer.valueOf(orario.substring(0,2));
+- 
+--        if (anno >= cal.get(Calendar.YEAR)) {
+--            if ((mese) >= cal.get(Calendar.MONTH)) {
+--                if (giorno >= cal.get(Calendar.DAY_OF_MONTH)) {
+--                    if (giorno == cal.get(Calendar.DAY_OF_MONTH)) {
+--                        if (oraapp >= (cal.get(Calendar.HOUR_OF_DAY))+1) {
+--                            System.out.println("arrivo qui");
+--                            evento.setData(data);
+--                            evento.setOrario(orario);
+--                          //  evento.setPartecipanti(getMailUtenteLoggato().charAt());
+--                            condorario3 = false;
+--                            condevento2=true;
+--                        }
+--                    } else {condevento2 = true; condorario3= false;}
+--                } else {condevento2 = true; condorario3= false;}
+--            } else {condevento2 = true; condorario3= false;}
+--        } else {condevento2 = true; condorario3= false;}
+--
+--        if(!condevento2){
+--            Toast.makeText(this, "data non valida",Toast.LENGTH_SHORT).show();
+--            validita = false;
+--        }else if(condorario3) {
+--            Toast.makeText(this, "orario non valido",Toast.LENGTH_SHORT).show();
+--            Toast.makeText(this, "l'evento deve essere tra minimo un'ora!",Toast.LENGTH_SHORT).show();
+--            validita = false;
+--        }else{
+--            validita = true;
+--            evento.setData(data);
+--            evento.setOrario(orario);
+-+            if(dataEvento.compareTo(dataAttuale) >= 0) {
+-+                if(dataEvento.compareTo(dataAttuale) == 0) {
+-+                    if(oraapp > (cal.get(Calendar.HOUR_OF_DAY) + 1) &&
+-+                            minapp <= cal.get(Calendar.MINUTE)) {
+-+                        validita = true;
+-+                    } else Toast.makeText(this, "L'evento deve essere almeno tra un'ora da adesso", Toast.LENGTH_LONG).show();
+-+                } else validita = true;
+-+            } else Toast.makeText(this, "Data inserita non valida", Toast.LENGTH_LONG).show();
+-+
+-+        } catch (ParseException e) {
+-+            e.printStackTrace();
+-         }
+-+
+-         return validita;
+-     }
+- 
+-@@ -405,38 +434,6 @@
+-         return mailUtenteLoggato;
+-     }
+- 
+--    @Override
+--    public void onMapReady(GoogleMap googleMap) {
+--
+--    }
+--
+--    @Override
+--    protected void onStart() {
+--        super.onStart();
+--        mapView.onStart();
+--    }
+--
+--    @Override
+--    protected void onResume() {
+--        super.onResume();
+--    }
+--
+--    @Override
+--    protected void onPause() {
+--        super.onPause();
+--    }
+--
+--    @Override
+--    protected void onStop() {
+--        super.onStop();
+--    }
+--
+--    @Override
+--    protected void onDestroy() {
+--        super.onDestroy();
+--        mapView.onDestroy();
+--    }
+--
+-     @Override
+-     public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+-         super.onSaveInstanceState(outState, outPersistentState);
+-@@ -449,12 +446,10 @@
+-         mapView.onLowMemory();
+-     }
+- 
+--
+-     public void addImgEvent(View view) {
+-         openImage();
+-     }
+- 
+--
+-     private void openImage(){
+-         Intent intent = new Intent();
+-         intent.setType("image/*");
+-@@ -581,4 +576,4 @@
+-             });
+-         }
+-     }
+--};
+-+}
+-Index: app/src/main/java/com/example/contagiapp/eventi/ProfiloEventoAdminFragment.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.contagiapp.eventi;\r\n\r\nimport android.app.Notification;\r\nimport android.app.NotificationChannel;\r\nimport android.app.NotificationManager;\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.net.Uri;\r\nimport android.os.Build;\r\nimport android.os.Bundle;\r\n\r\nimport androidx.activity.OnBackPressedCallback;\r\nimport androidx.annotation.NonNull;\r\nimport androidx.core.app.NotificationCompat;\r\nimport androidx.core.app.NotificationManagerCompat;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.fragment.app.FragmentTransaction;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.util.Log;\r\nimport android.view.GestureDetector;\r\nimport android.view.LayoutInflater;\r\nimport android.view.MotionEvent;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Button;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.contagiapp.HomeFragment;\r\nimport com.example.contagiapp.R;\r\nimport com.example.contagiapp.UserAdapter;\r\nimport com.example.contagiapp.data.amici.FriendsFragment;\r\nimport com.example.contagiapp.data.amici.ProfiloUtentiActivity;\r\nimport com.example.contagiapp.utente.Utente;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.OnFailureListener;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.android.material.button.MaterialButton;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.QueryDocumentSnapshot;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\n\r\nimport com.google.firebase.storage.FirebaseStorage;\r\nimport com.google.firebase.storage.StorageReference;\r\nimport com.google.gson.Gson;\r\nimport com.squareup.picasso.Picasso;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\n\r\npublic class ProfiloEventoAdminFragment extends Fragment {\r\n    private FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n    private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();\r\n    private final static String storageDirectory = \"eventi\";\r\n    public Evento evento;\r\n    RecyclerView rvPartecipantiProfiloEventoAdmin;\r\n    private MaterialButton btnEliminaEvento;\r\n\r\n\r\n    ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli utenti\r\n\r\n    public ProfiloEventoAdminFragment() {\r\n        // Required empty public constructor\r\n    }\r\n\r\n\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n        // Inflate the layout for this fragment\r\n        View view = inflater.inflate(R.layout.fragment_profilo_evento_admin, container, false);\r\n\r\n        Log.d(\"doveSiamo\", \"ProfiloEventoAdminFragment\");\r\n\r\n        Bundle bundle = getArguments();\r\n        final String idEvento = bundle.getString(\"idEvento\");\r\n\r\n        caricaEvento(idEvento, view);\r\n        caricaPartecipanti(idEvento);\r\n\r\n\r\n        final ImageView img = view.findViewById(R.id.imgProfiloEventoAdmin);\r\n        rvPartecipantiProfiloEventoAdmin = view.findViewById(R.id.rvPartecipantiProfiloEventoAdmin);\r\n\r\n        db.collection(\"Eventi\").document(idEvento)\r\n                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onSuccess(DocumentSnapshot documentSnapshot) {\r\n\r\n                //recupero l'immagine dallo storage\r\n                Log.d(\"eventi/idEvento\",\"eventi/\" + idEvento);\r\n\r\n                caricaImgDaStorage(storageRef, storageDirectory, idEvento, img );\r\n\r\n            }\r\n        });\r\n\r\n\r\n        btnEliminaEvento = view.findViewById(R.id.btnEliminaEvento);\r\n        btnEliminaEvento.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                eliminaEvento(idEvento);\r\n\r\n                showFragment(new EventsFragment());\r\n            }\r\n        });\r\n\r\n        return view;\r\n    }\r\n\r\n    private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){\r\n        storageRef.child(directory + \"/\" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {\r\n            @Override\r\n            public void onSuccess(Uri uri) {\r\n                String sUrl = uri.toString(); //otteniamo il token del'immagine\r\n                Log.d(\"sUrl\", sUrl);\r\n                Picasso.get().load(sUrl).into(imageView);\r\n            }\r\n        }).addOnFailureListener(new OnFailureListener() {\r\n            @Override\r\n            public void onFailure(@NonNull Exception e) {\r\n                Log.d(\"OnFailure Exception\", String.valueOf(e));\r\n            }\r\n        });\r\n    }\r\n\r\n    private void caricaEvento(String idEvento, final View view){\r\n        db.collection(\"Eventi\")\r\n                .document(idEvento)\r\n                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onSuccess(DocumentSnapshot documentSnapshot) {\r\n                if (documentSnapshot.exists()) {\r\n\r\n                    evento = documentSnapshot.toObject(Evento.class);\r\n                    String nome = evento.getNome();\r\n                    String descrizione = evento.getDescrizione();\r\n                    String data = evento.getData();\r\n                    String orario = evento.getOrario();\r\n                    String indirizzo = evento.getIndirizzo();\r\n                    String citta = evento.getCitta();\r\n                    int numMax = evento.getNumeroMaxPartecipanti();\r\n                    int numPartecipanti = evento.getPartecipanti().size();\r\n                    int numDisponibili = numMax - numPartecipanti;\r\n\r\n                    TextView tvNomeEvento = view.findViewById(R.id.tvNomeEventoAdmin);\r\n                    TextView tvDescrEvento = view.findViewById(R.id.tvDescrEventoAdmin);\r\n                    TextView tvDataEvento = view.findViewById(R.id.tvDataEventoAdmin);\r\n                    TextView tvOrarioEvento = view.findViewById(R.id.tvOrarioEventoAdmin);\r\n                    TextView tvIndirizzoEvento = view.findViewById(R.id.tvIndirizzoEventoAdmin);\r\n                    TextView tvCittaEvento = view.findViewById(R.id.tvCittaEventoAdmin);\r\n                    TextView numMaxPartecipanti = view.findViewById(R.id.num_partecipanti_max);\r\n                    TextView numDispono = view.findViewById(R.id.posti_disponibili);\r\n                    TextView numParteci = view.findViewById(R.id.num_partecipanti);\r\n\r\n                    tvNomeEvento.setText(\"Nome evento: \"+nome);\r\n                    tvDescrEvento.setText(descrizione);\r\n                    tvDataEvento.setText(data);\r\n                    tvOrarioEvento.setText(orario);\r\n                    tvIndirizzoEvento.setText(\"Indirizzo: \"+indirizzo);\r\n                    tvCittaEvento.setText(\"Città: \"+citta);\r\n                    numMaxPartecipanti.setText(\"Numero massimo di partecipanti:   \"+numMax);\r\n                    numDispono.setText(\"Numero posti disponibili:   \"+numDisponibili);\r\n                    numParteci.setText(\"Numero di iscritti all'evento:   \"+numPartecipanti);\r\n\r\n                } else {\r\n                    Toast.makeText(getContext(), \"Documents does not exist\", Toast.LENGTH_SHORT).show();\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n\r\n    private void caricaPartecipanti(final String idEvento){\r\n        db.collection(\"Eventi\")\r\n                .document(idEvento)\r\n                .get()\r\n                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {\r\n                    @Override\r\n                    public void onSuccess(final DocumentSnapshot documentSnapshot) {\r\n                        Evento evento = documentSnapshot.toObject(Evento.class);\r\n\r\n                        final ArrayList<String> listaPartecipanti = evento.getPartecipanti();\r\n                        Log.d(\"listaPartecipanti\", String.valueOf(listaPartecipanti));\r\n\r\n                        //recuperare dalle mail l'oggetto utente\r\n                        final ArrayList<Utente> listaUtenti = new ArrayList<Utente>();\r\n\r\n                        if (!listaPartecipanti.isEmpty()) {\r\n\r\n                            db.collection(\"Utenti\")\r\n                                    .whereIn(\"mail\", listaPartecipanti)\r\n                                    .get()\r\n                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {\r\n                                        @Override\r\n                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {\r\n                                            if (task.isSuccessful()) {\r\n                                                final ArrayList<String> idList = new ArrayList<String>();\r\n\r\n                                                for (QueryDocumentSnapshot document : task.getResult()) {\r\n                                                    Log.d(\"prova\", document.getId() + \" => \" + document.getData());\r\n                                                    Utente utente = document.toObject(Utente.class);\r\n                                                    Log.d(\"utenteNome\", String.valueOf(utente.getNome()));\r\n                                                    listaUtenti.add(utente);\r\n                                                    idList.add(utente.getMail());\r\n\r\n                                                }\r\n                                                Log.d(\"listaUtenti\", String.valueOf(listaUtenti));\r\n                                                //devo lavorare qui altrimenti perdo la visibilità della lista Utenti\r\n\r\n                                                UserAdapter adapter = new UserAdapter(listaUtenti);\r\n                                                rvPartecipantiProfiloEventoAdmin.setAdapter(adapter);\r\n                                                rvPartecipantiProfiloEventoAdmin.setLayoutManager(new LinearLayoutManager(getActivity()));\r\n\r\n\r\n                                                rvPartecipantiProfiloEventoAdmin.addOnItemTouchListener(new ProfiloEventoAdminFragment.RecyclerTouchListener(getActivity(), rvPartecipantiProfiloEventoAdmin, new ProfiloEventoAdminFragment.RecyclerTouchListener.ClickListener() {\r\n                                                    @Override\r\n                                                    public void onClick(View view, int position) {\r\n                                                        String idUtenteSelezionato = idList.get(position);\r\n                                                        Log.i(\"idList \", idUtenteSelezionato);\r\n\r\n                                                        ProfiloPartecipanteFragment fragment = new ProfiloPartecipanteFragment();\r\n\r\n                                                        Bundle bundle = new Bundle();\r\n                                                        bundle.putString(\"mailPartecipante\", idUtenteSelezionato);\r\n                                                        bundle.putString(\"idEvento\", idEvento);\r\n\r\n                                                        fragment.setArguments(bundle);\r\n\r\n                                                        //richiamo il fragment\r\n\r\n                                                        showFragment(fragment);\r\n                                                    }\r\n\r\n                                                    @Override\r\n                                                    public void onLongClick(View view, int position) {\r\n                                                    }\r\n\r\n                                                }));\r\n\r\n                                            } else {\r\n                                                Log.d(\"ERROR\", \"Error getting documents: \", task.getException());\r\n                                            }\r\n                                        }\r\n                                    });\r\n                        }\r\n                    }\r\n\r\n                });\r\n\r\n    }\r\n\r\n    private void showFragment(Fragment fragment) {\r\n        FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();\r\n        fr.replace(R.id.container,fragment);\r\n\r\n        fr.addToBackStack(null); //serve per tornare al fragment precedente\r\n        fr.commit();\r\n        fr.show(new ProfiloEventoAdminFragment());\r\n    }\r\n\r\n    private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {\r\n        private GestureDetector gestureDetector;\r\n        private ProfiloEventoAdminFragment.RecyclerTouchListener.ClickListener clickListener;\r\n\r\n        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ProfiloEventoAdminFragment.RecyclerTouchListener.ClickListener clickListener) {\r\n            this.clickListener = clickListener;\r\n            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {\r\n                @Override\r\n                public boolean onSingleTapUp(MotionEvent e) {\r\n                    return true;\r\n                }\r\n\r\n                public void onLongPress(MotionEvent e) {\r\n                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());\r\n                    if (child != null && clickListener != null) {\r\n                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));\r\n                    }\r\n                }\r\n            });\r\n        }\r\n\r\n        @Override\r\n        public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {\r\n            View child = rv.findChildViewUnder(e.getX(), e.getY());\r\n\r\n            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {\r\n                clickListener.onClick(child, rv.getChildAdapterPosition(child));\r\n            }\r\n            return false;\r\n        }\r\n\r\n        @Override\r\n        public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {\r\n\r\n        }\r\n\r\n        @Override\r\n        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {\r\n\r\n        }\r\n\r\n        public interface ClickListener {\r\n            void onClick(View view, int position);\r\n\r\n            void onLongClick(View view, int position);\r\n        }\r\n    }\r\n\r\n    private void eliminaEvento(String idEvento){\r\n        db.collection(\"Eventi\")\r\n                .document(idEvento)\r\n                .delete();\r\n\r\n        //toDo: devo avvisare gli utenti che l'evento è stato cancellato\r\n        //forse è meglio non cancellare l'evento ma segnarlo come eliminato\r\n        //dopodichè nella main activity metto controllo sullo stato degli eventi a cui partecipa un utente e se lo stato è cancellato applicare notifica\r\n\r\n        notificaEventoEliminato();\r\n\r\n        //notificheFCM();\r\n\r\n\r\n    }\r\n\r\n\r\n\r\n    private void notificaEventoEliminato(){\r\n        createNotificationChannel();\r\n\r\n        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), \"CHANNEL_ID\")\r\n                .setSmallIcon(R.mipmap.ic_launcher)\r\n                .setContentTitle(\"Evento cancellato\")\r\n                .setContentText(\"L'admin ha cancellato l' evento\" )\r\n                .setPriority(NotificationCompat.PRIORITY_DEFAULT);\r\n\r\n\r\n        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());\r\n\r\n        // notificationId is a unique int for each notification that you must define\r\n        int notificationId = 1234;\r\n        notificationManager.notify(notificationId, builder.build());\r\n\r\n\r\n\r\n    }\r\n\r\n    private void createNotificationChannel() {\r\n        // Create the NotificationChannel, but only on API 26+ because\r\n        // the NotificationChannel class is new and not in the support library\r\n        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {\r\n            CharSequence name = \"channelName\";\r\n            String description = \"channel_description\" ;\r\n            int importance = NotificationManager.IMPORTANCE_DEFAULT;\r\n            NotificationChannel channel = new NotificationChannel(\"CHANNEL_ID\", name, importance);\r\n            channel.setDescription(description);\r\n            // Register the channel with the system; you can't change the importance\r\n            // or other notification behaviors after this\r\n            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);\r\n            notificationManager.createNotificationChannel(channel);\r\n        }\r\n    }\r\n\r\n    /*private void notificheFCM(){\r\n        FirebaseMessaging.getInstance().subscribeToTopic(\"weather\")\r\n                .addOnCompleteListener(new OnCompleteListener<Void>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<Void> task) {\r\n                        String msg = \"msg\";\r\n                        if (!task.isSuccessful()) {\r\n                            msg = \"msg_subscribe_failed\";\r\n                        }\r\n                        Log.d(\"ProfiloEventoAdmin\", msg);\r\n                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();\r\n                    }\r\n                });\r\n    }\r\n\r\n     */\r\n\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/java/com/example/contagiapp/eventi/ProfiloEventoAdminFragment.java	(revision f67625775b3750f658fdfd28037d778e087ad17d)
+-+++ app/src/main/java/com/example/contagiapp/eventi/ProfiloEventoAdminFragment.java	(date 1633629115953)
+-@@ -1,24 +1,12 @@
+- package com.example.contagiapp.eventi;
+- 
+--import android.app.Notification;
+- import android.app.NotificationChannel;
+- import android.app.NotificationManager;
+- import android.content.Context;
+- import android.content.Intent;
+--import android.content.SharedPreferences;
+- import android.net.Uri;
+- import android.os.Build;
+- import android.os.Bundle;
+--
+--import androidx.activity.OnBackPressedCallback;
+--import androidx.annotation.NonNull;
+--import androidx.core.app.NotificationCompat;
+--import androidx.core.app.NotificationManagerCompat;
+--import androidx.fragment.app.Fragment;
+--import androidx.fragment.app.FragmentTransaction;
+--import androidx.recyclerview.widget.LinearLayoutManager;
+--import androidx.recyclerview.widget.RecyclerView;
+--
+- import android.util.Log;
+- import android.view.GestureDetector;
+- import android.view.LayoutInflater;
+-@@ -30,11 +18,16 @@
+- import android.widget.TextView;
+- import android.widget.Toast;
+- 
+--import com.example.contagiapp.HomeFragment;
+-+import androidx.annotation.NonNull;
+-+import androidx.core.app.NotificationCompat;
+-+import androidx.core.app.NotificationManagerCompat;
+-+import androidx.fragment.app.Fragment;
+-+import androidx.fragment.app.FragmentTransaction;
+-+import androidx.recyclerview.widget.LinearLayoutManager;
+-+import androidx.recyclerview.widget.RecyclerView;
+-+
+- import com.example.contagiapp.R;
+- import com.example.contagiapp.UserAdapter;
+--import com.example.contagiapp.data.amici.FriendsFragment;
+--import com.example.contagiapp.data.amici.ProfiloUtentiActivity;
+- import com.example.contagiapp.utente.Utente;
+- import com.google.android.gms.tasks.OnCompleteListener;
+- import com.google.android.gms.tasks.OnFailureListener;
+-@@ -45,15 +38,11 @@
+- import com.google.firebase.firestore.FirebaseFirestore;
+- import com.google.firebase.firestore.QueryDocumentSnapshot;
+- import com.google.firebase.firestore.QuerySnapshot;
+--
+- import com.google.firebase.storage.FirebaseStorage;
+- import com.google.firebase.storage.StorageReference;
+--import com.google.gson.Gson;
+- import com.squareup.picasso.Picasso;
+- 
+- import java.util.ArrayList;
+--import java.util.HashMap;
+--import java.util.List;
+- 
+- public class ProfiloEventoAdminFragment extends Fragment {
+-     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+-@@ -80,12 +69,22 @@
+- 
+-         Log.d("doveSiamo", "ProfiloEventoAdminFragment");
+- 
+--        Bundle bundle = getArguments();
+-+        final Bundle bundle = getArguments();
+-         final String idEvento = bundle.getString("idEvento");
+- 
+-         caricaEvento(idEvento, view);
+-         caricaPartecipanti(idEvento);
+- 
+-+        Button modificaEvento = view.findViewById(R.id.btnModificaEvento);
+-+        modificaEvento.setOnClickListener(new View.OnClickListener() {
+-+            @Override
+-+            public void onClick(View v) {
+-+                Intent intent = new Intent(getActivity(), NewEventsActivity.class);
+-+                intent.putExtra("scelta", true);
+-+                intent.putExtra("idEvento", idEvento);
+-+                startActivity(intent);
+-+            }
+-+        });
+- 
+-         final ImageView img = view.findViewById(R.id.imgProfiloEventoAdmin);
+-         rvPartecipantiProfiloEventoAdmin = view.findViewById(R.id.rvPartecipantiProfiloEventoAdmin);
+-@@ -117,6 +116,23 @@
+-         return view;
+-     }
+- 
+-+    /*@Override
+-+    public boolean onKeyDown(int keyCode, KeyEvent event)
+-+    {
+-+        if (keyCode == KeyEvent.KEYCODE_BACK)
+-+        {
+-+            //Back buttons was pressed, do whatever logic you want
+-+        }
+-+
+-+        return false;
+-+    }
+-+
+-+    @Override
+-+    public void onBackPressed() {
+-+        EventsFragment events = new EventsFragment();
+-+        showFragment(events);
+-+    }*/
+-+
+-     private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
+-         storageRef.child(directory + "/" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
+-             @Override
+-Index: app/src/main/res/layout/fragment_new_events.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<ScrollView xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    app:layout_constraintBottom_toBottomOf=\"parent\"\r\n    app:layout_constraintStart_toStartOf=\"parent\"\r\n    tools:context=\".eventi.NewEventsActivity\">\r\n\r\n\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"vertical\"\r\n        android:padding=\"20dp\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView2\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:padding=\"20dp\"\r\n            android:gravity=\"center\"\r\n            android:text=\"Inserire dati dell'evento\"\r\n            android:textAppearance=\"@style/TextAppearance.AppCompat.Display1\"\r\n            android:fontFamily=\"sans-serif-black\"\r\n            android:textSize=\"26sp\"\r\n            android:textColor=\"@color/black\"\r\n            android:textStyle=\"bold\" />\r\n\r\n\r\n\r\n        <com.google.android.material.textfield.TextInputLayout\r\n            android:id=\"@+id/textInputNomeEventoLayout\"\r\n            style=\"@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"32dp\"\r\n            android:hint=\"Nome evento\"\r\n            app:endIconMode=\"clear_text\"\r\n            app:errorEnabled=\"true\">\r\n\r\n            <com.google.android.material.textfield.TextInputEditText\r\n                android:id=\"@+id/editTextNomeEvento\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:inputType=\"textPersonName\"\r\n                android:labelFor=\"@id/editTextNomeEvento\"/>\r\n        </com.google.android.material.textfield.TextInputLayout>\r\n\r\n\r\n        <com.google.android.material.textfield.TextInputLayout\r\n            android:id=\"@+id/textInputNumMaxPartecipantiLayout\"\r\n            style=\"@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"32dp\"\r\n            android:hint=\"Numero massimo di partecipanti\"\r\n            app:endIconMode=\"clear_text\"\r\n            app:errorEnabled=\"true\">\r\n\r\n            <com.google.android.material.textfield.TextInputEditText\r\n                android:id=\"@+id/editTextNumMaxPartecipanti\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:inputType=\"number\"\r\n                android:labelFor=\"@id/editTextNumMaxPartecipanti\"/>\r\n        </com.google.android.material.textfield.TextInputLayout>\r\n\r\n        <TextView\r\n            android:id=\"@+id/dataEvento\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:ems=\"10\"\r\n            android:hint=\"Data Evento\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:textSize=\"20sp\" />\r\n        <TextClock\r\n            android:id=\"@+id/orarioEvento\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:ems=\"10\"\r\n            android:hint=\"Orario Evento\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:textSize=\"20sp\" />\r\n\r\n\r\n\r\n        <com.google.android.material.textfield.TextInputLayout\r\n            android:id=\"@+id/textInputDescrEvento\"\r\n            style=\"@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"32dp\"\r\n            android:hint=\"Descrizione evento\"\r\n            app:endIconMode=\"clear_text\"\r\n            app:errorEnabled=\"true\">\r\n\r\n            <com.google.android.material.textfield.TextInputEditText\r\n                android:id=\"@+id/editTextDescrEvento\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:inputType=\"textMultiLine\"\r\n                android:labelFor=\"@id/editTextDescrEvento\"/>\r\n        </com.google.android.material.textfield.TextInputLayout>\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView8\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Nazione:\"\r\n            android:textSize=\"20sp\" />\r\n\r\n        <Spinner\r\n            android:id=\"@+id/spinnerNazioni\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"44dp\"\r\n            android:entries=\"@array/nazioni\" />\r\n\r\n\r\n        <com.google.android.material.textfield.TextInputLayout\r\n            android:id=\"@+id/textInputCitta\"\r\n            style=\"@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"32dp\"\r\n            android:hint=\"Città\"\r\n            app:endIconMode=\"clear_text\"\r\n            app:errorEnabled=\"true\">\r\n\r\n            <com.google.android.material.textfield.TextInputEditText\r\n                android:id=\"@+id/editTextCitta\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:inputType=\"textPersonName\"\r\n                android:labelFor=\"@id/editTextCitta\"/>\r\n        </com.google.android.material.textfield.TextInputLayout>\r\n\r\n\r\n\r\n        <com.google.android.material.textfield.TextInputLayout\r\n            android:id=\"@+id/textInputIndirizzo\"\r\n            style=\"@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"32dp\"\r\n            android:hint=\"Indirizzo\"\r\n            app:endIconMode=\"clear_text\"\r\n            app:errorEnabled=\"true\">\r\n\r\n            <com.google.android.material.textfield.TextInputEditText\r\n                android:id=\"@+id/editTextIndirizzo\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:inputType=\"textPersonName\"\r\n                android:labelFor=\"@id/editTextIndirizzo\"/>\r\n        </com.google.android.material.textfield.TextInputLayout>\r\n\r\n        <com.google.android.material.button.MaterialButton\r\n            android:id=\"@+id/btnAddImgEvento\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Aggiungi immagine\"\r\n            app:cornerRadius=\"20dp\"\r\n            android:onClick=\"addImgEvent\">\r\n        </com.google.android.material.button.MaterialButton>\r\n\r\n        <ImageView\r\n            android:id=\"@+id/immagineEvento\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:maxHeight=\"150dp\"\r\n            android:adjustViewBounds=\"true\"/>\r\n\r\n\r\n        <com.google.android.gms.maps.MapView\r\n            android:id=\"@+id/map_view\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"200dp\">\r\n        </com.google.android.gms.maps.MapView>\r\n\r\n        <com.google.android.material.button.MaterialButton\r\n            android:id=\"@+id/buttonCreaEvento\"\r\n            android:layout_width=\"152dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_gravity=\"center\"\r\n            android:layout_marginTop=\"20dp\"\r\n            android:layout_marginBottom=\"50dp\"\r\n            app:cornerRadius=\"20dp\"\r\n            android:text=\"Crea\" />\r\n\r\n    </LinearLayout>\r\n\r\n</ScrollView>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/res/layout/fragment_new_events.xml	(revision f67625775b3750f658fdfd28037d778e087ad17d)
+-+++ app/src/main/res/layout/fragment_new_events.xml	(date 1633604522107)
+-@@ -6,8 +6,8 @@
+-     android:layout_height="match_parent"
+-     app:layout_constraintBottom_toBottomOf="parent"
+-     app:layout_constraintStart_toStartOf="parent"
+--    tools:context=".eventi.NewEventsActivity">
+--
+-+    tools:context=".eventi.NewEventsActivity"
+-+    android:id="@+id/new_event">
+- 
+- 
+-     <LinearLayout
+-@@ -68,6 +68,14 @@
+-                 android:labelFor="@id/editTextNumMaxPartecipanti"/>
+-         </com.google.android.material.textfield.TextInputLayout>
+- 
+-+        <TextView
+-+            android:id="@+id/textView5"
+-+            android:layout_width="match_parent"
+-+            android:layout_height="wrap_content"
+-+            android:text="Data evento:"
+-+            android:textSize="24sp"
+-+            android:textStyle="bold" />
+-+
+-         <TextView
+-             android:id="@+id/dataEvento"
+-             android:layout_width="match_parent"
+-@@ -76,6 +84,15 @@
+-             android:hint="Data Evento"
+-             android:layout_marginTop="10dp"
+-             android:textSize="20sp" />
+-+
+-+        <TextView
+-+            android:id="@+id/textView6"
+-+            android:layout_width="match_parent"
+-+            android:layout_height="wrap_content"
+-+            android:text="Orario evento:"
+-+            android:textSize="24sp"
+-+            android:textStyle="bold" />
+-+
+-         <TextClock
+-             android:id="@+id/orarioEvento"
+-             android:layout_width="match_parent"
+-@@ -105,19 +122,6 @@
+-                 android:labelFor="@id/editTextDescrEvento"/>
+-         </com.google.android.material.textfield.TextInputLayout>
+- 
+--        <TextView
+--            android:id="@+id/textView8"
+--            android:layout_width="match_parent"
+--            android:layout_height="wrap_content"
+--            android:text="Nazione:"
+--            android:textSize="20sp" />
+--
+--        <Spinner
+--            android:id="@+id/spinnerNazioni"
+--            android:layout_width="match_parent"
+--            android:layout_height="44dp"
+--            android:entries="@array/nazioni" />
+--
+- 
+-         <com.google.android.material.textfield.TextInputLayout
+-             android:id="@+id/textInputCitta"
+-Index: app/src/main/res/layout/fragment_profilo_evento_admin.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n\r\n<ScrollView xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:layout_marginBottom=\"60dp\">\r\n\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    tools:context=\".eventi.ProfiloEventoAdminFragment\"\r\n    >\r\n\r\n    <!-- TODO: Update blank fragment layout -->\r\n    <ImageView\r\n        android:id=\"@+id/imgProfiloEventoAdmin\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:maxHeight=\"250dp\"\r\n        android:adjustViewBounds=\"true\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/tvNomeEventoAdmin\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Titolo Evento\"\r\n        android:textSize=\"30dp\"\r\n        android:textStyle=\"bold\"\r\n        android:textColor=\"@color/black\"\r\n        android:padding=\"20dp\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/tvDescrEventoAdmin\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Descrizione dell'evento\"\r\n        android:padding=\"20dp\"/>\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        android:padding=\"15dp\">\r\n\r\n        <ImageView\r\n            android:layout_width=\"24dp\"\r\n            android:layout_height=\"24dp\"\r\n            android:layout_gravity=\"center\"\r\n            android:src=\"@drawable/ic_baseline_event_24\">\r\n        </ImageView>\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:padding=\"10dp\"\r\n            android:orientation=\"vertical\">\r\n\r\n            <TextView\r\n                android:id=\"@+id/tvDataEventoAdmin\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Data\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/tvOrarioEventoAdmin\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Orario\" />\r\n\r\n        </LinearLayout>\r\n\r\n\r\n\r\n    </LinearLayout>\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        android:padding=\"15dp\">\r\n\r\n        <ImageView\r\n            android:layout_width=\"24dp\"\r\n            android:layout_height=\"24dp\"\r\n            android:layout_gravity=\"center\"\r\n            android:src=\"@drawable/ic_baseline_location_on_24\">\r\n        </ImageView>\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:padding=\"10dp\"\r\n            android:orientation=\"vertical\">\r\n\r\n            <TextView\r\n                android:id=\"@+id/tvCittaEventoAdmin\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Città\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/tvIndirizzoEventoAdmin\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Indirizzo\" />\r\n\r\n        </LinearLayout>\r\n\r\n    </LinearLayout>\r\n\r\n    <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"horizontal\"\r\n            android:padding=\"20dp\">\r\n\r\n            <ImageView\r\n                android:layout_width=\"24dp\"\r\n                android:layout_height=\"24dp\"\r\n                android:layout_gravity=\"center\"\r\n                android:src=\"@drawable/ic_baseline_account_circle_24_gray\">\r\n            </ImageView>\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:padding=\"10dp\"\r\n                android:orientation=\"vertical\">\r\n\r\n                <TextView\r\n                    android:id=\"@+id/num_partecipanti_max\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:text=\"Num partecipanti max\" />\r\n\r\n                <TextView\r\n                    android:id=\"@+id/num_partecipanti\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:text=\"Num partecipanti\" />\r\n\r\n                <TextView\r\n                    android:id=\"@+id/posti_disponibili\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:text=\"Num posti disponibili\" />\r\n\r\n            </LinearLayout>\r\n    </LinearLayout>\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/rvPartecipantiProfiloEventoAdmin\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:minHeight=\"400dp\"\r\n        tools:listitem=\"@layout/user_row\"/>\r\n\r\n    <com.google.android.material.button.MaterialButton\r\n        android:id=\"@+id/btnEliminaEvento\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_margin=\"15dp\"\r\n        app:cornerRadius=\"20dp\"\r\n        android:text=\"elimina evento\"\r\n        android:backgroundTint=\"@color/red\"/>\r\n\r\n\r\n</LinearLayout>\r\n\r\n</ScrollView>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/res/layout/fragment_profilo_evento_admin.xml	(revision f67625775b3750f658fdfd28037d778e087ad17d)
+-+++ app/src/main/res/layout/fragment_profilo_evento_admin.xml	(date 1633629374651)
+-@@ -1,19 +1,18 @@
+- <?xml version="1.0" encoding="utf-8"?>
+- 
+- <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+--    xmlns:tools="http://schemas.android.com/tools"
+--    android:layout_width="match_parent"
+--    android:layout_height="match_parent"
+--    android:layout_marginBottom="60dp">
+--
+--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-     xmlns:app="http://schemas.android.com/apk/res-auto"
+-     xmlns:tools="http://schemas.android.com/tools"
+-+    android:layout_marginBottom="60dp"
+-+    android:layout_width="fill_parent"
+-+    android:layout_height="wrap_content"
+-+    android:layout_weight="1"
+-+    tools:context=".eventi.ProfiloEventoAdminFragment">
+-+
+-+<LinearLayout
+-     android:layout_width="match_parent"
+-     android:layout_height="match_parent"
+--    android:orientation="vertical"
+--    tools:context=".eventi.ProfiloEventoAdminFragment"
+--    >
+-+    android:orientation="vertical">
+- 
+-     <!-- TODO: Update blank fragment layout -->
+-     <ImageView
+-@@ -155,9 +154,16 @@
+-         android:id="@+id/rvPartecipantiProfiloEventoAdmin"
+-         android:layout_width="match_parent"
+-         android:layout_height="wrap_content"
+--        android:minHeight="400dp"
+-         tools:listitem="@layout/user_row"/>
+- 
+-+    <com.google.android.material.button.MaterialButton
+-+        android:id="@+id/btnModificaEvento"
+-+        android:layout_width="match_parent"
+-+        android:layout_height="wrap_content"
+-+        android:layout_margin="15dp"
+-+        app:cornerRadius="20dp"
+-+        android:text="modifica evento"/>
+-+
+-     <com.google.android.material.button.MaterialButton
+-         android:id="@+id/btnEliminaEvento"
+-         android:layout_width="match_parent"
+-@@ -166,8 +172,6 @@
+-         app:cornerRadius="20dp"
+-         android:text="elimina evento"
+-         android:backgroundTint="@color/red"/>
+--
+--
+- </LinearLayout>
+- 
+- </ScrollView>
+-\ No newline at end of file
+-Index: app/src/main/java/com/example/contagiapp/eventi/EventsFragment.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.contagiapp.eventi;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.fragment.app.FragmentTransaction;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.util.Log;\r\nimport android.view.GestureDetector;\r\nimport android.view.KeyEvent;\r\nimport android.view.LayoutInflater;\r\nimport android.view.MotionEvent;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.view.inputmethod.EditorInfo;\r\nimport android.widget.CompoundButton;\r\nimport android.widget.Switch;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.contagiapp.R;\r\nimport com.example.contagiapp.utente.Utente;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\r\nimport com.google.android.material.textfield.TextInputEditText;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\nimport com.google.gson.Gson;\r\n\r\nimport java.text.ParseException;\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.ArrayList;\r\nimport java.util.Date;\r\n\r\npublic class EventsFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {\r\n\r\n    public EventsFragment() {\r\n        // Required empty public constructor\r\n    }\r\n\r\n    private FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n    private FloatingActionButton new_event;\r\n    TextInputEditText editText;\r\n    RecyclerView rvEventi;\r\n    ArrayList<Evento> listaEventi = new ArrayList<Evento>();\r\n    ArrayList<Evento> listaEventiCreati = new ArrayList<Evento>();\r\n    ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli eventi\r\n    ArrayList<String> listaIDEventoUtenteLoggato = new ArrayList<String>();\r\n    private boolean switchiscritto = false;\r\n    private boolean switchcreato = false;\r\n\r\n\r\n\r\n    @Override\r\n    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n\r\n        // Inflate the layout for this fragment\r\n        View view;\r\n        view = inflater.inflate(R.layout.fragment_events, container, false);\r\n        final Switch iscritto = view.findViewById(R.id.switch1);\r\n        final Switch creati = view.findViewById(R.id.switch2);\r\n        rvEventi = view.findViewById(R.id.rvEventi);\r\n\r\n        caricaEventi();\r\n\r\n        iscritto.setOnCheckedChangeListener(this);\r\n        creati.setOnCheckedChangeListener(this);\r\n\r\n        new_event = view.findViewById(R.id.floating_action_button);\r\n        new_event.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(getActivity(), NewEventsActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        editText = view.findViewById(R.id.search_field);\r\n        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {\r\n            @Override\r\n            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {\r\n                if (actionId == EditorInfo.IME_ACTION_SEARCH) {\r\n                    //da inserire metodo per la ricerca\r\n                    return true;\r\n                }\r\n                return false;\r\n            }\r\n        });\r\n        return view;\r\n    }\r\n\r\n    private void caricaEventiCreati(){\r\n        listaEventiCreati.clear();\r\n        db.collection(\"Eventi\")\r\n                .whereEqualTo(\"admin\", getMailUtenteLoggato())\r\n                .get()\r\n                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {\r\n                    @Override\r\n                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {\r\n                        for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){\r\n\r\n                            String idEvento = documentSnapshot.getId();\r\n\r\n                            listaIDEventoUtenteLoggato.add(idEvento);\r\n\r\n                            String id = documentSnapshot.getId();\r\n                            if(!listaIDEventoUtenteLoggato.contains(id)){\r\n                                idList.add(id);\r\n                            }\r\n\r\n                            Evento evento = documentSnapshot.toObject(Evento.class);\r\n\r\n\r\n                            try {\r\n                                Date dataEvento = new SimpleDateFormat(\"dd/MM/yyyy\").parse(evento.getData());\r\n                                Date dataAttuale = new Date(System.currentTimeMillis());\r\n\r\n                                if(dataEvento.compareTo(dataAttuale) >= 0 && ! listaEventiCreati.contains(evento.getIdEvento())){\r\n                                    listaEventiCreati.add(evento);\r\n                                }\r\n                            } catch (ParseException e) {\r\n                                e.printStackTrace();\r\n                            }\r\n\r\n                        }\r\n                        Log.d(\"listaIDEventoUtenteLog\", String.valueOf(listaIDEventoUtenteLoggato));\r\n                        Log.d(\"listaEventiCreati\", String.valueOf(listaEventiCreati));\r\n\r\n                        EventAdapter adapter = new EventAdapter(listaEventiCreati);\r\n                        rvEventi.setAdapter(adapter);\r\n                        rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));\r\n\r\n\r\n                        rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {\r\n                            @Override\r\n                            public void onClick(View view, int position) {\r\n\r\n\r\n                                String idEventoSelezionato = listaIDEventoUtenteLoggato.get(position);\r\n                                Log.i(\"idEventoSelezionato\", idEventoSelezionato);\r\n                                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();\r\n\r\n\r\n                                ProfiloEventoAdminFragment fragment = new ProfiloEventoAdminFragment();\r\n\r\n                                Bundle bundle = new Bundle();\r\n                                bundle.putString(\"idEvento\", idEventoSelezionato);\r\n\r\n                                fragment.setArguments(bundle);\r\n\r\n\r\n\r\n                                //richiamo il fragment\r\n\r\n                                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();\r\n                                fr.replace(R.id.container,fragment);\r\n                                fr.addToBackStack(null); //serve per tornare al fragment precedente\r\n                                fr.commit();\r\n                            }\r\n\r\n                            @Override\r\n                            public void onLongClick(View view, int position) {\r\n\r\n                            }\r\n\r\n                        }));\r\n\r\n                    }\r\n                });\r\n\r\n    }\r\n\r\n    private void caricaEventiIscritto(){\r\n\r\n        listaEventi.clear();\r\n        db.collection(\"Eventi\")\r\n                .whereArrayContains(\"partecipanti\", getMailUtenteLoggato())\r\n                .get()\r\n                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {\r\n                    @Override\r\n                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {\r\n                        for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){\r\n                            Evento evento = documentSnapshot.toObject(Evento.class);\r\n\r\n                            try {\r\n                                Date dataEvento = new SimpleDateFormat(\"dd/MM/yyyy\").parse(evento.getData());\r\n                                Date dataAttuale = new Date(System.currentTimeMillis());\r\n\r\n                                if(dataEvento.compareTo(dataAttuale) >= 0 && !evento.getAdmin().equals(getMailUtenteLoggato())) {\r\n                                    Log.d(\"idList\", String.valueOf(idList));\r\n                                    Log.d(\"listaIDEventoLoggato\", String.valueOf(listaIDEventoUtenteLoggato));\r\n                                    listaEventi.add(evento);\r\n\r\n\r\n                                    String id = documentSnapshot.getId();\r\n                                    idList.add(id);\r\n                                }\r\n                            } catch (ParseException e) {\r\n                                e.printStackTrace();\r\n                            }\r\n                        }\r\n\r\n                        EventAdapter adapter = new EventAdapter(listaEventi);\r\n                        rvEventi.setAdapter(adapter);\r\n                        rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));\r\n                        rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {\r\n                            @Override\r\n                            public void onClick(View view, int position) {\r\n\r\n                                String idEventoSelezionato = idList.get(position);\r\n                                Log.i(\"idList: \", idEventoSelezionato);\r\n                                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();\r\n\r\n                                EliminazionePartecipazioneEvento fragment = new EliminazionePartecipazioneEvento();\r\n\r\n                                Bundle bundle = new Bundle();\r\n                                bundle.putString(\"idEvento\", idEventoSelezionato);\r\n                                bundle.putBoolean(\"partenza\", false);\r\n\r\n                                fragment.setArguments(bundle);\r\n\r\n                                //richiamo il fragment\r\n\r\n                                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();\r\n                                fr.replace(R.id.container,fragment);\r\n                                fr.addToBackStack(null); //serve per tornare al fragment precedente\r\n                                fr.commit();\r\n                            }\r\n\r\n                            @Override\r\n                            public void onLongClick(View view, int position) {\r\n\r\n                            }\r\n\r\n                        }));\r\n                    }\r\n                }); //toDo onFailure\r\n    }\r\n\r\n    private void caricaEventi(){\r\n        listaEventi.clear();\r\n\r\n        db.collection(\"Eventi\")\r\n                .get()\r\n                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {\r\n                    @Override\r\n                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {\r\n                        for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){\r\n                            Evento evento = documentSnapshot.toObject(Evento.class);\r\n\r\n                            try {\r\n                                Date dataEvento = new SimpleDateFormat(\"dd/MM/yyyy\").parse(evento.getData());\r\n                                Date dataAttuale = new Date(System.currentTimeMillis());\r\n\r\n                                if(dataEvento.compareTo(dataAttuale) >= 0\r\n                                    && !evento.getAdmin().equals(getMailUtenteLoggato())\r\n                                        && !evento.getPartecipanti().contains(getMailUtenteLoggato())) {\r\n\r\n                                    Log.d(\"idList\", String.valueOf(idList));\r\n                                    Log.d(\"listaIDEventoLoggato\", String.valueOf(listaIDEventoUtenteLoggato));\r\n                                    listaEventi.add(evento);\r\n\r\n\r\n                                    String id = documentSnapshot.getId();\r\n                                    idList.add(id);\r\n                                }\r\n                            } catch (ParseException e) {\r\n                                e.printStackTrace();\r\n                            }\r\n                        }\r\n\r\n                        EventAdapter adapter = new EventAdapter(listaEventi);\r\n                        rvEventi.setAdapter(adapter);\r\n                        rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));\r\n                        rvEventi.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvEventi, new RecyclerTouchListener.ClickListener() {\r\n                            @Override\r\n                            public void onClick(View view, int position) {\r\n\r\n                                String idEventoSelezionato = idList.get(position);\r\n                                Log.i(\"idList: \", idEventoSelezionato);\r\n                                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();\r\n\r\n                                ProfiloEventoFragment fragment = new ProfiloEventoFragment();\r\n\r\n                                Bundle bundle = new Bundle();\r\n                                bundle.putString(\"idEvento\", idEventoSelezionato);\r\n\r\n                                fragment.setArguments(bundle);\r\n\r\n                                //richiamo il fragment\r\n\r\n                                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();\r\n                                fr.replace(R.id.container,fragment);\r\n                                fr.addToBackStack(null); //serve per tornare al fragment precedente\r\n                                fr.commit();\r\n                            }\r\n\r\n                            @Override\r\n                            public void onLongClick(View view, int position) {\r\n\r\n                            }\r\n\r\n                        }));\r\n                    }\r\n                }); //toDo onFailure\r\n    }\r\n\r\n\r\n    private String getMailUtenteLoggato(){\r\n        Utente utente;\r\n        Gson gson = new Gson();\r\n        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(\"Login\", Context.MODE_PRIVATE);\r\n        String json = prefs.getString(\"utente\", \"no\");\r\n        String mailUtenteLoggato;\r\n        if(!json.equals(\"no\")) {\r\n            utente = gson.fromJson(json, Utente.class);\r\n            mailUtenteLoggato = utente.getMail();\r\n            Log.d(\"mailutenteLoggato\", mailUtenteLoggato);\r\n        } else {\r\n            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences(\"LoginTemporaneo\",Context.MODE_PRIVATE);\r\n            mailUtenteLoggato = prefs1.getString(\"mail\", \"no\");\r\n            Log.d(\"mail\", mailUtenteLoggato);\r\n        }\r\n        return mailUtenteLoggato;\r\n    }\r\n\r\n    @Override\r\n    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {\r\n\r\n        switch (buttonView.getId()) {\r\n            case R.id.switch1:\r\n                switchiscritto = isChecked;\r\n\r\n                if(isChecked) {\r\n                    if (switchcreato) {\r\n                        Toast.makeText(getContext(), \"Impossibile effettuare questa operazione\", Toast.LENGTH_LONG).show();\r\n                        buttonView.setChecked(false);\r\n                        switchiscritto = !switchiscritto;\r\n                    } else caricaEventiIscritto();\r\n                }\r\n\r\n                if(!isChecked && !switchcreato) caricaEventi();\r\n                break;\r\n            case R.id.switch2:\r\n                switchcreato = isChecked;\r\n\r\n                if(isChecked) {\r\n                    if(switchiscritto) {\r\n                        Toast.makeText(getContext(),\"Impossibile effettuare questa operazione\",Toast.LENGTH_LONG).show();\r\n                        buttonView.setChecked(false);\r\n                        switchcreato = !switchcreato;\r\n                    } else caricaEventiCreati();\r\n                }\r\n\r\n                if(!isChecked && !switchiscritto) caricaEventi();\r\n                break;\r\n        }\r\n    }\r\n\r\n    //per il click\r\n    private static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {\r\n        private GestureDetector gestureDetector;\r\n        private EventsFragment.RecyclerTouchListener.ClickListener clickListener;\r\n\r\n        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final EventsFragment.RecyclerTouchListener.ClickListener clickListener) {\r\n            this.clickListener = clickListener;\r\n            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {\r\n                @Override\r\n                public boolean onSingleTapUp(MotionEvent e) {\r\n                    return true;\r\n                }\r\n\r\n                public void onLongPress(MotionEvent e) {\r\n                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());\r\n                    if (child != null && clickListener != null) {\r\n                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));\r\n                    }\r\n                }\r\n            });\r\n        }\r\n\r\n        @Override\r\n        public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {\r\n            View child = rv.findChildViewUnder(e.getX(), e.getY());\r\n\r\n            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {\r\n                clickListener.onClick(child, rv.getChildAdapterPosition(child));\r\n            }\r\n            return false;\r\n        }\r\n\r\n        @Override\r\n        public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {\r\n\r\n        }\r\n\r\n        @Override\r\n        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {\r\n\r\n        }\r\n\r\n        public interface ClickListener {\r\n            void onClick(View view, int position);\r\n\r\n            void onLongClick(View view, int position);\r\n        }\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/java/com/example/contagiapp/eventi/EventsFragment.java	(revision f67625775b3750f658fdfd28037d778e087ad17d)
+-+++ app/src/main/java/com/example/contagiapp/eventi/EventsFragment.java	(date 1633627346201)
+-@@ -79,6 +79,7 @@
+-             @Override
+-             public void onClick(View v) {
+-                 Intent intent = new Intent(getActivity(), NewEventsActivity.class);
+-+                intent.putExtra("scelta", false);
+-                 startActivity(intent);
+-             }
+-         });
+-@@ -99,6 +100,8 @@
+- 
+-     private void caricaEventiCreati(){
+-         listaEventiCreati.clear();
+-+        rvEventi.removeAllViews();
+-+
+-         db.collection("Eventi")
+-                 .whereEqualTo("admin", getMailUtenteLoggato())
+-                 .get()
+-@@ -107,18 +110,8 @@
+-                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+-                         for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+- 
+--                            String idEvento = documentSnapshot.getId();
+--
+--                            listaIDEventoUtenteLoggato.add(idEvento);
+--
+--                            String id = documentSnapshot.getId();
+--                            if(!listaIDEventoUtenteLoggato.contains(id)){
+--                                idList.add(id);
+--                            }
+--
+-                             Evento evento = documentSnapshot.toObject(Evento.class);
+- 
+--
+-                             try {
+-                                 Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
+-                                 Date dataAttuale = new Date(System.currentTimeMillis());
+-@@ -131,8 +124,6 @@
+-                             }
+- 
+-                         }
+--                        Log.d("listaIDEventoUtenteLog", String.valueOf(listaIDEventoUtenteLoggato));
+--                        Log.d("listaEventiCreati", String.valueOf(listaEventiCreati));
+- 
+-                         EventAdapter adapter = new EventAdapter(listaEventiCreati);
+-                         rvEventi.setAdapter(adapter);
+-@@ -143,27 +134,28 @@
+-                             @Override
+-                             public void onClick(View view, int position) {
+- 
+--
+--                                String idEventoSelezionato = listaIDEventoUtenteLoggato.get(position);
+--                                Log.i("idEventoSelezionato", idEventoSelezionato);
+--                                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
+-+                                try {
+-+                                    String idEventoSelezionato = listaEventiCreati.get(position).getIdEvento();
+-+                                    Log.i("idEventoSelezionato", idEventoSelezionato);
+-+                                    Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
+- 
+- 
+--                                ProfiloEventoAdminFragment fragment = new ProfiloEventoAdminFragment();
+-+                                    ProfiloEventoAdminFragment fragment = new ProfiloEventoAdminFragment();
+- 
+--                                Bundle bundle = new Bundle();
+--                                bundle.putString("idEvento", idEventoSelezionato);
+-+                                    Bundle bundle = new Bundle();
+-+                                    bundle.putString("idEvento", idEventoSelezionato);
+- 
+--                                fragment.setArguments(bundle);
+-+                                    fragment.setArguments(bundle);
+- 
+--
+--
+--                                //richiamo il fragment
+-+                                    //richiamo il fragment
+- 
+--                                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+--                                fr.replace(R.id.container,fragment);
+--                                fr.addToBackStack(null); //serve per tornare al fragment precedente
+--                                fr.commit();
+-+                                    FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+-+                                    fr.replace(R.id.container,fragment);
+-+                                    fr.addToBackStack(null); //serve per tornare al fragment precedente
+-+                                    fr.commit();
+-+                                } catch (Exception e) {
+-+                                    Log.d("Funziona", "caricaEventiCreati");
+-+                                }
+-                             }
+- 
+-                             @Override
+-@@ -181,6 +173,9 @@
+-     private void caricaEventiIscritto(){
+- 
+-         listaEventi.clear();
+-+        idList.clear();
+-+        rvEventi.removeAllViews();
+-+
+-         db.collection("Eventi")
+-                 .whereArrayContains("partecipanti", getMailUtenteLoggato())
+-                 .get()
+-@@ -208,6 +203,8 @@
+-                             }
+-                         }
+- 
+-+                        Log.d("listaIdEventi", String.valueOf(idList));
+-+
+-                         EventAdapter adapter = new EventAdapter(listaEventi);
+-                         rvEventi.setAdapter(adapter);
+-                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
+-@@ -215,24 +212,28 @@
+-                             @Override
+-                             public void onClick(View view, int position) {
+- 
+--                                String idEventoSelezionato = idList.get(position);
+--                                Log.i("idList: ", idEventoSelezionato);
+--                                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
+-+                                try {
+-+                                    String idEventoSelezionato = idList.get(position);
+-+                                    Log.i("idList: ", idEventoSelezionato);
+-+                                    Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
+- 
+--                                EliminazionePartecipazioneEvento fragment = new EliminazionePartecipazioneEvento();
+-+                                    EliminazionePartecipazioneEvento fragment = new EliminazionePartecipazioneEvento();
+- 
+--                                Bundle bundle = new Bundle();
+--                                bundle.putString("idEvento", idEventoSelezionato);
+--                                bundle.putBoolean("partenza", false);
+-+                                    Bundle bundle = new Bundle();
+-+                                    bundle.putString("idEvento", idEventoSelezionato);
+-+                                    bundle.putBoolean("partenza", false);
+- 
+--                                fragment.setArguments(bundle);
+-+                                    fragment.setArguments(bundle);
+- 
+--                                //richiamo il fragment
+-+                                    //richiamo il fragment
+- 
+--                                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+--                                fr.replace(R.id.container,fragment);
+--                                fr.addToBackStack(null); //serve per tornare al fragment precedente
+--                                fr.commit();
+-+                                    FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+-+                                    fr.replace(R.id.container,fragment);
+-+                                    fr.addToBackStack(null); //serve per tornare al fragment precedente
+-+                                    fr.commit();
+-+                                } catch (Exception e) {
+-+                                    Log.d("Funziona", "caricaEventiIscritto");
+-+                                }
+-                             }
+- 
+-                             @Override
+-@@ -247,6 +248,8 @@
+- 
+-     private void caricaEventi(){
+-         listaEventi.clear();
+-+        idList.clear();
+-+        rvEventi.removeAllViews();
+- 
+-         db.collection("Eventi")
+-                 .get()
+-@@ -284,23 +287,27 @@
+-                             @Override
+-                             public void onClick(View view, int position) {
+- 
+--                                String idEventoSelezionato = idList.get(position);
+--                                Log.i("idList: ", idEventoSelezionato);
+--                                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
+-+                                try {
+-+                                    String idEventoSelezionato = idList.get(position);
+-+                                    Log.i("idList: ", idEventoSelezionato);
+-+                                    Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
+- 
+--                                ProfiloEventoFragment fragment = new ProfiloEventoFragment();
+-+                                    ProfiloEventoFragment fragment = new ProfiloEventoFragment();
+- 
+--                                Bundle bundle = new Bundle();
+--                                bundle.putString("idEvento", idEventoSelezionato);
+-+                                    Bundle bundle = new Bundle();
+-+                                    bundle.putString("idEvento", idEventoSelezionato);
+- 
+--                                fragment.setArguments(bundle);
+-+                                    fragment.setArguments(bundle);
+- 
+--                                //richiamo il fragment
+-+                                    //richiamo il fragment
+- 
+--                                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+--                                fr.replace(R.id.container,fragment);
+--                                fr.addToBackStack(null); //serve per tornare al fragment precedente
+--                                fr.commit();
+-+                                    FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();
+-+                                    fr.replace(R.id.container,fragment);
+-+                                    fr.addToBackStack(null); //serve per tornare al fragment precedente
+-+                                    fr.commit();
+-+                                } catch (Exception e) {
+-+                                    Log.d("Funziona", "caricaEventi");
+-+                                }
+-                             }
+- 
+-                             @Override
+-@@ -347,6 +354,7 @@
+-                     } else caricaEventiIscritto();
+-                 }
+- 
+-+
+-                 if(!isChecked && !switchcreato) caricaEventi();
+-                 break;
+-             case R.id.switch2:
+-Index: app/src/main/java/com/example/contagiapp/eventi/ProfiloEventoFragment.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.contagiapp.eventi;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.fragment.app.FragmentTransaction;\r\n\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Button;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.contagiapp.R;\r\nimport com.example.contagiapp.data.amici.FriendsFragment;\r\nimport com.example.contagiapp.data.amici.ProfiloUtentiActivity;\r\nimport com.example.contagiapp.gruppi.Gruppo;\r\nimport com.example.contagiapp.gruppi.ProfiloGruppoAdminFragment;\r\nimport com.example.contagiapp.utente.Utente;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.OnFailureListener;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.storage.FileDownloadTask;\r\nimport com.google.firebase.storage.FirebaseStorage;\r\nimport com.google.firebase.storage.StorageMetadata;\r\nimport com.google.firebase.storage.StorageReference;\r\nimport com.google.firebase.storage.UploadTask;\r\nimport com.google.gson.Gson;\r\nimport com.squareup.picasso.Picasso;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Map;\r\n\r\nimport es.dmoral.toasty.Toasty;\r\n\r\n\r\npublic class ProfiloEventoFragment extends Fragment {\r\n\r\n    private static final String TAG = \"ProfiloEventoFragment\";\r\n    private FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n    private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();\r\n    private final static String storageDirectory = \"eventi\";\r\n    private Button btnPartecipa;\r\n    private Button btnPartecipaComeGruppo;\r\n    public Evento evento;\r\n    ArrayList<String> gruppiEvento = new ArrayList<>();\r\n\r\n\r\n    public ProfiloEventoFragment() {\r\n        // Required empty public constructor\r\n    }\r\n\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n\r\n        View view;\r\n        view = inflater.inflate(R.layout.fragment_profilo_evento, container, false);\r\n\r\n        Bundle bundle = getArguments();\r\n        final String idEvento = bundle.getString(\"idEvento\");\r\n        Log.d(\"idEvento\", String.valueOf(idEvento));\r\n\r\n        controlloGruppi(idEvento);\r\n\r\n        caricaEvento(idEvento, view);\r\n        btnPartecipa= view.findViewById(R.id.partecipa_evento);\r\n        btnPartecipaComeGruppo = view.findViewById(R.id.partecipa_evento_gruppo);\r\n\r\n        final String mailutente= getMailUtenteLoggato();\r\n        final ArrayList<String> partecipanti = new ArrayList<>();\r\n        btnPartecipa.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                if(evento.getAdmin().equals(mailutente)) {\r\n                    Toast.makeText(getContext(), \"Hai creato tu questo evento\", Toast.LENGTH_SHORT).show();\r\n\r\n                }else if(evento.getPartecipanti().contains(mailutente)) {\r\n                    Toast.makeText(getContext(), \"Ti sei già iscritto a questo evento\", Toast.LENGTH_LONG).show();\r\n                }else if((evento.getNumeroMaxPartecipanti() - evento.getPartecipanti().size()) == 0){\r\n                    Toast.makeText(getContext(),\"Non ci sono più posto disponibili\",Toast.LENGTH_SHORT).show();\r\n                }\r\n                else {\r\n                    //otteniamo lo stato dell'utente per controllarlo\r\n\r\n                    db.collection(\"Utenti\")\r\n                            .document(getMailUtenteLoggato())\r\n                            .get()\r\n                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {\r\n                                @Override\r\n                                public void onSuccess(DocumentSnapshot documentSnapshot) {\r\n                                    Utente utente = documentSnapshot.toObject(Utente.class);\r\n                                    String stato = utente.getStato();\r\n\r\n                                    if(stato.equals(\"giallo\") || stato.equals(\"verde\")){\r\n                                        //OK può prenotarsi\r\n\r\n                                        ArrayList<String> appoggio= evento.getPartecipanti();\r\n                                        for(int i=0; i<appoggio.size();i++){\r\n                                            partecipanti.add(appoggio.get(i));\r\n\r\n                                        }\r\n\r\n                                        partecipanti.add(getMailUtenteLoggato());\r\n                                        assert evento != null;\r\n                                        evento.setPartecipanti(partecipanti);\r\n\r\n                                        db.collection(\"Eventi\").document(idEvento).update(\"partecipanti\", partecipanti);\r\n                                        Toast.makeText(getContext(), \"Iscrizione aggiunta!\", Toast.LENGTH_LONG).show();\r\n\r\n                                    }else{\r\n                                        //non può prenotarsi\r\n                                        Toasty.warning(getActivity(), \"Non puoi prenotarti all'evento\").show();\r\n                                    }\r\n                                }\r\n                            }).addOnFailureListener(new OnFailureListener() {\r\n                        @Override\r\n                        public void onFailure(@NonNull Exception e) {\r\n                            Log.d(TAG, \"Error\");\r\n                        }\r\n                    });\r\n\r\n            }\r\n        }\r\n        });\r\n\r\n\r\n\r\n        btnPartecipaComeGruppo.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n\r\n                PartecipazioneGruppoFragment fragment = new PartecipazioneGruppoFragment();\r\n\r\n                Bundle bundle = new Bundle();\r\n                bundle.putString(\"idEvento\", idEvento);\r\n\r\n                fragment.setArguments(bundle);\r\n\r\n                Log.d(\"idEv\", idEvento);\r\n\r\n                FragmentTransaction fr = getActivity().getSupportFragmentManager().beginTransaction();\r\n                fr.replace(R.id.container,fragment);\r\n                fr.addToBackStack(null); //serve per tornare al fragment precedente\r\n                fr.commit();\r\n\r\n            }\r\n        });\r\n\r\n        final ImageView img = view.findViewById(R.id.imgProfiloEvento);\r\n\r\n\r\n        db.collection(\"Eventi\").document(idEvento)\r\n                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onSuccess(DocumentSnapshot documentSnapshot) {\r\n\r\n                //recupero l'immagine dallo storage\r\n                Log.d(\"eventi/idEvento\",\"eventi/\" + idEvento);\r\n\r\n                caricaImgDaStorage(storageRef, storageDirectory, idEvento, img );\r\n            }\r\n        });\r\n        return view;\r\n    }\r\n\r\n    private String getMailUtenteLoggato(){\r\n        Gson gson = new Gson();\r\n        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(\"Login\", Context.MODE_PRIVATE);\r\n        String json = prefs.getString(\"utente\", \"no\");\r\n        String mailUtenteLoggato;\r\n        //TODO capire il funzionamento\r\n        if(!json.equals(\"no\")) {\r\n            Utente utente = gson.fromJson(json, Utente.class);\r\n            mailUtenteLoggato = utente.getMail();\r\n            Log.d(\"mailutenteLoggato\", mailUtenteLoggato);\r\n        } else {\r\n            SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences(\"LoginTemporaneo\",Context.MODE_PRIVATE);\r\n            mailUtenteLoggato = prefs1.getString(\"mail\", \"no\");\r\n            Log.d(\"mail\", mailUtenteLoggato);\r\n        }\r\n        return mailUtenteLoggato;\r\n    }\r\n\r\n    private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){\r\n        storageRef.child(directory + \"/\" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {\r\n            @Override\r\n            public void onSuccess(Uri uri) {\r\n                String sUrl = uri.toString(); //otteniamo il token del'immagine\r\n                Log.d(\"sUrl\", sUrl);\r\n                Picasso.get().load(sUrl).into(imageView);\r\n            }\r\n        }).addOnFailureListener(new OnFailureListener() {\r\n            @Override\r\n            public void onFailure(@NonNull Exception e) {\r\n                Log.d(\"OnFailure Exception\", String.valueOf(e));\r\n            }\r\n        });\r\n    }\r\n\r\n    private void caricaEvento(String idEvento, final View view){\r\n        db.collection(\"Eventi\")\r\n                .document(idEvento)\r\n                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onSuccess(DocumentSnapshot documentSnapshot) {\r\n                if (documentSnapshot.exists()) {\r\n\r\n                    evento = documentSnapshot.toObject(Evento.class);\r\n                    String nome = evento.getNome();\r\n                    String descrizione = evento.getDescrizione();\r\n                    String data = evento.getData();\r\n                    String orario = evento.getOrario();\r\n                    String indirizzo = evento.getIndirizzo();\r\n                    String citta = evento.getCitta();\r\n                    int numMax = evento.getNumeroMaxPartecipanti();\r\n                    int numPartecipanti = evento.getPartecipanti().size();\r\n                    int numDisponibili = numMax - numPartecipanti;\r\n\r\n                    TextView tvNomeEvento = view.findViewById(R.id.tvNomeEvento2);\r\n                    TextView tvDescrEvento = view.findViewById(R.id.tvDescrEvento2);\r\n                    TextView tvDataEvento = view.findViewById(R.id.tvDataEvento);\r\n                    TextView tvOrarioEvento = view.findViewById(R.id.tvOrarioEvento);\r\n                    TextView tvIndirizzoEvento = view.findViewById(R.id.tvIndirizzoEvento);\r\n                    TextView tvCittaEvento = view.findViewById(R.id.tvCittaEvento);\r\n                    TextView numMaxPartecipanti = view.findViewById(R.id.num_partecipanti_max);\r\n                    TextView numDispono = view.findViewById(R.id.posti_disponibili);\r\n                    TextView numParteci = view.findViewById(R.id.num_partecipanti);\r\n\r\n\r\n                    tvNomeEvento.setText(\"Nome evento: \"+nome);\r\n                    tvDescrEvento.setText(descrizione);\r\n                    tvDataEvento.setText(data);\r\n                    tvOrarioEvento.setText(orario);\r\n                    tvIndirizzoEvento.setText(\"Indirizzo: \"+indirizzo);\r\n                    tvCittaEvento.setText(\"Città: \"+citta);\r\n                    numMaxPartecipanti.setText(\"Numero massimo di partecipanti:   \"+numMax);\r\n                    numDispono.setText(\"Numero posti disponibili:   \"+numDisponibili);\r\n                    numParteci.setText(\"Numero di iscritti all'evento:   \"+numPartecipanti);\r\n\r\n                } else {\r\n                    Toast.makeText(getContext(), \"Documents does not exist\", Toast.LENGTH_SHORT).show();\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n    private void controlloGruppi(final String idEvento) {\r\n        final ArrayList<Boolean> cond = new ArrayList<>();\r\n\r\n        db.collection(\"Eventi\")\r\n                .document(idEvento)\r\n                .get()\r\n                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onSuccess(DocumentSnapshot documentSnapshot) {\r\n                Evento evento1 = documentSnapshot.toObject(Evento.class);\r\n                gruppiEvento = evento1.getGruppiPartecipanti();\r\n                final ArrayList<String> partecipanti = evento1.getPartecipanti();\r\n\r\n                //Log.d(\"ANY_TAG\", String.valueOf(gruppiEvento));\r\n\r\n                for(int i = 0; i < gruppiEvento.size(); i++) {\r\n                    String idGruppo = gruppiEvento.get(i);\r\n\r\n                    db.collection(\"Gruppo\")\r\n                            .document(idGruppo)\r\n                            .get()\r\n                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {\r\n                        @Override\r\n                        public void onSuccess(DocumentSnapshot documentSnapshot) {\r\n                            //Log.d(\"ANY_TAG\", \"entered gruppo\");\r\n                            Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);\r\n\r\n                            ArrayList<String> membri = gruppo.getPartecipanti();\r\n\r\n                            for(int j = 0; j < membri.size(); j++) {\r\n                                String membro = membri.get(j);\r\n                                if(partecipanti.contains(membro)) {\r\n                                    cond.add(true);\r\n                                } else cond.add(false);\r\n                            }\r\n                        }\r\n                    });\r\n\r\n                    if(!cond.contains(true)) {\r\n                        gruppiEvento.remove(idGruppo);\r\n                    }\r\n                }\r\n            }\r\n        });\r\n\r\n        db.collection(\"Eventi\").document(idEvento).update(\"gruppiPartecipanti\", gruppiEvento);\r\n    }\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/java/com/example/contagiapp/eventi/ProfiloEventoFragment.java	(revision f67625775b3750f658fdfd28037d778e087ad17d)
+-+++ app/src/main/java/com/example/contagiapp/eventi/ProfiloEventoFragment.java	(date 1633627761232)
+-@@ -173,6 +173,7 @@
+-                 caricaImgDaStorage(storageRef, storageDirectory, idEvento, img );
+-             }
+-         });
+-+
+-         return view;
+-     }
+- 
+-@@ -304,4 +305,6 @@
+- 
+-         db.collection("Eventi").document(idEvento).update("gruppiPartecipanti", gruppiEvento);
+-     }
+-+
+-+    //TODO come chiudere l'attività schiacciando il tasto indietro
+- }
+-\ No newline at end of file
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\n\r\nbuildscript {\r\n    \r\n    repositories {\r\n        google()\r\n        jcenter()\r\n        \r\n    }\r\n    dependencies {\r\n        classpath 'com.android.tools.build:gradle:4.1.3'\r\n        classpath 'com.google.gms:google-services:4.3.5'\r\n\r\n\r\n\r\n        // NOTE: Do not place your application dependencies here; they belong\r\n        // in the individual module build.gradle files\r\n    }\r\n}\r\n\r\n\r\n\r\nallprojects {\r\n    repositories {\r\n        google()\r\n        jcenter()\r\n        maven { url 'https://jitpack.io' }\r\n    }\r\n}\r\n\r\ntask clean(type: Delete) {\r\n    delete rootProject.buildDir\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle b/build.gradle
+--- a/build.gradle	(revision 95ad4920bec4300ba3721a2990b5bd897dcea77d)
++++ b/build.gradle	(date 1633723945032)
+@@ -8,7 +8,7 @@
+         
+     }
+     dependencies {
+-        classpath 'com.android.tools.build:gradle:4.1.3'
++        classpath 'com.android.tools.build:gradle:4.2.2'
+         classpath 'com.google.gms:google-services:4.3.5'
+ 
+ 
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_8\" default=\"true\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 95ad4920bec4300ba3721a2990b5bd897dcea77d)
++++ b/.idea/misc.xml	(date 1633723945048)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"CompilerConfiguration\">\r\n    <bytecodeTargetLevel target=\"1.8\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+--- a/.idea/compiler.xml	(revision 95ad4920bec4300ba3721a2990b5bd897dcea77d)
++++ b/.idea/compiler.xml	(date 1633723945057)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="CompilerConfiguration">
+-    <bytecodeTargetLevel target="1.8" />
++    <bytecodeTargetLevel target="11" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"testRunner\" value=\"PLATFORM\" />\r\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"modules\">\r\n          <set>\r\n            <option value=\"$PROJECT_DIR$\" />\r\n            <option value=\"$PROJECT_DIR$/app\" />\r\n          </set>\r\n        </option>\r\n        <option name=\"resolveModulePerSourceSet\" value=\"false\" />\r\n        <option name=\"useQualifiedModuleNames\" value=\"true\" />\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	(revision 95ad4920bec4300ba3721a2990b5bd897dcea77d)
++++ b/.idea/gradle.xml	(date 1633723945068)
+@@ -4,7 +4,7 @@
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
+-        <option name="testRunner" value="PLATFORM" />
++        <option name="testRunner" value="GRADLE" />
+         <option name="distributionType" value="DEFAULT_WRAPPED" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+         <option name="modules">
+@@ -14,7 +14,6 @@
+           </set>
+         </option>
+         <option name="resolveModulePerSourceSet" value="false" />
+-        <option name="useQualifiedModuleNames" value="true" />
+       </GradleProjectSettings>
+     </option>
+   </component>
+Index: gradle/wrapper/gradle-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Thu Jan 21 12:21:22 CET 2021\r\ndistributionBase=GRADLE_USER_HOME\r\ndistributionPath=wrapper/dists\r\nzipStoreBase=GRADLE_USER_HOME\r\nzipStorePath=wrapper/dists\r\ndistributionUrl=https\\://services.gradle.org/distributions/gradle-6.5-all.zip\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>windows-1252
+===================================================================
+diff --git a/gradle/wrapper/gradle-wrapper.properties b/gradle/wrapper/gradle-wrapper.properties
+--- a/gradle/wrapper/gradle-wrapper.properties	(revision 95ad4920bec4300ba3721a2990b5bd897dcea77d)
++++ b/gradle/wrapper/gradle-wrapper.properties	(date 1633723945077)
+@@ -3,4 +3,4 @@
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-6.5-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-6.7.1-all.zip
