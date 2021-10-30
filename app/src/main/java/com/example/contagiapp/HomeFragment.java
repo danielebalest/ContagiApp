@@ -143,7 +143,7 @@ public class HomeFragment extends Fragment {
                                 if(!statoUtente.equals(stato)) setStato(stato, dataStato);
                                 if(stato.equals("rosso") || stato.equals("arancione")) eliminaPartecipazioneEventi();
 
-                                switch (stato){//TODO modificare i messaggi in tvStatusDEscr
+                                switch (stato){
                                     case "rosso" :
                                         try {
                                             Date dataPositivita = new SimpleDateFormat("dd/MM/yyyy").parse(dataStato);
@@ -194,9 +194,6 @@ public class HomeFragment extends Fragment {
                                             e.printStackTrace();
                                         }
                                         break;
-
-                                    default:
-                                        //toDo: inserire errore per lo stato
                                 }
 
                             }
@@ -259,6 +256,7 @@ public class HomeFragment extends Fragment {
         Toasty.success(getContext(), "Stato aggiornato", Toast.LENGTH_LONG).show();
         Intent i = new Intent(getActivity(),MainActivity.class);
         startActivity(i);
+        getActivity().finish();
     }
 
     private void eliminaPartecipazioneEventi() {

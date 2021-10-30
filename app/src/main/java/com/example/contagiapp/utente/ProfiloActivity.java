@@ -94,19 +94,7 @@ public class ProfiloActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                            utente = new Utente();
                             utente = documentSnapshot.toObject(Utente.class);
-                            utente.setNome(documentSnapshot.getString("nome"));
-                            utente.setCognome(documentSnapshot.getString("cognome"));
-                            utente.setMail(documentSnapshot.getString("mail"));
-                            utente.setDataNascita(documentSnapshot.getString("dataNascita"));
-                            utente.setGenere(documentSnapshot.getString("genere"));
-                            utente.setNazione(documentSnapshot.getString("nazione"));
-                            utente.setRegione(documentSnapshot.getString("regione"));
-                            utente.setProvince(documentSnapshot.getString("province"));
-                            utente.setCitta(documentSnapshot.getString("citta"));
-                            utente.setTelefono(documentSnapshot.getString("telefono"));
-                            utente.setStato(documentSnapshot.getString("stato"));
 
                             riempiListView(arrayListProfilo);
                         }
@@ -124,7 +112,7 @@ public class ProfiloActivity extends AppCompatActivity {
 
 
 
-        modifica = (Button) findViewById(R.id.modifica_dati);
+        modifica = findViewById(R.id.modifica_dati);
         modifica.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,7 +122,7 @@ public class ProfiloActivity extends AppCompatActivity {
             }
         });
 
-        logout = (Button) findViewById(R.id.logout);
+        logout = findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

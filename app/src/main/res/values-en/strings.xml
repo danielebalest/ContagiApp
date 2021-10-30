@@ -22,6 +22,7 @@
     <string name="invite">Invite</string>
     <string name="participants">participants</string>
     <string name="available">available</string>
+    <string name="VuotoEventi">You have not attended any event in the past. Click on finish to complete the operation</string>
 
     <string name="remember_me">Remember me</string>
     <string name="createAccount">Create account</string>

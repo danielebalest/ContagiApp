@@ -3,6 +3,7 @@ package com.example.contagiapp.impostazioni;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.contagiapp.HomeFragment;
 import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
 import com.example.contagiapp.gruppi.AddImgGruppoActivity;
@@ -44,7 +46,10 @@ import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import es.dmoral.toasty.Toasty;
@@ -89,17 +94,26 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                editTextData.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
-                                //int dayOfYear = dayOfMonth + 30 * month;
-
                                 Calendar cal = Calendar.getInstance();
                                 cal.set(Calendar.YEAR, year);
                                 cal.set(Calendar.MONTH, month);
                                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                int giornoDellAnno = cal.get(Calendar.DAY_OF_YEAR);
+
+
+                                month++;
+
+                                String dataInserita;
+
+                                if (month <= 9) {
+                                    dataInserita = dayOfMonth + "/0" + month + "/" + year;
+                                } else
+                                    dataInserita = dayOfMonth + "/" + month + "/" + year;
+
+                                editTextData.setText(dataInserita);
+                                //int dayOfYear = dayOfMonth + 30 * month;
 
                                 Log.d("giornoDellAnno", String.valueOf(cal.get(Calendar.DAY_OF_YEAR)));
-                                controlloData(editTextData, textInputLayoutData, giornoDellAnno);
+                                controlloData(editTextData, textInputLayoutData, dataInserita);
                             }
                         },
                         year, month, dayOfMonth);
@@ -179,28 +193,28 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
     }
 
 
-    private void controlloData(EditText editTextData, TextInputLayout textInputLayoutData, int dayOfYear){
-        String data = editTextData.getText().toString();
+    private void controlloData(EditText editTextData, TextInputLayout textInputLayoutData, String dataInserita){
 
-        //todo: controllo da sistemare. Deve tenere conto anche dell'anno
-        Calendar cal = Calendar.getInstance();
-        int dayOfYearToday = cal.get(Calendar.DAY_OF_YEAR);
+        try {
+            Date dataAttuale = new Date(System.currentTimeMillis());
+            Date inserita = new SimpleDateFormat("dd/MM/yyyy").parse(dataInserita);
 
-
-        if(editTextData == null){
-            textInputLayoutData.setError("inserisci data");
-        }else{
-            textInputLayoutData.setErrorEnabled(false);
-            if((dayOfYear - dayOfYearToday) > 0){
-                textInputLayoutData.setError("Data successiva a quella di oggi");
-            }else if ((dayOfYearToday - dayOfYear) > 30){
-                textInputLayoutData.setError("E' trascorso molto tempo");
-                Toasty.warning(SegnalaPositivitaActivity.this, "E' trascorso molto tempo", Toast.LENGTH_SHORT).show();
-            }else
-
-                textInputLayoutData.setErrorEnabled(false);
+            if(editTextData == null) {
+                textInputLayoutData.setError("inserisci data");
+            } else {
+                if((inserita.getTime() - dataAttuale.getTime()) > 0) {
+                    textInputLayoutData.setErrorEnabled(true);
+                    textInputLayoutData.setError("Data inserita successiva a quella di oggi");
+                } else {
+                    if((dataAttuale.getTime() - inserita.getTime()) > 864000000) {
+                        textInputLayoutData.setErrorEnabled(true);
+                        textInputLayoutData.setError("E' trascorso molto tempo");
+                    } else textInputLayoutData.setErrorEnabled(false);
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-
     }
 
     private void scegliDocumento(){
@@ -253,6 +267,12 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
                         @Override
                         public void onCanceled() {
                             Toasty.error(SegnalaPositivitaActivity.this, "Certificato non caricato", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            finish();
                         }
                     });
                 }
@@ -263,7 +283,6 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
             Log.e("Errore", "Uri o documentId nulli");
             Log.d("documentId", String.valueOf(documentId));
         }
-
     }
 
     private String getMailUtenteLoggato(){
