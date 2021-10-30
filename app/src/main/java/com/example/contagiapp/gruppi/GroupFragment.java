@@ -156,11 +156,6 @@ public class GroupFragment extends Fragment {
                     Log.d("ListaNomiGruppiCreat", String.valueOf(listaNomiGruppiCreati));
 
                 }
-                if(listaGruppiCreati.isEmpty()){
-                    tvTuoiGruppi.setText("Non hai ancora nessun gruppo. Crea subito uno");
-                }
-
-
 
                 GruppoAdapter adapter = new GruppoAdapter(listaGruppiCreati);
                 rvGruppiCreati.setAdapter(adapter);
@@ -224,11 +219,18 @@ public class GroupFragment extends Fragment {
 
 
                         }//fine for
-                        if(!listaGruppiPartecipante.isEmpty()){
-                            tvTuoiGruppi.setText(getString(R.string.your_create_groups));
-                        }else {
+                        if(listaGruppiPartecipante.isEmpty()){
                             tvGruppiPartecipante.setVisibility(View.GONE);
                         }
+
+                        if(listaGruppiCreati.isEmpty() && listaGruppiPartecipante.isEmpty()){
+                            tvTuoiGruppi.setText("Non hai ancora nessun gruppo. Crea subito uno");
+                        }
+
+                        if(listaGruppiCreati.isEmpty() && ! listaGruppiPartecipante.isEmpty()){
+                            tvTuoiGruppi.setVisibility(View.GONE);
+                        }
+
 
 
                         GruppoAdapter adapter = new GruppoAdapter(listaGruppiPartecipante);
