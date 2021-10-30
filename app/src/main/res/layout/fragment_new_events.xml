@@ -85,24 +85,23 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+        <TextView
+            android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:hint="@string/event_time2dots"
-            app:errorEnabled="true">
+            android:text="@string/event_time2dots"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-            <TextClock
-                android:id="@+id/orarioEvento"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/event_time2dots"
-                android:textColor="@color/gray"
-                android:padding="10dp"
-                android:textSize="16sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+        <TextClock
+            android:id="@+id/orarioEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Orario Evento"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp" />
 
 
 
