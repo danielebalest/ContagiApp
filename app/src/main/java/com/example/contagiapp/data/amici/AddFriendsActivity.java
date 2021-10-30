@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 /*
@@ -46,7 +47,7 @@ public class AddFriendsActivity extends AppCompatActivity  {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private RecyclerView recyclerView;
-
+    String mailUtenteLoggato;
     ArrayList<String> idList = new ArrayList<>(); //lista che conterrà gli id cioè le mail degli utenti
     ArrayList<Utente> utenti = new ArrayList<>();
     ArrayList<String> amiciLoggato;
@@ -56,6 +57,8 @@ public class AddFriendsActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friends);
 
+        mailUtenteLoggato = getMailUtenteLoggato();
+
         Bundle extras = getIntent().getExtras();
         if(extras.getString("aggiungere").equals("si")) {
             ArrayList<String> listaMailAmici;
@@ -64,18 +67,37 @@ public class AddFriendsActivity extends AppCompatActivity  {
                 listaMailAmici = new ArrayList<>();
             } else listaMailAmici = extras.getStringArrayList("listaMailAmici");
 
-            String mailUtenteLoggato = extras.getString("mailUtenteLoggato");
+            Log.d("mailUtenteLoggato8", String.valueOf(mailUtenteLoggato));
+
             listaMailAmici.add(mailUtenteLoggato);
-            Log.d("listaMailAmici", String.valueOf(listaMailAmici));
+            listaMailAmici.removeAll(Collections.singleton(null));
+            Log.d("listaMailAmici1", String.valueOf(listaMailAmici));
             caricaUtentiNonAmici(listaMailAmici, mailUtenteLoggato);
         } else {
-            caricaAmicicCercati(extras);
+            caricaAmiciCercati(extras);
         }
+    }
+
+    private String getMailUtenteLoggato(){
+        Gson gson = new Gson();
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String json = prefs.getString("utente", "no");
+        String mailUtenteLoggato;
+
+        if(!json.equals("no")) {
+            Utente utente = gson.fromJson(json, Utente.class);
+            mailUtenteLoggato = utente.getMail();
+            Log.d("mailutenteLoggato", mailUtenteLoggato);
+        } else {
+            SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
+            mailUtenteLoggato = prefs1.getString("mail", "no");
+            Log.d("mail", mailUtenteLoggato);
+        }
+        return mailUtenteLoggato;
     }
 
     public void caricaUtentiNonAmici(ArrayList<String> listaAmici, final String mailUtenteLoggato) {
         recyclerView = findViewById(R.id.rvUtenti);
-
 
 
         db.collection("Utenti")
@@ -93,7 +115,6 @@ public class AddFriendsActivity extends AppCompatActivity  {
                 }
 
                 UserAdapter adapter = new UserAdapter(utenti);
-
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(AddFriendsActivity.this, LinearLayoutManager.VERTICAL, false));
                 recyclerView.addOnItemTouchListener(new RecyclerTouchListener(AddFriendsActivity.this, recyclerView, new RecyclerTouchListener.ClickListener() {
@@ -120,7 +141,7 @@ public class AddFriendsActivity extends AppCompatActivity  {
         });//Todo: onFailure
     }
 
-    public void caricaAmicicCercati(final Bundle extras) {
+    public void caricaAmiciCercati(final Bundle extras) {
         recyclerView = findViewById(R.id.rvUtenti);
         final String cerca = extras.getString("cerca");
         final String mail = extras.getString("mail");
@@ -156,7 +177,6 @@ public class AddFriendsActivity extends AppCompatActivity  {
                             public void onClick(View view, int position) {
                                 final String idUtenteSelezionato = idList.get(position);  //finalmente cristo
                                 Log.i("idList: ", idUtenteSelezionato);
-                                Toast.makeText(getApplicationContext(), idUtenteSelezionato, Toast.LENGTH_LONG).show();
 
                                 final Intent profiloIntent = new Intent(AddFriendsActivity.this, ProfiloUtentiActivity.class );
                                 profiloIntent.putExtra("id", idUtenteSelezionato);

@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import com.example.contagiapp.R;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import es.dmoral.toasty.Toasty;
@@ -16,15 +18,24 @@ public class CreaGruppoActivity extends AppCompatActivity {
 
     TextInputEditText editTextNomeGruppo;
     TextInputEditText editTextDescrGruppo;
+    MaterialButton btnNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crea_gruppo);
 
+        btnNext = findViewById(R.id.btnNext);
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addImgGruoup();
+            }
+        });
+
     }
 
-    public void addImgGruoup(View view) {
+    public void addImgGruoup() {
         editTextNomeGruppo = findViewById(R.id.editTextNomeGruppo);
         editTextDescrGruppo = findViewById(R.id.editTextDescrGruppo);
         String nomeGruppo = editTextNomeGruppo.getText().toString();
@@ -40,10 +51,12 @@ public class CreaGruppoActivity extends AppCompatActivity {
         if ((!nomeGruppo.isEmpty()) && (!descrGruppo.isEmpty())) {
             textInputLayoutNome.setErrorEnabled(false);
             textInputLayoutDesc.setErrorEnabled(false);
+
             //Apro activity AddImgGruppoActivity
-            Intent imgIntent = new Intent(this, AddImgGruppoActivity.class);
+            Intent imgIntent = new Intent(CreaGruppoActivity.this, AddImgGruppoActivity.class);
             imgIntent.putExtra("nomeGruppo", nomeGruppo);
             imgIntent.putExtra("descrGruppo", descrGruppo);
+            Log.d("sonoQUI", "prima dello start");
             startActivity(imgIntent);
         } else {
             if (nomeGruppo.isEmpty() && descrGruppo.isEmpty()) {

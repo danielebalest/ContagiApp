@@ -71,7 +71,7 @@
             android:text="@string/next"
             app:cornerRadius="20dp" />
 
-        <androidx.core.widget.ContentLoadingProgressBar
+        <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="28dp"

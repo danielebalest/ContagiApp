@@ -202,8 +202,7 @@
     <string name="subMessage2">\'\' \nto be held in:\n</string>
     <string name="separator">", "</string>
     <string name="subMessage3">\n\nMake your reservation on the app now."</string>
-
-
+    <string name="ERROR">ERROR</string>
 
 
 </resources>

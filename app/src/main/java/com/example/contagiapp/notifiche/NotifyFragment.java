@@ -258,8 +258,6 @@ public class NotifyFragment extends Fragment {
                             String id = user.getMail();
                             idList.add(id);
 
-
-
 /*
                             recyclerView.addOnItemTouchListener(new NotifyFragment.RecyclerTouchListener(getActivity(), recyclerView, new NotifyFragment.RecyclerTouchListener.ClickListener() {
                                 @Override
@@ -355,7 +353,6 @@ public class NotifyFragment extends Fragment {
         }
 
     }
-
 
     private String getMailUtenteLoggato(){
         Gson gson = new Gson();

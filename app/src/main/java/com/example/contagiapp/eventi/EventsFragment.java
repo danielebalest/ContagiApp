@@ -98,7 +98,6 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
                 String idEventoSelezionato = idList.get(position);
                 Log.i("idList: ", idEventoSelezionato);
-                Toast.makeText(getActivity().getApplicationContext(), idEventoSelezionato, Toast.LENGTH_SHORT).show();
 
                 Fragment fragment;
 

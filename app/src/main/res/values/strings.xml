@@ -223,5 +223,6 @@
     <string name="subMessage2">\'\' \n che si terrà in:\n</string>
     <string name="separator">", "</string>
     <string name="subMessage3">\n\nEffettua subito la prenotazione sull\'app."</string>
+    <string name="ERROR">ERRORE</string>
 
 </resources>

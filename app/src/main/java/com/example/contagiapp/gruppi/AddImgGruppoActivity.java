@@ -53,6 +53,8 @@ public class AddImgGruppoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("sonoQUI", "AddImgGruppoActivity");
+
         setContentView(R.layout.activity_add_img_gruppo);
         btnImgCopertina = findViewById(R.id.btnAddImgCopertina);
         btnImgCopertina.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +129,7 @@ public class AddImgGruppoActivity extends AppCompatActivity {
         Gson gson = new Gson();
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
         String json = prefs.getString("utente", "no");
+
         String mailUtenteLoggato;
         if(!json.equals("no")) {
             Utente utente = gson.fromJson(json, Utente.class);

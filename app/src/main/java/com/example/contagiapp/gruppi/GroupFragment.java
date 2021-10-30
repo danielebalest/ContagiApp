@@ -82,12 +82,14 @@ public class GroupFragment extends Fragment {
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_group, container, false);
-
+        mailUtenteLoggato = getMailUtenteLoggato();
         tvTuoiGruppi = view.findViewById(R.id.tvTuoiGruppi);
         rvGruppiCreati = view.findViewById(R.id.rvGruppiCreati);
         rvGruppiPartecipante = view.findViewById(R.id.rvGruppiPartecipante);
         editTextSearch = view.findViewById(R.id.search_field_group);
 
+
+        Log.d("mailUtLog", mailUtenteLoggato);
         caricaGruppi();
 
         crea_gruppo = view.findViewById(R.id.FAB_groups);
@@ -123,7 +125,9 @@ public class GroupFragment extends Fragment {
     private void caricaGruppi() {
         listaGruppiCreati = new ArrayList<Gruppo>();
         listaGruppiPartecipante = new ArrayList<Gruppo>();
+
         String mailAdmin = mailUtenteLoggato;
+        Log.d("mailUtLogAd", mailAdmin);
 
 
         db.collection("Gruppo").whereEqualTo("admin", mailAdmin)

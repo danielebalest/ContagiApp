@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
+
 /*
 * questa activity permette la visualizzazione del profilo dell'utente selezionato dalla ListView di addFriends
 * */
@@ -176,13 +178,13 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                 //aggiornaRichieste(idUtenteSelezionato, profiloLoggato, user);
 
                             } else {
-                                Toast.makeText(ProfiloUtentiActivity.this, "Documents does not exist", Toast.LENGTH_SHORT);
+                                Toast.makeText(ProfiloUtentiActivity.this, "Documents does not exist", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(ProfiloUtentiActivity.this, "Errore", Toast.LENGTH_SHORT);
+                    Toasty.error(ProfiloUtentiActivity.this, getString(R.string.ERROR)).show();
                 }
             });
         }
