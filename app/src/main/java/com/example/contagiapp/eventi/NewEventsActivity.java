@@ -40,6 +40,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -82,7 +83,7 @@ public class NewEventsActivity extends AppCompatActivity {
     private EditText nome;
     private EditText descrizione;
     private EditText numeroMaxP;
-    private TextView data;
+    private TextInputEditText data;
     private TextClock orario;
     private EditText indirizzo;
 

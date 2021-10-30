@@ -67,39 +67,43 @@
                 android:labelFor="@id/editTextNumMaxPartecipanti" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/textView5"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/event_date2dots"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/dataEvento"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
+            android:layout_marginTop="32dp"
             android:hint="@string/event_date"
-            android:textSize="20sp" />
+            app:errorEnabled="true">
 
-        <TextView
-            android:id="@+id/textView6"
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/dataEvento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:editable="false" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/event_time2dots"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:layout_marginTop="32dp"
+            android:hint="@string/event_time2dots"
+            app:errorEnabled="true">
 
-        <TextClock
-            android:id="@+id/orarioEvento"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Orario Evento"
-            android:layout_marginTop="10dp"
-            android:textSize="20sp" />
+            <TextClock
+                android:id="@+id/orarioEvento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/event_time2dots"
+                android:textColor="@color/gray"
+                android:padding="10dp"
+                android:textSize="16sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
 
         <com.google.android.material.textfield.TextInputLayout

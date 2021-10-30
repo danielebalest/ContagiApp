@@ -159,7 +159,7 @@
     <string name="maximum_number_of_participants">Numero massimo di partecipanti</string>
     <string name="event_date2dots">Data evento:</string>
     <string name="event_date">Data evento</string>
-    <string name="event_time2dots">Orario evento:</string>
+    <string name="event_time2dots">Orario evento</string>
     <string name="event_time">Orario evento</string>
     <string name="event_description">Descrizione evento</string>
     <string name="event_address">Indirizzo evento</string>

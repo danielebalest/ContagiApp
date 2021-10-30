@@ -135,7 +135,7 @@
     <string name="maximum_number_of_participants">Maximum number of participants</string>
     <string name="event_date2dots">Event date:</string>
     <string name="event_date">Event date</string>
-    <string name="event_time2dots">Event time:</string>
+    <string name="event_time2dots">Event time</string>
     <string name="event_time">Event time</string>
     <string name="event_description">Event description</string>
     <string name="event_address">Event address</string>
