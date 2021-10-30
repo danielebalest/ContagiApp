@@ -90,7 +90,8 @@
     <string name="create_event">Crea evento</string>
 
     //GroupFragment
-    <string name="your_groups">I tuoi gruppi</string>
+    <string name="your_create_groups">I tuoi gruppi</string>
+    <string name="your_groups_partecipante">Gruppi a cui partecipi</string>
 
     //addFriends
     <string name="select_user">Seleziona utente</string>

@@ -73,6 +73,7 @@ public class GroupFragment extends Fragment {
     RecyclerView rvGruppiCreati;
     RecyclerView rvGruppiPartecipante;
     TextView tvTuoiGruppi;
+    TextView tvGruppiPartecipante;
 
 
 
@@ -84,6 +85,7 @@ public class GroupFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_group, container, false);
         mailUtenteLoggato = getMailUtenteLoggato();
         tvTuoiGruppi = view.findViewById(R.id.tvTuoiGruppi);
+        tvGruppiPartecipante = view.findViewById(R.id.tvGruppiPartecipante);
         rvGruppiCreati = view.findViewById(R.id.rvGruppiCreati);
         rvGruppiPartecipante = view.findViewById(R.id.rvGruppiPartecipante);
         editTextSearch = view.findViewById(R.id.search_field_group);
@@ -195,6 +197,7 @@ public class GroupFragment extends Fragment {
             }
         }); //toDo onFailure
 
+
         db.collection("Gruppo").whereArrayContains("partecipanti", mailUtenteLoggato)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -220,11 +223,13 @@ public class GroupFragment extends Fragment {
                             }
 
 
-                            if(!listaGruppiPartecipante.isEmpty()){
-                                tvTuoiGruppi.setText("I tuoi gruppi");
-                            }
-
                         }//fine for
+                        if(!listaGruppiPartecipante.isEmpty()){
+                            tvTuoiGruppi.setText(getString(R.string.your_create_groups));
+                        }else {
+                            tvGruppiPartecipante.setVisibility(View.GONE);
+                        }
+
 
                         GruppoAdapter adapter = new GruppoAdapter(listaGruppiPartecipante);
                         rvGruppiPartecipante.setAdapter(adapter);

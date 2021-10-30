@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:padding="20dp"
-    tools:context=".gruppi.InvitaAmiciGruppoActivity">
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="80dp"
             android:orientation="vertical" >
 
                 <TextView
@@ -22,14 +25,24 @@
                     android:text="@string/invite_friend_to_group"
                     android:textSize="20dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvInvitaAmici"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            tools:listitem="@layout/add_user_row" >
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvInvitaAmici"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    tools:listitem="@layout/add_user_row" >
 
-        </androidx.recyclerview.widget.RecyclerView>
+                </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+
+
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="0dp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnTermina"
@@ -40,12 +53,13 @@
                     android:text="@string/stop"
                     app:cornerRadius="20dp" />
 
-        <ProgressBar
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:indeterminate="false"
-            android:progress="100"
-            android:layout_gravity="bottom"/>
-        </LinearLayout>
-    </ScrollView>
+                <ProgressBar
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:indeterminate="false"
+                    android:progress="100"
+                    android:layout_gravity="bottom"/>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

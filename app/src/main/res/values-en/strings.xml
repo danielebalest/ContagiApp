@@ -66,7 +66,8 @@
 
 
     //GroupFragment
-    <string name="your_groups">Your groups</string>
+    <string name="your_create_groups">Your groups</string>
+    <string name="your_groups_partecipante">Groups you participate in</string>
 
     //addFriends
     <string name="select_user">Select user</string>

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,8 +8,6 @@
     android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
-
-
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/search_field_group"
@@ -25,37 +25,56 @@
         android:imeOptions="actionSearch"
         />
 
-    <TextView
-        android:id="@+id/tvTuoiGruppi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/search_field_group"
-        android:gravity="center"
-        android:padding="20dp"
-        android:text="@string/your_groups"
-        android:textSize="20dp" />
-
-    <LinearLayout
-        android:layout_width = "match_parent"
-        android:layout_height = "match_parent"
-        android:orientation = "vertical"
-        android:layout_below="@+id/tvTuoiGruppi"
-        android:layout_marginTop="20dp">
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvGruppiCreati"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:listitem="@layout/item_gruppo"/>
+            android:layout_height="match_parent"
+            android:layout_marginBottom="60dp"
+            android:layout_below="@+id/search_field_group">
+
+            <LinearLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:orientation = "vertical"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:id="@+id/tvTuoiGruppi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text="@string/your_create_groups"
+                    android:textSize="20dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvGruppiCreati"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    tools:listitem="@layout/item_gruppo"/>
+
+                <TextView
+                    android:id="@+id/tvGruppiPartecipante"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text="@string/your_groups_partecipante"
+                    android:textSize="20dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvGruppiPartecipante"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    tools:listitem="@layout/item_gruppo"/>
+            </LinearLayout>
+
+        </ScrollView>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvGruppiPartecipante"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:listitem="@layout/item_gruppo"/>
-    </LinearLayout>
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
