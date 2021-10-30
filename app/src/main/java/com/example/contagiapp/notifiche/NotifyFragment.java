@@ -396,7 +396,11 @@ public class NotifyFragment extends Fragment {
                                         && (evento.getPartecipanti().contains(mailUtenteLoggato) ||
                                         evento.getAdmin().equals(mailUtenteLoggato))) {
 
-                                    listaEventi.add(evento);
+
+                                    if(!listaEventi.contains(evento)){
+                                        listaEventi.add(evento);
+                                    }
+
 
                                     String id = documentSnapshot.getId();
                                     idList.add(id);
