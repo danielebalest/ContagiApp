@@ -232,7 +232,7 @@ public class PartecipazioneGruppoFragment extends Fragment {
 
 
                     }
-                }); //toDo onFailure
+                });
     }
 
     private String getMailUtenteLoggato(){

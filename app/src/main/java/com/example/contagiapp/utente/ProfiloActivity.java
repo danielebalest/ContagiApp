@@ -74,7 +74,6 @@ public class ProfiloActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String json = prefs.getString("utente", "no");
 
-        //TODO verificare il controllo
         if(!json.equals("no")) {
             utente = gson.fromJson(json, Utente.class);
 
@@ -86,16 +85,13 @@ public class ProfiloActivity extends AppCompatActivity {
             String username = prefs1.getString("mail", "no");
             Log.d("username", String.valueOf(username));
 
-
             db.collection("Utenti")
                     .document(username)
                     .get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-
                             utente = documentSnapshot.toObject(Utente.class);
-
                             riempiListView(arrayListProfilo);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
