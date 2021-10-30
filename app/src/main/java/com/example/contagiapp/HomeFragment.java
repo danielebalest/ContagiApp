@@ -60,6 +60,11 @@ public class HomeFragment extends Fragment {
     private String statoUtente;
     private String mailUtenteLoggato;
 
+    private String descStatoVerde;
+    private String descStatoGiallo;
+    private String descStatoArancione;
+    private String descStatoRosso;
+
     ColorStateList red = ColorStateList.valueOf(Color.parseColor("#FF0000"));
     ColorStateList yellow = ColorStateList.valueOf(Color.parseColor("#FFF8F405"));
     ColorStateList green = ColorStateList.valueOf(Color.parseColor("#FF43A047"));
@@ -76,6 +81,11 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
 
         mailUtenteLoggato = getMailUtenteLoggato();
+
+        descStatoVerde = getString(R.string.DescrStatoVerde);
+        descStatoGiallo = getString(R.string.DescrStatoGiallo);
+        descStatoArancione = getString(R.string.DescrStatoArancione);
+        descStatoRosso = getString(R.string.DescrStatoRosso);
 
         View view;
         view = inflater.inflate(R.layout.fragment_home, container, false);
@@ -149,7 +159,7 @@ public class HomeFragment extends Fragment {
                                                 setStato("arancione", stringDataAttuale);
                                             } else {
                                                 status.setBackgroundTintList(red);
-                                                tvStatusDescr.setText(getString(R.string.DescrStatoRosso));
+                                                tvStatusDescr.setText(descStatoRosso);
                                             }
                                         } catch (ParseException e) {
                                             e.printStackTrace();
@@ -157,16 +167,16 @@ public class HomeFragment extends Fragment {
                                         break;
 
                                     case "verde" : status.setBackgroundTintList(green);
-                                        tvStatusDescr.setText(getString(R.string.DescrStatoVerde));
+                                        tvStatusDescr.setText(descStatoVerde);
                                         break;
 
                                     case "giallo" : status.setBackgroundTintList(yellow);
-                                        tvStatusDescr.setText(getString(R.string.DescrStatoGiallo));
+                                        tvStatusDescr.setText(descStatoGiallo);
 
                                         break;
 
                                     case "arancione" :
-                                        tvStatusDescr.setText(getString(R.string.DescrStatoArancione));
+                                        tvStatusDescr.setText(descStatoArancione);
                                         try {
                                             Date dataPositivita = new SimpleDateFormat("dd/MM/yyyy").parse(dataStato);
                                             Date dataAttuale = new Date(System.currentTimeMillis());
