@@ -128,7 +128,7 @@ public class GroupFragment extends Fragment {
         listaGruppiCreati = new ArrayList<Gruppo>();
         listaGruppiPartecipante = new ArrayList<Gruppo>();
 
-        String mailAdmin = mailUtenteLoggato;
+        final String mailAdmin = mailUtenteLoggato;
         Log.d("mailUtLogAd", mailAdmin);
 
 
@@ -190,7 +190,7 @@ public class GroupFragment extends Fragment {
                 }));
 
             }
-        }); //toDo onFailure
+        });
 
 
         db.collection("Gruppo").whereArrayContains("partecipanti", mailUtenteLoggato)
@@ -201,20 +201,22 @@ public class GroupFragment extends Fragment {
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
 
-                            Log.d("gruppo.getPartecipanti", String.valueOf(gruppo.getPartecipanti()));
-                            gruppo.setPartecipanti(gruppo.getPartecipanti());
-                            gruppo.aggiornaNroPartecipanti(gruppo.getPartecipanti());
+                            if(!gruppo.getAdmin().equals(mailAdmin)) {
+                                Log.d("gruppo.getPartecipanti", String.valueOf(gruppo.getPartecipanti()));
+                                gruppo.setPartecipanti(gruppo.getPartecipanti());
+                                gruppo.aggiornaNroPartecipanti(gruppo.getPartecipanti());
 
-                            String id = documentSnapshot.getId();
-                            listaIdGruppiPartecipante.add(id);
-                            listaGruppiPartecipante.add(gruppo);
+                                String id = documentSnapshot.getId();
+                                listaIdGruppiPartecipante.add(id);
+                                listaGruppiPartecipante.add(gruppo);
 
 
-                            Log.d("ListaGruppiPartecipante", String.valueOf(listaGruppiPartecipante));
-                            Log.d("Lista_ID", String.valueOf(listaIdGruppiCreati));
+                                Log.d("ListaGruppiPartecipante", String.valueOf(listaGruppiPartecipante));
+                                Log.d("Lista_ID", String.valueOf(listaIdGruppiCreati));
 
-                            if(!listaNomiGruppiPartecipante.contains(gruppo.getNomeGruppo())){
-                                listaNomiGruppiPartecipante.add(gruppo.getNomeGruppo());
+                                if(!listaNomiGruppiPartecipante.contains(gruppo.getNomeGruppo())){
+                                    listaNomiGruppiPartecipante.add(gruppo.getNomeGruppo());
+                                }
                             }
 
 
@@ -282,17 +284,13 @@ public class GroupFragment extends Fragment {
                         listaIdGruppiCreati.clear();
                         listaIdGruppiPartecipante.clear();
 
-                        //da inserire metodo per la ricerca
-
-                        ArrayList<String> nomeGruppiCreatiTrovati = new ArrayList<String>();
-                        ArrayList<String> nomeGruppiPartecipantiTrovati = new ArrayList<String>();
+                        ArrayList<String> nomeGruppiCreatiTrovati;
+                        ArrayList<String> nomeGruppiPartecipantiTrovati;
                         nomeGruppiCreatiTrovati = ricerca(editTextSearch.getText().toString(), listaNomiGruppiCreati);
                         nomeGruppiPartecipantiTrovati = ricerca(editTextSearch.getText().toString(), listaNomiGruppiPartecipante);
 
                         Log.d("listaInCuiCercare", String.valueOf(listaNomiGruppiCreati));
                         Log.d("gruppiTrovati", String.valueOf(nomeGruppiCreatiTrovati));
-
-
 
 
                         //ottengo l'id del gruppo creato Trovato
@@ -308,9 +306,6 @@ public class GroupFragment extends Fragment {
                                                 gruppoTrovato.aggiornaNroPartecipanti(gruppoTrovato.getPartecipanti());
                                                 listaGruppiCreatiTrovati.add(gruppoTrovato);
                                                 listaIdGruppiCreati.add(gruppoTrovato.getIdGruppo());
-
-
-
                                             }
                                             Log.d("listaGruppiTrovati", String.valueOf(listaGruppiCreatiTrovati));
                                             Log.d("listaGruppiCreati_ID", String.valueOf(listaIdGruppiCreati));
@@ -318,10 +313,10 @@ public class GroupFragment extends Fragment {
                                             GruppoAdapter adapter = new GruppoAdapter(listaGruppiCreatiTrovati);
                                             rvGruppiCreati.setAdapter(adapter);
                                             rvGruppiCreati.setLayoutManager(new LinearLayoutManager(getActivity()));
-
                                         }
                                     });
                         }
+
                         //ottengo l'id del gruppo Trovato a cui partecipo
                         for(int i = 0; i < nomeGruppiPartecipantiTrovati.size(); i++){
                             db.collection("Gruppo")
@@ -336,8 +331,6 @@ public class GroupFragment extends Fragment {
 
                                                 listaGruppiPartecipanteTrovati.add(gruppoTrovato);
                                                 listaIdGruppiPartecipante.add(gruppoTrovato.getIdGruppo());
-
-
                                             }
                                             Log.d("listaGruppiPartTrovati", String.valueOf(listaGruppiPartecipanteTrovati));
                                             Log.d("listaGruppiParte_ID", String.valueOf(listaIdGruppiPartecipante));
@@ -345,7 +338,6 @@ public class GroupFragment extends Fragment {
                                             GruppoAdapter adapter = new GruppoAdapter(listaGruppiPartecipanteTrovati);
                                             rvGruppiPartecipante.setAdapter(adapter);
                                             rvGruppiPartecipante.setLayoutManager(new LinearLayoutManager(getActivity()));
-
                                         }
                                     });
                         }
@@ -353,11 +345,9 @@ public class GroupFragment extends Fragment {
                         hideSoftKeyboard(getActivity()); //nascode la tastiera dopo aver cliccato il tasto cerca nella tastiera
                         return true;
                     }
-
                     return false;
                 }
             });
-
         }
     }
 
