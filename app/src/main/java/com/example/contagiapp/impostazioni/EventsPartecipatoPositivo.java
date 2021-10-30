@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.contagiapp.HomeFragment;
+import com.example.contagiapp.MainActivity;
 import com.example.contagiapp.R;
 import com.example.contagiapp.eventi.Evento;
 import com.example.contagiapp.notifiche.RichiesteAdapter;
@@ -36,12 +38,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
 public class EventsPartecipatoPositivo extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "EventsPartecipatoP";
     private String dataRosso;
     private Button btnFine;
     private EventiPartecipatoAdapter adapter;
+    private TextView noEventi;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +54,7 @@ public class EventsPartecipatoPositivo extends AppCompatActivity {
         setContentView(R.layout.activity_eventi_partecipato_positivo);
 
         btnFine = findViewById(R.id.btnFine);
+        noEventi = findViewById(R.id.textView4);
 
         final List<Evento> eventi = new ArrayList<>();
         final RecyclerView recyclerView =  findViewById(R.id.rvRichiesteEventi);
@@ -78,6 +84,9 @@ public class EventsPartecipatoPositivo extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
+
+                            if(eventi.isEmpty()) noEventi.setVisibility(View.VISIBLE);
+                            //if(eventi.isEmpty()) finish();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -103,19 +112,20 @@ public class EventsPartecipatoPositivo extends AppCompatActivity {
         btnFine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(eventi.size()==0) {
+                if(!eventi.isEmpty()) {
                     if(adapter.getCond().contains(false)) {
                         Toast.makeText(EventsPartecipatoPositivo.this, "Completare la segnalazione degli eventi", Toast.LENGTH_LONG).show();
-                    } else {
-                        HomeFragment home = new HomeFragment();
-                        FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                        fr.replace(R.id.container,home);
-                        fr.addToBackStack(null); //serve per tornare al fragment precedente
-                        fr.commit();
-                    }
-                } else finish();
+                    } else home();
+                } else home();
             }
         });
+    }
+
+
+    private void home() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private String getMailUtenteLoggato(){

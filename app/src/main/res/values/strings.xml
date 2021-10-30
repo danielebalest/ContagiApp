@@ -25,6 +25,7 @@
 
     <string name="remember_me">Ricordami</string>
     <string name="createAccount">Crea account</string>
+    <string name="VuotoEventi">Non hai partecipato ad alcun evento utlimamente. Clicca su fine per completare l operazione</string>
 
     //Nomi AppBar
     <string name="settings">Impostazioni</string>

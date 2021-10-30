@@ -101,6 +101,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SettingActivity.this, SegnalaPositivitaActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
