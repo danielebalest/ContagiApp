@@ -34,8 +34,8 @@
         <activity
             android:name=".impostazioni.EventsPartecipatoPositivo"
             android:parentActivityName=".impostazioni.SegnalaPositivitaActivity" />
-        <activity android:name=".data.amici.ProfiloUtentiActivity" />
-        <activity android:name=".data.amici.AddFriendsActivity" />
+        <activity android:name=".amici.ProfiloUtentiActivity" />
+        <activity android:name=".amici.AddFriendsActivity" />
         <activity android:name=".gruppi.InvitaAmiciGruppoActivity" />
         <activity
             android:name=".gruppi.AddImgGruppoActivity"
