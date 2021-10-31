@@ -137,7 +137,9 @@ public class AddFriendsActivity extends AppCompatActivity  {
         final String cerca = extras.getString("cerca");
         final String mail = extras.getString("mail");
 
-        db.collection("Utenti").document(mail).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        db.collection("Utenti").document(mail)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 amiciLoggato = (ArrayList<String>) documentSnapshot.get("amici");

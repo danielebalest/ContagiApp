@@ -77,6 +77,10 @@ public class FriendsFragment extends Fragment {
         }
         */
 
+        mailUtenteLoggato = getMailUtenteLoggato();
+
+        Log.d("mailUtenteLoggato44" , mailUtenteLoggato);
+
         editText = view.findViewById(R.id.search_field);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
