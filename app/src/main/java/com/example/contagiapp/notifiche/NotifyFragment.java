@@ -466,7 +466,6 @@ public class NotifyFragment extends Fragment {
 
 }
 
-//TODO vedere se la partecipazione all'evento la vede solo chi si è iscritto all'evento come gruppo o tutto il gruppo
 //per il click
 class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
     private GestureDetector gestureDetector;

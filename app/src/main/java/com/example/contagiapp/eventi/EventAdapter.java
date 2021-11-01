@@ -35,8 +35,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
 
 
 
-    public EventAdapter(ArrayList<Evento> listaEventi){
+    public EventAdapter(ArrayList<Evento> listaEventi, Context mContext){
         this.listaEventi = listaEventi;
+        this.mContext = mContext;
     }
 
 
