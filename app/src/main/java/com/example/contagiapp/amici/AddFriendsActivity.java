@@ -129,7 +129,7 @@ public class AddFriendsActivity extends AppCompatActivity  {
 
                 }));
             }
-        });//Todo: onFailure
+        });
     }
 
     public void caricaAmiciCercati(final Bundle extras) {

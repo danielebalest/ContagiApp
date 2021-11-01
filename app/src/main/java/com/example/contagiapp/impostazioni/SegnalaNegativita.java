@@ -175,15 +175,15 @@ public class SegnalaNegativita extends AppCompatActivity {
             Date inserita = new SimpleDateFormat("dd/MM/yyyy").parse(data);
 
             if(editTextData == null) {
-                textInputLayoutData.setError("inserisci data");
+                textInputLayoutData.setError(getString(R.string.enter_date));
             } else {
                 if((inserita.getTime() - dataAttuale.getTime()) > 0) {
                     textInputLayoutData.setErrorEnabled(true);
-                    textInputLayoutData.setError("Data inserita successiva a quella di oggi");
+                    textInputLayoutData.setError(getString(R.string.data_successiva));
                 } else {
                     if((dataAttuale.getTime() - inserita.getTime()) > 864000000) {
                         textInputLayoutData.setErrorEnabled(true);
-                        textInputLayoutData.setError("E' trascorso molto tempo");
+                        textInputLayoutData.setError(getString(R.string.molto_tempo));
                     } else textInputLayoutData.setErrorEnabled(false);
                 }
             }
@@ -223,7 +223,7 @@ public class SegnalaNegativita extends AppCompatActivity {
 
                             if((dayOfYearNegativita - dayOfYearPositivita) < 10 && utente.getStato().equals("rosso")){
                                 Log.d("differenza", String.valueOf((dayOfYearNegativita - dayOfYearPositivita)));
-                                textInputLayoutData.setError("Devono essere trascorsi almeno 10 giorni dalla positività");
+                                textInputLayoutData.setError(getString(R.string.giorni10_pos));
                             }
                         }
                     }
