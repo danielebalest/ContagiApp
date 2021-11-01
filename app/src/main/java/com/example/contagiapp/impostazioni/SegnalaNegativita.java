@@ -237,11 +237,8 @@ public class SegnalaNegativita extends AppCompatActivity {
                                 textInputLayoutData.setError("Devono essere trascorsi almeno 10 giorni dalla positività");
                             }
                         }
-
                     }
                 });
-
-
     }
 
 
@@ -251,7 +248,6 @@ public class SegnalaNegativita extends AppCompatActivity {
                 .document(getMailUtenteLoggato())
                 .update("dataNegativita", data);
     }
-
 
 
     private void scegliImmagine(){

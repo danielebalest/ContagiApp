@@ -27,6 +27,8 @@
     <string name="remember_me">Remember me</string>
     <string name="createAccount">Create account</string>
 
+    <string name="EventoEliminato">Event deleted</string>
+
     //Nomi AppBar
     <string name="settings">Settings</string>
 
