@@ -226,7 +226,7 @@ public class GroupFragment extends Fragment {
                         }
 
                         if(listaGruppiCreati.isEmpty() && listaGruppiPartecipante.isEmpty()){
-                            tvTuoiGruppi.setText("Non hai ancora nessun gruppo. Crea subito uno");
+                            tvTuoiGruppi.setText(R.string.no_group_msg);
                         }
 
                         if(listaGruppiCreati.isEmpty() && ! listaGruppiPartecipante.isEmpty()){
