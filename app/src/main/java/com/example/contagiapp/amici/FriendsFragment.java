@@ -32,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
@@ -66,6 +67,13 @@ public class FriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view;
         view = inflater.inflate(R.layout.fragment_friends, container, false);
+
+
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+
+        db.setFirestoreSettings(settings);
 
         /*
         SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("Refresh",Context.MODE_PRIVATE);

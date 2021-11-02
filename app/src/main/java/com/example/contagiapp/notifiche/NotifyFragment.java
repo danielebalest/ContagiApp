@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -76,6 +77,15 @@ public class NotifyFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_notify, container, false);
         mailUtenteLoggato = getMailUtenteLoggato();
+
+
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+
+        db.setFirestoreSettings(settings);
+
+
 
         RecyclerView rvNoEventiPartecipazione = view.findViewById(R.id.rvNoPartecipazioneEvento);
         rvEventiRossi = view.findViewById(R.id.rvEventiRossi);

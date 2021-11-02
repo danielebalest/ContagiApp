@@ -36,6 +36,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
@@ -89,6 +90,13 @@ public class GroupFragment extends Fragment {
         rvGruppiCreati = view.findViewById(R.id.rvGruppiCreati);
         rvGruppiPartecipante = view.findViewById(R.id.rvGruppiPartecipante);
         editTextSearch = view.findViewById(R.id.search_field_group);
+
+
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+
+        db.setFirestoreSettings(settings);
 
 
         Log.d("mailUtLog", mailUtenteLoggato);
