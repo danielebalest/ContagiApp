@@ -27,6 +27,7 @@ public class GruppoAdapter extends RecyclerView.Adapter<GruppoAdapter.ViewHolder
     private ArrayList<Gruppo> listaGruppi;
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private final static String storageDirectory = "imgGruppi";
+    private Context context;
 
     public GruppoAdapter(ArrayList< Gruppo> gruppi){
         listaGruppi = gruppi;
@@ -36,7 +37,7 @@ public class GruppoAdapter extends RecyclerView.Adapter<GruppoAdapter.ViewHolder
     @NonNull
     @Override
     public GruppoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View usertView = inflater.inflate(R.layout.item_gruppo, parent, false);
@@ -54,7 +55,7 @@ public class GruppoAdapter extends RecyclerView.Adapter<GruppoAdapter.ViewHolder
 
         textViewNomeGruppo.setText(gruppo.getNomeGruppo());
         Log.d("NomeGrup: Partecipanti", String.valueOf(gruppo.getNomeGruppo()) + "   " + String.valueOf(gruppo.getNroPartecipanti()));
-        textViewNumPartecipantiGruppo.setText(gruppo.getNroPartecipanti() + " partecipanti");
+        textViewNumPartecipantiGruppo.setText(gruppo.getNroPartecipanti() +" "+context.getString(R.string.participants));
 
 
 

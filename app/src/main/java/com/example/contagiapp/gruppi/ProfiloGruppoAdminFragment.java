@@ -284,7 +284,7 @@ public class ProfiloGruppoAdminFragment extends Fragment {
                 break;
             case 4:
                 status.setBackgroundTintList(red);
-                aggiornaStatoGruppo(idGruppo, "red", db);
+                aggiornaStatoGruppo(idGruppo, "rosso", db);
                 break;
             default:
                 break;

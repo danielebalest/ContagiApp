@@ -84,15 +84,16 @@ public class AddImgGruppoActivity extends AppCompatActivity {
         String mailAdmin = getMailUtenteLoggato();
 
             ArrayList<String> listaMailPartecipanti = new ArrayList<String>();
+            listaMailPartecipanti.add(getMailUtenteLoggato());
 
             final Gruppo gruppo = new Gruppo();
             gruppo.setAdmin(mailAdmin);
             gruppo.setNomeGruppo(nomeGruppo);
             gruppo.setDescrizione(descrGruppo);
             gruppo.setPartecipanti(listaMailPartecipanti);
-            gruppo.setStatoGruppo(null);
-            gruppoCollection.add(gruppo)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            gruppo.setStatoGruppo("giallo");
+            gruppo.setNroPartecipanti(1);
+            gruppoCollection.add(gruppo).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
                     documentId = documentReference.getId();
@@ -100,7 +101,7 @@ public class AddImgGruppoActivity extends AppCompatActivity {
                     Log.d("documentId", String.valueOf(documentId));
                     Log.d("getIdGruppo", String.valueOf(gruppo.getIdGruppo()));
                     db.collection("Gruppo").document(documentId).update("idGruppo", documentId);
-                    Toasty.success(AddImgGruppoActivity.this, "Gruppo creato", Toast.LENGTH_LONG).show();
+                    Toasty.success(AddImgGruppoActivity.this, getString(R.string.group_create), Toast.LENGTH_LONG).show();
                     uploadImage(documentId);
 
                     Intent invitaIntent = new Intent(AddImgGruppoActivity.this, InvitaAmiciGruppoActivity.class);
@@ -114,11 +115,6 @@ public class AddImgGruppoActivity extends AppCompatActivity {
                     Toasty.error(AddImgGruppoActivity.this, "Error", Toast.LENGTH_SHORT).show();
                 }
             });
-
-
-
-
-
     }
 
     private String getMailUtenteLoggato(){
@@ -129,7 +125,7 @@ public class AddImgGruppoActivity extends AppCompatActivity {
         String mailUtenteLoggato;
         if(!json.equals("no")) {
             Utente utente = gson.fromJson(json, Utente.class);
-            mailUtenteLoggato = utente.getMail();
+            mailUtenteLoggato = utente.getMailPath();
             Log.d("mailutenteLoggato", mailUtenteLoggato);
         } else {
             SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);

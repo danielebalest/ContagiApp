@@ -99,9 +99,11 @@ public class InvitiAdapter extends RecyclerView.Adapter<com.example.contagiapp.n
                 btnAccettaInvito.setClickable(false);
                 btnRifiutaInvito.setVisibility(View.GONE);
 
+                int numero = gruppo.getPartecipanti().size() + 1;
+
                 //aggiunge alla lista partecipanti del gruppo la mail dell'utente loggato
                 db.collection("Gruppo").document(idGruppo)
-                        .update("partecipanti", gruppo.getPartecipanti());
+                        .update("partecipanti", gruppo.getPartecipanti(), "nroPartecipanti", numero);
 
 
 
@@ -112,7 +114,7 @@ public class InvitiAdapter extends RecyclerView.Adapter<com.example.contagiapp.n
 
             }
         });
-
+//TODO controllare tutti getMail e nel caso mettere getMailPath
 
         btnRifiutaInvito.setOnClickListener(new View.OnClickListener() {
             @Override

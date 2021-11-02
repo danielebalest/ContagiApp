@@ -108,6 +108,8 @@
     //activity_crea_gruppo
     <string name="group_name">nome del gruppo</string>
     <string name="description">descrizione</string>
+    <string name="group_create">Creazione del gruppo avvenuta con successo</string>
+    <string name="friends_aggiunti">Richieste di invito al gruppo inviate</string>
 
     //activity_eventi_partecipato_positivo
     <string name="end">fine</string>

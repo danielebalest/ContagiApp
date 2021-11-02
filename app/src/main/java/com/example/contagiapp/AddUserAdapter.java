@@ -97,7 +97,7 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
                 });
 
 
-        db.collection("Utenti").document(user.getMail()).get()
+        db.collection("Utenti").document(user.getMailPath()).get()
                 .addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
@@ -113,7 +113,7 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
 
                                     listaInviti.add(idGruppo);
                                     db.collection("Utenti").document(user.getMail()).update("invitiRicevuti", listaInviti);
-                                    Log.d("listaInvitiAdd", String.valueOf(String.valueOf(listaInviti) + "  Utente:"  +  String.valueOf(user.getMail())));
+                                    Log.d("listaInvitiAdd", String.valueOf(listaInviti) + "  Utente:" + String.valueOf(user.getMail()));
                                 }
                                 if(!isChecked){
                                     if(user.getMail() !=null){

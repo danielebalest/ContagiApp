@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.contagiapp.AddUserAdapter;
 import com.example.contagiapp.MainActivity;
@@ -29,6 +30,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
@@ -51,9 +54,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent mainIntent = new Intent(InvitaAmiciGruppoActivity.this, MainActivity.class);
                 startActivity(mainIntent);
-                //todo: devo tornare al fragment GroupFragment
-
-
+                Toasty.success(InvitaAmiciGruppoActivity.this, getString(R.string.friends_aggiunti), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -106,7 +107,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
         if(!json.equals("no")) {
             Utente utente = gson.fromJson(json, Utente.class);
-            mailUtenteLoggato = utente.getMail();
+            mailUtenteLoggato = utente.getMailPath();
             Log.d("mailutenteLoggato", mailUtenteLoggato);
         } else {
             SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
