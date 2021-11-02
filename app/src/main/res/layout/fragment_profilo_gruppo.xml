@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageView
@@ -36,7 +36,7 @@
             android:background="@color/gray"
             android:padding="20dp"
             android:text="@string/description"
-            android:textColor="@color/black"></TextView>
+            android:textColor="@color/black"/>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -129,8 +129,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPartecipantiProfiloGruppo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/item_partecipanti"></androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/user_row"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAbbandonaGruppo"
@@ -140,7 +140,7 @@
             android:layout_margin="20dp"
             android:backgroundTint="#800000"
             android:text="@string/exit_group"
-            app:cornerRadius="20dp"></com.google.android.material.button.MaterialButton>
+            app:cornerRadius="20dp"/>
 
     </LinearLayout>
 

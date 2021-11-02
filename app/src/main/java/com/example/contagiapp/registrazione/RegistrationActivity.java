@@ -126,7 +126,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private Uri imageUri;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {//TODO controllare tutto il codice
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         immagine = findViewById(R.id.propic);

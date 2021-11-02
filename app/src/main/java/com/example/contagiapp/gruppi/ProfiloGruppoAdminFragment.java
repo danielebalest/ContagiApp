@@ -242,7 +242,6 @@ public class ProfiloGruppoAdminFragment extends Fragment {
                                         if(finalI == mailPartecipanti.size()) {
                                             caricaPartecipanti(listaPartecipanti);
 
-                                            //todo: richiamare il metodo per lo stato del gruppo
                                             nStato = calcolaNuovoStatoGruppo(listaPartecipanti);
                                             Log.d("nStato", String.valueOf(nStato));
                                             impostaStatoGruppo(nStato, idGruppo, db);

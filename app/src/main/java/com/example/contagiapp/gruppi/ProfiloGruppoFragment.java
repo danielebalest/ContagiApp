@@ -214,13 +214,12 @@ public class ProfiloGruppoFragment extends Fragment {
                                         }
                                         Log.d("dataNascita", String.valueOf(user.getDataNascita()));
 
-                                        listaPartecipanti.add(user); //toDo: questa lista globale deve essere accessibile anche fuori dal metodo a riga 70 (per intederci)
+                                        listaPartecipanti.add(user);
                                         Log.d("listaPartecipantiFOR", String.valueOf(listaPartecipanti)); //qui è visibile, ma è nel for
 
                                         if(finalI == mailPartecipanti.size()) {
                                             caricaPartecipanti(listaPartecipanti);
 
-                                            //todo: richiamare il metodo per lo stato del gruppo
                                             nStato = calcolaNuovoStatoGruppo(listaPartecipanti);
                                             Log.d("nStato", String.valueOf(nStato));
                                             impostaStatoGruppo(nStato, idGruppo, db);
