@@ -43,6 +43,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
@@ -52,10 +53,11 @@ public class ProfiloGruppoFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private final static String storageDirectory = "imgGruppi";
-    private ArrayList<Utente> listaPartecipanti = new ArrayList<Utente>();
+    private List<Utente> listaPartecipanti = new ArrayList<Utente>();
     int nStato = 0;
     LinearLayout status;
     private TextView admin;
+    private RecyclerView rvPartecipanti;
 
     ColorStateList red = ColorStateList.valueOf(Color.parseColor("#FF0000"));
     ColorStateList orange = ColorStateList.valueOf(Color.parseColor("#F4511E"));
@@ -189,61 +191,43 @@ public class ProfiloGruppoFragment extends Fragment {
                     tvDescGruppo.setText(descrizione);
                     tvNroPartecipanti.setText("Partecipanti" + "(" + String.valueOf(nroPartecipanti) + ")");
 
-                    final RecyclerView rvPartecipanti = view.findViewById(R.id.rvPartecipantiProfiloGruppo);
+                    rvPartecipanti = view.findViewById(R.id.rvPartecipantiProfiloGruppo);
                     Log.d("mailPartecipanti.size()", String.valueOf(mailPartecipanti.size()));
-
-
-                    //ciclo l'elenco dei partecipanti per poter ottenere
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                for(int i = 0; i < mailPartecipanti.size(); i++){
-
-
-                                    Task<DocumentSnapshot> task =   db.collection("Utenti")
-                                            .document(mailPartecipanti.get(i))
-                                            .get()
-                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                    Utente user = documentSnapshot.toObject(Utente.class);
-
-                                                    if(user.getMailPath().equals(gruppo.getAdmin())) {
-                                                        admin.setText(user.getCognome()+" "+user.getNome());
-                                                    }
-                                                    Log.d("dataNascita", String.valueOf(user.getDataNascita()));
-
-                                                    listaPartecipanti.add(user); //toDo: questa lista globale deve essere accessibile anche fuori dal metodo a riga 70 (per intederci)
-                                                    Log.d("listaPartecipantiFOR", String.valueOf(listaPartecipanti)); //qui è visibile, ma è nel for
-                                                }
-                                            });
-                                }
-
-                                Thread.sleep(2000);
-                                Log.d("dopoSleep", String.valueOf(listaPartecipanti));
-                                //todo: richiamare il metodo per lo stato del gruppo
-                                nStato = calcolaNuovoStatoGruppo(listaPartecipanti);
-                                Log.d("nStato", String.valueOf(nStato));
-                                impostaStatoGruppo(nStato, idGruppo, db);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    }).start();
-
-
-
-                    UserAdapter adapter = new UserAdapter(listaPartecipanti);
-                    rvPartecipanti.setAdapter(adapter);
-                    rvPartecipanti.setLayoutManager(new LinearLayoutManager(getActivity()));
 
                     ImageView imageViewProfiloGruppo = view.findViewById(R.id.imgProfiloGruppo);
                     caricaImgDaStorage(storageRef, storageDirectory, idGruppo, imageViewProfiloGruppo);
 
+                    aggiornaNrPartecipanti(mailPartecipanti.size(), gruppo.getIdGruppo());
+                    //ciclo l'elenco dei partecipanti per poter ottenere
+                    for(int i = 0; i < mailPartecipanti.size(); i++){
+                        final int finalI = i + 1;
+                        db.collection("Utenti")
+                                .document(mailPartecipanti.get(i))
+                                .get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        Utente user = documentSnapshot.toObject(Utente.class);
+
+                                        if(user.getMailPath().equals(gruppo.getAdmin())) {
+                                            admin.setText(user.getCognome()+" "+user.getNome());
+                                        }
+                                        Log.d("dataNascita", String.valueOf(user.getDataNascita()));
+
+                                        listaPartecipanti.add(user); //toDo: questa lista globale deve essere accessibile anche fuori dal metodo a riga 70 (per intederci)
+                                        Log.d("listaPartecipantiFOR", String.valueOf(listaPartecipanti)); //qui è visibile, ma è nel for
+
+                                        if(finalI == mailPartecipanti.size()) {
+                                            caricaPartecipanti(listaPartecipanti);
+
+                                            //todo: richiamare il metodo per lo stato del gruppo
+                                            nStato = calcolaNuovoStatoGruppo(listaPartecipanti);
+                                            Log.d("nStato", String.valueOf(nStato));
+                                            impostaStatoGruppo(nStato, idGruppo, db);
+                                        }
+                                    }
+                                });
+                    }
                 } else {
                     Toast.makeText(getContext(), "Documents does not exist", Toast.LENGTH_SHORT);
                 }
@@ -252,6 +236,15 @@ public class ProfiloGruppoFragment extends Fragment {
 
     }
 
+    private void aggiornaNrPartecipanti(int num, String idGruppo) {
+        db.collection("Gruppo").document(idGruppo).update("nroPartecipanti", num);
+    }
+
+    private void caricaPartecipanti(List<Utente> list) {
+        UserAdapter adapter = new UserAdapter(list);
+        rvPartecipanti.setAdapter(adapter);
+        rvPartecipanti.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
 
     private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
         storageRef.child(directory + "/" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
@@ -269,7 +262,7 @@ public class ProfiloGruppoFragment extends Fragment {
         });
     }
 
-    private int calcolaNuovoStatoGruppo(ArrayList<Utente> listaPartecipanti){
+    private int calcolaNuovoStatoGruppo(List<Utente> listaPartecipanti){
         int nuovoStato = 0;
         ArrayList <Integer> listaStati = new ArrayList<Integer> ();
 
@@ -305,6 +298,7 @@ public class ProfiloGruppoFragment extends Fragment {
                 break;
         }
     }
+
     private void aggiornaStatoGruppo (String idGruppo, String nuovoStatoGruppo,  FirebaseFirestore db){
         db.collection("Gruppo")
                 .document(idGruppo)

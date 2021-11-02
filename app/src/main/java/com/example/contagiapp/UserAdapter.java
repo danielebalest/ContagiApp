@@ -27,7 +27,6 @@ import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
     private List<Utente> mUsers;
-    private ArrayList<Utente> utenti = new ArrayList<Utente>();
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
 
@@ -78,8 +77,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
                         Log.d("OnFailure Exception", String.valueOf(e));
                     }
                 });
-
-
     }
 
     @Override
