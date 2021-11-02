@@ -63,14 +63,6 @@ public class SegnalaNegativita extends AppCompatActivity {
         final TextInputLayout textInputLayoutData = findViewById(R.id.textInputLayoutDataNegativita);
 
 
-
-
-
-        //Todo: inserire data OK
-        //Todo: controllo DA SISTEMARE
-        //Todo: completa segnalazione: devo controllare ancora la data: se data 
-
-
         editTextDataNegativita.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,13 +85,12 @@ public class SegnalaNegativita extends AppCompatActivity {
                                 cal.set(Calendar.MONTH, month);
                                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                                int annoInserito = cal.get(Calendar.YEAR);
                                 int giornoDellAnnoInserito = cal.get(Calendar.DAY_OF_YEAR);
 
 
                                 Log.d("YEAR", String.valueOf(cal.get(Calendar.YEAR)));
                                 Log.d("giornoDellAnno", String.valueOf(cal.get(Calendar.DAY_OF_YEAR)));
-                                controlloData(editTextDataNegativita, textInputLayoutData, giornoDellAnnoInserito, annoInserito);
+                                controlloData(editTextDataNegativita, textInputLayoutData, giornoDellAnnoInserito);
                             }
                         },
                         year, month, dayOfMonth);
@@ -169,7 +160,7 @@ public class SegnalaNegativita extends AppCompatActivity {
 
 
 
-    private void controlloData(EditText editTextData, final TextInputLayout textInputLayoutData, final int dayOfYearNegativita, int anno){
+    private void controlloData(EditText editTextData, final TextInputLayout textInputLayoutData, final int dayOfYearNegativita){
         /*
         * regole. La data del tampone negativo deve:
         * 1) essere inferiore o pari alla data attuale OK
@@ -179,27 +170,25 @@ public class SegnalaNegativita extends AppCompatActivity {
 
         String data = editTextData.getText().toString();
 
-        //todo: controllo da sistemare. Deve tenere conto anche dell'anno
-        Calendar cal = Calendar.getInstance();
-        int dayOfYearToday = cal.get(Calendar.DAY_OF_YEAR);
-        int annoAttuale = cal.get(Calendar.YEAR);
+        try {
+            Date dataAttuale = new Date(System.currentTimeMillis());
+            Date inserita = new SimpleDateFormat("dd/MM/yyyy").parse(data);
 
-        if(editTextData == null){
-            textInputLayoutData.setError("inserisci data");
-        }else{
-            textInputLayoutData.setErrorEnabled(false);
-
-            if(anno < annoAttuale){
-                textInputLayoutData.setError("E' trascorso molto tempo");
-            }else {
-                if((dayOfYearNegativita - dayOfYearToday) > 0){
-                    textInputLayoutData.setError("Data successiva a quella di oggi");
-                }else if ((dayOfYearToday - dayOfYearNegativita) > 5){
-                    textInputLayoutData.setError("E' trascorso molto tempo");
-                    Toasty.warning(SegnalaNegativita.this, "E' trascorso molto tempo", Toast.LENGTH_SHORT).show();
-                }else
-                    textInputLayoutData.setErrorEnabled(false);
+            if(editTextData == null) {
+                textInputLayoutData.setError(getString(R.string.enter_date));
+            } else {
+                if((inserita.getTime() - dataAttuale.getTime()) > 0) {
+                    textInputLayoutData.setErrorEnabled(true);
+                    textInputLayoutData.setError(getString(R.string.data_successiva));
+                } else {
+                    if((dataAttuale.getTime() - inserita.getTime()) > 864000000) {
+                        textInputLayoutData.setErrorEnabled(true);
+                        textInputLayoutData.setError(getString(R.string.molto_tempo));
+                    } else textInputLayoutData.setErrorEnabled(false);
+                }
             }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         //CONTROLLO SU DATA POSITIVITA'
@@ -232,16 +221,13 @@ public class SegnalaNegativita extends AppCompatActivity {
                             Log.d("dayOfYearNegativita", String.valueOf(dayOfYearNegativita));
 
 
-                            if((dayOfYearNegativita - dayOfYearPositivita) < 10){
+                            if((dayOfYearNegativita - dayOfYearPositivita) < 10 && utente.getStato().equals("rosso")){
                                 Log.d("differenza", String.valueOf((dayOfYearNegativita - dayOfYearPositivita)));
-                                textInputLayoutData.setError("Devono essere trascorsi almeno 10 giorni dalla positività");
+                                textInputLayoutData.setError(getString(R.string.giorni10_pos));
                             }
                         }
-
                     }
                 });
-
-
     }
 
 
@@ -251,7 +237,6 @@ public class SegnalaNegativita extends AppCompatActivity {
                 .document(getMailUtenteLoggato())
                 .update("dataNegativita", data);
     }
-
 
 
     private void scegliImmagine(){
@@ -332,6 +317,4 @@ public class SegnalaNegativita extends AppCompatActivity {
         }
         return mailUtenteLoggato;
     }
-
-
 }

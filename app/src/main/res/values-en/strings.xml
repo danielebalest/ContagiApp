@@ -20,12 +20,14 @@
     <string name="phone">Cellulare</string>
     <string name="search">Search</string>
     <string name="invite">Invite</string>
-    <string name="participants">participants</string>
-    <string name="available">available</string>
+    <string name="participants"> participants</string>
+    <string name="available"> places available</string>
     <string name="VuotoEventi">You have not attended any event in the past. Click on finish to complete the operation</string>
 
     <string name="remember_me">Remember me</string>
     <string name="createAccount">Create account</string>
+
+    <string name="EventoEliminato">Event deleted</string>
 
     //Nomi AppBar
     <string name="settings">Settings</string>
@@ -47,7 +49,7 @@
 
     <string name="rimuovi_partecipante">Remove participant</string>
 
-
+    <string name="operazione_eseguita">Operation performed</string>
 
 
 
@@ -119,6 +121,11 @@
     <string name="upload_image">upload image</string>
     <string name="upload_pdf">upload pdf</string>
     <string name="report">report</string>
+    <string name="enter_date">enter the date</string>
+    <string name="data_successiva">Date entered later than today</string>
+    <string name="molto_tempo">It is been a long time</string>
+    <string name="giorni10_pos">At least 10 days must have elapsed from positivity</string>
+
 
     //activity_segnala_positività
     <string name="date_of_positivity">positivity date</string>

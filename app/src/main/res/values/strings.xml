@@ -20,8 +20,8 @@
     <string name="phone">Cellulare</string>
     <string name="search">Cerca</string>
     <string name="invite">Invita</string>
-    <string name="participants">Partecipanti</string>
-    <string name="available">disponibili</string>
+    <string name="participants"> Partecipanti</string>
+    <string name="available"> posti disponibili</string>
 
     <string name="remember_me">Ricordami</string>
     <string name="createAccount">Crea account</string>
@@ -61,6 +61,7 @@
         <item>TA</item>
     </string-array>
 
+    <string name="EventoEliminato">Evento eliminato</string>
 
     //ERRORI
 
@@ -73,7 +74,7 @@
 
     <string name="rimuovi_partecipante">Rimuovi partecipante</string>
 
-
+    <string name="operazione_eseguita">Operazione eseguita</string>
 
 
     //Descrizione stati
@@ -142,6 +143,10 @@
     <string name="upload_image">carica immagine</string>
     <string name="upload_pdf">carica pdf</string>
     <string name="report">completa la segnalazione</string>
+    <string name="enter_date">Inserisci la data</string>
+    <string name="data_successiva">Data inserita successiva a quella di oggi</string>
+    <string name="molto_tempo">E trascorso molto tempo</string>
+    <string name="giorni10_pos">Devono essere trascorsi almeno 10 giorni dalla positività</string>
 
     //activity_segnala_positività
     <string name="date_of_positivity">data positività</string>

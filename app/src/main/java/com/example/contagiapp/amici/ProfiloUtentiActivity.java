@@ -212,7 +212,7 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
         String json = prefs.getString("utente", "no");
         String mailUtenteLoggato;
-        //TODO capire il funzionamento
+
         if(!json.equals("no")) {
             Utente utente = gson.fromJson(json, Utente.class);
             mailUtenteLoggato = utente.getMail();

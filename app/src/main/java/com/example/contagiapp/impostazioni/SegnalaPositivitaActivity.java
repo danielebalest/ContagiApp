@@ -200,15 +200,15 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
             Date inserita = new SimpleDateFormat("dd/MM/yyyy").parse(dataInserita);
 
             if(editTextData == null) {
-                textInputLayoutData.setError("inserisci data");
+                textInputLayoutData.setError(getString(R.string.enter_date));
             } else {
                 if((inserita.getTime() - dataAttuale.getTime()) > 0) {
                     textInputLayoutData.setErrorEnabled(true);
-                    textInputLayoutData.setError("Data inserita successiva a quella di oggi");
+                    textInputLayoutData.setError(getString(R.string.data_successiva));
                 } else {
                     if((dataAttuale.getTime() - inserita.getTime()) > 864000000) {
                         textInputLayoutData.setErrorEnabled(true);
-                        textInputLayoutData.setError("E' trascorso molto tempo");
+                        textInputLayoutData.setError(getString(R.string.molto_tempo));
                     } else textInputLayoutData.setErrorEnabled(false);
                 }
             }
@@ -237,7 +237,7 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
         if(requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             uri = data.getData();
             Log.d("uri", String.valueOf(uri));
-            Toasty.success(SegnalaPositivitaActivity.this, "Operazione eseguita", Toast.LENGTH_SHORT).show();
+            Toasty.success(SegnalaPositivitaActivity.this, getString(R.string.operazione_eseguita), Toast.LENGTH_SHORT).show();
         }
 
     }

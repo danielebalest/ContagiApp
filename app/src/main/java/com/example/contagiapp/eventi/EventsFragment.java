@@ -95,7 +95,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
         rvEventi = view.findViewById(R.id.rvEventi);
 
         Log.d("listaEventiOnCreate", String.valueOf(listaEventi));
-        EventAdapter adapterVuoto = new EventAdapter(listaEventi);
+        EventAdapter adapterVuoto = new EventAdapter(listaEventi, getContext());
         rvEventi.setAdapter(adapterVuoto);
 
 
@@ -208,7 +208,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                                             Log.d("listaEventiTrovati", String.valueOf(listaEventiTrovati));
                                             Log.d("listaGruppiCreati_ID", String.valueOf(listaIdEventi));
 
-                                            EventAdapter adapter = new EventAdapter(listaEventiTrovati);
+                                            EventAdapter adapter = new EventAdapter(listaEventiTrovati, getContext());
                                             rvEventi.setAdapter(adapter);
                                             rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
                                         }
@@ -220,14 +220,9 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                     }
                     return true;
                 }
-
                 return false;
             }
         });
-
-
-
-
         return view;
     }
 
@@ -280,7 +275,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
                         Log.d("listaEventiCreatiOUTFor", String.valueOf(listaEventiCreati));
 
-                        EventAdapter adapter = new EventAdapter(listaEventiCreati);
+                        EventAdapter adapter = new EventAdapter(listaEventiCreati, getContext());
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -328,7 +323,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                             }
                         }
                         Log.d("listaEventiOutFor", String.valueOf(listaEventi));
-                        EventAdapter adapter = new EventAdapter(listaEventi);
+                        EventAdapter adapter = new EventAdapter(listaEventi, getContext());
 
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -385,7 +380,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                         }
 
                         Log.d("listaEventiIscritOutFor", String.valueOf(listaEventiIscritto));
-                        EventAdapter adapter = new EventAdapter(listaEventiIscritto);
+                        EventAdapter adapter = new EventAdapter(listaEventiIscritto, getContext());
 
                         rvEventi.setAdapter(adapter);
                         rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));

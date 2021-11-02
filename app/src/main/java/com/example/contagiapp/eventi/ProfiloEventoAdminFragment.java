@@ -46,6 +46,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
+
 public class ProfiloEventoAdminFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
@@ -356,7 +358,7 @@ public class ProfiloEventoAdminFragment extends Fragment {
                 .document(idEvento)
                 .delete();
 
-        //toDo: devo avvisare gli utenti che l'evento è stato cancellato
+        Toasty.success(getContext(), getString(R.string.EventoEliminato), Toast.LENGTH_LONG).show();
         //forse è meglio non cancellare l'evento ma segnarlo come eliminato
         //dopodichè nella main activity metto controllo sullo stato degli eventi a cui partecipa un utente e se lo stato è cancellato applicare notifica
 
