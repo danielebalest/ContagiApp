@@ -1,6 +1,7 @@
 package com.example.contagiapp.utente;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -100,6 +101,7 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
     //rivedere il fatto di utilizzare le regioni e province (con spinner) quindi se toglierli e mettere solo spinner nazioni e una textbox per la città
     //ricontrollare tutto il codice di questa classe
     //vedere se modificare la pagina profilo utente aggiungendo altre cose o togliendo quelle già presenti
+    //vedere se funziona tutto il codice
 
 
 
@@ -225,17 +227,20 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
             }
         });
 
-
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
         Gson gson = new Gson();
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
         String json = prefs.getString("utente", "no");
-        utente = gson.fromJson(json, Utente.class);
+        String mailUtenteLoggato;
+        if(!json.equals("no")) {
+            utente = gson.fromJson(json, Utente.class);
+            mailUtenteLoggato = utente.getMailPath();
+            Log.d("mailutenteLoggato", mailUtenteLoggato);
+        } else {
+            SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);
+            mailUtenteLoggato = prefs1.getString("mail", "no");
+            Log.d("mail", mailUtenteLoggato);
 
-        SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo", MODE_PRIVATE);
-        String username = prefs1.getString("mail", "no");
-
-        if(json == "no") {
-            db.collection("Utenti").whereEqualTo("mail", utente.getMail()).get()
+            db.collection("Utenti").whereEqualTo("mail", mailUtenteLoggato).get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -479,7 +484,7 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
         EditText mail = (EditText) findViewById(R.id.editTextTextEmailAddress);
         final String email = mail.getText().toString();
 
-        db.collection("Utenti").whereEqualTo("mail", email).whereNotIn("telefono", Collections.singletonList(telefono.getText().toString())).get()
+        db.collection("Utenti").whereEqualTo("mailPath", utente.getMailPath()).whereNotIn("telefono", Collections.singletonList(telefono.getText().toString())).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot querySnapshots) {

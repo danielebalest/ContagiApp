@@ -114,7 +114,6 @@ public class InvitiAdapter extends RecyclerView.Adapter<com.example.contagiapp.n
 
             }
         });
-//TODO controllare tutti getMail e nel caso mettere getMailPath
 
         btnRifiutaInvito.setOnClickListener(new View.OnClickListener() {
             @Override

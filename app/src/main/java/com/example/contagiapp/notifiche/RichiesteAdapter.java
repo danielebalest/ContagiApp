@@ -68,7 +68,7 @@ public class RichiesteAdapter extends RecyclerView.Adapter<com.example.contagiap
         final ImageView imageViewUser = holder.imgUtente;
         final MaterialButton btnAccetta = holder.btnAccetta;
         final MaterialButton btnRifiuta = holder.btnRifiuta;
-        final String idUtente = user.getMail();
+        final String idUtente = user.getMailPath();
 
 
         textViewNome.setText(user.getNome());

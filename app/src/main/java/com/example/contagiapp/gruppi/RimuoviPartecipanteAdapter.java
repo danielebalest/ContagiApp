@@ -68,7 +68,7 @@ public class RimuoviPartecipanteAdapter extends RecyclerView.Adapter<RimuoviPart
         TextView textViewNome = holder.nomeTextView;
         TextView textViewCognome = holder.cognomeTextView;
         final ImageView imageViewUser = holder.imgUtente;
-        final String idUtente = user.getMail();
+        final String idUtente = user.getMailPath();
         final CheckBox checkBox = holder.checkBox;
 
         textViewNome.setText(user.getNome());
@@ -109,10 +109,10 @@ public class RimuoviPartecipanteAdapter extends RecyclerView.Adapter<RimuoviPart
                                 if(isChecked){
                                     listaPartecipanti.add(idUtente);
                                     db.collection("Gruppo").document(idGruppo).update("partecipanti", listaPartecipanti);
-                                    Log.d("listaPartecipanti", String.valueOf(String.valueOf(listaPartecipanti) + "  Utente:"  +  String.valueOf(user.getMail())));
+                                    Log.d("listaPartecipanti", String.valueOf(String.valueOf(listaPartecipanti) + "  Utente:"  +  String.valueOf(user.getMailPath())));
                                 }
                                 if(!isChecked){
-                                    if(user.getMail() !=null){
+                                    if(user.getMailPath() !=null){
 
                                         listaPartecipanti.remove(idUtente);
                                         db.collection("Gruppo").document(idGruppo).update("partecipanti", listaPartecipanti);

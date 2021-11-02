@@ -54,7 +54,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
         TextView textViewCognome = holder.cognomeTextView;
         TextView textViewAge = holder.ageTextView;
         final ImageView imageViewUser = holder.imgUtente;
-        String idUtente = user.getMail();
+        String idUtente = user.getMailPath();
 
         textViewNome.setText(user.getNome());
         textViewCognome.setText(user.getCognome());

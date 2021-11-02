@@ -79,7 +79,7 @@ public class Notifiche {
                                             Utente ut = documentSnapshot1.toObject(Utente.class);
 
                                             //TODO non riesco a caricare l'immagine dell'utente
-                                            //caricaImgDaStorage("imgUtenti", ut.getMail());
+                                            //caricaImgDaStorage("imgUtenti", ut.getMailPath());
                                             Notification newMessageNotification1 =
                                                     new NotificationCompat.Builder(mainActivity, "CHANNEL_ID")
                                                             .setSmallIcon(R.drawable.ic_friends)
@@ -278,7 +278,7 @@ public class Notifiche {
 
         if(!json.equals("no")) {
             Utente utente = gson.fromJson(json, Utente.class);
-            mailUtenteLoggato = utente.getMail();
+            mailUtenteLoggato = utente.getMailPath();
             Log.d("mailutenteLoggato", mailUtenteLoggato);
         } else {
             SharedPreferences prefs1 = mainActivity.getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);

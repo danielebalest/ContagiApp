@@ -703,8 +703,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
                         db.collection("Utenti").document(email).set(user1);
 
-                        //uploadImage(utente.getMail()); //
-                        uploadImageToStorage(utente.getMail());
+
+                        uploadImageToStorage(utente.getMailPath());
                         SharedPreferences prefs = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         Gson gson = new Gson();

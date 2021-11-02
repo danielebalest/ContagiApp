@@ -135,7 +135,7 @@ public class EliminazionePartecipazioneEvento extends Fragment {
 
         if(!json.equals("no")) {
             Utente utente = gson.fromJson(json, Utente.class);
-            mailUtenteLoggato = utente.getMail();
+            mailUtenteLoggato = utente.getMailPath();
             Log.d("mailutenteLoggato", mailUtenteLoggato);
         } else {
             SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);

@@ -255,7 +255,7 @@ public class NotifyFragment extends Fragment {
 
                             //RichiesteAdapter adapter = new RichiesteAdapter(utenti, mailUtenteLoggato, utenteLoggato);
 
-                            String id = user.getMail();
+                            String id = user.getMailPath();
                             idList.add(id);
 
 /*
@@ -362,7 +362,7 @@ public class NotifyFragment extends Fragment {
 
         if(!json.equals("no")) {
             Utente utente = gson.fromJson(json, Utente.class);
-            mailUtenteLoggato = utente.getMail();
+            mailUtenteLoggato = utente.getMailPath();
             Log.d("mailutenteLoggato", mailUtenteLoggato);
         } else {
             SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);

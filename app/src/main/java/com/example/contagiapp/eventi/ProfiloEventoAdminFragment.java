@@ -248,7 +248,7 @@ public class ProfiloEventoAdminFragment extends Fragment {
                                                     Utente utente = document.toObject(Utente.class);
                                                     Log.d("utenteNome", String.valueOf(utente.getNome()));
                                                     listaUtenti.add(utente);
-                                                    idList.add(utente.getMail());
+                                                    idList.add(utente.getMailPath());
 
                                                 }
                                                 Log.d("listaUtenti", String.valueOf(listaUtenti));

@@ -150,7 +150,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
 
 
-                            String id = user.getMail();
+                            String id = user.getMailPath();
                             idList.add(id);
 
                             AddUserAdapter adapter = new AddUserAdapter(amici, idGruppo);

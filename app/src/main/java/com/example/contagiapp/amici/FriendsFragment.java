@@ -176,7 +176,7 @@ public class FriendsFragment extends Fragment {
                                     Log.d("amiciSize", String.valueOf(amici.size()));
 
 
-                                    String id = user.getMail();
+                                    String id = user.getMailPath();
                                     idList.add(id);
                                 }
                                 UserAdapter adapter = new UserAdapter(amici);
@@ -222,7 +222,7 @@ public class FriendsFragment extends Fragment {
 
         if(!json.equals("no")) {
             Utente utente = gson.fromJson(json, Utente.class);
-            mailUtenteLoggato = utente.getMail();
+            mailUtenteLoggato = utente.getMailPath();
             Log.d("mailutenteLoggato", mailUtenteLoggato);
         } else {
             SharedPreferences prefs1 = getActivity().getApplicationContext().getSharedPreferences("LoginTemporaneo",Context.MODE_PRIVATE);

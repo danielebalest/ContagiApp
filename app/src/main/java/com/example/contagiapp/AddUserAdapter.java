@@ -71,7 +71,7 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
         TextView textViewNome = holder.nomeTextView;
         TextView textViewCognome = holder.cognomeTextView;
         final ImageView imageViewUser = holder.imgUtente;
-        String idUtente = user.getMail();
+        String idUtente = user.getMailPath();
         final CheckBox checkBox = holder.checkBox;
 
         textViewNome.setText(user.getNome());
@@ -104,7 +104,7 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
                         DocumentSnapshot document = (DocumentSnapshot) task.getResult();
                         final ArrayList<String> listaInviti = (ArrayList<String>) document.get("invitiRicevuti");
 
-                        Log.d("listaInviti", String.valueOf(String.valueOf(listaInviti) + "  Utente:"  +  String.valueOf(user.getMail())));
+                        Log.d("listaInviti", String.valueOf(String.valueOf(listaInviti) + "  Utente:"  +  String.valueOf(user.getMailPath())));
 
                         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
@@ -112,15 +112,15 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
                                 if(isChecked){
 
                                     listaInviti.add(idGruppo);
-                                    db.collection("Utenti").document(user.getMail()).update("invitiRicevuti", listaInviti);
-                                    Log.d("listaInvitiAdd", String.valueOf(listaInviti) + "  Utente:" + String.valueOf(user.getMail()));
+                                    db.collection("Utenti").document(user.getMailPath()).update("invitiRicevuti", listaInviti);
+                                    Log.d("listaInvitiAdd", String.valueOf(listaInviti) + "  Utente:" + String.valueOf(user.getMailPath()));
                                 }
                                 if(!isChecked){
-                                    if(user.getMail() !=null){
+                                    if(user.getMailPath() !=null){
 
                                         listaInviti.remove(idGruppo);
-                                        db.collection("Utenti").document(user.getMail()).update("invitiRicevuti", listaInviti);
-                                        Log.d("listaInvitiRemove", String.valueOf(String.valueOf(listaInviti) + "  Utente:"  +  String.valueOf(user.getMail())));
+                                        db.collection("Utenti").document(user.getMailPath()).update("invitiRicevuti", listaInviti);
+                                        Log.d("listaInvitiRemove", String.valueOf(String.valueOf(listaInviti) + "  Utente:"  +  String.valueOf(user.getMailPath())));
                                     }
                                 }
 
@@ -128,7 +128,7 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
                         });
 
                     }
-                }); //fine  db.collection("Utenti").document(user.getMail()).get()
+                });
     }
 
 

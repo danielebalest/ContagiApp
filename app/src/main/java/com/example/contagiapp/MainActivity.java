@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         String mailUtenteLoggato;
         if(!json.equals("no")) {
             utente = gson.fromJson(json, Utente.class);
-            mailUtenteLoggato = utente.getMail();
+            mailUtenteLoggato = utente.getMailPath();
             Log.d("mailutenteLoggato", mailUtenteLoggato);
             stato = utente.getStato();
 

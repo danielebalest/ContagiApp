@@ -215,7 +215,7 @@ public class HomeFragment extends Fragment {
         String mailUtenteLoggato;
         if(!json.equals("no")) {
             utente = gson.fromJson(json, Utente.class);
-            mailUtenteLoggato = utente.getMail();
+            mailUtenteLoggato = utente.getMailPath();
             Log.d("mailutenteLoggato", mailUtenteLoggato);
             statoUtente = utente.getStato();
         } else {
