@@ -55,6 +55,7 @@ public class ProfiloGruppoFragment extends Fragment {
     private ArrayList<Utente> listaPartecipanti = new ArrayList<Utente>();
     int nStato = 0;
     LinearLayout status;
+    private TextView admin;
 
     ColorStateList red = ColorStateList.valueOf(Color.parseColor("#FF0000"));
     ColorStateList orange = ColorStateList.valueOf(Color.parseColor("#F4511E"));
@@ -66,7 +67,6 @@ public class ProfiloGruppoFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,6 +75,7 @@ public class ProfiloGruppoFragment extends Fragment {
         view =  inflater.inflate(R.layout.fragment_profilo_gruppo, container, false);
 
         status = view.findViewById(R.id.groupStatusCircle);
+        admin = view.findViewById(R.id.tvAdmin);
 
         Bundle bundle = getArguments();
         final String idGruppo = bundle.getString("idGruppo");
@@ -161,21 +162,6 @@ public class ProfiloGruppoFragment extends Fragment {
                 });
     }
 
-
-    String stato = null;
-    private void getStatoGruppo(String idGruppo){
-        db.collection("Utenti")
-                .document(idGruppo)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Gruppo g = documentSnapshot.toObject(Gruppo.class);
-                        stato = g.getStatoGruppo();
-                    }
-                });
-    }
-
     private void caricaGruppo(final String idGruppo, final View view){
 
         db.collection("Gruppo")
@@ -185,10 +171,9 @@ public class ProfiloGruppoFragment extends Fragment {
             public void onSuccess(final DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
 
-                    Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
+                    final Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
                     String nome = gruppo.getNomeGruppo();
                     String descrizione = gruppo.getDescrizione();
-                    String stato = gruppo.getStatoGruppo();
                     final ArrayList<String> mailPartecipanti = gruppo.getPartecipanti();
                     gruppo.aggiornaNroPartecipanti(mailPartecipanti);
                     int nroPartecipanti = gruppo.getNroPartecipanti();
@@ -198,7 +183,7 @@ public class ProfiloGruppoFragment extends Fragment {
                     TextView tvNomeGruppo = view.findViewById(R.id.tvNomeProfiloGruppo);
                     TextView tvDescGruppo = view.findViewById(R.id.tvDescrProfiloGruppo);
                     final TextView tvNroPartecipanti = view.findViewById(R.id.tvNumPartecipantiProfiloGruppo);
-
+                    final TextView admin = view.findViewById(R.id.tvAdmin);
 
                     tvNomeGruppo.setText(nome);
                     tvDescGruppo.setText(descrizione);
@@ -223,21 +208,17 @@ public class ProfiloGruppoFragment extends Fragment {
                                             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                    Utente user = new Utente();
-                                                    user.setNome(documentSnapshot.getString("nome"));
-                                                    user.setCognome(documentSnapshot.getString("cognome"));
-                                                    user.setMail(documentSnapshot.getString("mail"));
-                                                    user.setDataNascita(documentSnapshot.getString("dataNascita"));
-                                                    user.setStato(documentSnapshot.getString("stato"));
+                                                    Utente user = documentSnapshot.toObject(Utente.class);
+
+                                                    if(user.getMailPath().equals(gruppo.getAdmin())) {
+                                                        admin.setText(user.getCognome()+" "+user.getNome());
+                                                    }
                                                     Log.d("dataNascita", String.valueOf(user.getDataNascita()));
 
                                                     listaPartecipanti.add(user); //toDo: questa lista globale deve essere accessibile anche fuori dal metodo a riga 70 (per intederci)
                                                     Log.d("listaPartecipantiFOR", String.valueOf(listaPartecipanti)); //qui è visibile, ma è nel for
                                                 }
                                             });
-
-
-
                                 }
 
                                 Thread.sleep(2000);
