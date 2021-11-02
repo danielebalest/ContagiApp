@@ -249,16 +249,12 @@ public class RegistrationActivity extends AppCompatActivity {
         });
 
 
-
-
-
         // collegamento button registrati con la mainActivity
         Button signUpButton = (Button) findViewById(R.id.modificaDati);
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                
                 switch (controlli_TextInput(nome, nomeLayout, cognome, cognomeLayout, mail, mailLayout, data, dataLayout, phone, phoneLayout, psw1, psw1Layout, psw2, psw2Layout, layoutRegion, layoutProvince, layoutCity)) {
 
                     case 1:

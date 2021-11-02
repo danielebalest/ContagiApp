@@ -15,7 +15,7 @@
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_launcher2" />
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"

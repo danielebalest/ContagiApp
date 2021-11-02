@@ -113,15 +113,6 @@
         android:layout_marginTop="10dp"
         />
 
-    <Button
-        android:id="@+id/forgetPSWbutton"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:text="Password dimenticata"
-        android:textSize="11dp"
-        />
 
 
     <Button
