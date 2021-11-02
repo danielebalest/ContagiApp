@@ -145,22 +145,22 @@ public class ProfiloActivity extends AppCompatActivity {
 
     private void riempiListView(ArrayList<String> arrayListProfilo){
         String stato = null;
-        if(utente.getStato().equals("rosso")) stato="POSITIVO";
-        if(utente.getStato().equals("verde")) stato="NEGATIVO";
-        if(utente.getStato().equals("arancione")) stato="contatto con un POSITIVO";
-        if(utente.getStato().equals("giallo")) stato="INCERTO";
+        if(utente.getStato().equals("rosso")) stato=getString(R.string.positive);
+        if(utente.getStato().equals("verde")) stato=getString(R.string.negative);
+        if(utente.getStato().equals("arancione")) stato=getString(R.string.contact_with_a_positive);
+        if(utente.getStato().equals("giallo")) stato=getString(R.string.uncertain);
 
-        arrayListProfilo.add("Stato: "+stato);
-        arrayListProfilo.add("Nome: "+utente.getNome());
-        arrayListProfilo.add("Cognome: "+utente.getCognome());
-        arrayListProfilo.add("Mail: "+utente.getMail());
-        arrayListProfilo.add("Data di Nascita: "+utente.getDataNascita());
-        arrayListProfilo.add("Genere: "+utente.getGenere());
-        arrayListProfilo.add("Nazione di residenza: "+utente.getNazione());
-        arrayListProfilo.add("Regione di residenza: "+utente.getRegione());
-        arrayListProfilo.add("Provincia di residenza: "+utente.getProvince());
-        arrayListProfilo.add("Città di residenza: "+utente.getCitta());
-        arrayListProfilo.add("Telefono: "+utente.getTelefono());
+        arrayListProfilo.add(getString(R.string.state2dots) +stato);
+        arrayListProfilo.add(getString(R.string.name2dots)+utente.getNome());
+        arrayListProfilo.add(getString(R.string.surname2dots)+utente.getCognome());
+        arrayListProfilo.add(getString(R.string.mail2dots)+utente.getMail());
+        arrayListProfilo.add(getString(R.string.date_of_birth2dots)+utente.getDataNascita());
+        arrayListProfilo.add(getString(R.string.gender2dots)+utente.getGenere());
+        arrayListProfilo.add(getString(R.string.country_of_residence2dots)+utente.getNazione());
+        arrayListProfilo.add(getString(R.string.region_of_residence2dots)+utente.getRegione());
+        arrayListProfilo.add(getString(R.string.province_of_residence2dots)+utente.getProvince());
+        arrayListProfilo.add(getString(R.string.city_of_residence2dots)+utente.getCitta());
+        arrayListProfilo.add(getString(R.string.phone2dots)+utente.getTelefono());
 
         caricaImgDaStorage(storageRef, storageDirectory, utente.getMail(), imgViewProfiloUtente);
         Log.d("arrayListProfilo", String.valueOf(arrayListProfilo));

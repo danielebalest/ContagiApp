@@ -92,7 +92,8 @@
                 android:id="@+id/radioButton2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="F" />
+                android:text="F"
+                tools:ignore="TouchTargetSizeCheck" />
         </RadioGroup>
 
         <com.google.android.material.textfield.TextInputLayout

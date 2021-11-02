@@ -17,7 +17,7 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="phone">Cellulare</string>
+    <string name="phone">Phone number</string>
     <string name="search">Search</string>
     <string name="invite">Invite</string>
     <string name="participants"> participants</string>
@@ -215,5 +215,23 @@
     <string name="subMessage3">\n\nMake your reservation on the app now."</string>
     <string name="ERROR">ERROR</string>
 
+    //ProfiloActivity
+    <string name="positive">POSITIVE </string>
+    <string name="negative">NEGATIVE </string>
+    <string name="uncertain">UNCERTAIN </string>
+    <string name="contact_with_a_positive">contact with a POSITIVE </string>
+    <string name="state2dots">State: </string>
+    <string name="name2dots">Name: </string>
+    <string name="surname2dots">Surname: </string>
+    <string name="mail2dots">Mail: </string>
+    <string name="date_of_birth2dots">Date of birth: </string>
+    <string name="country_of_residence2dots">Country of residence: </string>
+    <string name="region_of_residence2dots">Region of residence: </string>
+    <string name="province_of_residence2dots">Province of residence: </string>
+    <string name="city_of_residence2dots">City of residence: </string>
+    <string name="phone2dots">Phone number: </string>
+
+    //GroupFragment
+    <string name="no_group_msg">"You're not part of any group. Create one now"</string>
 
 </resources>
