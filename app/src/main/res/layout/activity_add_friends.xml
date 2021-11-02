@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    tools:context=".amici.AddFriendsActivity">
+    tools:context="com.batsoftware.contagiapp.amici.AddFriendsActivity">
 
 
     <TextView

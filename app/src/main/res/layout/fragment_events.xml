@@ -7,7 +7,7 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:layout_marginTop="20dp"
-    tools:context=".eventi.EventsFragment">
+    tools:context="com.batsoftware.contagiapp.eventi.EventsFragment">
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/search_field"

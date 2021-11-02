@@ -7,7 +7,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    tools:context=".eventi.ProfiloEventoAdminFragment">
+    tools:context="com.batsoftware.contagiapp.eventi.ProfiloEventoAdminFragment">
 
 <LinearLayout
     android:layout_width="match_parent"

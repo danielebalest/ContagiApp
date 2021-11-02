@@ -23,7 +23,6 @@ android {
         }
 
         // Inject the Maps API key into the manifest
-        manifestPlaceholders = [ mapsApiKey : properties.getProperty("MAPS_API_KEY", "") ]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -91,9 +90,5 @@ dependencies {
 
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.GrenderG:Toasty:1.2.5'
-
-
-
-
 
 }

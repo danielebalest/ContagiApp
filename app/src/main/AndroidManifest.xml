@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.contagiapp">
+    package="com.batsoftware.contagiapp">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -27,33 +27,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".impostazioni.SegnalaNegativita"
-            android:parentActivityName=".impostazioni.SettingActivity" />
+        <activity android:name="com.batsoftware.contagiapp.impostazioni.SegnalaNegativita"
+            android:parentActivityName="com.batsoftware.contagiapp.impostazioni.SettingActivity" />
         <activity
-            android:name=".impostazioni.SegnalaPositivitaActivity"
-            android:parentActivityName=".impostazioni.SettingActivity" />
+            android:name="com.batsoftware.contagiapp.impostazioni.SegnalaPositivitaActivity"
+            android:parentActivityName="com.batsoftware.contagiapp.impostazioni.SettingActivity" />
         <activity
-            android:name=".impostazioni.EventsPartecipatoPositivo"
-            android:parentActivityName=".impostazioni.SegnalaPositivitaActivity" />
-        <activity android:name=".amici.ProfiloUtentiActivity" />
-        <activity android:name=".amici.AddFriendsActivity" />
-        <activity android:name=".gruppi.InvitaAmiciGruppoActivity" />
+            android:name="com.batsoftware.contagiapp.impostazioni.EventsPartecipatoPositivo"
+            android:parentActivityName="com.batsoftware.contagiapp.impostazioni.SegnalaPositivitaActivity" />
+        <activity android:name="com.batsoftware.contagiapp.amici.ProfiloUtentiActivity" />
+        <activity android:name="com.batsoftware.contagiapp.amici.AddFriendsActivity" />
+        <activity android:name="com.batsoftware.contagiapp.gruppi.InvitaAmiciGruppoActivity" />
         <activity
-            android:name=".gruppi.AddImgGruppoActivity"
-            android:parentActivityName=".gruppi.CreaGruppoActivity" />
-        <activity android:name=".gruppi.CreaGruppoActivity" />
+            android:name="com.batsoftware.contagiapp.gruppi.AddImgGruppoActivity"
+            android:parentActivityName="com.batsoftware.contagiapp.gruppi.CreaGruppoActivity" />
+        <activity android:name="com.batsoftware.contagiapp.gruppi.CreaGruppoActivity" />
         <activity
-            android:name=".impostazioni.SettingActivity"
+            android:name="com.batsoftware.contagiapp.impostazioni.SettingActivity"
             android:label="@string/settings" />
-        <activity android:name=".notifiche.Smistamento" />
+        <activity android:name="com.batsoftware.contagiapp.notifiche.Smistamento" />
         <activity
-            android:name=".registrazione.RegistrationActivity"
-            android:parentActivityName=".WelcomeActivity" />
+            android:name="com.batsoftware.contagiapp.registrazione.RegistrationActivity"
+            android:parentActivityName="com.batsoftware.contagiapp.WelcomeActivity" />
         <activity
-            android:name=".ui.login.LoginActivity"
-            android:parentActivityName=".WelcomeActivity" />
+            android:name="com.batsoftware.contagiapp.ui.login.LoginActivity"
+            android:parentActivityName="com.batsoftware.contagiapp.WelcomeActivity" />
         <activity
-            android:name=".LaunchScreenActivity"
+            android:name="com.batsoftware.contagiapp.LaunchScreenActivity"
             android:theme="@style/LauncherTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,21 +61,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".utente.ProfiloActivity">
+        <activity android:name="com.batsoftware.contagiapp.utente.ProfiloActivity">
             <intent-filter>
                 <action android:name="android.intent.action.ProfiloActivity" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".WelcomeActivity"
+            android:name="com.batsoftware.contagiapp.WelcomeActivity"
             android:theme="@style/NoActionBar" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".eventi.NewEventsActivity">
+        <activity android:name="com.batsoftware.contagiapp.MainActivity" />
+        <activity android:name="com.batsoftware.contagiapp.eventi.NewEventsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.NewEventsActivity" />
             </intent-filter>
         </activity>
-        <activity android:name=".utente.ModificaUtenteActivity">
+        <activity android:name="com.batsoftware.contagiapp.utente.ModificaUtenteActivity">
             <intent-filter>
                 <action android:name="android.intent.action.ModificaUtenteActivity" />
             </intent-filter>
@@ -84,9 +84,7 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${mapsApiKey}" />
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
