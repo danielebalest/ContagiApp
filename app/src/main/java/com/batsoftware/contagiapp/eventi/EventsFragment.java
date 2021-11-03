@@ -63,6 +63,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
     ArrayList<String> idList = new ArrayList<String>(); //lista che conterrà gli id cioè le mail degli eventi
 
     ArrayList<String> listaNomiEventi = new ArrayList<String>();
+    ArrayList<String> listaNomiEventiCitta = new ArrayList<String>();
     ArrayList<Evento> listaEventiTrovati = new ArrayList<Evento>();
     ArrayList<String> listaIdEventi = new ArrayList<String>();
 
@@ -180,18 +181,46 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
 
                         ArrayList<String> nomeEventiTrovati;
+                        ArrayList<String> cittaEventiTrovati;
+
+
 
                         nomeEventiTrovati = ricerca(editText.getText().toString(), listaNomiEventi);
-
+                        cittaEventiTrovati= ricerca(editText.getText().toString(), listaNomiEventiCitta);
 
                         Log.d("listaInCuiCercare", String.valueOf(listaNomiEventi));
                         Log.d("eventiTrovati", String.valueOf(nomeEventiTrovati));
+                        Log.d("listaInCuiCercareCitta", String.valueOf(listaNomiEventiCitta));
+                        Log.d("eventiCittaTrovati", String.valueOf(cittaEventiTrovati));
+
 
 
                         //ottengo l'id dell'evento Trovato
                         for(int i = 0; i < nomeEventiTrovati.size(); i++){
                             db.collection("Eventi")
                                     .whereEqualTo("nome", nomeEventiTrovati.get(i))
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Evento eventoTrovato = document.toObject(Evento.class);
+
+                                                listaEventiTrovati.add(eventoTrovato);
+                                                listaIdEventi.add(eventoTrovato.getIdEvento());
+                                            }
+                                            Log.d("listaEventiTrovati", String.valueOf(listaEventiTrovati));
+                                            Log.d("listaGruppiCreati_ID", String.valueOf(listaIdEventi));
+
+                                            EventAdapter adapter = new EventAdapter(listaEventiTrovati, getContext());
+                                            rvEventi.setAdapter(adapter);
+                                            rvEventi.setLayoutManager(new LinearLayoutManager(getActivity()));
+                                        }
+                                    });
+                        }
+                        for(int i = 0; i < cittaEventiTrovati.size(); i++){
+                            db.collection("Eventi")
+                                    .whereEqualTo("citta", cittaEventiTrovati.get(i))
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
@@ -227,6 +256,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
         idList.clear();
         listaEventiCreati.clear();
         listaNomiEventi.clear();
+        listaNomiEventiCitta.clear();
 
 
 
@@ -261,6 +291,10 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                                     if(!listaNomiEventi.contains(evento.getNome())){
                                         listaNomiEventi.add(evento.getNome());
                                         Log.d("1listaNomiEventi", String.valueOf(listaNomiEventi));
+                                    }
+                                    if(!listaNomiEventiCitta.contains(evento.getCitta())){
+                                        listaNomiEventiCitta.add(evento.getCitta());
+                                        Log.d("2listaNomiEventi", String.valueOf(listaNomiEventiCitta));
                                     }
 
                                 }
@@ -314,6 +348,9 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                                         listaNomiEventi.add(evento.getNome());
                                     }
 
+                                    if(!listaNomiEventiCitta.contains(evento.getCitta())){
+                                        listaNomiEventiCitta.add(evento.getCitta());
+                                    }
                                 }
                             } catch (ParseException e) {
                                 e.printStackTrace();
@@ -343,6 +380,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
         listaEventiIscritto.clear();
         idList.clear();
         listaNomiEventi.clear();
+        listaNomiEventiCitta.clear();
 
 
         db.collection("Eventi")
@@ -370,6 +408,9 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
                                         listaNomiEventi.add(evento.getNome());
                                     }
 
+                                    if(!listaNomiEventiCitta.contains(evento.getCitta())){
+                                        listaNomiEventiCitta.add(evento.getCitta());
+                                    }
                                 }
                             } catch (ParseException e) {
                                 e.printStackTrace();
@@ -409,6 +450,18 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
         }
         return elementiTrovati;
     }
+
+   /* private ArrayList<String> ricercacitta(String testoInserito, ArrayList<String> listaInCuiCercareCitta){
+
+
+        ArrayList<String> elementiTrovati = new ArrayList<String>();
+        for(int i=0; i < listaInCuiCercareCitta.size(); i++){
+            if(listaInCuiCercareCitta.get(i).toLowerCase().contains(testoInserito.toLowerCase())){
+                elementiTrovati.add(listaInCuiCercareCitta.get(i));
+            }
+        }
+        return elementiTrovati;
+    }*/
 
     //funzione che nasconde la tastiera
     public static void hideSoftKeyboard(Activity activity) {
@@ -463,7 +516,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
                 if(isChecked) {
                     if(switchiscritto) {
-                        Toast.makeText(getContext(),"Impossibile effettuare questa operazione",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getContext().getText(R.string.impossible_operation),Toast.LENGTH_LONG).show();
                         buttonView.setChecked(false);
                         switchcreato = !switchcreato;
                     } else caricaEventiCreati();
