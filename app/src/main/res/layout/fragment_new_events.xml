@@ -228,12 +228,6 @@
             android:adjustViewBounds="true"/>
 
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/map_view"
-            android:layout_width="match_parent"
-            android:layout_height="200dp">
-        </com.google.android.gms.maps.MapView>
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonCreaEvento"
             android:layout_width="152dp"
