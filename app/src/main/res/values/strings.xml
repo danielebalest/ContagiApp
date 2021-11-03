@@ -23,6 +23,13 @@
     <string name="participants"> Partecipanti</string>
     <string name="available"> posti disponibili</string>
 
+
+        <plurals name="nPartecipants">
+            <item quantity="one">%d partecipante</item>
+            <item quantity="other">%d partecipanti</item>
+        </plurals>
+
+
     <string name="remember_me">Ricordami</string>
     <string name="createAccount">Crea account</string>
     <string name="VuotoEventi">Non hai partecipato ad alcun evento utlimamente. Clicca su fine per completare l operazione</string>
@@ -174,6 +181,13 @@
     //fragment_profilo_evento
     <string name="number_of_participants">Numero di partecipanti all\'evento </string>
     <string name="available_places">Posti disponibili </string>
+
+    <plurals name="nPlacesAvailable">
+        <item quantity="one">%d posto disponibile</item>
+        <item quantity="other">%d posti disponibili</item>
+    </plurals>
+
+
     <string name="partecipate">partecipa </string>
     <string name="partecipate_as_a_group">partecipa come gruppo </string>
 

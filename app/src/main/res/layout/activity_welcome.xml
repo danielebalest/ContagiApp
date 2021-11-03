@@ -40,7 +40,7 @@
         android:text="@string/login"
         android:textColor="#FFFFFF"
         app:cornerRadius="20dp"
-        android:background="#CD1919"/>
+        android:background="@color/red"/>
 
 
     <Button
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="32dp"
-        android:background="#1E88E5"
+        android:background="@color/colorPrimary"
         app:cornerRadius="20dp"
         android:text="@string/signUp"
         android:textColor="#FFFFFF"

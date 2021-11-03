@@ -107,7 +107,11 @@ public class AddUserAdapter extends RecyclerView.Adapter<AddUserAdapter.ViewHold
                             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                 if(isChecked){
 
-                                    listaInviti.add(idGruppo);
+                                    if(!listaInviti.contains(idGruppo)){
+                                        listaInviti.add(idGruppo);
+                                    }
+
+
                                     db.collection("Utenti").document(user.getMailPath()).update("invitiRicevuti", listaInviti);
                                     Log.d("listaInvitiAdd", String.valueOf(listaInviti) + "  Utente:" + String.valueOf(user.getMailPath()));
                                 }

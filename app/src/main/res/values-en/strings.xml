@@ -21,7 +21,23 @@
     <string name="search">Search</string>
     <string name="invite">Invite</string>
     <string name="participants"> participants</string>
+
+    <plurals name="nPartecipants">
+        <item quantity="one">%d partecipant</item>
+        <item quantity="other">%d partecipants</item>
+    </plurals>
+
+
+
+
     <string name="available"> places available</string>
+    <plurals name="nPlacesAvailable">
+        <item quantity="one">%d place available</item>
+        <item quantity="other">%d places available</item>
+    </plurals>
+
+
+
     <string name="VuotoEventi">You have not attended any event in the past. Click on finish to complete the operation</string>
 
     <string name="remember_me">Remember me</string>

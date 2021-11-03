@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:backgroundTint="#2E6C01"
+                    android:backgroundTint="@color/green"
                     android:text="@string/accept"
                     app:cornerRadius="20dp">
 
@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:backgroundTint="#870F0F"
+                    android:backgroundTint="@color/red"
                     android:text="@string/delete"
                     app:cornerRadius="20dp">
 
