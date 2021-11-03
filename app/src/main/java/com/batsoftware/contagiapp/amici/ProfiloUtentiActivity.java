@@ -158,7 +158,7 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                             }
                                         });
                                     } else {
-                                        btnRichiesta.setText("Rimuovi amico");
+                                        btnRichiesta.setText(getString(R.string.remove_friend));
 
                                         btnRichiesta.setOnClickListener(new View.OnClickListener() {
                                             @Override

@@ -138,6 +138,7 @@
 
     //activity_profilo_utenti
     <string name="add_to_friends">aggiungi agli amici</string>
+    <string name="remove_friend">rimuovi amico</string>
     <string name="birth2dots">Data di nascita: </string>
     <string name="age2dots">Età: </string>
     <string name="gender2dots">Genere: </string>

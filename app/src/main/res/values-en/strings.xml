@@ -125,6 +125,7 @@
 
     //activity_profilo_utenti
     <string name="add_to_friends">add to friends</string>
+    <string name="remove_friend">remove friend</string>
     <string name="birth2dots">Date of birth</string>
     <string name="age2dots">Age:</string>
     <string name="gender2dots">Gender:</string>
