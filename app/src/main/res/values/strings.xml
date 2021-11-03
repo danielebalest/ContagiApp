@@ -274,4 +274,57 @@
     //FriendFragment
     <string name="you_dont_have_any_friends_yet">Non hai ancora nessun amico</string>
 
+    //EventsFragment
+    <string name="impossible_operation">Impossibile effettuare questa operazione</string>
+
+    //NewEventsActivity
+    <string name="fill_in_all_fields">Inserisci tutti i campi</string>
+    <string name="enter_event_name">Inserisci il nome dell\'evento</string>
+    <string name="enter_group_description">Inserisci la descrizione del gruppo</string>
+    <string name="enter_event_description">Inserisci la descrizione</string>
+    <string name="enter_event_city">Inserisci la città</string>
+    <string name="enter_event_address">Inserisci l\'indirizzo</string>
+    <string name="enter_event_max_participants_number">Inserisci il numero massimo dei partecipanti</string>
+    <string name="enter_group_name">Inserisci il nome del gruppo</string>
+    <string name="loading">Caricamento</string>
+    <string name="image_uploaded">Immagine caricata</string>
+    <string name="image_not_uploaded">Immagine not caricata</string>
+
+    //PartecipazioneGruppoFragment
+    <string name="registration_completed">Iscrizione effettuata</string>
+    <string name="group_already_registered">Questo tuo gruppo è già prenotato all\'evento</string>
+    <string name="groups_you_created_exceed_maximum">I gruppi da te creati eccedono il numero massimo di partecipanti dell\'evento</string>
+
+    //ProfiloPartecipanteFragment
+    <string name="are_you_sure_you_want_to_remove_the_reservation">Sicuro di rimuovere la prenotazione?</string>
+
+
+    //EventiPartecipatoAdapter
+    <string name="take_part">Partecipato</string>
+    <string name="did_not_partecipated">Non ho partecipato</string>
+
+    //SegnalaNegativita
+    <string name="enter_date_and_certificate">Inserisci data e/o certificato</string>
+
+    <string name="accepted">Accettato</string>
+    <string name="declined">Rifiutato</string>
+
+
+    <string name="enter_mail">Inserisci email</string>
+    <string name="enter_password">Inserisci password</string>
+    <string name="incorrect_mail_or_password">Email o password errati</string>
+
+
+    //RegistrationActivity
+    <string name="enter_name">Inserisci nome</string>
+    <string name="enter_surname">Inserisci cognome</string>
+    <string name="enter_date_of_birth">Inserisci data di nascita</string>
+    <string name="enter_region">Inserisci regione</string>
+    <string name="enter_province">Inserisci provincia</string>
+    <string name="enter_city">Inserisci città</string>
+    <string name="enter_phone_number">Inserisci cellulare</string>
+
+
+    <string name="state_updated">Stato aggiornato</string>
+    <string name="already_existing_email">Mail già esistente</string>
 </resources>

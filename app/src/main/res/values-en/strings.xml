@@ -207,7 +207,7 @@
     <string name="no">No</string>
 
     //item_promemoria_evento
-    <string name="reminder">Promemoria</string>
+    <string name="reminder">Reminder</string>
     <string name="you_will_participate_event">You will participate at this event</string>
 
 
@@ -255,6 +255,61 @@
 
     //FriendFragment
     <string name="you_dont_have_any_friends_yet">You still don\'t have any friend</string>
+
+    //EventsFragment
+    <string name="impossible_operation">Unable to do this operation</string>
+
+    //NewEventsActivity
+    <string name="fill_in_all_fields">Fill in all fields</string>
+    <string name="enter_event_name">Enter event name</string>
+    <string name="enter_group_description">Enter group description</string>
+    <string name="enter_event_description">Enter description</string>
+    <string name="enter_event_city">Enter city</string>
+    <string name="enter_event_address">Enter address</string>
+    <string name="enter_event_max_participants_number">Enter maximum number of participants</string>
+    <string name="enter_group_name">Enter group name</string>
+    <string name="loading">Upoading</string>
+    <string name="image_uploaded">Image uploaded</string>
+    <string name="image_not_uploaded">Image not uploaded</string>
+
+    //PartecipazioneGruppoFragment
+    <string name="registration_completed">Registration completed</string>
+    <string name="group_already_registered">Group already registered to the event</string>
+    <string name="groups_you_created_exceed_maximum">The group you created exceed the maximum number of participants at the event</string>
+
+
+    //ProfiloPartecipanteFragment
+    <string name="are_you_sure_you_want_to_remove_the_reservation">Are you sure you want to remove the reservation?</string>
+
+    //EventiPartecipatoAdapter
+    <string name="did_not_partecipated">Haven\'t taken part</string>
+    <string name="take_part">Have taken part</string>
+
+    //SegnalaNegativita
+    <string name="enter_date_and_certificate">Enter date and/or certificate</string>
+
+    <string name="accepted">Accepted</string>
+    <string name="declined">Declined</string>
+
+
+    //LoginActivity
+    <string name="enter_mail">Enter email</string>
+    <string name="enter_password">Enter password</string>
+    <string name="incorrect_mail_or_password">Incorrect mail or password</string>
+
+    <string name="state_updated">State updated</string>
+
+    //RegistrationActivity
+    <string name="enter_name">Enter name</string>
+    <string name="enter_surname">Enter surname</string>
+    <string name="enter_date_of_birth">Enter date of birth</string>
+    <string name="enter_region">Enter region</string>
+    <string name="enter_province">Enter province</string>
+    <string name="enter_city">Enter city</string>
+    <string name="enter_phone_number">Enter phone number</string>
+
+
+    <string name="already_existing_email">Already existing email</string>
 
 
 </resources>

@@ -107,8 +107,8 @@ public class EventiPartecipatoAdapter extends RecyclerView.Adapter<EventiParteci
                 //avvisare tutti i partecipanti a quell'evento e se hanno partecipato diventano arancioni e dopo 10 giorni gialli
                 //se non hanno partecipato non succede niente
 
-                btnAccetta.setText("Partecipato");
-                btnRifiuta.setText("no");
+                btnAccetta.setText(context.getText(R.string.take_part));
+                btnRifiuta.setText(context.getText(R.string.no));
                 btnAccetta.setClickable(false);
                 btnRifiuta.setClickable(true);
                 cond.set(position, true);
@@ -120,8 +120,8 @@ public class EventiPartecipatoAdapter extends RecyclerView.Adapter<EventiParteci
             @Override
             public void onClick(View v) {
                 db.collection("Eventi").document(idEvento).update("statoRosso", false, "dataRosso", null);
-                btnRifiuta.setText("No partecipato");
-                btnAccetta.setText("si");
+                btnRifiuta.setText(R.string.did_not_partecipated);
+                btnAccetta.setText(context.getText(R.string.yes));
                 btnAccetta.setClickable(true);
                 btnRifiuta.setClickable(false);
                 cond.set(position, true);

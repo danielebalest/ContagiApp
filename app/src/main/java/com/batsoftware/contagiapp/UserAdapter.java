@@ -47,6 +47,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Utente user = mUsers.get(position);
+        Context context= holder.itemView.getContext();
         TextView textViewNome = holder.nomeTextView;
         TextView textViewCognome = holder.cognomeTextView;
         TextView textViewAge = holder.ageTextView;
@@ -55,7 +56,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
         textViewNome.setText(user.getNome());
         textViewCognome.setText(user.getCognome());
-        textViewAge.setText(user.getAge() + " "  + "anni");
+        textViewAge.setText(user.getAge() + " "  +context.getText(R.string.years));
 
         //recupero l'immagine dallo storage
         Log.d("imgUtenti/idUtente","imgUtenti/"+idUtente);

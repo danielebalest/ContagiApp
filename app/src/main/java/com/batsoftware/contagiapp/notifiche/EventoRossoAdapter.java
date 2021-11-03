@@ -98,8 +98,8 @@ public class EventoRossoAdapter extends RecyclerView.Adapter<EventoRossoAdapter.
             @Override
             public void onClick(View v) {
 
-                btnAccetta.setText("Partecipato");
-                btnRifiuta.setText("no");
+                btnAccetta.setText(context.getText(R.string.take_part));
+                btnRifiuta.setText(context.getText(R.string.no));
                 btnAccetta.setClickable(false);
                 btnRifiuta.setClickable(true);
 
@@ -124,8 +124,8 @@ public class EventoRossoAdapter extends RecyclerView.Adapter<EventoRossoAdapter.
         btnRifiuta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnRifiuta.setText("No partecipato");
-                btnAccetta.setText("si");
+                btnRifiuta.setText(context.getText(R.string.did_not_partecipated));
+                btnAccetta.setText(context.getText(R.string.yes));
                 btnAccetta.setClickable(true);
                 btnRifiuta.setClickable(false);
 

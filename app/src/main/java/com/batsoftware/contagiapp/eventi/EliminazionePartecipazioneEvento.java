@@ -196,13 +196,13 @@ public class EliminazionePartecipazioneEvento extends Fragment {
                     tvDescrEvento.setText(descrizione);
                     tvDataEvento.setText(data);
                     tvOrarioEvento.setText(orario);
-                    tvRegioneEvento.setText("Regione: " + regione);
-                    tvProvinciaEvento.setText("Provincia: " + provincia);
-                    tvCittaEvento.setText("Città: " +citta);
-                    tvIndirizzoEvento.setText("Indirizzo: "+indirizzo);
-                    numMaxPartecipanti.setText("Numero massimo di partecipanti:   "+numMax);
-                    numDispon.setText("Numero posti disponibili:   "+numDisponibili);
-                    numParteci.setText("Numero di iscritti all'evento:   "+numPartecipanti);
+                    tvRegioneEvento.setText(getContext().getText(R.string.region)+ ": " + regione);
+                    tvProvinciaEvento.setText(getContext().getText(R.string.province)+ ": " + provincia);
+                    tvCittaEvento.setText(getContext().getText(R.string.city)+ ": " +citta);
+                    tvIndirizzoEvento.setText(getContext().getText(R.string.event_address)+ ": " +indirizzo);
+                    numMaxPartecipanti.setText(getContext().getText(R.string.maximum_number_of_participants)+ ": " +numMax);
+                    numDispon.setText(getContext().getText(R.string.available_places)+ ": " +numDisponibili);
+                    numParteci.setText(getContext().getText(R.string.number_of_participants)+ ": " +numPartecipanti);
 
                 } else {
                     Toast.makeText(getContext(), "Documents does not exist", Toast.LENGTH_SHORT).show();

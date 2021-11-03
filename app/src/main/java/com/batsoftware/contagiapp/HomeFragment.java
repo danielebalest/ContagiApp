@@ -244,7 +244,7 @@ public class HomeFragment extends Fragment {
             editor.apply();
         }
 
-        Toasty.success(getContext(), "Stato aggiornato", Toast.LENGTH_LONG).show();
+        Toasty.success(getContext(), getText(R.string.state_updated), Toast.LENGTH_LONG).show();
         Intent i = new Intent(getActivity(),MainActivity.class);
         startActivity(i);
         getActivity().finish();

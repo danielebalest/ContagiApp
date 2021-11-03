@@ -600,18 +600,18 @@ public class NewEventsActivity extends AppCompatActivity {
 
         } else {
             if (nomeEvento.isEmpty() && numMaxPartecipanti.isEmpty() && descrEvento.isEmpty() && citta.isEmpty() && indirizzo.isEmpty()) { //se sono tutti vuoti
-                Toasty.warning(NewEventsActivity.this, "Inserisci tutti i campi", Toast.LENGTH_SHORT).show();
+                Toasty.warning(NewEventsActivity.this, getText(R.string.fill_in_all_fields), Toast.LENGTH_SHORT).show();
 
-                textInputLayoutNome.setError("Inserisci nome dell'evento");
-                textInputLayoutNumMaxPartecipanti.setError("Inserisci descrizione del gruppo");
-                textInputLayoutDescrEvento.setError("Inserisci descrizione");
-                textInputLayoutCitta.setError("Inserisci città");
-                textInputLayoutIndirizzo.setError("Inserisci indirizzo");
+                textInputLayoutNome.setError(getText(R.string.enter_event_name));
+                textInputLayoutNumMaxPartecipanti.setError(getText(R.string.enter_group_description));
+                textInputLayoutDescrEvento.setError(getText(R.string.enter_event_description));
+                textInputLayoutCitta.setError(getText(R.string.enter_event_city));
+                textInputLayoutIndirizzo.setError(getText(R.string.enter_event_address));
             } else {
 
                 //se solo uno tra tutti è vuoto
                 if (indirizzo.isEmpty()) {
-                    textInputLayoutIndirizzo.setError("Inserisci indirizzo");
+                    textInputLayoutIndirizzo.setError(getText(R.string.enter_event_address));
                     textInputLayoutNome.setErrorEnabled(false);
                     textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);
                     textInputLayoutDescrEvento.setErrorEnabled(false);
@@ -619,7 +619,7 @@ public class NewEventsActivity extends AppCompatActivity {
                 }
 
                 if (citta.isEmpty()) {
-                    textInputLayoutCitta.setError("Inserisci città");
+                    textInputLayoutCitta.setError(getText(R.string.enter_event_city));
                     textInputLayoutNome.setErrorEnabled(false);
                     textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);
                     textInputLayoutDescrEvento.setErrorEnabled(false);
@@ -627,7 +627,7 @@ public class NewEventsActivity extends AppCompatActivity {
                 }
 
                 if (descrEvento.isEmpty()) {
-                    textInputLayoutDescrEvento.setError("Inserisci descrizione");
+                    textInputLayoutDescrEvento.setError(getText(R.string.enter_event_description));
                     textInputLayoutNome.setErrorEnabled(false);
                     textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);
                     textInputLayoutCitta.setErrorEnabled(false);
@@ -635,7 +635,7 @@ public class NewEventsActivity extends AppCompatActivity {
                 }
 
                 if (numMaxPartecipanti.isEmpty()) {
-                    textInputLayoutNumMaxPartecipanti.setError("Inserisci numero massimo dei partecipanti");
+                    textInputLayoutNumMaxPartecipanti.setError(getText(R.string.enter_event_max_participants_number));
                     textInputLayoutNome.setErrorEnabled(false);
                     textInputLayoutDescrEvento.setErrorEnabled(false);
                     textInputLayoutCitta.setErrorEnabled(false);
@@ -643,7 +643,7 @@ public class NewEventsActivity extends AppCompatActivity {
                 }
 
                 if (nomeEvento.isEmpty()) {
-                    textInputLayoutNome.setError("Inserisci nome del gruppo");
+                    textInputLayoutNome.setError(getText(R.string.enter_group_name));
                     textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);
                     textInputLayoutDescrEvento.setErrorEnabled(false);
                     textInputLayoutCitta.setErrorEnabled(false);
@@ -657,7 +657,7 @@ public class NewEventsActivity extends AppCompatActivity {
 
     private  void uploadImage(){
         final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Caricamento");
+        pd.setMessage(getText(R.string.loading));
         pd.show();
 
         Log.d("imageUri", String.valueOf(imageUri));
@@ -676,12 +676,12 @@ public class NewEventsActivity extends AppCompatActivity {
 
                             Log.d("downloadUrl", url);
                             //pd.dismiss();
-                            Toast.makeText(NewEventsActivity.this, "immagine caricata", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewEventsActivity.this, getText(R.string.image_uploaded), Toast.LENGTH_SHORT).show();
                         }
                     }).addOnCanceledListener(new OnCanceledListener() {
                         @Override
                         public void onCanceled() {
-                            Toast.makeText(NewEventsActivity.this, "immagine non caricata", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewEventsActivity.this, getText(R.string.image_not_uploaded), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

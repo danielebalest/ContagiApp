@@ -81,7 +81,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
 
         textViewDataEvento.setText(evento.getData());
         textViewOrarioEvento.setText(evento.getOrario());
-        textViewCittaEvento.setText("Città: "+evento.getCitta());
+        textViewCittaEvento.setText(mContext.getString(R.string.city)+ ": "+evento.getCitta());
 
 
         //recupero l'immagine dallo storage
