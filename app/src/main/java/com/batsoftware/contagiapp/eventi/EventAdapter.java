@@ -70,8 +70,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
 
         //evento.setNumeroPostiDisponibili(evento.getNumeroMaxPartecipanti(), evento.getNumPartecipanti());
         textViewNomeEvento.setText(evento.getNome());
-        textViewNumPartecipanti.setText(evento.getPartecipanti().size() + mContext.getString(R.string.participants));
-        textViewPostiDisponibili.setText(evento.getNumeroMaxPartecipanti() - evento.getPartecipanti().size() + mContext.getString(R.string.available));
+
+        //textViewNumPartecipanti.setText(evento.getPartecipanti().size() + mContext.getString(R.string.participants));
+        textViewNumPartecipanti.setText(mContext.getResources().getQuantityString(R.plurals.nPartecipants, evento.getPartecipanti().size(),  evento.getPartecipanti().size()));
+
+
+        //textViewPostiDisponibili.setText(evento.getNumeroMaxPartecipanti() - evento.getPartecipanti().size() + mContext.getString(R.string.available));
+        textViewPostiDisponibili.setText(mContext.getResources().getQuantityString(R.plurals.nPlacesAvailable, evento.getNumeroMaxPartecipanti() - evento.getPartecipanti().size(),  evento.getNumeroMaxPartecipanti() - evento.getPartecipanti().size()));
+
+
         textViewDataEvento.setText(evento.getData());
         textViewOrarioEvento.setText(evento.getOrario());
         textViewCittaEvento.setText("Città: "+evento.getCitta());
