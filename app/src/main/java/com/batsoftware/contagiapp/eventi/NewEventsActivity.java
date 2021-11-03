@@ -397,7 +397,7 @@ public class NewEventsActivity extends AppCompatActivity {
 
 
     private void addEventToDb(){
-        if(cittaSelezionata == null && autoCompleteCity.getText().toString() != null) {
+        if(cittaSelezionata == null && !autoCompleteCity.getText().toString().isEmpty()) {
                 cittaSelezionata = autoCompleteCity.getText().toString();
                 regioneSelezionata = autoCompleteRegion.getText().toString();
                 provinciaSelezionata = autoCompleteProvincia.getText().toString();
@@ -557,7 +557,7 @@ public class NewEventsActivity extends AppCompatActivity {
         TextInputLayout textInputLayoutRegione = findViewById(R.id.textInputRegioneEventoLayout);
         TextInputLayout textInputLayoutProvincia = findViewById(R.id.textInputProvinciaEventoLayout);
 
-        if ((!nomeEvento.isEmpty()) && (!numMaxPartecipanti.isEmpty()) && (!descrEvento.isEmpty()) && (!citta.isEmpty()) && (!indirizzo.isEmpty())) { //se sono tutti validi
+        if ((!nomeEvento.isEmpty()) && (!numMaxPartecipanti.isEmpty()) && (!descrEvento.isEmpty()) && (citta != null) && (!indirizzo.isEmpty())) { //se sono tutti validi
             textInputLayoutNome.setErrorEnabled(false);
             textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);
             textInputLayoutDescrEvento.setErrorEnabled(false);
