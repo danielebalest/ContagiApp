@@ -676,12 +676,12 @@ public class NewEventsActivity extends AppCompatActivity {
 
                             Log.d("downloadUrl", url);
                             //pd.dismiss();
-                            Toast.makeText(NewEventsActivity.this, getText(R.string.image_loaded), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewEventsActivity.this, getText(R.string.image_uploaded), Toast.LENGTH_SHORT).show();
                         }
                     }).addOnCanceledListener(new OnCanceledListener() {
                         @Override
                         public void onCanceled() {
-                            Toast.makeText(NewEventsActivity.this, getText(R.string.image_not_loaded), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewEventsActivity.this, getText(R.string.image_not_uploaded), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
