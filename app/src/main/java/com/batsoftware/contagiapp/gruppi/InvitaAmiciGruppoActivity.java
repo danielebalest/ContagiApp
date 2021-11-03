@@ -48,7 +48,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         final String idGruppo = extras.getString("idGruppo");
 
-        btn = findViewById(R.id.btnTermina);
+        btn = findViewById(R.id.btnInvita);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

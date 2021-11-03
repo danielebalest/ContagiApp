@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginTop="10dp"
-        android:backgroundTint="#D81B31"
+        android:backgroundTint="@color/red"
         android:enabled="true"
         android:text="@string/login"
         android:textColor="#FFFFFF"
