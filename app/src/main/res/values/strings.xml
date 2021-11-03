@@ -251,7 +251,13 @@
     <string name="phone2dots">Cellulare: </string>
 
 
+    //ProfiloGruppoFragment
+    <string name="are_you_sure_you_want_to_quit">Sei sicuro di voler abbandonare il gruppo?</string>
+
     //GroupFragment
-    <string name="no_group_msg">"Non hai ancora nessun gruppo. Crea subito uno"</string>
+    <string name="no_group_msg">Non hai ancora nessun gruppo. Crea subito uno</string>
+
+    //FriendFragment
+    <string name="you_dont_have_any_friends_yet">Non hai ancora nessun amico</string>
 
 </resources>

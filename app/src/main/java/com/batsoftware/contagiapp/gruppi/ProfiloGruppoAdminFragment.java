@@ -102,8 +102,8 @@ public class ProfiloGruppoAdminFragment extends Fragment {
             public void onClick(View v) {
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
-                builder1.setMessage("Sicuro di eliminare il gruppo?");
-                builder1.setPositiveButton("Sì", new DialogInterface.OnClickListener() {
+                builder1.setMessage(R.string.are_you_sure_you_want_to_quit);
+                builder1.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -123,7 +123,7 @@ public class ProfiloGruppoAdminFragment extends Fragment {
                     }
                 });
 
-                builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                builder1.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -208,7 +208,7 @@ public class ProfiloGruppoAdminFragment extends Fragment {
 
                     tvNomeGruppo.setText(nome);
                     tvDescGruppo.setText(descrizione);
-                    tvNroPartecipanti.setText("Partecipanti" + "(" + String.valueOf(nroPartecipanti) + ")");
+                    tvNroPartecipanti.setText(getText(R.string.participants) + "(" + String.valueOf(nroPartecipanti) + ")");
 
                     rvPartecipanti = view.findViewById(R.id.rvPartecipantiProfiloGruppoAdmin);
                     Log.d("mailPartecipanti.size()", String.valueOf(mailPartecipanti.size()));

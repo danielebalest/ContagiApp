@@ -128,13 +128,13 @@ public class FriendsFragment extends Fragment {
                         DocumentSnapshot document = (DocumentSnapshot) task.getResult();
                         listaMail = (ArrayList<String>) document.get("amici");
                         if(listaMail.isEmpty()){
-                            tvListaMail.setText("Non hai ancora nessun amico");
+                            tvListaMail.setText(getContext().getText(R.string.you_dont_have_any_friends_yet));
                         }
                         Log.d("lista", String.valueOf(listaMail));
 
                         if(listaMail.isEmpty()) {
                             TextView am = view.findViewById(R.id.tvTuoiAmici);
-                            am.setText("Non hai ancora nessun amico");
+                            am.setText(getContext().getText(R.string.you_dont_have_any_friends_yet));
                         } else getFriends(listaMail);
                     }
                 });
