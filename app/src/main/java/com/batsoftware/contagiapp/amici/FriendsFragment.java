@@ -27,6 +27,7 @@ import com.batsoftware.contagiapp.UserAdapter;
 import com.batsoftware.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -162,65 +163,55 @@ public class FriendsFragment extends Fragment {
         final ArrayList<Utente> amici = new ArrayList<Utente>();
 
 
-        //for(int i=0; i < listaAmici.size(); i++){
-            db.collection("Utenti")
-                    .whereIn("mail",listaAmici)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Utente user = new Utente();
-                                    user.setNome(document.getString("nome"));
-                                    user.setCognome(document.getString("cognome"));
-                                    user.setMail(document.getString("mail"));
-                                    user.setDataNascita(document.getString("dataNascita"));
-                                    Log.d("dataNascita", String.valueOf(user.getDataNascita()));
-                                    Log.d("Nome utente", String.valueOf(user.getNome()));
+        db.collection("Utenti")
+                .whereIn("mail",listaAmici)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Utente user = documentSnapshot.toObject(Utente.class);
+
+                            String id = documentSnapshot.getId();
+                            idList.add(id);
+                            amici.add(user);
+                        }
 
 
-                                    amici.add(user);
-                                    Log.d("amiciSize", String.valueOf(amici.size()));
+                        UserAdapter adapter = new UserAdapter(amici);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+                        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new RecyclerTouchListener.ClickListener() {
+                            @Override
+                            public void onClick(View view, int position) {
+                                String idUtenteSelezionato = idList.get(position);
+                                Log.d("position", String.valueOf(position));
+                                //Log.d("idList: ", idUtenteSelezionato);
 
-                                    String id = user.getMailPath();
-                                    idList.add(id);
-                                }
-                                UserAdapter adapter = new UserAdapter(amici);
-                                recyclerView.setAdapter(adapter);
-                                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-                                recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new RecyclerTouchListener.ClickListener() {
-                                    @Override
-                                    public void onClick(View view, int position) {
-                                        String idUtenteSelezionato = idList.get(position);
-                                        Log.i("idList: ", idUtenteSelezionato);
-
-                                        Intent profiloIntent = new Intent(getActivity(), ProfiloUtentiActivity.class);
-                                        profiloIntent.putExtra("id", idUtenteSelezionato);
-                                        profiloIntent.putExtra( "amico", "si");
-                                        profiloIntent.putExtra("mailLoggato", mailUtenteLoggato);
-                                        startActivity(profiloIntent);
-                                    }
-
-                                    @Override
-                                    public void onLongClick(View view, int position) {
-
-                                    }
-                                }));
-
+                                Intent profiloIntent = new Intent(getActivity(), ProfiloUtentiActivity.class);
+                                profiloIntent.putExtra("id", idUtenteSelezionato);
+                                profiloIntent.putExtra("amico", "si");
+                                profiloIntent.putExtra("mailLoggato", mailUtenteLoggato);
+                                startActivity(profiloIntent);
                             }
 
-                        }
+                            @Override
+                            public void onLongClick(View view, int position) {
+
+                            }
+                        }));
+
+                    }
 
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("error", "errore");
+                Log.d("Error", "Error");
             }
-            });
+        });
     }
+
 
     private String getMailUtenteLoggato(){
         Gson gson = new Gson();
@@ -289,3 +280,4 @@ public class FriendsFragment extends Fragment {
         }
     }
 }
+
