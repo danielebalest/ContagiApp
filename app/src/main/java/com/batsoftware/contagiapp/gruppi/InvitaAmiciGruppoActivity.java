@@ -137,11 +137,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Utente user = new Utente();
-                            user.setNome(documentSnapshot.getString("nome"));
-                            user.setCognome(documentSnapshot.getString("cognome"));
-                            user.setMail(documentSnapshot.getString("mail"));
-                            user.setDataNascita(documentSnapshot.getString("dataNascita"));
+                            Utente user = documentSnapshot.toObject(Utente.class);
                             Log.d("Nome utente", String.valueOf(user.getNome()));
                             Log.d("dataNascita", String.valueOf(user.getDataNascita()));
 
