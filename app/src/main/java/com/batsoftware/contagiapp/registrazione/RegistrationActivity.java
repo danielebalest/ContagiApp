@@ -257,48 +257,48 @@ public class RegistrationActivity extends AppCompatActivity {
                 switch (controlli_TextInput(nome, nomeLayout, cognome, cognomeLayout, mail, mailLayout, data, dataLayout, phone, phoneLayout, psw1, psw1Layout, psw2, psw2Layout, layoutRegion, layoutProvince, layoutCity)) {
 
                     case 1:
-                        nomeLayout.setError("Inserisci nome");
-                        Toast.makeText(RegistrationActivity.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
+                        nomeLayout.setError(getText(R.string.enter_name));
+                        Toast.makeText(RegistrationActivity.this, getText(R.string.enter_name), Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
-                        cognomeLayout.setError("Inserisci cognome");
-                        Toast.makeText(RegistrationActivity.this, "Inserisci cognome", Toast.LENGTH_SHORT).show();
+                        cognomeLayout.setError(getText(R.string.enter_surname));
+                        Toast.makeText(RegistrationActivity.this, getText(R.string.enter_surname), Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        dataLayout.setError("Inserisci data di nascita");
-                        Toast.makeText(RegistrationActivity.this, "Inserisci data di nascita", Toast.LENGTH_SHORT).show();
+                        dataLayout.setError(getText(R.string.enter_date_of_birth));
+                        Toast.makeText(RegistrationActivity.this, getText(R.string.enter_date_of_birth), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 4:
-                        layoutRegion.setError("Inserisci regione");
-                        Toast.makeText(RegistrationActivity.this, "Inserisci regione", Toast.LENGTH_SHORT).show();
+                        layoutRegion.setError(getText(R.string.enter_region));
+                        Toast.makeText(RegistrationActivity.this, getText(R.string.enter_region), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 5:
-                        layoutProvince.setError("Inserisci provincia");
-                        Toast.makeText(RegistrationActivity.this, "Inserisci provincia", Toast.LENGTH_SHORT).show();
+                        layoutProvince.setError(getText(R.string.enter_province));
+                        Toast.makeText(RegistrationActivity.this, getText(R.string.enter_province), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 6:
-                        layoutCity.setError("Inserisci citta");
-                        Toast.makeText(RegistrationActivity.this, "Inserisci citta", Toast.LENGTH_SHORT).show();
+                        layoutCity.setError(getText(R.string.enter_city));
+                        Toast.makeText(RegistrationActivity.this, getText(R.string.enter_city), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 7:
-                        mailLayout.setError("Inserisci mail");
-                        Toast.makeText(RegistrationActivity.this, "Inserisci mail", Toast.LENGTH_SHORT).show();
+                        mailLayout.setError(getText(R.string.enter_mail));
+                        Toast.makeText(RegistrationActivity.this, getText(R.string.enter_mail), Toast.LENGTH_SHORT).show();
                         break;
                     case 8:
-                        phoneLayout.setError("Inserisci cellulare");
-                        Toast.makeText(RegistrationActivity.this, "Inserisci cellulare", Toast.LENGTH_SHORT).show();
+                        phoneLayout.setError(getText(R.string.enter_phone_number));
+                        Toast.makeText(RegistrationActivity.this, getText(R.string.enter_phone_number), Toast.LENGTH_SHORT).show();
                         break;
                     case 9:
-                        psw1Layout.setError("Inserisci password");
-                        Toast.makeText(RegistrationActivity.this, "Inserisci Password", Toast.LENGTH_SHORT).show();
+                        psw1Layout.setError(getText(R.string.enter_password));
+                        Toast.makeText(RegistrationActivity.this, getText(R.string.enter_password), Toast.LENGTH_SHORT).show();
                         break;
                     case 10:
-                        psw2Layout.setError("Inserisci password");
-                        Toast.makeText(RegistrationActivity.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
+                        psw2Layout.setError(getText(R.string.enter_password));
+                        Toast.makeText(RegistrationActivity.this, getText(R.string.enter_password), Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         addToDb();
@@ -406,12 +406,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
                             Log.d("downloadUrl", url);
                             //pd.dismiss();
-                            Toast.makeText(RegistrationActivity.this, "immagine caricata", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrationActivity.this, getText(R.string.image_uploaded), Toast.LENGTH_SHORT).show();
                         }
                     }).addOnCanceledListener(new OnCanceledListener() {
                         @Override
                         public void onCanceled() {
-                            Toast.makeText(RegistrationActivity.this, "immagine non caricata", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrationActivity.this, getText(R.string.image_not_uploaded), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -715,8 +715,8 @@ public class RegistrationActivity extends AppCompatActivity {
                         openMainActivity();
                         finish();
                     } else {
-                        Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
-                        mailLayout.setError("Mail già esistente");
+                        Toast.makeText(this, getText(R.string.already_existing_email), Toast.LENGTH_SHORT).show();
+                        mailLayout.setError(getText(R.string.already_existing_email));
                     }
                 }
             }

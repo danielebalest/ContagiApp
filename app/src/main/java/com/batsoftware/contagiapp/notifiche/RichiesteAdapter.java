@@ -65,11 +65,12 @@ public class RichiesteAdapter extends RecyclerView.Adapter<RichiesteAdapter.View
         final MaterialButton btnAccetta = holder.btnAccetta;
         final MaterialButton btnRifiuta = holder.btnRifiuta;
         final String idUtente = user.getMailPath();
+        Context context= holder.itemView.getContext();
 
 
         textViewNome.setText(user.getNome());
         textViewCognome.setText(user.getCognome());
-        textViewAge.setText(user.getAge() + " "  + "anni");
+        textViewAge.setText(user.getAge() + " "  + context.getText(R.string.years));
         Log.d("user.getNome()", String.valueOf(user.getNome()));
 
 
@@ -97,7 +98,7 @@ public class RichiesteAdapter extends RecyclerView.Adapter<RichiesteAdapter.View
 
                 user.addAmico(mailUtenteLoggato);
 
-                btnAccetta.setText("Accettato");
+                btnAccetta.setText(context.getText(R.string.accepted));
                 btnAccetta.setClickable(false);
 
                 //aggiunge alla lista amici dell'utente che ha inviato la richiesta, la mail dell'utente loggato

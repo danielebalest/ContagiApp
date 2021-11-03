@@ -82,21 +82,21 @@ public class LoginActivity extends AppCompatActivity {
     private int controlloTextFieldVuoto(TextInputEditText mailEditText, TextInputEditText passwordEditText){
 
         if(isEmpty(mailEditText) == true && isEmpty(passwordEditText) == false ){
-            mailTextLayout.setError("Inserisci mail");
+            mailTextLayout.setError(getText(R.string.enter_mail));
             passwordTextLayout.setError(null);
             return 1;
         }
 
         if(isEmpty(passwordEditText) == true && isEmpty(mailEditText) == false){
-            passwordTextLayout.setError("Inserisci password");
+            passwordTextLayout.setError(getText(R.string.enter_password));
             mailTextLayout.setError(null);
             return 2;
         }else
             passwordTextLayout.setError(null);
 
         if(isEmpty(mailEditText) && isEmpty(passwordEditText) == true){
-            mailTextLayout.setError("Inserisci mail");
-            passwordTextLayout.setError("Inserisci password");
+            mailTextLayout.setError(getText(R.string.enter_mail));
+            passwordTextLayout.setError(getText(R.string.enter_password));
             return 3;
         }
         return 0;
@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot querySnapshots) {
                 if(querySnapshots.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Mail o password errati", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getText(R.string.incorrect_mail_or_password), Toast.LENGTH_SHORT).show();
                 } else {
                     //checkbox ricordami
                     if(ricord) {

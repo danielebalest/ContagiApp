@@ -309,4 +309,22 @@
     <string name="accepted">Accettato</string>
     <string name="declined">Rifiutato</string>
 
+
+    <string name="enter_mail">Inserisci email</string>
+    <string name="enter_password">Inserisci password</string>
+    <string name="incorrect_mail_or_password">Email o password errati</string>
+
+
+    //RegistrationActivity
+    <string name="enter_name">Inserisci nome</string>
+    <string name="enter_surname">Inserisci cognome</string>
+    <string name="enter_date_of_birth">Inserisci data di nascita</string>
+    <string name="enter_region">Inserisci regione</string>
+    <string name="enter_province">Inserisci provincia</string>
+    <string name="enter_city">Inserisci città</string>
+    <string name="enter_phone_number">Inserisci cellulare</string>
+
+
+    <string name="state_updated">Stato aggiornato</string>
+    <string name="already_existing_email">Mail già esistente</string>
 </resources>

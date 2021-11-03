@@ -292,4 +292,24 @@
     <string name="declined">Declined</string>
 
 
+    //LoginActivity
+    <string name="enter_mail">Enter email</string>
+    <string name="enter_password">Enter password</string>
+    <string name="incorrect_mail_or_password">Incorrect mail or password</string>
+
+    <string name="state_updated">State updated</string>
+
+    //RegistrationActivity
+    <string name="enter_name">Enter name</string>
+    <string name="enter_surname">Enter surname</string>
+    <string name="enter_date_of_birth">Enter date of birth</string>
+    <string name="enter_region">Enter region</string>
+    <string name="enter_province">Enter province</string>
+    <string name="enter_city">Enter city</string>
+    <string name="enter_phone_number">Enter phone number</string>
+
+
+    <string name="already_existing_email">Already existing email</string>
+
+
 </resources>
