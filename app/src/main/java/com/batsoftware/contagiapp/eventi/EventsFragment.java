@@ -450,7 +450,7 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
 
                 if(isChecked) {
                     if (switchcreato) {
-                        Toast.makeText(getContext(), "Impossibile effettuare questa operazione", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), getContext().getText(R.string.impossible_operation), Toast.LENGTH_LONG).show();
                         buttonView.setChecked(false);
                         switchiscritto = !switchiscritto;
                     } else caricaEventiIscritto();

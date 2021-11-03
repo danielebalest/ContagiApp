@@ -77,8 +77,8 @@ public class ProfiloPartecipanteFragment extends Fragment {
             public void onClick(View v) {
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
-                builder1.setMessage("Sicuro di rimuovere la prenotazione?");
-                builder1.setPositiveButton("Sì", new DialogInterface.OnClickListener() {
+                builder1.setMessage(getText(R.string.are_you_sure_you_want_to_remove_the_reservation));
+                builder1.setPositiveButton(getText(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -99,7 +99,7 @@ public class ProfiloPartecipanteFragment extends Fragment {
                     }
                 });
 
-                builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                builder1.setNegativeButton(getText(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();

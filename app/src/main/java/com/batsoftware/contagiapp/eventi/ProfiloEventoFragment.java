@@ -262,17 +262,17 @@ public class ProfiloEventoFragment extends Fragment {
                     TextView numParteci = view.findViewById(R.id.num_partecipanti);
 
 
-                    tvNomeEvento.setText("Nome evento: "+nome);
+                    tvNomeEvento.setText(getText(R.string.event_name)+": "+nome);
                     tvDescrEvento.setText(descrizione);
                     tvDataEvento.setText(data);
                     tvOrarioEvento.setText(orario);
-                    tvRegioneEvento.setText("Regione: " + regione);
-                    tvProvinciaEvento.setText("Provincia: " + provincia);
-                    tvCittaEvento.setText("Città: " +citta);
-                    tvIndirizzoEvento.setText("Indirizzo: "+indirizzo);
-                    numMaxPartecipanti.setText("Numero massimo di partecipanti:   "+numMax);
-                    numDispono.setText("Numero posti disponibili:   "+numDisponibili);
-                    numParteci.setText("Numero di iscritti all'evento:   "+numPartecipanti);
+                    tvRegioneEvento.setText(getText(R.string.region)+": " + regione);
+                    tvProvinciaEvento.setText(getText(R.string.province)+": "  + provincia);
+                    tvCittaEvento.setText(getText(R.string.city)+": " +citta);
+                    tvIndirizzoEvento.setText(getText(R.string.event_address)+": " +indirizzo);
+                    numMaxPartecipanti.setText(getText(R.string.maximum_number_of_participants)+": " +numMax);
+                    numDispono.setText(getText(R.string.available_places)+": " +numDisponibili);
+                    numParteci.setText(getText(R.string.number_of_participants)+": " +numPartecipanti);
 
                 } else {
                     Toast.makeText(getContext(), "Documents does not exist", Toast.LENGTH_SHORT).show();

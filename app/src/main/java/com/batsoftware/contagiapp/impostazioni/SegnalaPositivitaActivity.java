@@ -156,7 +156,7 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
                         i.putExtra("dataRosso", editTextData.getText().toString());
                         startActivity(i);
                     }else
-                        Toasty.warning(SegnalaPositivitaActivity.this, "Inserisci data e/o certificato", Toast.LENGTH_SHORT).show();
+                        Toasty.warning(SegnalaPositivitaActivity.this, getText(R.string.enter_date_and_certificate), Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -228,7 +228,7 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
 
     private void uploadImage(String documentId){
         final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Caricamento");
+        pd.setMessage(getText(R.string.loading));
         pd.show();
 
 
@@ -245,12 +245,12 @@ public class SegnalaPositivitaActivity extends AppCompatActivity {
 
                             Log.d("downloadUrl", url);
                             pd.dismiss();
-                            Toasty.success(SegnalaPositivitaActivity.this, "Certificato caricato", Toast.LENGTH_SHORT).show();
+                            Toasty.success(SegnalaPositivitaActivity.this, getText(R.string.image_uploaded), Toast.LENGTH_SHORT).show();
                         }
                     }).addOnCanceledListener(new OnCanceledListener() {
                         @Override
                         public void onCanceled() {
-                            Toasty.error(SegnalaPositivitaActivity.this, "Certificato non caricato", Toast.LENGTH_SHORT).show();
+                            Toasty.error(SegnalaPositivitaActivity.this, getText(R.string.image_not_uploaded), Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }).addOnCompleteListener(new OnCompleteListener<Uri>() {

@@ -95,7 +95,7 @@ public class InvitiAdapter extends RecyclerView.Adapter<InvitiAdapter.ViewHolder
 
                 gruppo.addPartecipante(mailUtenteLoggato);
 
-                btnAccettaInvito.setText("Accettato");
+                btnAccettaInvito.setText(R.string.accepted);
                 btnAccettaInvito.setClickable(false);
                 btnRifiutaInvito.setVisibility(View.GONE);
 
@@ -118,7 +118,7 @@ public class InvitiAdapter extends RecyclerView.Adapter<InvitiAdapter.ViewHolder
         btnRifiutaInvito.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnRifiutaInvito.setText("Rifiutato");
+                btnRifiutaInvito.setText(R.string.declined);
                 btnRifiutaInvito.setClickable(false);
                 btnAccettaInvito.setVisibility(View.GONE);
 

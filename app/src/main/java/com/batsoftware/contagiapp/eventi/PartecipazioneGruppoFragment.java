@@ -147,7 +147,7 @@ public class PartecipazioneGruppoFragment extends Fragment {
 
 
                         if(listaGruppiCreati.isEmpty()){
-                            Toast.makeText(getContext(),"Non hai ancora nessun gruppo. Crea subito uno",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),getText(R.string.no_group_msg),Toast.LENGTH_LONG).show();
                         }
 
                         if(listaIdGruppiCreati.size()!=0) {
@@ -164,7 +164,7 @@ public class PartecipazioneGruppoFragment extends Fragment {
 
                                     if(!listaGruppi.contains(idGruppoSelezionato)){
                                         listaGruppi.add(idGruppoSelezionato);
-                                        Toasty.success(getActivity(), "Prenotazione effettuata", Toast.LENGTH_SHORT).show();
+                                        Toasty.success(getActivity(), getText(R.string.registration_completed), Toast.LENGTH_SHORT).show();
 
                                         db.collection("Gruppo")
                                                 .document(idGruppoSelezionato)
@@ -206,7 +206,7 @@ public class PartecipazioneGruppoFragment extends Fragment {
                                         db.collection("Eventi")
                                                 .document(idEvento)
                                                 .update("gruppiPartecipanti", listaGruppi);
-                                    }else Toasty.warning(getActivity(), "Questo tuo gruppo è già prenotato all'evento", Toast.LENGTH_SHORT).show();
+                                    }else Toasty.warning(getActivity(), getText(R.string.group_already_registered), Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override
@@ -217,7 +217,7 @@ public class PartecipazioneGruppoFragment extends Fragment {
                             }));
                         } else {
                             tornareIndietro(2);
-                            Toast.makeText(getContext().getApplicationContext(), "I gruppi da te creati eccedono il numero massimo di partecipanti dell'evento", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext().getApplicationContext(), getText(R.string.groups_you_created_exceed_maximum), Toast.LENGTH_LONG).show();
                         }
 
 

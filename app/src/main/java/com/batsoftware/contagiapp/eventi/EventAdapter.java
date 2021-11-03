@@ -74,7 +74,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         textViewPostiDisponibili.setText(evento.getNumeroMaxPartecipanti() - evento.getPartecipanti().size() + mContext.getString(R.string.available));
         textViewDataEvento.setText(evento.getData());
         textViewOrarioEvento.setText(evento.getOrario());
-        textViewCittaEvento.setText("Città: "+evento.getCitta());
+        textViewCittaEvento.setText(mContext.getString(R.string.city)+ ": "+evento.getCitta());
 
 
         //recupero l'immagine dallo storage
