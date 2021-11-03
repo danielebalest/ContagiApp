@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,7 +37,6 @@ public class ProfiloActivity extends AppCompatActivity {
     private Button modifica;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Utente utente;
-    //private ImageView imgCertificato;
     private ImageView imgViewProfiloUtente;
     String imageFileName;
     String currentPhotoPath;
@@ -47,7 +47,11 @@ public class ProfiloActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilo);
-        //imgCertificato= findViewById(R.id.immaginecertificato);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getSupportActionBar().hide();
+        }
+
         imgViewProfiloUtente = findViewById(R.id.imgProfilo);
         listViewProfilo = (ListView) findViewById(R.id.list_profilo);
         final ArrayList<String> arrayListProfilo = new ArrayList<>();

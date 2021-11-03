@@ -177,6 +177,7 @@
     <string name="event_time">Orario evento</string>
     <string name="event_description">Descrizione evento</string>
     <string name="event_address">Indirizzo evento</string>
+    <string name="modifica_evento">Modifica evento</string>
 
     //fragment_profilo_evento
     <string name="number_of_participants">Numero di partecipanti all\'evento </string>
@@ -289,6 +290,8 @@
     <string name="loading">Caricamento</string>
     <string name="image_uploaded">Immagine caricata</string>
     <string name="image_not_uploaded">Immagine not caricata</string>
+    <string name="inserisci_regione">Inserisci regione</string>
+    <string name="inserisci_provincia">Inserisci provincia</string>
 
     //PartecipazioneGruppoFragment
     <string name="registration_completed">Iscrizione effettuata</string>

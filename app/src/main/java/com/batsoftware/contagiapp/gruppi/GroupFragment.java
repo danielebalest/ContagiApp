@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -79,6 +80,9 @@ public class GroupFragment extends Fragment {
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_group, container, false);
+
+
+
         mailUtenteLoggato = getMailUtenteLoggato();
         tvTuoiGruppi = view.findViewById(R.id.tvTuoiGruppi);
         tvGruppiPartecipante = view.findViewById(R.id.tvGruppiPartecipante);

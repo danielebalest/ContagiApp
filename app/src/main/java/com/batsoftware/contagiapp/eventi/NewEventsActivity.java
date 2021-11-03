@@ -132,7 +132,8 @@ public class NewEventsActivity extends AppCompatActivity {
         if(cond) {
 
             idEvento = bundle.getString("idEvento");
-            final ImageView img = findViewById(R.id.imgProfiloEvento);
+            TextView modifica = findViewById(R.id.textView2);
+            modifica.setText(getText(R.string.modifica_evento));
 
             db.collection("Eventi")
                     .document(idEvento)
@@ -176,10 +177,8 @@ public class NewEventsActivity extends AppCompatActivity {
                     });
         }
 
-//TODO controllare se la modifica evento funziona e se la chiamata di
-// questa pagina funziona senza problemi sia da "profiloEventoAdminFragment"
-// che da "EventsFragment" e perchè torna indietro in ProfiloEventoFragment anzichè EventsFragment
-// aggiustare i controlli per data e orario e capire perchè quando apro il calendario anzichè 12 mi esce 1
+//TODO aggiustare i controlli per data e orario e capire perchè quando apro il calendario anzichè 12 mi esce 1
+// controllare le modifiche fatte ieri (controlli su citta, regione e provincia)
 
         ArrayAdapter<String> adapterRegione = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, Regions.all_regions);
@@ -398,6 +397,11 @@ public class NewEventsActivity extends AppCompatActivity {
 
 
     private void addEventToDb(){
+        if(cittaSelezionata == null && !autoCompleteCity.getText().toString().isEmpty()) {
+                cittaSelezionata = autoCompleteCity.getText().toString();
+                regioneSelezionata = autoCompleteRegion.getText().toString();
+                provinciaSelezionata = autoCompleteProvincia.getText().toString();
+        }
 
         if(controlloEditText(nome.getText().toString(), numeroMaxP.getText().toString(), descrizione.getText().toString(), cittaSelezionata, indirizzo.getText().toString())){
             String mail = getMailUtenteLoggato();
@@ -436,33 +440,15 @@ public class NewEventsActivity extends AppCompatActivity {
 
                         if(cond) {
                             db.collection("Eventi").document(idEvento).delete();
-                            //db.collection("Eventi").document(idEvento).update(evento);
+                            //TODO se io non carico una nuova immagine per l'evento, ma dato che modificando l'evento l'id cambia,
+                            // bisogna ricaricare l'immagine dell'evento (quella vecchia) con il nuovo id
 
                             Toast.makeText(NewEventsActivity.this, "Evento modificato", Toast.LENGTH_SHORT).show();
-
-                            /*ProfiloEventoAdminFragment eventoAdmin = new ProfiloEventoAdminFragment();
-
-                            Bundle bun = new Bundle();
-                            bun.putString("idEvento", documentId);
-
-                            eventoAdmin.setArguments(bun);
-                            FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                            fr.replace(R.id.new_event,eventoAdmin);
-                            fr.addToBackStack(null); //serve per tornare al fragment precedente
-                            fr.commit();*/
-
-//TODO il problema è quando si va da questa activity a profiloEventoAdminFragment
                             finish();
                         } else {
                             Toast.makeText(NewEventsActivity.this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
                             finish();
                         }
-
-
-                        /*parentIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        parentIntent.putExtra("idEvento", documentId);
-                        startActivity(parentIntent);
-                        finish();*/
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -470,27 +456,6 @@ public class NewEventsActivity extends AppCompatActivity {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
-                        /*.addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                Log.d(TAG, "DocumentSnapshot written with ID: " + task.getResult().getId());
-                                documentId = task.getResult().getId();
-                                evento.setIdEvento(documentId);
-                                db.collection("Eventi").document(documentId).update("idEvento", documentId);
-                                uploadImage();
-
-                                if(cond) {
-                                    db.collection("Eventi").document(idEvento).delete();
-                                    //db.collection("Eventi").document(idEvento).update(evento);
-                                }
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
-                            }
-                        });*/
             }else {
                 Toast.makeText(NewEventsActivity.this, "Dati inseriti non corretti", Toast.LENGTH_LONG).show();
             }
@@ -589,8 +554,10 @@ public class NewEventsActivity extends AppCompatActivity {
         TextInputLayout textInputLayoutDescrEvento = findViewById(R.id.textInputDescrEvento);
         TextInputLayout textInputLayoutCitta = findViewById(R.id.textInputCittaLayoutEvento);
         TextInputLayout textInputLayoutIndirizzo = findViewById(R.id.textInputIndirizzo);
+        TextInputLayout textInputLayoutRegione = findViewById(R.id.textInputRegioneEventoLayout);
+        TextInputLayout textInputLayoutProvincia = findViewById(R.id.textInputProvinciaEventoLayout);
 
-        if ((!nomeEvento.isEmpty()) && (!numMaxPartecipanti.isEmpty()) && (!descrEvento.isEmpty()) && (!citta.isEmpty()) && (!indirizzo.isEmpty())) { //se sono tutti validi
+        if ((!nomeEvento.isEmpty()) && (!numMaxPartecipanti.isEmpty()) && (!descrEvento.isEmpty()) && (citta != null) && (!indirizzo.isEmpty())) { //se sono tutti validi
             textInputLayoutNome.setErrorEnabled(false);
             textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);
             textInputLayoutDescrEvento.setErrorEnabled(false);
@@ -599,7 +566,7 @@ public class NewEventsActivity extends AppCompatActivity {
             isValid = true;
 
         } else {
-            if (nomeEvento.isEmpty() && numMaxPartecipanti.isEmpty() && descrEvento.isEmpty() && citta.isEmpty() && indirizzo.isEmpty()) { //se sono tutti vuoti
+            if (nomeEvento.isEmpty() && numMaxPartecipanti.isEmpty() && descrEvento.isEmpty() && citta == null && indirizzo.isEmpty()) { //se sono tutti vuoti
                 Toasty.warning(NewEventsActivity.this, getText(R.string.fill_in_all_fields), Toast.LENGTH_SHORT).show();
 
                 textInputLayoutNome.setError(getText(R.string.enter_event_name));
@@ -618,8 +585,10 @@ public class NewEventsActivity extends AppCompatActivity {
                     textInputLayoutCitta.setErrorEnabled(false);
                 }
 
-                if (citta.isEmpty()) {
+                if (citta == null) {
                     textInputLayoutCitta.setError(getText(R.string.enter_event_city));
+                    textInputLayoutRegione.setError(getText(R.string.inserisci_regione));
+                    textInputLayoutProvincia.setError(getText(R.string.inserisci_provincia));
                     textInputLayoutNome.setErrorEnabled(false);
                     textInputLayoutNumMaxPartecipanti.setErrorEnabled(false);
                     textInputLayoutDescrEvento.setErrorEnabled(false);

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="20dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSegnalaPositività"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="@string/SegnalaPositività"
+        android:textAlignment="viewStart"
+        app:icon="@drawable/ic_baseline_keyboard_arrow_right_24"
+        app:iconGravity="end"
+        style = "@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:cornerRadius="20dp"
+        ></com.google.android.material.button.MaterialButton>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSegnalaNegatività"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="@string/SegnalaNegatività"
+        android:textAlignment="viewStart"
+        app:icon="@drawable/ic_baseline_keyboard_arrow_right_24"
+        app:iconGravity="end"
+        style = "@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:cornerRadius="20dp"
+        ></com.google.android.material.button.MaterialButton>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ></com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNotify"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="@string/Notifiche"
+        android:textAlignment="viewStart"
+        android:layout_marginTop="20dp"
+        app:icon="@drawable/ic_baseline_keyboard_arrow_right_24"
+        app:iconGravity="end"
+        app:cornerRadius="20dp"
+        style = "@style/Widget.MaterialComponents.Button.OutlinedButton"
+        ></com.google.android.material.button.MaterialButton>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPrivacy"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="@string/InformativaPrivacy"
+        android:textAlignment="viewStart"
+        android:layout_marginTop="20dp"
+        app:icon="@drawable/ic_baseline_keyboard_arrow_right_24"
+        app:iconGravity="end"
+        app:cornerRadius="20dp"
+        style = "@style/Widget.MaterialComponents.Button.OutlinedButton"
+        ></com.google.android.material.button.MaterialButton>
+
+
+</LinearLayout>

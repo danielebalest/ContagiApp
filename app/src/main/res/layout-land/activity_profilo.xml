@@ -75,6 +75,27 @@
                     app:backgroundTint="@color/red"/>
 
 
+
+                <!--Button
+                    android:id="@+id/certificato"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="10dp"
+                    android:text="inserisci certificato"
+                    android:textSize="16dp"
+                    app:cornerRadius="20dp"
+                    android:padding="10dp"
+                    app:icon="@drawable/ic_baseline_add_24"></Button>
+
+                <ImageView
+                    android:id="@+id/immaginecertificato"
+                    android:layout_width="120dp"
+                    android:layout_height="160dp"
+                    android:layout_gravity="center"/> -->
+
+
             </LinearLayout>
 
         </RelativeLayout>
