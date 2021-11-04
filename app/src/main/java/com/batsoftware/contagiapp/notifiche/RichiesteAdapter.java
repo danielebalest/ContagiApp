@@ -64,7 +64,8 @@ public class RichiesteAdapter extends RecyclerView.Adapter<RichiesteAdapter.View
         final ImageView imageViewUser = holder.imgUtente;
         final MaterialButton btnAccetta = holder.btnAccetta;
         final MaterialButton btnRifiuta = holder.btnRifiuta;
-        final String idUtente = user.getMailPath();
+        final String idUtente = user.getMail();
+
         Context context= holder.itemView.getContext();
 
 
@@ -72,7 +73,7 @@ public class RichiesteAdapter extends RecyclerView.Adapter<RichiesteAdapter.View
         textViewCognome.setText(user.getCognome());
         textViewAge.setText(user.getAge() + " "  + context.getText(R.string.years));
         Log.d("user.getNome()", String.valueOf(user.getNome()));
-
+        Log.d("user.getMailPath", String.valueOf(user.getMail()));
 
         //recupero l'immagine dallo storage
         Log.d("imgUtenti/idUtente","imgUtenti/"+idUtente);
