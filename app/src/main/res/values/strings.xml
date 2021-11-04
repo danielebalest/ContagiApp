@@ -6,7 +6,6 @@
     <!--Campi di registrazione-->
     <string name="birth">Data di nascita</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="login">Accedi</string>
     <string name="signUp">Registrati</string>
     <string name="prompt_email">Email</string>
@@ -76,7 +75,6 @@
         <item>Bari</item>
         <item>Molfetta</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
 
 
     <string name="rimuovi_partecipante">Rimuovi partecipante</string>
