@@ -5,11 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.util.Log;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -21,7 +17,6 @@ import com.batsoftware.contagiapp.eventi.Evento;
 import com.batsoftware.contagiapp.gruppi.Gruppo;
 import com.batsoftware.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,7 +25,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,7 +36,6 @@ public class Notifiche {
     private static final String TAG = "Notifiche.java";
     private MainActivity mainActivity;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private Bitmap bitMap;
     private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private static final String GROUP_KEY_WORK = "NOTIFY";
 
@@ -77,16 +70,10 @@ public class Notifiche {
                                         public void onSuccess(@NonNull DocumentSnapshot documentSnapshot1) {
                                             Utente ut = documentSnapshot1.toObject(Utente.class);
 
-                                            //TODO non riesco a caricare l'immagine dell'utente
-                                            //caricaImgDaStorage("imgUtenti", ut.getMailPath());
                                             Notification newMessageNotification1 =
                                                     new NotificationCompat.Builder(mainActivity, "CHANNEL_ID")
                                                             .setSmallIcon(R.drawable.ic_friends)
                                                             .setSubText("Richiesta di amicizia")
-                                                            .setLargeIcon(bitMap)
-                                                            /*.setStyle(new NotificationCompat.BigPictureStyle()
-                                                                    .bigPicture(bitMap)
-                                                                    .bigLargeIcon(null))*/
                                                             .setContentText("Città: "+ut.getCitta()+"\nData di nascita: "+ut.getDataNascita())
                                                             .setContentTitle(ut.getCognome()+" "+ut.getNome())
                                                             .setGroup(GROUP_KEY_WORK)
@@ -138,10 +125,6 @@ public class Notifiche {
                                             new NotificationCompat.Builder(mainActivity, "CHANNEL_ID")
                                                     .setSmallIcon(R.drawable.ic_group_black_24dp)
                                                     .setSubText("Unisciti al gruppo")
-                                                    .setLargeIcon(bitMap)
-                                                    /*.setStyle(new NotificationCompat.BigPictureStyle()
-                                                            .bigPicture(bitMap)
-                                                            .bigLargeIcon(null))*/
                                                     .setContentTitle("Amministratore gruppo: "+admin.getCognome()+" "+admin.getNome())
                                                     .setContentText("Nome gruppo: "+grup.getNomeGruppo()+" Partecipanti: "+grup.getNroPartecipanti())
                                                     .setGroup(GROUP_KEY_WORK)
@@ -194,11 +177,7 @@ public class Notifiche {
                                         new NotificationCompat.Builder(mainActivity, "CHANNEL_ID")
                                                 .setSmallIcon(R.drawable.ic_event_black_24dp)
                                                 .setSubText("Ti ricordiamo l'evento "+evento.getNome())
-                                                .setLargeIcon(bitMap)
                                                 .setContentIntent(notifyPendingIntent)
-                                                /*.setStyle(new NotificationCompat.BigPictureStyle()
-                                                        .bigPicture(bitMap)
-                                                        .bigLargeIcon(null))*/
                                                 .setContentText("Città: "+evento.getCitta())
                                                 .setContentTitle("Data: "+evento.getData()+" "+evento.getOrario())
                                                 .setGroup(GROUP_KEY_WORK)
@@ -235,10 +214,6 @@ public class Notifiche {
                                     .setSubText("Stato")
                                     .setContentTitle("Ti ricordo che il tuo stato è "+stato+"\n")
                                     .setContentText("Fai un tampone al più presto")
-                                    .setLargeIcon(bitMap)
-                                    /*.setStyle(new NotificationCompat.BigPictureStyle()
-                                            .bigPicture(bitMap)
-                                            .bigLargeIcon(null))*/
                                     .setGroup(GROUP_KEY_WORK)
                                     .build();
 
@@ -285,25 +260,5 @@ public class Notifiche {
             Log.d("mail", mailUtenteLoggato);
         }
         return mailUtenteLoggato;
-    }
-
-    private void caricaImgDaStorage(String directory, String idImmagine) {
-        storageRef.child(directory + "/" + idImmagine).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                ImageView imageView = mainActivity.findViewById(R.id.imgUser);
-                String sUrl = uri.toString(); //otteniamo il token del'immagine
-                Log.d("sUrl", sUrl);
-                Picasso.get().load(sUrl).into(imageView);
-
-                Drawable d = imageView.getDrawable();
-                bitMap = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("OnFailure Exception", String.valueOf(e));
-            }
-        });
     }
 }

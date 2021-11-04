@@ -73,7 +73,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:hint="@string/event_date"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            android:id="@+id/data_evento">
 
 
             <com.google.android.material.textfield.TextInputEditText

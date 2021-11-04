@@ -177,9 +177,6 @@ public class NewEventsActivity extends AppCompatActivity {
                     });
         }
 
-//TODO aggiustare i controlli per data e orario e capire perchè quando apro il calendario anzichè 12 mi esce 1
-// controllare le modifiche fatte ieri (controlli su citta, regione e provincia)
-
         ArrayAdapter<String> adapterRegione = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, Regions.all_regions);
 
@@ -276,12 +273,6 @@ public class NewEventsActivity extends AppCompatActivity {
 
         editTextIndirizzo = findViewById(R.id.editTextIndirizzo);
 
-
-        /*mapView = findViewById(R.id.map_view);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);*/
-
-
         // collegamento button registrati con la mainActivity
         creaEvento = (Button) findViewById(R.id.buttonCreaEvento);
 
@@ -331,8 +322,8 @@ public class NewEventsActivity extends AppCompatActivity {
                 if(cond) {
                     String data = evento.getData();
                     day = Integer.parseInt(data.substring(0,2));
-                    month = Integer.parseInt(data.substring(3,5));
-                    year = Integer.parseInt(data.substring(6,10)) - 1;
+                    month = Integer.parseInt(data.substring(3,5)) - 1;
+                    year = Integer.parseInt(data.substring(6,10));
                 } else {
                     year = cal.get(Calendar.YEAR);
                     month = cal.get(Calendar.MONTH);
@@ -357,15 +348,19 @@ public class NewEventsActivity extends AppCompatActivity {
                 month++;
                 String date = null;
                 Log.d(TAG, "onDateSet: date: " + dayOfMonth + "/" + month + "/" + year);
-                if(month<=9) {
-                    date = dayOfMonth + "/0" + month + "/" + year;
-                }else
-                    date = dayOfMonth + "/" + month + "/" + year;
+                if(month <= 9) {
+                    if(dayOfMonth <= 9) {
+                        date = "0" + dayOfMonth + "/0" + month + "/" + year;
+                    } else date = dayOfMonth + "/0" + month + "/" + year;
+                } else {
+                    if(dayOfMonth <= 9) {
+                        date = "0" + dayOfMonth + "/" + month + "/" + year;
+                    } else date = dayOfMonth + "/" + month + "/" + year;
+                }
 
                 dataEvento.setText(date);
             }
         };
-        //orario visualizzato come cristo comanda
 
         orarioDellEvento = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -394,7 +389,6 @@ public class NewEventsActivity extends AppCompatActivity {
             }
         };
     }
-
 
     private void addEventToDb(){
         if(cittaSelezionata == null && !autoCompleteCity.getText().toString().isEmpty()) {
@@ -469,22 +463,14 @@ public class NewEventsActivity extends AppCompatActivity {
         boolean validita = false;
 
         try {
-            Date dataEvento = new SimpleDateFormat("dd/MM/yyyy").parse(evento.getData());
+            Date dataEvento = new SimpleDateFormat("dd/MM/yyyy hh:mm").parse(evento.getData()+" "+evento.getOrario());
             Date dataAttuale = new Date(System.currentTimeMillis());
 
-            Calendar cal = Calendar.getInstance();
-            String orario = evento.getOrario();
-            int minapp = Integer.valueOf(orario.substring(3,5));
-            int oraapp = Integer.valueOf(orario.substring(0,2));
-
-            if(dataEvento.compareTo(dataAttuale) >= 0) {
-                if(dataEvento.compareTo(dataAttuale) == 0) {
-                    if(oraapp > (cal.get(Calendar.HOUR_OF_DAY) + 1) &&
-                            minapp <= cal.get(Calendar.MINUTE)) {
-                        validita = true;
-                    } else Toast.makeText(this, "L'evento deve essere almeno tra un'ora da adesso", Toast.LENGTH_LONG).show();
-                } else validita = true;
-            } else Toast.makeText(this, "Data inserita non valida", Toast.LENGTH_LONG).show();
+            //3600000 = 1 ora
+            if(dataEvento.getTime() - dataAttuale.getTime() < 3600000) {
+                TextInputLayout dataa = findViewById(R.id.data_evento);
+                dataa.setError(getString(R.string.tra_1_ora));
+            } else validita = true;
 
         } catch (ParseException e) {
             e.printStackTrace();

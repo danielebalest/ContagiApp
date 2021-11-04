@@ -275,6 +275,7 @@
     <string name="image_not_uploaded">Image not uploaded</string>
     <string name="inserisci_regione">Enter region</string>
     <string name="inserisci_provincia">Enter province</string>
+    <string name="tra_1_ora">Evento deve essere almeno tra 1 ora da adesso</string>
 
     //PartecipazioneGruppoFragment
     <string name="registration_completed">Registration completed</string>
