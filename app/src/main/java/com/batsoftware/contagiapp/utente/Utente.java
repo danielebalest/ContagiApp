@@ -10,7 +10,6 @@ public class Utente {
     private String dataNascita;
     private String genere;
     private String mail;
-    private String nazione;
     private String nome;
     private String password;
     private String province;
@@ -132,14 +131,6 @@ public class Utente {
 
     public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    public String getNazione() {
-        return nazione;
-    }
-
-    public void setNazione(String nazione) {
-        this.nazione = nazione;
     }
 
     public String getNome() {

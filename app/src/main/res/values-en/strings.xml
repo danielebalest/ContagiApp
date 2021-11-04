@@ -320,6 +320,7 @@
     <string name="event_reminder">We remind you the event </string>
     <string name="join_group">Join group</string>
     <string name="already_existing_email">Already existing email</string>
+    <string name="caricare_img">You must upload your image</string>
 
 
 </resources>

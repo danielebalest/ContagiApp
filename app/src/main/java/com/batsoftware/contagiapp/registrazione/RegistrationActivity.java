@@ -38,6 +38,8 @@ import com.batsoftware.contagiapp.R;
 
 import dizionarioPerCitta.Province;
 import dizionarioPerCitta.Regions;
+import es.dmoral.toasty.Toasty;
+
 import com.batsoftware.contagiapp.utente.Utente;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -77,6 +79,7 @@ public class RegistrationActivity extends AppCompatActivity {
     FirebaseStorage storage;
     StorageReference storageReference;
     private Uri filePath;
+    private boolean imgCaricata;
 
     private int anno = 0, mese = 0, giorno = 0;
     //Per gli errori
@@ -131,6 +134,7 @@ public class RegistrationActivity extends AppCompatActivity {
         immagine = findViewById(R.id.propic);
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReferenceFromUrl("gs://contagiapp-c5306.appspot.com/");
+        imgCaricata = false;
 
 
         nome = (TextInputEditText) findViewById(R.id.editTextName);
@@ -380,6 +384,7 @@ public class RegistrationActivity extends AppCompatActivity {
             imageUri = data.getData();
             ImageView imageView = findViewById(R.id.propic);
             Picasso.get().load(imageUri).into(imageView); //mette l'immagine nell'ImageView di questa activity
+            imgCaricata = true;
         }
 
     }
@@ -619,7 +624,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot querySnapshots) {
-                        controlli(querySnapshots.isEmpty(), user, email, psw1, psw2, appoggio);
+                        if(imgCaricata) controlli(querySnapshots.isEmpty(), user, email, psw1, psw2, appoggio);
+                        else Toasty.warning(RegistrationActivity.this, getText(R.string.caricare_img), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -685,6 +691,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         user1.put("password", psw1);
                         user1.put("mail", email);
                         user1.put("mailPath", email);
+                        utente.setMailPath(email);
                         utente.setPassword(psw1);
                         utente.setMail(email);
                         utente.setAmici(friends);
