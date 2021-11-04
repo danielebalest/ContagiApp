@@ -57,6 +57,7 @@ public class Notifiche {
                         final ArrayList<String> invitiAmici = utente.getRichiesteRicevute();
                         final ArrayList<Notification> notifiche = new ArrayList<>();
 
+
                         boolean controllo = false;
                         for(int i = 0; i < invitiAmici.size(); i++) {
                             if(i == invitiAmici.size()-1) controllo = true;
@@ -73,8 +74,8 @@ public class Notifiche {
                                             Notification newMessageNotification1 =
                                                     new NotificationCompat.Builder(mainActivity, "CHANNEL_ID")
                                                             .setSmallIcon(R.drawable.ic_friends)
-                                                            .setSubText("Richiesta di amicizia")
-                                                            .setContentText("Città: "+ut.getCitta()+"\nData di nascita: "+ut.getDataNascita())
+                                                            .setSubText(mainActivity.getText(R.string.friend_request_e_basta))
+                                                            .setContentText(mainActivity.getText(R.string.city)+": "+ut.getCitta()+mainActivity.getText(R.string.date_of_birth2dots)+" "+ut.getDataNascita())
                                                             .setContentTitle(ut.getCognome()+" "+ut.getNome())
                                                             .setGroup(GROUP_KEY_WORK)
                                                             .build();
@@ -124,9 +125,9 @@ public class Notifiche {
                                     Notification newMessageNotification1 =
                                             new NotificationCompat.Builder(mainActivity, "CHANNEL_ID")
                                                     .setSmallIcon(R.drawable.ic_group_black_24dp)
-                                                    .setSubText("Unisciti al gruppo")
-                                                    .setContentTitle("Amministratore gruppo: "+admin.getCognome()+" "+admin.getNome())
-                                                    .setContentText("Nome gruppo: "+grup.getNomeGruppo()+" Partecipanti: "+grup.getNroPartecipanti())
+                                                    .setSubText(mainActivity.getText(R.string.join_group))
+                                                    .setContentTitle(mainActivity.getText(R.string.admin_group)+": "+admin.getCognome()+" "+admin.getNome())
+                                                    .setContentText(mainActivity.getText(R.string.group_name)+": "+grup.getNomeGruppo()+mainActivity.getText(R.string.participants)+": "+grup.getNroPartecipanti())
                                                     .setGroup(GROUP_KEY_WORK)
                                                     .build();
 
@@ -176,10 +177,10 @@ public class Notifiche {
                                 Notification newMessageNotification1 =
                                         new NotificationCompat.Builder(mainActivity, "CHANNEL_ID")
                                                 .setSmallIcon(R.drawable.ic_event_black_24dp)
-                                                .setSubText("Ti ricordiamo l'evento "+evento.getNome())
+                                                .setSubText(mainActivity.getText(R.string.event_reminder)+": "+evento.getNome())
                                                 .setContentIntent(notifyPendingIntent)
-                                                .setContentText("Città: "+evento.getCitta())
-                                                .setContentTitle("Data: "+evento.getData()+" "+evento.getOrario())
+                                                .setContentText(mainActivity.getText(R.string.city)+": "+evento.getCitta())
+                                                .setContentTitle(mainActivity.getText(R.string.date)+": "+evento.getData()+" "+evento.getOrario())
                                                 .setGroup(GROUP_KEY_WORK)
                                                 .build();
 
@@ -211,9 +212,9 @@ public class Notifiche {
                     Notification newMessageNotification1 =
                             new NotificationCompat.Builder(mainActivity, "CHANNEL_ID")
                                     .setSmallIcon(R.drawable.ic_account_circle_black_24dp)
-                                    .setSubText("Stato")
-                                    .setContentTitle("Ti ricordo che il tuo stato è "+stato+"\n")
-                                    .setContentText("Fai un tampone al più presto")
+                                    .setSubText(mainActivity.getText(R.string.state2dots)+" ")
+                                    .setContentTitle(mainActivity.getText(R.string.state_reminder)+": "+stato+"\n")
+                                    .setContentText(mainActivity.getText(R.string.swab_reminder))
                                     .setGroup(GROUP_KEY_WORK)
                                     .build();
 

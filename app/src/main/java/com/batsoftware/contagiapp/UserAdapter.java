@@ -37,7 +37,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-
         View userView = inflater.inflate(R.layout.user_row, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(userView);

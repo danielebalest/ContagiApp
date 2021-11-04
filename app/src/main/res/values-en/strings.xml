@@ -313,7 +313,12 @@
     <string name="enter_city">Enter city</string>
     <string name="enter_phone_number">Enter phone number</string>
 
-
+    <string name="state_reminder">We remind you that your state is </string>
+    <string name="swab_reminder">Have a swab as soon as possible</string>
+    <string name="friend_request_e_basta">Friend request</string>
+    <string name="admin_group">Group admin</string>
+    <string name="event_reminder">We remind you the event </string>
+    <string name="join_group">Join group</string>
     <string name="already_existing_email">Already existing email</string>
 
 

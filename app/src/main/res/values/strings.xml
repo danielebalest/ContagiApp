@@ -328,6 +328,13 @@
     <string name="enter_phone_number">Inserisci cellulare</string>
 
 
+
+    <string name="friend_request_e_basta">Richiesta di amicizia</string>
+    <string name="join_group">Unisciti al gruppo</string>
+    <string name="admin_group">Admin del gruppo</string>
+    <string name="event_reminder">Ti ricordiamo l\'evento </string>
+    <string name="state_reminder">Ti ricordo che il tuo stato è </string>
+    <string name="swab_reminder">Fai un tampone al più presto</string>
     <string name="state_updated">Stato aggiornato</string>
     <string name="already_existing_email">Mail già esistente</string>
 </resources>
