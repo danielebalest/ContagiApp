@@ -85,8 +85,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
 
 
         //recupero l'immagine dallo storage
-        Log.d("eventi/idEvento","eventi/"+idEvento);
-        storageRef.child("eventi/"+idEvento).getDownloadUrl()
+        Log.d("eventi/idEvento","eventi/"+evento.getPathImg());
+        storageRef.child("eventi/"+evento.getPathImg()).getDownloadUrl()
                 .addOnSuccessListener( new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {

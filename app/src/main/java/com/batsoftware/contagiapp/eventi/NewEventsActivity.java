@@ -39,6 +39,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
@@ -69,6 +70,7 @@ public class NewEventsActivity extends AppCompatActivity {
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private static final String TAG = "NewEventsFragment";
 
+    private boolean caricato;
     private Button creaEvento;
     private TextView dataEvento;
     private TextClock orarioEvento;
@@ -112,6 +114,8 @@ public class NewEventsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_new_events);
 
+        caricato = false;
+
         nome = findViewById(R.id.editTextNomeEvento);
         descrizione = findViewById(R.id.editTextDescrEvento);
         numeroMaxP = findViewById(R.id.editTextNumMaxPartecipanti);
@@ -143,6 +147,10 @@ public class NewEventsActivity extends AppCompatActivity {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             evento = documentSnapshot.toObject(Evento.class);
 
+                            caricato = true;
+                            MaterialButton btnImg = findViewById(R.id.btnAddImgEvento);
+                            btnImg.setVisibility(View.INVISIBLE);
+
                             nome.setText(evento.getNome());
                             descrizione.setText(evento.getDescrizione());
                             numeroMaxP.setText(Integer.toString(evento.getNumeroMaxPartecipanti()));
@@ -154,25 +162,6 @@ public class NewEventsActivity extends AppCompatActivity {
                             orario.setText(evento.getOrario());
 
                             creaEvento.setText("Modifica Evento");
-
-                            //recupero l'immagine dallo storage
-                            //TODO caricare l'immgaine precedente
-                            /*Log.d("eventi/idEvento","eventi/"+idEvento);
-                            storageRef.child("eventi/"+idEvento).getDownloadUrl()
-                                    .addOnSuccessListener( new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            String sUrl = uri.toString(); //otteniamo il token del'immagine
-                                            Log.d("OnSuccess", "");
-                                            Log.d("sUrl", sUrl);
-                                            Picasso.get().load(sUrl).into(img);
-                                        }})
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.d("OnFailure Exception", String.valueOf(e));
-                                        }
-                                    });*/
                         }
                     });
         }
@@ -218,10 +207,7 @@ public class NewEventsActivity extends AppCompatActivity {
                         });
                     }
                 });
-
-
             }
-
         });
 
 
@@ -279,7 +265,6 @@ public class NewEventsActivity extends AppCompatActivity {
         creaEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //openMainActivity();
                 addEventToDb();
             }
         });
@@ -421,38 +406,36 @@ public class NewEventsActivity extends AppCompatActivity {
 
 
             if(dataOraValide(evento)){
+                if(caricato) {
 
-                final Intent parentIntent = NavUtils.getParentActivityIntent(this);
+                    db.collection("Eventi").add(evento).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            documentId = documentReference.getId();
+                            evento.setIdEvento(documentId);
+                            db.collection("Eventi").document(documentId).update("idEvento", documentId);
 
-                db.collection("Eventi").add(evento).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        documentId = documentReference.getId();
-                        evento.setIdEvento(documentId);
-                        db.collection("Eventi").document(documentId).update("idEvento", documentId);
-                        uploadImage();
+                            String imgPath = documentId;
 
-                        if(cond) {
-                            db.collection("Eventi").document(idEvento).delete();
-                            //TODO se io non carico una nuova immagine per l'evento, ma dato che modificando l'evento l'id cambia,
-                            // bisogna ricaricare l'immagine dell'evento (quella vecchia) con il nuovo id
-
-                            Toast.makeText(NewEventsActivity.this, "Evento modificato", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            Toast.makeText(NewEventsActivity.this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
-                            finish();
+                            if(cond) {
+                                db.collection("Eventi").document(idEvento).delete();
+                                Toast.makeText(NewEventsActivity.this, "Evento modificato", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                db.collection("Eventi").document(documentId).update("pathImg", imgPath);
+                                uploadImage();
+                                Toast.makeText(NewEventsActivity.this, "Evento aggiunto", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-            }else {
-                Toast.makeText(NewEventsActivity.this, "Dati inseriti non corretti", Toast.LENGTH_LONG).show();
-            }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error adding document", e);
+                        }
+                    });
+                } else Toasty.warning(NewEventsActivity.this, "Immagine non iserita", Toast.LENGTH_SHORT).show();
+            } else Toast.makeText(NewEventsActivity.this, "Dati inseriti non corretti", Toast.LENGTH_LONG).show();
         }
 
 
@@ -518,6 +501,7 @@ public class NewEventsActivity extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+        caricato = true;
     }
 
     @Override
@@ -630,7 +614,6 @@ public class NewEventsActivity extends AppCompatActivity {
                             String url = uri.toString();
 
                             Log.d("downloadUrl", url);
-                            //pd.dismiss();
                             Toast.makeText(NewEventsActivity.this, getText(R.string.image_uploaded), Toast.LENGTH_SHORT).show();
                         }
                     }).addOnCanceledListener(new OnCanceledListener() {

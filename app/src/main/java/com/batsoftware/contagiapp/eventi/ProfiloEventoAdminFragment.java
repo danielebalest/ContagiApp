@@ -104,11 +104,11 @@ public class ProfiloEventoAdminFragment extends Fragment {
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-
+                String pathImg = documentSnapshot.getString("pathImg");
                 //recupero l'immagine dallo storage
-                Log.d("eventi/idEvento","eventi/" + idEvento);
+                Log.d("eventi/idEvento","eventi/" + pathImg);
 
-                caricaImgDaStorage(storageRef, storageDirectory, idEvento, img );
+                caricaImgDaStorage(storageRef, storageDirectory, pathImg, img );
 
             }
         });

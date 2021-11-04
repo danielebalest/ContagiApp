@@ -117,9 +117,9 @@ public class EliminazionePartecipazioneEvento extends Fragment {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
                 //recupero l'immagine dallo storage
-                Log.d("eventi/idEvento","eventi/" + idEvento);
+                Log.d("eventi/idEvento","eventi/" + evento.getPathImg());
 
-                caricaImgDaStorage(storageRef, storageDirectory, idEvento, img );
+                caricaImgDaStorage(storageRef, storageDirectory, evento.getPathImg(), img );
             }
         });
         return view;

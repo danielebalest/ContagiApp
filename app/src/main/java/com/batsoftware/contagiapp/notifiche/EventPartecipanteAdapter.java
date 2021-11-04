@@ -24,7 +24,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class EventPartecipanteAdapter extends RecyclerView.Adapter<EventPartecipanteAdapter.ViewHolder>{
-    public Context mContext;
     private ArrayList<Evento> listaEventi;
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -72,8 +71,8 @@ public class EventPartecipanteAdapter extends RecyclerView.Adapter<EventPartecip
 
 
         //recupero l'immagine dallo storage
-        Log.d("eventi/idEvento","eventi/"+idEvento);
-        storageRef.child("eventi/"+idEvento).getDownloadUrl()
+        Log.d("eventi/idEvento","eventi/"+evento.getPathImg());
+        storageRef.child("eventi/"+evento.getPathImg()).getDownloadUrl()
                 .addOnSuccessListener( new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {

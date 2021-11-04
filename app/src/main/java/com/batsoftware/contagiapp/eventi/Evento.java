@@ -18,6 +18,15 @@ public class Evento {
     private ArrayList<String> gruppiPartecipanti;
     private boolean statoRosso;
     private String dataRosso;
+    private String pathImg;
+
+    public String getPathImg() {
+        return pathImg;
+    }
+
+    public void setPathImg(String pathImg) {
+        this.pathImg = pathImg;
+    }
 
     public boolean getStatoRosso() {
         return statoRosso;

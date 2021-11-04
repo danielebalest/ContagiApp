@@ -77,8 +77,8 @@ public class EventoRossoAdapter extends RecyclerView.Adapter<EventoRossoAdapter.
         Log.d("user.getNome()", String.valueOf(event.getNome()));
 
         //recupero l'immagine dallo storage
-        Log.d("eventi/idEvento","eventi/"+idEvento);
-        storageRef.child("eventi/"+idEvento).getDownloadUrl()
+        Log.d("eventi/idEvento","eventi/"+event.getPathImg());
+        storageRef.child("eventi/"+event.getPathImg()).getDownloadUrl()
                 .addOnSuccessListener( new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {

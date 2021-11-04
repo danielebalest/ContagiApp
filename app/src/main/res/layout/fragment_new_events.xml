@@ -134,7 +134,6 @@
             android:hint="@string/region"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
-            >
 
 
             <AutoCompleteTextView
@@ -180,7 +179,6 @@
             android:hint="@string/city"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
-            >
 
 
             <AutoCompleteTextView
@@ -219,7 +217,7 @@
             android:layout_height="wrap_content"
             android:onClick="addImgEvent"
             android:text="@string/upload_image"
-            app:cornerRadius="20dp"></com.google.android.material.button.MaterialButton>
+            app:cornerRadius="20dp"/>
 
         <ImageView
             android:id="@+id/immagineEvento"
