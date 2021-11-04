@@ -214,14 +214,7 @@ public class NotifyFragment extends Fragment {
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Utente user = new Utente();
-                            user.setNome(documentSnapshot.getString("nome"));
-                            user.setCognome(documentSnapshot.getString("cognome"));
-                            user.setMail(documentSnapshot.getString("mail"));
-                            user.setDataNascita(documentSnapshot.getString("dataNascita"));
-                            user.setCitta(documentSnapshot.getString("citta"));
-                            user.setAmici((ArrayList<String>) documentSnapshot.get("amici"));
-                            user.setRichiesteRicevute((ArrayList<String>) documentSnapshot.get("richiesteRicevute"));
+                            Utente user = documentSnapshot.toObject(Utente.class);
 
                             Log.d("amici", String.valueOf(user.getAmici()));
 
