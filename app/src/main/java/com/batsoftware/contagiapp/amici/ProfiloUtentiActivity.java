@@ -42,7 +42,6 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
     private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private final static String storageDirectory = "imgUtenti";
     TextView textViewNomeCognome;
-    TextView textViewNazione;
     TextView textViewDataNascita;
     TextView textViewGenere;
     TextView textViewCitta;
@@ -78,7 +77,6 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
         textViewNomeCognome = findViewById(R.id.textViewNomeCognome);
         textViewCitta = findViewById(R.id.textViewCitta);
         textViewAge = findViewById(R.id.textViewAge);
-        textViewNazione = findViewById(R.id.textViewNazione);
         textViewDataNascita = findViewById(R.id.textViewDataNascita);
         textViewGenere = findViewById(R.id.textViewGenere);
         imageViewProfiloUtente = findViewById(R.id.imageViewProfiloUtente);
@@ -103,7 +101,6 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                 String nome = user.getNome();
                                 String cognome = user.getCognome();
                                 String citta = user.getCitta();
-                                String nazione = user.getNazione();
                                 String dataNascita = user.getDataNascita();
                                 String genere = user.getGenere();
                                 int age = user.getAge();
@@ -112,7 +109,6 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                 textViewNomeCognome.setText(nome + " " + cognome);
                                 textViewCitta.setText(citta);
                                 textViewAge.setText(String.valueOf(age));
-                                textViewNazione.setText(nazione);
                                 textViewDataNascita.setText(dataNascita);
                                 textViewGenere.setText(genere);
 

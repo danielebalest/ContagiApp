@@ -73,7 +73,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:hint="@string/event_date"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            android:id="@+id/data_evento">
 
 
             <com.google.android.material.textfield.TextInputEditText
@@ -133,7 +134,6 @@
             android:hint="@string/region"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
-            >
 
 
             <AutoCompleteTextView
@@ -179,7 +179,6 @@
             android:hint="@string/city"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
-            >
 
 
             <AutoCompleteTextView
@@ -218,7 +217,7 @@
             android:layout_height="wrap_content"
             android:onClick="addImgEvent"
             android:text="@string/upload_image"
-            app:cornerRadius="20dp"></com.google.android.material.button.MaterialButton>
+            app:cornerRadius="20dp"/>
 
         <ImageView
             android:id="@+id/immagineEvento"
@@ -227,12 +226,6 @@
             android:maxHeight="150dp"
             android:adjustViewBounds="true"/>
 
-
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/map_view"
-            android:layout_width="match_parent"
-            android:layout_height="200dp">
-        </com.google.android.gms.maps.MapView>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonCreaEvento"

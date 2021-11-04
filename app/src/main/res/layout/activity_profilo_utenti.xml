@@ -34,7 +34,7 @@
         android:textColor="@color/black"
         android:layout_margin="10dp"
         android:textSize="32dp"
-        android:textStyle="bold"></TextView>
+        android:textStyle="bold"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRichiesta"
@@ -43,7 +43,7 @@
         android:layout_margin="5dp"
         android:text="@string/add_to_friends"
         android:textSize="20dp"
-        android:textStyle="bold"></com.google.android.material.button.MaterialButton>
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -141,15 +141,6 @@
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:textColor="@color/black"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textViewNazione"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:textAppearance="?attr/textAppearanceHeadline6"
-            />
 
         <TextView
             android:id="@+id/textViewCitta"

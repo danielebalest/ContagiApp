@@ -90,15 +90,6 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
 
     private Utente utente = new Utente();
 
-
-    //TODO fare le cose scritte sotto:  + controlli su autocomplete
-    // rivedere il fatto di utilizzare le regioni e province (con spinner) quindi se toglierli e mettere solo spinner nazioni e una textbox per la città
-    // ricontrollare tutto il codice di questa classe
-    // vedere se modificare la pagina profilo utente aggiungendo altre cose o togliendo quelle già presenti
-    // vedere se funziona tutto il codice
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
