@@ -457,8 +457,9 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
         utente.setCitta(cittaSelezionata);
 
         EditText telefono = (EditText) findViewById(R.id.editTextPhone);
-        user.put("telefono", telefono.getText().toString());
-        utente.setTelefono(telefono.getText().toString());
+        String cell = telefono.getText().toString();
+        user.put("telefono", cell);
+        utente.setTelefono(cell);
 
         EditText password = (EditText) findViewById(R.id.editTextTextPassword);
         final String psw1 = password.getText().toString();
@@ -469,7 +470,7 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
         EditText mail = (EditText) findViewById(R.id.editTextTextEmailAddress);
         final String email = mail.getText().toString();
 
-        db.collection("Utenti").whereEqualTo("mailPath", utente.getMailPath()).whereNotIn("telefono", Collections.singletonList(telefono.getText().toString())).get()
+        db.collection("Utenti").whereEqualTo("mail", email).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot querySnapshots) {

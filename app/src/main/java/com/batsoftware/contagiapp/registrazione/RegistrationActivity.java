@@ -620,7 +620,7 @@ public class RegistrationActivity extends AppCompatActivity {
         final String email = mail.getText().toString();
 
 
-        db.collection("Utenti").whereEqualTo("mail", email).get()
+        db.collection("Utenti").whereEqualTo("mailPath", email).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot querySnapshots) {

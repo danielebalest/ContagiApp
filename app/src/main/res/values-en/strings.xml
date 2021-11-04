@@ -243,7 +243,6 @@
     <string name="surname2dots">Surname: </string>
     <string name="mail2dots">Mail: </string>
     <string name="date_of_birth2dots">Date of birth: </string>
-    <string name="country_of_residence2dots">Country of residence: </string>
     <string name="region_of_residence2dots">Region of residence: </string>
     <string name="province_of_residence2dots">Province of residence: </string>
     <string name="city_of_residence2dots">City of residence: </string>

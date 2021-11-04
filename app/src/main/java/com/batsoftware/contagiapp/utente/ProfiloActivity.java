@@ -142,7 +142,6 @@ public class ProfiloActivity extends AppCompatActivity {
         arrayListProfilo.add(getString(R.string.mail2dots)+utente.getMail());
         arrayListProfilo.add(getString(R.string.date_of_birth2dots)+utente.getDataNascita());
         arrayListProfilo.add(getString(R.string.gender2dots)+utente.getGenere());
-        arrayListProfilo.add(getString(R.string.country_of_residence2dots)+utente.getNazione());
         arrayListProfilo.add(getString(R.string.region_of_residence2dots)+utente.getRegione());
         arrayListProfilo.add(getString(R.string.province_of_residence2dots)+utente.getProvince());
         arrayListProfilo.add(getString(R.string.city_of_residence2dots)+utente.getCitta());

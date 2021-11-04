@@ -5,16 +5,16 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Utente {
-    private String citta;
-    private String cognome;
-    private String dataNascita;
-    private String genere;
-    private String mail;
-    private String nome;
-    private String password;
-    private String province;
-    private String regione;
-    private String telefono;
+    private String citta;//
+    private String cognome;//
+    private String dataNascita;//
+    private String genere;//
+    private String mail;//
+    private String nome;//
+    private String password;//
+    private String province;//
+    private String regione;//
+    private String telefono;//
     private String mailPath;
     private String stato;
     private ArrayList<String> amici;
