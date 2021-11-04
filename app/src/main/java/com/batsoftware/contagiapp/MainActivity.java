@@ -66,27 +66,10 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         db.setFirestoreSettings(settings);
 
-        //checkMyPermission();
-        //checkMyBL();
-        //createNotificationChannel();
-
         new Notifiche(this);
 
         // Tiene lo schermo acceso
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        /*
-        final BluetoothManager bluetoothManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
-        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
-
-
-        if (!bluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            Toast.makeText(this,"schifoso il signore",Toast.LENGTH_SHORT).show();
-        }
-
-         */
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
 
@@ -100,59 +83,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    /*private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "NOTIFICA";//getString(R.string.channel_name);
-            String description = "CIAOOCISDVOD";//getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }*/
-
-    //per bluetooth
-    private void checkMyBL(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                        MainActivity.this,
-                        new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},PERMISSION_CODE
-                        );
-            }
-        }
-
-    }
-
-    //per gps
-    private void checkMyPermission(){
-        Dexter.withActivity(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
-            @Override
-            public void onPermissionGranted(PermissionGrantedResponse response) {
-                Toast.makeText(MainActivity.this, "Permesso gps concesso", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onPermissionDenied(PermissionDeniedResponse response) {
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                        Uri.fromParts("package", getPackageName(), null));
-                startActivity(intent);
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                token.continuePermissionRequest();
-            }
-        }).check();
     }
 
 
@@ -259,9 +189,4 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
             };
-
-
-
-
-
 }
