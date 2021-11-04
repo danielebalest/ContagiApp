@@ -320,6 +320,10 @@
     <string name="join_group">Join group</string>
     <string name="already_existing_email">Already existing email</string>
     <string name="caricare_img">You must upload your image</string>
+    <string name="DescrStatoGruppoVerde">All participants are swab negative. This group can participate in all events</string>
+    <string name="DescrStatoGruppoGiallo">This group can participate in all events</string>
+    <string name="DescrStatoGruppoArancione">At least one participant in the group had positive contact, therefore this group cannot participate in any event</string>
+    <string name="DescrStatoGruppoRosso">In this group there is at least one person infected with Covid-19. Therefore this group cannot temporarily participate in any event</string>
 
 
 </resources>

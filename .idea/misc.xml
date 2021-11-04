@@ -51,19 +51,19 @@
         <entry key="..\:/Users/franc/AndroidStudioProjects/ContagiApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher2.xml" value="0.2703125" />
         <entry key="..\:/Users/franc/AndroidStudioProjects/ContagiApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher2_round.xml" value="0.2703125" />
         <entry key="..\:/Users/franc/AndroidStudioProjects/ContagiApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2703125" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout-land/activity_profilo_utenti.xml" value="0.19895833333333332" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout-land/activity_setting.xml" value="0.19895833333333332" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout-land/fragment_new_events.xml" value="0.19895833333333332" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout-land/fragment_profilo_evento.xml" value="0.19895833333333332" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout-land/fragment_profilo_evento_admin.xml" value="0.19895833333333332" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout/activity_profilo_utenti.xml" value="0.209375" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout/activity_setting.xml" value="0.33" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout/add_user_row.xml" value="0.11770833333333333" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout/fragment_home.xml" value="0.209375" />
         <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout/fragment_new_events.xml" value="0.209375" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout/fragment_partecipazione_gruppo.xml" value="0.11770833333333333" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout/fragment_profilo_evento.xml" value="0.1125" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/Contagiooo/app/src/main/res/layout/fragment_profilo_evento_admin.xml" value="0.11770833333333333" />
+        <entry key="..\:/dev/ContagiApp/app/src/main/res/layout-land/fragment_friends.xml" value="0.1" />
+        <entry key="..\:/dev/ContagiApp/app/src/main/res/layout-land/fragment_profilo_gruppo.xml" value="0.26587301587301587" />
+        <entry key="..\:/dev/ContagiApp/app/src/main/res/layout-land/fragment_profilo_gruppo_admin.xml" value="0.26587301587301587" />
+        <entry key="..\:/dev/ContagiApp/app/src/main/res/layout-land/fragment_profilo_partecipante.xml" value="0.26587301587301587" />
+        <entry key="..\:/dev/ContagiApp/app/src/main/res/layout/activity_profilo_utenti.xml" value="0.20989583333333334" />
+        <entry key="..\:/dev/ContagiApp/app/src/main/res/layout/activity_registration.xml" value="0.2776268115942029" />
+        <entry key="..\:/dev/ContagiApp/app/src/main/res/layout/fragment_friends.xml" value="0.16510416666666666" />
+        <entry key="..\:/dev/ContagiApp/app/src/main/res/layout/fragment_group.xml" value="0.3140625" />
+        <entry key="..\:/dev/ContagiApp/app/src/main/res/layout/fragment_profilo_gruppo.xml" value="0.2776268115942029" />
+        <entry key="..\:/dev/ContagiApp/app/src/main/res/layout/fragment_profilo_gruppo_admin.xml" value="0.2776268115942029" />
+        <entry key="..\:/dev/ContagiApp/app/src/main/res/layout/item_invito.xml" value="0.234375" />
+        <entry key="..\:/dev/ContagiApp/app/src/main/res/layout/item_partecipanti.xml" value="0.23697916666666666" />
       </map>
     </option>
   </component>

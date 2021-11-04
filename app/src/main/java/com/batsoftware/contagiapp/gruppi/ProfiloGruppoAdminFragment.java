@@ -48,6 +48,7 @@ public class ProfiloGruppoAdminFragment extends Fragment {
     private final static String storageDirectory = "imgGruppi";
     private ArrayList<Utente> listaPartecipanti = new ArrayList<Utente>();
     LinearLayout status;
+    TextView tvStatusDescr;
     int nStato = 0;
     private RecyclerView rvPartecipanti;
 
@@ -56,7 +57,10 @@ public class ProfiloGruppoAdminFragment extends Fragment {
     ColorStateList yellow = ColorStateList.valueOf(Color.parseColor("#FFF8F405"));
     ColorStateList green = ColorStateList.valueOf(Color.parseColor("#FF43A047"));
 
-
+    private String descStatoVerde;
+    private String descStatoGiallo;
+    private String descStatoArancione;
+    private String descStatoRosso;
 
 
     public ProfiloGruppoAdminFragment() {
@@ -72,6 +76,12 @@ public class ProfiloGruppoAdminFragment extends Fragment {
         View view;
         view =  inflater.inflate(R.layout.fragment_profilo_gruppo_admin, container, false);
 
+        descStatoVerde = getString(R.string.DescrStatoGruppoVerde);
+        descStatoGiallo = getString(R.string.DescrStatoGruppoGiallo);
+        descStatoArancione = getString(R.string.DescrStatoGruppoArancione);
+        descStatoRosso = getString(R.string.DescrStatoGruppoRosso);
+
+
         Bundle bundle = getArguments();
         final String idGruppo = bundle.getString("idGruppo");
         Log.d("idGruppo", String.valueOf(idGruppo));
@@ -84,6 +94,7 @@ public class ProfiloGruppoAdminFragment extends Fragment {
         MaterialButton btnEliminaGruppo = view.findViewById(R.id.btnEliminaGruppo);
         MaterialButton btnModificaGruppo = view.findViewById(R.id.btnModificaGruppo);
         status = view.findViewById(R.id.statusCircle);
+        tvStatusDescr = view.findViewById(R.id.tvStatusDescription);
 
         btnInvita.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,18 +273,22 @@ public class ProfiloGruppoAdminFragment extends Fragment {
         switch (nStato){
             case 1:
                 status.setBackgroundTintList(green);
+                tvStatusDescr.setText(descStatoVerde);
                 aggiornaStatoGruppo(idGruppo, "verde", db);
                 break;
             case 2:
                 status.setBackgroundTintList(yellow);
+                tvStatusDescr.setText(descStatoGiallo);
                 aggiornaStatoGruppo(idGruppo, "giallo", db);
                 break;
             case 3:
                 status.setBackgroundTintList(orange);
+                tvStatusDescr.setText(descStatoArancione);
                 aggiornaStatoGruppo(idGruppo, "arancione", db);
                 break;
             case 4:
                 status.setBackgroundTintList(red);
+                tvStatusDescr.setText(descStatoRosso);
                 aggiornaStatoGruppo(idGruppo, "rosso", db);
                 break;
             default:

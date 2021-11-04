@@ -144,7 +144,6 @@ public class RimuoviPartecipanteAdapter extends RecyclerView.Adapter<RimuoviPart
             imgUtente = itemView.findViewById(R.id.imgPartecipante);
             checkBox = itemView.findViewById(R.id.checkBoxRimoviPartecipante);
 
-
         }
 
 

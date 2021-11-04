@@ -337,4 +337,8 @@
     <string name="swab_reminder">Fai un tampone al più presto</string>
     <string name="state_updated">Stato aggiornato</string>
     <string name="already_existing_email">Mail già esistente</string>
+    <string name="DescrStatoGruppoVerde">Tutti i partecipanti sono negativi al tampone. Questo gruppo può partecipare a tutti gli eventi</string>
+    <string name="DescrStatoGruppoGiallo">Questo gruppo puà partecipare a tutti gli eventi</string>
+    <string name="DescrStatoGruppoArancione">Almeno un partecipante al gruppo ha avuto un contatto positivo, pertanto questo gruppo non può partecipare a nessuno evento</string>
+    <string name="DescrStatoGruppoRosso">In questo gruppo c\'è almeno una persona contagiata da Covid-19. Pertanto questo gruppo non può momentaneamente partecipare a nessun evento</string>
 </resources>
