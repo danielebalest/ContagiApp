@@ -262,7 +262,7 @@ public class ProfiloEventoFragment extends Fragment {
                     TextView numParteci = view.findViewById(R.id.num_partecipanti);
 
 
-                    tvNomeEvento.setText(getText(R.string.event_name)+": "+nome);
+                    tvNomeEvento.setText(nome);
                     tvDescrEvento.setText(descrizione);
                     tvDataEvento.setText(data);
                     tvOrarioEvento.setText(orario);
