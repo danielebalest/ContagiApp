@@ -65,7 +65,7 @@ public class ProfiloActivity extends AppCompatActivity {
 
             riempiListView(arrayListProfilo);
 
-            caricaImgDaStorage(storageRef, storageDirectory, utente.getMail(), imgViewProfiloUtente);
+            caricaImgDaStorage(storageRef, storageDirectory, utente.getMailPath(), imgViewProfiloUtente);
         } else {
             SharedPreferences prefs1 = getApplicationContext().getSharedPreferences("LoginTemporaneo", MODE_PRIVATE);
             String username = prefs1.getString("mail", "no");
@@ -79,6 +79,7 @@ public class ProfiloActivity extends AppCompatActivity {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             utente = documentSnapshot.toObject(Utente.class);
                             riempiListView(arrayListProfilo);
+                            caricaImgDaStorage(storageRef, storageDirectory, utente.getMailPath(), imgViewProfiloUtente);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
