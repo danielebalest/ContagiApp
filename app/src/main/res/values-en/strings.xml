@@ -154,7 +154,7 @@
     <string name="created_by_me">Events created by me</string>
 
     //fragment_friends
-    <string name="your_friends">your friends</string>
+    <string name="your_friends">Your friends</string>
 
     //fragment_new_events
     <string name="event_name">Event name</string>
