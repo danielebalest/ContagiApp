@@ -75,7 +75,7 @@ public class Notifiche {
                                                     new NotificationCompat.Builder(mainActivity, "CHANNEL_ID")
                                                             .setSmallIcon(R.drawable.ic_friends)
                                                             .setSubText(mainActivity.getText(R.string.friend_request_e_basta))
-                                                            .setContentText(mainActivity.getText(R.string.city)+": "+ut.getCitta()+mainActivity.getText(R.string.date_of_birth2dots)+" "+ut.getDataNascita())
+                                                            .setContentText(mainActivity.getText(R.string.city)+": "+ut.getCitta()+" "+mainActivity.getText(R.string.date_of_birth2dots)+" "+ut.getDataNascita())
                                                             .setContentTitle(ut.getCognome()+" "+ut.getNome())
                                                             .setGroup(GROUP_KEY_WORK)
                                                             .build();
@@ -127,7 +127,7 @@ public class Notifiche {
                                                     .setSmallIcon(R.drawable.ic_group_black_24dp)
                                                     .setSubText(mainActivity.getText(R.string.join_group))
                                                     .setContentTitle(mainActivity.getText(R.string.admin_group)+": "+admin.getCognome()+" "+admin.getNome())
-                                                    .setContentText(mainActivity.getText(R.string.group_name)+": "+grup.getNomeGruppo()+mainActivity.getText(R.string.participants)+": "+grup.getNroPartecipanti())
+                                                    .setContentText(mainActivity.getText(R.string.group_name)+": "+grup.getNomeGruppo()+" "+mainActivity.getText(R.string.participants)+": "+grup.getNroPartecipanti())
                                                     .setGroup(GROUP_KEY_WORK)
                                                     .build();
 
