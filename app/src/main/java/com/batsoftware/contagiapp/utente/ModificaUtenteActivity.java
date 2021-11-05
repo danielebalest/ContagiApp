@@ -445,6 +445,11 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
         TextView date = (TextView) findViewById(R.id.editTextDataNascita);
         final String appoggio = date.getText().toString();
 
+        if(cittaSelezionata == null && !autoCompleteCity.getText().toString().isEmpty()) {
+            cittaSelezionata = autoCompleteCity.getText().toString();
+            regioneSelezionata = autoCompleteRegion.getText().toString();
+            provinciaSelezionata = autoCompleteProvincia.getText().toString();
+        }
 
         user.put("regione", regioneSelezionata);
         utente.setRegione(regioneSelezionata);
@@ -474,7 +479,13 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot querySnapshots) {
-                        controlli(querySnapshots.isEmpty(), user, email, psw1, psw2, appoggio);
+                        if(querySnapshots.isEmpty()) {
+                            controlli(true, user, email, psw1, psw2, appoggio);
+                        } else {
+                            if(querySnapshots.toObjects(Utente.class).get(0).getMailPath().equals(utente.getMailPath())) {
+                                controlli(true, user, email, psw1, psw2, appoggio);
+                            } else controlli(false, user, email, psw1, psw2, appoggio);
+                        }
                     }
                 });
     }
