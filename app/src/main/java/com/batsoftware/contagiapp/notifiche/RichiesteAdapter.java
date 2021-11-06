@@ -101,6 +101,7 @@ public class RichiesteAdapter extends RecyclerView.Adapter<RichiesteAdapter.View
 
                 btnAccetta.setText(context.getText(R.string.accepted));
                 btnAccetta.setClickable(false);
+                btnRifiuta.setVisibility(View.GONE);
 
                 //aggiunge alla lista amici dell'utente che ha inviato la richiesta, la mail dell'utente loggato
                 db.collection("Utenti").document(idUtente)
@@ -125,6 +126,10 @@ public class RichiesteAdapter extends RecyclerView.Adapter<RichiesteAdapter.View
         btnRifiuta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnRifiuta.setText(context.getText(R.string.declined));
+                btnRifiuta.setClickable(false);
+                btnAccetta.setVisibility(View.GONE);
+
                 //rimuovere richiesta  per l'utente loggato
                 utenteLoggato.rimuoviRichiesta(idUtente);
                 db.collection("Utenti").document(mailUtenteLoggato)
