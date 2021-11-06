@@ -47,6 +47,7 @@
 
     //Nomi AppBar
     <string name="settings">Settings</string>
+    <string name="account">Profile</string>
 
     //bottoni in impostazioni
     <string name="SegnalaPositività">Report positivity</string>
@@ -54,13 +55,6 @@
     <string name="DarkTheme">Dark Theme</string>
     <string name="Notifiche">Notifications</string>
     <string name="InformativaPrivacy">Information and privacy</string>
-
-    <string-array name="nazioni">
-        <item>Italy</item>
-        <item>France</item>
-        <item>Spain</item>
-        <item>Germany</item>
-    </string-array>
 
 
     <string name="rimuovi_partecipante">Remove participant</string>

@@ -35,6 +35,7 @@
 
     //Nomi AppBar
     <string name="settings">Impostazioni</string>
+    <string name="account">Profilo</string>
 
     //bottoni in impostazioni
     <string name="SegnalaPositività">Segnala positività</string>
@@ -43,14 +44,6 @@
     <string name="Notifiche">Notifiche</string>
     <string name="InformativaPrivacy">Informativa e privacy</string>
 
-
-
-    <string-array name="nazioni">
-        <item>Italia</item>
-        <item>Francia</item>
-        <item>Spagna</item>
-        <item>Germania</item>
-    </string-array>
 
     <string-array name="regioniItaliane">
         <item>Puglia</item>

@@ -23,7 +23,9 @@
         <activity
             android:name="com.batsoftware.contagiapp.impostazioni.EventsPartecipatoPositivo"
             android:parentActivityName="com.batsoftware.contagiapp.impostazioni.SegnalaPositivitaActivity" />
-        <activity android:name="com.batsoftware.contagiapp.amici.ProfiloUtentiActivity" />
+
+        <activity android:name="com.batsoftware.contagiapp.amici.ProfiloUtentiActivity"/>
+
         <activity android:name="com.batsoftware.contagiapp.amici.AddFriendsActivity" />
         <activity android:name="com.batsoftware.contagiapp.gruppi.InvitaAmiciGruppoActivity" />
         <activity
@@ -50,10 +52,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.batsoftware.contagiapp.utente.ProfiloActivity">
+        <activity android:name="com.batsoftware.contagiapp.utente.ProfiloActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/account">
             <intent-filter>
                 <action android:name="android.intent.action.ProfiloActivity" />
             </intent-filter>
+
         </activity>
         <activity
             android:name="com.batsoftware.contagiapp.WelcomeActivity"
