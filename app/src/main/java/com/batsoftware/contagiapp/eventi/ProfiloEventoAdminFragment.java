@@ -137,7 +137,9 @@ public class ProfiloEventoAdminFragment extends Fragment {
                 String body = getString(R.string.subMessage1)  + evento.getNome().toUpperCase() + getString(R.string.subMessage2) + evento.getIndirizzo()
                         + getString(R.string.separator) + evento.getCitta() + getString(R.string.separator) + evento.getProvincia() + getString(R.string.separator)
                         + evento.getRegione()
-                        +  getString(R.string.subMessage3);
+                        +  getString(R.string.subMessage3)
+                        + getString(R.string.subMessage4)
+                        + getString(R.string.link);
 
                 myIntent.putExtra(Intent.EXTRA_TEXT,body);
                 startActivity(Intent.createChooser(myIntent, "Share Using"));

@@ -225,6 +225,8 @@
     <string name="subMessage2">\'\' \nto be held in:\n</string>
     <string name="separator">", "</string>
     <string name="subMessage3">\n\nMake your reservation on the app now."</string>
+    <string name="subMessage4">\n\nIf you have not already done so, download the app immediately at the following link:\n</string>
+    <string name="link">https://drive.google.com/file/d/1BsW8gF3v9n-v7afdYC1OF2JG7qV1T1kN/view?usp=sharing</string>
     <string name="ERROR">ERROR</string>
 
     //ProfiloActivity

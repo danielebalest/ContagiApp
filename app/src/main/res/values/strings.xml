@@ -239,6 +239,8 @@
     <string name="subMessage2">\'\' \n che si terrà in:\n</string>
     <string name="separator">", "</string>
     <string name="subMessage3">\n\nEffettua subito la prenotazione sull\'app."</string>
+    <string name="subMessage4">\n\nSe non l\'hai già fatto, scarica subito l\'app al seguente link:\n</string>
+    <string name="link">https://drive.google.com/file/d/1BsW8gF3v9n-v7afdYC1OF2JG7qV1T1kN/view?usp=sharing</string>
     <string name="ERROR">ERRORE</string>
 
     //ProfiloActivity
