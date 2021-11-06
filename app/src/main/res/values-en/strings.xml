@@ -137,8 +137,8 @@
 
     //activity_segnala_negatività
     <string name="date_of_negativity">negativity date</string>
-    <string name="upload_image">upload image</string>
-    <string name="upload_pdf">upload pdf</string>
+    <string name="upload_image">upload\nimage</string>
+    <string name="upload_pdf">upload\npdf</string>
     <string name="report">report</string>
     <string name="enter_date">enter the date</string>
     <string name="data_successiva">Date entered later than today</string>

@@ -148,8 +148,8 @@
 
     //activity_segnala_negatività
     <string name="date_of_negativity">data negatività</string>
-    <string name="upload_image">carica immagine</string>
-    <string name="upload_pdf">carica pdf</string>
+    <string name="upload_image">carica\nimmagine</string>
+    <string name="upload_pdf">carica\npdf</string>
     <string name="report">completa la segnalazione</string>
     <string name="enter_date">Inserisci la data</string>
     <string name="data_successiva">Data inserita successiva a quella di oggi</string>

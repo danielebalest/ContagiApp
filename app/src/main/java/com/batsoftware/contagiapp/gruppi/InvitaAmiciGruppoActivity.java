@@ -42,6 +42,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("sonoQui", "InvitaAmiciGruppoActivity" );
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invita_amici_gruppo);
 
