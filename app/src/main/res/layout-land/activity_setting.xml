@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -47,17 +54,8 @@
         app:cornerRadius="20dp"
         style = "@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnPrivacy"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="@string/InformativaPrivacy"
-        android:textAlignment="viewStart"
-        android:layout_marginTop="20dp"
-        app:icon="@drawable/ic_baseline_keyboard_arrow_right_24"
-        app:iconGravity="end"
-        app:cornerRadius="20dp"
-        style = "@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
 
 </LinearLayout>
+
+</ScrollView>

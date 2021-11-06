@@ -32,6 +32,7 @@
         <activity android:name="com.batsoftware.contagiapp.gruppi.CreaGruppoActivity" />
         <activity
             android:name="com.batsoftware.contagiapp.impostazioni.SettingActivity"
+            android:parentActivityName=".MainActivity"
             android:label="@string/settings" />
         <activity android:name="com.batsoftware.contagiapp.notifiche.Smistamento" />
         <activity

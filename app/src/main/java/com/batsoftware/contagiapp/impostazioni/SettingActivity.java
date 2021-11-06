@@ -52,9 +52,9 @@ public class SettingActivity extends AppCompatActivity {
                 String stato = utente.getStato();
 
                 btnSegnalaPositivita.setClickable(false);
-                btnSegnalaPositivita.setVisibility(View.INVISIBLE);
+                btnSegnalaPositivita.setVisibility(View.GONE);
                 btnSegnalaNegativita.setClickable(false);
-                btnSegnalaNegativita.setVisibility(View.INVISIBLE);
+                btnSegnalaNegativita.setVisibility(View.GONE);
 
                 switch(stato) {
                     case "verde":
