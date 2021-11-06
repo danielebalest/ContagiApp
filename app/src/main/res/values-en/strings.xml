@@ -182,9 +182,9 @@
 
     //fragment_profilo_gruppo_admin
     <string name="group_state">Group state </string>
-    <string name="invite_friends">Invite friends </string>
-    <string name="modify_group">Modify group</string>
-    <string name="delete_group">Delete group </string>
+    <string name="invite_friends">Invite\nfriends </string>
+    <string name="modify_group">Modify\ngroup</string>
+    <string name="delete_group">Delete\ngroup </string>
 
     //fragment_profilo_partecipante
     <string name="name_and_surname">Name Surname </string>
