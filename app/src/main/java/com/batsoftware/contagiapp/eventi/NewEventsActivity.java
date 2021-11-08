@@ -30,7 +30,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 import com.batsoftware.contagiapp.R;
 import com.batsoftware.contagiapp.utente.Utente;
 import com.google.android.gms.maps.MapView;
@@ -161,7 +160,7 @@ public class NewEventsActivity extends AppCompatActivity {
                             data.setText(evento.getData());
                             orario.setText(evento.getOrario());
 
-                            creaEvento.setText("Modifica Evento");
+                            creaEvento.setText(getText(R.string.modify_event));
                         }
                     });
         }
