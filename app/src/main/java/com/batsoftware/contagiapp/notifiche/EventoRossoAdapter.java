@@ -112,7 +112,7 @@ public class EventoRossoAdapter extends RecyclerView.Adapter<EventoRossoAdapter.
                     db.collection("Utenti").document(mailUtenteLoggato)
                             .update("stato", "arancione", "dataPositivita", stringDataAttuale);
 
-                    Toasty.success(context, "Hai partecipato ad un evento con una persona risultata positiva\nTi consigliamo di far un tampone", Toast.LENGTH_LONG).show();
+                    Toasty.success(context, context.getText(R.string.you_attended_red_event), Toast.LENGTH_LONG).show();
                 }
 
                 List<String> partecipanti = event.getPartecipanti();

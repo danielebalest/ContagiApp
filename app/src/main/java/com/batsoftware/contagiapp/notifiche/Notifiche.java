@@ -166,9 +166,6 @@ public class Notifiche {
                                 Intent notifyIntent = new Intent(mainActivity, Smistamento.class);
                                 notifyIntent.putExtra("id", evento.getIdEvento());
 
-                                // Set the Activity to start in a new, empty task
-                                //notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
                                 // Create the PendingIntent
                                 PendingIntent notifyPendingIntent = PendingIntent.getActivity(
                                         mainActivity, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT

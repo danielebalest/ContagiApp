@@ -257,7 +257,7 @@ public class SegnalaNegativita extends AppCompatActivity {
         if(requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             uri = data.getData();
             Log.d("uri", String.valueOf(uri));
-            Toasty.success(SegnalaNegativita.this, "Operazione eseguita", Toast.LENGTH_SHORT).show();
+            Toasty.success(SegnalaNegativita.this, getText(R.string.operation_performed), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -293,7 +293,7 @@ public class SegnalaNegativita extends AppCompatActivity {
             });
         }else {
             pd.dismiss();
-            Toast.makeText(SegnalaNegativita.this, "Errore", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SegnalaNegativita.this, getText(R.string.ERROR), Toast.LENGTH_SHORT).show();
             Log.e("Errore", "Uri o documentId nulli");
             Log.d("documentId", String.valueOf(documentId));
         }

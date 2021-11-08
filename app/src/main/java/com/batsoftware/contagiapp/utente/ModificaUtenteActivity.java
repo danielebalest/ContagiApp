@@ -26,7 +26,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.batsoftware.contagiapp.R;
-//import com.example.contagiapp.registrazione.RegistrationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -38,7 +37,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -271,55 +269,53 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
                         layoutRegion, autoCompleteRegion, layoutProvince, autoCompleteProvincia, layoutCity, autoCompleteCity)) {
 
                     case 1:
-                        nomeLayout.setError("Inserisci nome");
-                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
+                        nomeLayout.setError(getText(R.string.enter_name));
+                        Toast.makeText(ModificaUtenteActivity.this, getText(R.string.enter_name), Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
-                        cognomeLayout.setError("Inserisci cognome");
-                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci cognome", Toast.LENGTH_SHORT).show();
+                        cognomeLayout.setError(getText(R.string.enter_surname));
+                        Toast.makeText(ModificaUtenteActivity.this,getText(R.string.enter_surname), Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        dataLayout.setError("Inserisci data di nascita");
-                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci data di nascita", Toast.LENGTH_SHORT).show();
+                        dataLayout.setError(getText(R.string.enter_date_of_birth));
+                        Toast.makeText(ModificaUtenteActivity.this, getText(R.string.enter_date), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 4:
-                        layoutRegion.setError("Inserisci regione");
-                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci regione", Toast.LENGTH_SHORT).show();
+                        layoutRegion.setError(getText(R.string.enter_region));
+                        Toast.makeText(ModificaUtenteActivity.this, getText(R.string.enter_region), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 5:
-                        layoutProvince.setError("Inserisci provincia");
-                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci provincia", Toast.LENGTH_SHORT).show();
+                        layoutProvince.setError(getText(R.string.enter_province));
+                        Toast.makeText(ModificaUtenteActivity.this, getText(R.string.enter_province), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 6:
-                        layoutCity.setError("Inserisci citta");
-                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci citta", Toast.LENGTH_SHORT).show();
+                        layoutCity.setError(getText(R.string.enter_city));
+                        Toast.makeText(ModificaUtenteActivity.this, getText(R.string.enter_city), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 7:
-                        mailLayout.setError("Inserisci mail");
-                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci mail", Toast.LENGTH_SHORT).show();
+                        mailLayout.setError(getText(R.string.enter_mail));
+                        Toast.makeText(ModificaUtenteActivity.this, getText(R.string.enter_mail), Toast.LENGTH_SHORT).show();
                         break;
                     case 8:
-                        phoneLayout.setError("Inserisci cellulare");
-                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci cellulare", Toast.LENGTH_SHORT).show();
+                        phoneLayout.setError(getText(R.string.enter_phone_number));
+                        Toast.makeText(ModificaUtenteActivity.this, getText(R.string.enter_phone_number), Toast.LENGTH_SHORT).show();
                         break;
                     case 9:
-                        psw1Layout.setError("Inserisci password");
-                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci Password", Toast.LENGTH_SHORT).show();
+                        psw1Layout.setError(getText(R.string.enter_password));
+                        Toast.makeText(ModificaUtenteActivity.this, getText(R.string.enter_password), Toast.LENGTH_SHORT).show();
                         break;
                     case 10:
-                        psw2Layout.setError("Inserisci password");
-                        Toast.makeText(ModificaUtenteActivity.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
+                        psw2Layout.setError(getText(R.string.enter_password));
+                        Toast.makeText(ModificaUtenteActivity.this, getText(R.string.enter_password), Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         addToDb();
                         break;
                 }
-                //per togliere i controlli togliere il commento alla riga successiva
-                //addToDb();
             }
         });
 
@@ -539,22 +535,22 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
             condemail=(matchFound && matchFoundPlus);
         }
         if(!condemail) {
-            Toast.makeText(this, "formato email non valido", Toast.LENGTH_SHORT).show();
-            mailLayout.setError("Formato email non valido");
+            Toast.makeText(this, getText(R.string.invalid_email_format), Toast.LENGTH_SHORT).show();
+            mailLayout.setError(getText(R.string.invalid_email_format));
         }else
 
         if(conddata && condemail)
         {
-            Toast.makeText(this, "Bisogna avere almeno 14 anni per iscriversi", Toast.LENGTH_SHORT).show();
-            dataLayout.setError("Bisogna avere almeno 14 anni per iscriversi");
+            Toast.makeText(this, getText(R.string.you_must_be_at_least_14), Toast.LENGTH_SHORT).show();
+            dataLayout.setError(getText(R.string.you_must_be_at_least_14));
         } else {
             user1.put("dataNascita", appoggio);
             utente.setDataNascita(appoggio);
 
             if (!(psw1.equals(psw2))) {
-                Toast.makeText(this, "Le password coincidono", Toast.LENGTH_SHORT).show();
-                psw1Layout.setError("Le password coincidono");
-                psw2Layout.setError("Le password coincidono");
+                Toast.makeText(this, getText(R.string.passwords_match), Toast.LENGTH_SHORT).show();
+                psw1Layout.setError(getText(R.string.passwords_match));
+                psw2Layout.setError(getText(R.string.passwords_match));
             } else {
                 if (cond) {
                     psw1Layout.setError(null);
@@ -585,8 +581,8 @@ public class ModificaUtenteActivity extends AppCompatActivity implements Adapter
                     openMainActivity();
                     finish();
                 } else {
-                    Toast.makeText(this, "Mail già esistente", Toast.LENGTH_SHORT).show();
-                    mailLayout.setError("Mail già esistente");
+                    Toast.makeText(this, getText(R.string.already_existing_email), Toast.LENGTH_SHORT).show();
+                    mailLayout.setError(getText(R.string.already_existing_email));
                 }
             }
         }

@@ -143,12 +143,9 @@ public class AddImgGruppoActivity extends AppCompatActivity {
 
     private void uploadImage(String documentId){
         final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Caricamento");
+        pd.setMessage(getText(R.string.loading));
         pd.show();
 
-
-        //Log.d("documentId2", documentId);
-        //Log.d("uri", imageUri.toString());
         if((imageUri != null) && (documentId != null)){
             final StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("imgGruppi").child(documentId);
 
@@ -162,19 +159,19 @@ public class AddImgGruppoActivity extends AppCompatActivity {
 
                             Log.d("downloadUrl", url);
                             pd.dismiss();
-                            Toasty.success(AddImgGruppoActivity.this, "immagine caricata", Toast.LENGTH_SHORT).show();
+                            Toasty.success(AddImgGruppoActivity.this, getText(R.string.image_uploaded), Toast.LENGTH_SHORT).show();
                         }
                     }).addOnCanceledListener(new OnCanceledListener() {
                         @Override
                         public void onCanceled() {
-                            Toasty.error(AddImgGruppoActivity.this, "immagine non caricata", Toast.LENGTH_SHORT).show();
+                            Toasty.error(AddImgGruppoActivity.this, getText(R.string.image_not_uploaded), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             });
         }else {
             pd.dismiss();
-            Toast.makeText(AddImgGruppoActivity.this, "Errore", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddImgGruppoActivity.this, getText(R.string.ERROR), Toast.LENGTH_SHORT).show();
             Log.e("Errore", "imageUri o documentId nulli");
             Log.d("documentId2", String.valueOf(documentId));
         }

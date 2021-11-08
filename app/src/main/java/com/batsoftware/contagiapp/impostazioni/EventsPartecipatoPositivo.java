@@ -109,7 +109,7 @@ public class EventsPartecipatoPositivo extends AppCompatActivity {
             public void onClick(View v) {
                 if(!eventi.isEmpty()) {
                     if(adapter.getCond().contains(false)) {
-                        Toast.makeText(EventsPartecipatoPositivo.this, "Completare la segnalazione degli eventi", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EventsPartecipatoPositivo.this, getText(R.string.complete_event_report), Toast.LENGTH_LONG).show();
                     } else home();
                 } else home();
             }

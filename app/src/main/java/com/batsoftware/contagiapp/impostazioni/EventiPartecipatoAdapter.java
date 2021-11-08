@@ -104,8 +104,6 @@ public class EventiPartecipatoAdapter extends RecyclerView.Adapter<EventiParteci
         btnAccetta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //avvisare tutti i partecipanti a quell'evento e se hanno partecipato diventano arancioni e dopo 10 giorni gialli
-                //se non hanno partecipato non succede niente
 
                 btnAccetta.setText(context.getText(R.string.take_part));
                 btnRifiuta.setText(context.getText(R.string.no));

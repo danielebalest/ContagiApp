@@ -296,8 +296,6 @@ public class ProfiloEventoFragment extends Fragment {
                 gruppiEvento = evento1.getGruppiPartecipanti();
                 final ArrayList<String> partecipanti = evento1.getPartecipanti();
 
-                //Log.d("ANY_TAG", String.valueOf(gruppiEvento));
-
                 for(int i = 0; i < gruppiEvento.size(); i++) {
                     String idGruppo = gruppiEvento.get(i);
 
@@ -307,7 +305,6 @@ public class ProfiloEventoFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            //Log.d("ANY_TAG", "entered gruppo");
                             Gruppo gruppo = documentSnapshot.toObject(Gruppo.class);
 
                             ArrayList<String> membri = gruppo.getPartecipanti();

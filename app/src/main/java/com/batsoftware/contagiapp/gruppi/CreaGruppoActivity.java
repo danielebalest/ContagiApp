@@ -59,23 +59,23 @@ public class CreaGruppoActivity extends AppCompatActivity {
             startActivity(imgIntent);
         } else {
             if (nomeGruppo.isEmpty() && descrGruppo.isEmpty()) {
-                Toasty.warning(CreaGruppoActivity.this, "Inserisci nome del gruppo", Toast.LENGTH_SHORT).show();
-                textInputLayoutNome.setError("Inserisci nome del gruppo");
+                Toasty.warning(CreaGruppoActivity.this, getText(R.string.enter_group_name), Toast.LENGTH_SHORT).show();
+                textInputLayoutNome.setError(getText(R.string.enter_group_name));
 
-                Toasty.warning(CreaGruppoActivity.this, "Inserisci descrizione del gruppo", Toast.LENGTH_SHORT).show();
-                textInputLayoutDesc.setError("Inserisci descrizione del gruppo");
+                Toasty.warning(CreaGruppoActivity.this, getText(R.string.enter_group_description), Toast.LENGTH_SHORT).show();
+                textInputLayoutDesc.setError(getText(R.string.enter_group_description));
             } else {
 
                 if (nomeGruppo.isEmpty()) {
-                    Toasty.warning(CreaGruppoActivity.this, "Inserisci nome del gruppo", Toast.LENGTH_SHORT).show();
-                    textInputLayoutNome.setError("Inserisci nome del gruppo");
+                    Toasty.warning(CreaGruppoActivity.this, getText(R.string.enter_group_name), Toast.LENGTH_SHORT).show();
+                    textInputLayoutNome.setError(getText(R.string.enter_group_name));
                     textInputLayoutDesc.setErrorEnabled(false);
 
 
                 }
                 if (descrGruppo.isEmpty()) {
-                    Toasty.warning(CreaGruppoActivity.this, "Inserisci descrizione del gruppo", Toast.LENGTH_SHORT).show();
-                    textInputLayoutDesc.setError("Inserisci descrizione del gruppo");
+                    Toasty.warning(CreaGruppoActivity.this, getText(R.string.enter_group_description), Toast.LENGTH_SHORT).show();
+                    textInputLayoutDesc.setError(getText(R.string.enter_group_description));
                     textInputLayoutNome.setErrorEnabled(false);
                 }
             }

@@ -2,8 +2,7 @@ package com.batsoftware.contagiapp.amici;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -48,19 +47,8 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
     TextView textViewAge;
     ImageView imageViewProfiloUtente;
     MaterialButton btnRichiesta;
-    //TextView stato;
 
 
-
-    private void showFragment(Fragment fragment) {
-
-        FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-        fr.replace(R.id.container,fragment);
-
-        fr.addToBackStack(null); //serve per tornare al fragment precedente
-        fr.commit();
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +69,6 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
         textViewGenere = findViewById(R.id.textViewGenere);
         imageViewProfiloUtente = findViewById(R.id.imageViewProfiloUtente);
         btnRichiesta = findViewById(R.id.btnRichiesta);
-        //stato = findViewById(R.id.stato);
 
         final Bundle extras = getIntent().getExtras();
         if(extras.getString("id") != null) {
@@ -104,7 +91,6 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                 String dataNascita = user.getDataNascita();
                                 String genere = user.getGenere();
                                 int age = user.getAge();
-                                //String statoDb = user.getStato();
 
                                 textViewNomeCognome.setText(nome + " " + cognome);
                                 textViewCitta.setText(citta);
@@ -112,27 +98,13 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                 textViewDataNascita.setText(dataNascita);
                                 textViewGenere.setText(genere);
 
-                                /*switch (statoDb) {
-                                    case "rosso":
-
-                                }
-
-                                if(statoDb.equals("rosso")) {
-                                    stato.setTextColor(Color.RED);
-                                    stato.setText("Positivo");
-                                }
-                                if(statoDb.equals("giallo")) {
-                                    stato.setTextColor(Color.YELLOW);
-                                }
-                                if(statoDb.equals("verde")) stato.setTextColor(Color.GREEN);
-                                if(statoDb.equals("arancione")) stato.setTextColor(Color.rgb(255, 165, 0));*/
 
 
 
                                 caricaImgDaStorage(storageRef, storageDirectory, idUtenteSelezionato, imageViewProfiloUtente);
 
                                 if(user.getRichiesteRicevute().contains(extras.getString("mailUtenteLoggato"))) {
-                                    btnRichiesta.setText("Richiesta inviata");
+                                    btnRichiesta.setText(getText(R.string.request_sent));
                                     btnRichiesta.setClickable(false);
                                 } else {
                                     if(amico.equals("no")) {
@@ -147,10 +119,9 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                                 db.collection("Utenti").document(idUtenteSelezionato)
                                                         .update("richiesteRicevute", user.getRichiesteRicevute());
 
-                                                btnRichiesta.setText("Richiesta inviata");
+                                                btnRichiesta.setText(getText(R.string.request_sent));
                                                 btnRichiesta.setClickable(false);
                                                 finish();
-                                                //getSupportFragmentManager().beginTransaction().replace(R.id.amici, new FriendsFragment()).commit();
                                             }
                                         });
                                     } else {
@@ -161,11 +132,6 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                             public void onClick(View v) {
                                                 rimuoviAmico(idUtenteSelezionato, extras.getString("mailLoggato"));
 
-                                                /*refresh della pagina friendsfragment (non funziona)
-                                                SharedPreferences prefs = getApplicationContext().getSharedPreferences("Refresh", MODE_PRIVATE);
-                                                SharedPreferences.Editor editor = prefs.edit();
-                                                editor.putInt("refresh", 1);
-                                                editor.commit ();*/
 
                                                 finish();
                                             }
@@ -173,7 +139,6 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
                                     }
                                 }
 
-                                //aggiornaRichieste(idUtenteSelezionato, profiloLoggato, user);
 
                             } else {
                                 Toast.makeText(ProfiloUtentiActivity.this, "Documents does not exist", Toast.LENGTH_SHORT).show();
@@ -187,13 +152,6 @@ public class ProfiloUtentiActivity extends AppCompatActivity {
             });
         }
     }
-
-
-    private void aggiornaRichieste(String mailDestinatario, String mailMittente, Utente utente) {
-
-    }
-
-
 
     private void caricaImgDaStorage(StorageReference storageRef, String directory, String idImmagine, final ImageView imageView){
         storageRef.child(directory + "/" + idImmagine).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {

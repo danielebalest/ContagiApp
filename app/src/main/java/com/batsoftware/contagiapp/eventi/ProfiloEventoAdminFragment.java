@@ -361,12 +361,8 @@ public class ProfiloEventoAdminFragment extends Fragment {
                 .delete();
 
         Toasty.success(getContext(), getString(R.string.EventoEliminato), Toast.LENGTH_LONG).show();
-        //forse è meglio non cancellare l'evento ma segnarlo come eliminato
-        //dopodichè nella main activity metto controllo sullo stato degli eventi a cui partecipa un utente e se lo stato è cancellato applicare notifica
-
         notificaEventoEliminato();
 
-        //notificheFCM();
 
 
     }
@@ -409,21 +405,5 @@ public class ProfiloEventoAdminFragment extends Fragment {
         }
     }
 
-    /*private void notificheFCM(){
-        FirebaseMessaging.getInstance().subscribeToTopic("weather")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "msg";
-                        if (!task.isSuccessful()) {
-                            msg = "msg_subscribe_failed";
-                        }
-                        Log.d("ProfiloEventoAdmin", msg);
-                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-     */
 
 }

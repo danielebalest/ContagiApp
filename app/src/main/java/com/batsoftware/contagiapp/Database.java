@@ -30,10 +30,6 @@ public class Database {
                         mydb.getStato(g.getNomeGruppo());
                         Log.d("getStatoGruppo", String.valueOf(g.getStatoGruppo()));
                         String stato = g.getStatoGruppo();
-
-
-                        //Log.d("getStatoGruppo", String.valueOf(g.getStatoGruppo().getClass()));
-
                     }
                 });
     }

@@ -22,6 +22,5 @@ public class Smistamento extends AppCompatActivity {
 
         fragment1.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment1).commit();
-        //finish();
     }
 }

@@ -31,15 +31,12 @@ import java.util.ArrayList;
 public class ProfiloActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 0;
     private static final String TAG = "ProfiloActivity";
-    private Button certificato;
     private ListView listViewProfilo;
     private Button logout;
     private Button modifica;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Utente utente;
     private ImageView imgViewProfiloUtente;
-    String imageFileName;
-    String currentPhotoPath;
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private final static String storageDirectory = "imgUtenti";
 
@@ -85,12 +82,6 @@ public class ProfiloActivity extends AppCompatActivity {
             });
         }
 
-
-
-        //arrayListProfilo.add("Propic"+ utente.getPropic());
-
-
-
         modifica = findViewById(R.id.modifica_dati);
         modifica.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,13 +107,6 @@ public class ProfiloActivity extends AppCompatActivity {
             }
         });
 
-        /*certificato = (Button) findViewById(R.id.certificato);
-        certificato.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-               dispatchTakePictureIntent(photoIntent);
-            }
-        });*/
     }
 
 
@@ -166,47 +150,4 @@ public class ProfiloActivity extends AppCompatActivity {
         });
     }
 
-   /* private void dispatchTakePictureIntent(@NotNull Intent takePictureIntent) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()),
-                        BuildConfig.APPLICATION_ID + ".provider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
-        }*/
-
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode== RESULT_OK ){
-            Bitmap bitmap= BitmapFactory.decodeFile(currentPhotoPath);
-            imgCertificato.setImageBitmap(bitmap);
-            imgCertificato.setRotation(90);
-        }
-    }
-
-    @NotNull
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDir
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }*/
 }

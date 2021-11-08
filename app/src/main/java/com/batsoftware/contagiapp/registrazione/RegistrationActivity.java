@@ -392,7 +392,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void uploadImageToStorage(String documentId) {
         final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Caricamento");
+        pd.setMessage(getText(R.string.loading));
         pd.show();
 
         Log.d("imageUri", String.valueOf(imageUri));
@@ -425,9 +425,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    public void clearAdapter() {
-        adapterCitta.clear();
-    }
 
     private void dispatchTakePictureIntent(@NotNull Intent takePictureIntent) {
         // Create the File where the photo should go
@@ -463,53 +460,8 @@ public class RegistrationActivity extends AppCompatActivity {
         return image;
     }
 
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
-            immagine.setImageBitmap(bitmap);
-            immagine.setRotation(90);
-        }
-    }
-     */
 
-    private void uploadImage(String mail) {
 
-        if (filePath != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-
-            StorageReference ref = storageReference.child("files/" + mail + ".jpg");
-
-            ref.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
-                            Toast.makeText(RegistrationActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(RegistrationActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                            progressDialog.dismiss();
-                        }
-                    });
-        }
-    }
 
 
     private int controlli_TextInput(TextInputEditText name, TextInputLayout nomeLayout, TextInputEditText surname, TextInputLayout cognomeLayout, TextInputEditText mail, TextInputLayout mailLayout,
@@ -670,20 +622,20 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
         if (!condemail) {
-            Toast.makeText(this, "formato email non valido", Toast.LENGTH_SHORT).show();
-            mailLayout.setError("Formato email non valido");
+            Toast.makeText(this, getText(R.string.invalid_email_format), Toast.LENGTH_SHORT).show();
+            mailLayout.setError(getText(R.string.invalid_email_format));
         } else {
             if (conddata && condemail) {
-                Toast.makeText(this, "Bisogna avere almeno 14 anni per iscriversi", Toast.LENGTH_SHORT).show();
-                dataLayout.setError("Bisogna avere almeno 14 anni per iscriversi");
+                Toast.makeText(this, getText(R.string.you_must_be_at_least_14), Toast.LENGTH_SHORT).show();
+                dataLayout.setError(getText(R.string.you_must_be_at_least_14));
             } else {
                 user1.put("dataNascita", appoggio);
                 utente.setDataNascita(appoggio);
 
                 if (!(psw1.equals(psw2))) {
-                    Toast.makeText(this, "Le password coincidono", Toast.LENGTH_SHORT).show();
-                    psw1Layout.setError("Le password coincidono");
-                    psw2Layout.setError("Le password coincidono");
+                    Toast.makeText(this, getText(R.string.passwords_match), Toast.LENGTH_SHORT).show();
+                    psw1Layout.setError(getText(R.string.passwords_match));
+                    psw2Layout.setError(getText(R.string.passwords_match));
                 } else {
                     if (cond) {
                         psw1Layout.setError(null);

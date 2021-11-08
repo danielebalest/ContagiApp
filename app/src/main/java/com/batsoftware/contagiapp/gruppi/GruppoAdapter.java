@@ -54,7 +54,6 @@ public class GruppoAdapter extends RecyclerView.Adapter<GruppoAdapter.ViewHolder
 
         textViewNomeGruppo.setText(gruppo.getNomeGruppo());
         Log.d("NomeGrup: Partecipanti", String.valueOf(gruppo.getNomeGruppo()) + "   " + String.valueOf(gruppo.getNroPartecipanti()));
-        //textViewNumPartecipantiGruppo.setText(gruppo.getNroPartecipanti() +" "+context.getString(R.string.participants));
         textViewNumPartecipantiGruppo.setText(context.getResources().getQuantityString(R.plurals.nPartecipants, gruppo.getNroPartecipanti(),  gruppo.getNroPartecipanti()));
 
 

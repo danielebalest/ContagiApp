@@ -71,7 +71,7 @@ public class InvitaAmiciGruppoActivity extends AppCompatActivity {
                         final ArrayList<String> amiciNonPartecipanti = (ArrayList<String>) document.get("amici");
                         if(amiciNonPartecipanti.isEmpty()){
                             TextView tvInvitaAmici = findViewById(R.id.tvInvitaAmici);
-                            tvInvitaAmici.setText("Non hai ancora nessun amico");
+                            tvInvitaAmici.setText(getText(R.string.you_dont_have_any_friends_yet));
                         }
                         Log.d("lista", String.valueOf(amiciNonPartecipanti));
 

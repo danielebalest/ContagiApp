@@ -67,7 +67,6 @@ public class InvitiAdapter extends RecyclerView.Adapter<InvitiAdapter.ViewHolder
 
         textViewNomeGruppo.setText(gruppo.getNomeGruppo());
         Log.d("gruppo", String.valueOf(gruppo.getNomeGruppo()));
-        //textViewPartecipanti.setText(gruppo.getNroPartecipanti());
 
 
 

@@ -251,30 +251,9 @@ public class NotifyFragment extends Fragment {
                                         }
                                     });
 
-                            //RichiesteAdapter adapter = new RichiesteAdapter(utenti, mailUtenteLoggato, utenteLoggato);
 
                             String id = user.getMailPath();
                             idList.add(id);
-
-/*
-                            recyclerView.addOnItemTouchListener(new NotifyFragment.RecyclerTouchListener(getActivity(), recyclerView, new NotifyFragment.RecyclerTouchListener.ClickListener() {
-                                @Override
-                                public void onClick(View view, int position) {
-                                    String idUtenteSelezionato = idList.get(position);
-                                    Log.i("idList: ", idUtenteSelezionato);
-
-                                    Intent profiloIntent = new Intent(getActivity(), ProfiloUtentiActivity.class);
-                                    profiloIntent.putExtra("id", idUtenteSelezionato);
-                                    startActivity(profiloIntent);
-                                }
-
-                                @Override
-                                public void onLongClick(View view, int position) {
-
-                                }
-
-                            }));
-                            */
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {

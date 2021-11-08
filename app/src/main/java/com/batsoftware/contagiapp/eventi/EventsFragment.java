@@ -451,17 +451,6 @@ public class EventsFragment extends Fragment implements CompoundButton.OnChecked
         return elementiTrovati;
     }
 
-   /* private ArrayList<String> ricercacitta(String testoInserito, ArrayList<String> listaInCuiCercareCitta){
-
-
-        ArrayList<String> elementiTrovati = new ArrayList<String>();
-        for(int i=0; i < listaInCuiCercareCitta.size(); i++){
-            if(listaInCuiCercareCitta.get(i).toLowerCase().contains(testoInserito.toLowerCase())){
-                elementiTrovati.add(listaInCuiCercareCitta.get(i));
-            }
-        }
-        return elementiTrovati;
-    }*/
 
     //funzione che nasconde la tastiera
     public static void hideSoftKeyboard(Activity activity) {

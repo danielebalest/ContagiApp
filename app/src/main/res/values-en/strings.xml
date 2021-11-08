@@ -249,6 +249,8 @@
 
     //ProfiloGruppoFragment
     <string name="are_you_sure_you_want_to_quit">Are you sure you want to exit the group?</string>
+    <string name="group_deleted">Group deleted</string>
+    <string name="group_not_deleted">Group not deleted</string>
 
     //FriendFragment
     <string name="you_dont_have_any_friends_yet">You still don\'t have any friend</string>
@@ -320,6 +322,12 @@
     <string name="DescrStatoGruppoGiallo">This group can participate in all events</string>
     <string name="DescrStatoGruppoArancione">At least one participant in the group had positive contact, therefore this group cannot participate in any event</string>
     <string name="DescrStatoGruppoRosso">In this group there is at least one person infected with Covid-19. Therefore this group cannot temporarily participate in any event</string>
-
+    <string name="invalid_email_format">Invalid mail format</string>
+    <string name="you_must_be_at_least_14">You must be at least 14 years old in order to register</string>
+    <string name="passwords_match">Password match</string>
+    <string name="request_sent">Request sent</string>
+    <string name="complete_event_report">Complete event\'s report</string>
+    <string name="operation_performed">Operation performed</string>
+    <string name="you_attended_red_event">You attended an event with a person who tested positive \n We reccomend you to take a swab</string>
 
 </resources>

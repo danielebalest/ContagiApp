@@ -101,7 +101,6 @@ public class ProfiloGruppoAdminFragment extends Fragment {
             public void onClick(View v) {
                 Intent invitaIntent = new Intent(getActivity(), InvitaAmiciGruppoActivity.class);
                 invitaIntent.putExtra("idGruppo", idGruppo);
-                //invitaIntent.putExtra("listaMailPartecipanti", mailPartecipanti);
                 startActivity(invitaIntent);
             }
         });
@@ -177,7 +176,7 @@ public class ProfiloGruppoAdminFragment extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("document", "DocumentSnapshot successfully deleted!");
-                        Toasty.success(getActivity(), "Gruppo eliminato", Toast.LENGTH_SHORT).show();
+                        Toasty.success(getActivity(), getText(R.string.group_deleted), Toast.LENGTH_SHORT).show();
 
 
 
@@ -187,7 +186,7 @@ public class ProfiloGruppoAdminFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w("document", "Error deleting document", e);
-                        Toasty.error(getActivity(), "Gruppo non eliminato", Toast.LENGTH_SHORT).show();
+                        Toasty.error(getActivity(), getText(R.string.group_not_deleted), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -2,29 +2,20 @@ package com.batsoftware.contagiapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.batsoftware.contagiapp.amici.FriendsFragment;
 import com.batsoftware.contagiapp.eventi.EventsFragment;
@@ -40,18 +31,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.gson.Gson;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
-
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int PERMISSION_CODE = 0;
-    private static final int REQUEST_ENABLE_BT = 1;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     String stato;
 
@@ -59,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//TODO eliminare tutti i commenti ed il codice inutile in tutte le classi
 
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
@@ -141,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(id == R.id.nav_setting){
-            //getSupportFragmentManager().beginTransaction().replace(R.id.container, SettingFragment).commit();
             Intent settingIntent = new Intent(this, SettingActivity.class);
             startActivity(settingIntent);
         }

@@ -261,6 +261,8 @@
 
     //ProfiloGruppoFragment
     <string name="are_you_sure_you_want_to_quit">Sei sicuro di voler abbandonare il gruppo?</string>
+    <string name="group_deleted">Gruppo eliminato</string>
+    <string name="group_not_deleted">Gruppo non eliminato</string>
 
     //GroupFragment
     <string name="no_group_msg">Non hai ancora nessun gruppo. Crea subito uno</string>
@@ -282,7 +284,7 @@
     <string name="enter_group_name">Inserisci il nome del gruppo</string>
     <string name="loading">Caricamento</string>
     <string name="image_uploaded">Immagine caricata</string>
-    <string name="image_not_uploaded">Immagine not caricata</string>
+    <string name="image_not_uploaded">Immagine non caricata</string>
     <string name="inserisci_regione">Inserisci regione</string>
     <string name="inserisci_provincia">Inserisci provincia</string>
     <string name="tra_1_ora">The event must be at least an hour from now</string>
@@ -293,7 +295,7 @@
     <string name="groups_you_created_exceed_maximum">I gruppi da te creati eccedono il numero massimo di partecipanti dell\'evento</string>
 
     //ProfiloPartecipanteFragment
-    <string name="are_you_sure_you_want_to_remove_the_reservation">Sicuro di rimuovere la prenotazione?</string>
+    <string name="are_you_sure_you_want_to_remove_the_reservation">Sicuro di voler rimuovere la prenotazione?</string>
 
 
     //EventiPartecipatoAdapter
@@ -336,4 +338,11 @@
     <string name="DescrStatoGruppoGiallo">Questo gruppo può partecipare a tutti gli eventi</string>
     <string name="DescrStatoGruppoArancione">Almeno un partecipante al gruppo ha avuto un contatto positivo, pertanto questo gruppo non può partecipare a nessuno evento</string>
     <string name="DescrStatoGruppoRosso">In questo gruppo c\'è almeno una persona contagiata da Covid-19. Pertanto questo gruppo non può momentaneamente partecipare a nessun evento</string>
+    <string name="invalid_email_format">Formato email non valido</string>
+    <string name="you_must_be_at_least_14">Bisogna avere almeno 14 anni per iscriversi</string>
+    <string name="passwords_match">Le password coincidono</string>
+    <string name="request_sent">Richesta inviata</string>
+    <string name="complete_event_report">Completare la segnalazione degli eventi</string>
+    <string name="operation_performed">Operazione eseguita</string>
+    <string name="you_attended_red_event">Hai partecipato ad un evento con una persona risultata positiva \n Ti consigliamo di far un tampone</string>
 </resources>

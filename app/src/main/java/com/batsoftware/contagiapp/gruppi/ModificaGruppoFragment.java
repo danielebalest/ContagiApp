@@ -200,23 +200,23 @@ public class ModificaGruppoFragment extends Fragment {
 
         } else {
             if (nomeGruppo.isEmpty() && descrGruppo.isEmpty()) {
-                Toasty.warning(getActivity(), "Inserisci nome del gruppo", Toast.LENGTH_SHORT).show();
-                textInputLayoutNome.setError("Inserisci nome del gruppo");
+                Toasty.warning(getActivity(), getText(R.string.enter_group_name), Toast.LENGTH_SHORT).show();
+                textInputLayoutNome.setError(getText(R.string.enter_group_name));
 
-                Toasty.warning(getActivity(), "Inserisci descrizione del gruppo", Toast.LENGTH_SHORT).show();
-                textInputLayoutDesc.setError("Inserisci descrizione del gruppo");
+                Toasty.warning(getActivity(), getText(R.string.enter_group_description), Toast.LENGTH_SHORT).show();
+                textInputLayoutDesc.setError(getText(R.string.enter_group_description));
             } else {
 
                 if (nomeGruppo.isEmpty()) {
-                    Toasty.warning(getActivity(), "Inserisci nome del gruppo", Toast.LENGTH_SHORT).show();
-                    textInputLayoutNome.setError("Inserisci nome del gruppo");
+                    Toasty.warning(getActivity(), getText(R.string.enter_group_name), Toast.LENGTH_SHORT).show();
+                    textInputLayoutNome.setError(getText(R.string.enter_group_name));
                     textInputLayoutDesc.setErrorEnabled(false);
 
 
                 }
                 if (descrGruppo.isEmpty()) {
-                    Toasty.warning(getActivity(), "Inserisci descrizione del gruppo", Toast.LENGTH_SHORT).show();
-                    textInputLayoutDesc.setError("Inserisci descrizione del gruppo");
+                    Toasty.warning(getActivity(), getText(R.string.enter_group_description), Toast.LENGTH_SHORT).show();
+                    textInputLayoutDesc.setError(getText(R.string.enter_group_description));
                     textInputLayoutNome.setErrorEnabled(false);
                 }
             }
@@ -271,12 +271,10 @@ public class ModificaGruppoFragment extends Fragment {
 
     private void uploadImage(String documentId){
         final ProgressDialog pd = new ProgressDialog(getActivity());
-        pd.setMessage("Caricamento");
+        pd.setMessage(getText(R.string.loading));
         pd.show();
 
 
-        //Log.d("documentId2", documentId);
-        //Log.d("uri", imageUri.toString());
         if((imageUri != null) && (documentId != null)){
             final StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("imgGruppi").child(documentId);
 
@@ -290,19 +288,19 @@ public class ModificaGruppoFragment extends Fragment {
 
                             Log.d("downloadUrl", url);
                             pd.dismiss();
-                            Toasty.success(getActivity(), "immagine caricata", Toast.LENGTH_SHORT).show();
+                            Toasty.success(getActivity(), getText(R.string.image_uploaded), Toast.LENGTH_SHORT).show();
                         }
                     }).addOnCanceledListener(new OnCanceledListener() {
                         @Override
                         public void onCanceled() {
-                            Toasty.error(getActivity(), "immagine non caricata", Toast.LENGTH_SHORT).show();
+                            Toasty.error(getActivity(), getText(R.string.image_not_uploaded), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             });
         }else {
             pd.dismiss();
-            Toast.makeText(getActivity(), "Errore", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),getText(R.string.ERROR), Toast.LENGTH_SHORT).show();
             Log.e("Errore", "imageUri o documentId nulli");
             Log.d("documentId2", String.valueOf(documentId));
         }
