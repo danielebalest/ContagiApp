@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     String stato;
+    Fragment fragment=null;
+    Bundle b = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,11 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();
+
+        if(savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();
+        }
+
 
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
@@ -140,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
 
-                    Fragment fragment=null;
+
 
                     switch (menuitem.getItemId())
                     {

@@ -115,7 +115,10 @@ public class GroupFragment extends Fragment {
     }
 
 
-
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
     private ArrayList<String> ricerca(String testoInserito, ArrayList<String> listaInCuiCercare){
 

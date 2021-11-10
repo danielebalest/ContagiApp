@@ -63,7 +63,7 @@
         <activity
             android:name="com.batsoftware.contagiapp.WelcomeActivity"
             android:theme="@style/NoActionBar" />
-        <activity android:name="com.batsoftware.contagiapp.MainActivity" />
+        <activity android:name="com.batsoftware.contagiapp.MainActivity"/>
         <activity android:name="com.batsoftware.contagiapp.eventi.NewEventsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.NewEventsActivity" />
